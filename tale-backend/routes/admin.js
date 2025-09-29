@@ -88,6 +88,15 @@ router.post('/sub-admins', auth(['admin']), [
 ], handleValidationErrors, adminController.createSubAdmin);
 
 router.get('/sub-admins', auth(['admin']), adminController.getAllSubAdmins);
+router.put('/sub-admins/:id', auth(['admin']), [
+  body('firstName').notEmpty().withMessage('First name is required'),
+  body('lastName').notEmpty().withMessage('Last name is required'),
+  body('username').notEmpty().withMessage('Username is required'),
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('phone').notEmpty().withMessage('Phone is required'),
+  body('permissions').isArray({ min: 1 }).withMessage('At least one permission is required'),
+  body('password').optional().isLength({ min: 6 }).withMessage('Password must be at least 6 characters if provided')
+], handleValidationErrors, adminController.updateSubAdmin);
 router.delete('/sub-admins/:id', auth(['admin']), adminController.deleteSubAdmin);
 
 // Site Settings Routes

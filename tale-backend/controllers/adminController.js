@@ -1045,6 +1045,54 @@ exports.getAllSubAdmins = async (req, res) => {
   }
 };
 
+exports.updateSubAdmin = async (req, res) => {
+  try {
+    const { name, firstName, lastName, username, email, phone, permissions, password } = req.body;
+    
+    // Check if username or email already exists for other sub-admins
+    const existingSubAdmin = await SubAdmin.findOne({ 
+      $or: [{ email }, { username }],
+      _id: { $ne: req.params.id }
+    });
+    
+    if (existingSubAdmin) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Username or email already exists' 
+      });
+    }
+    
+    const updateData = {
+      name,
+      firstName,
+      lastName,
+      username,
+      email,
+      phone,
+      permissions
+    };
+    
+    // Only update password if provided
+    if (password) {
+      updateData.password = password;
+    }
+    
+    const subAdmin = await SubAdmin.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true, runValidators: true }
+    ).select('-password');
+    
+    if (!subAdmin) {
+      return res.status(404).json({ success: false, message: 'Sub Admin not found' });
+    }
+    
+    res.json({ success: true, subAdmin });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 exports.deleteSubAdmin = async (req, res) => {
   try {
     const subAdmin = await SubAdmin.findByIdAndDelete(req.params.id);
