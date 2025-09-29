@@ -165,7 +165,7 @@ function LoginPage() {
                         <div className="col-xl-8 col-lg-6 col-md-5 twm-log-reg-media-wrap">
                             <div className="twm-log-reg-media">
                                 <div className="twm-l-media">
-                                    <JobZImage src="images/login-bg.png" alt="" />
+                                    <JobZImage src="images/login-image.jpg" alt="" style={{width: '100%', height: '100vh', objectFit: 'cover'}} />
                                 </div>
                             </div>
                         </div>

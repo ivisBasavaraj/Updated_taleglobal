@@ -302,14 +302,7 @@ function PlacementDetails() {
                             <h5>Actions</h5>
                             <div className="mb-2">
                                 <button
-                                    className="btn btn-info placement-action-btn me-2"
-                                    onClick={handleViewData}
-                                    disabled={loadingData}
-                                >
-                                    <i className="fa fa-eye"></i> {loadingData ? 'Loading...' : 'View Student Data'}
-                                </button>
-                                <button
-                                    className="btn btn-success placement-action-btn"
+                                    className="btn btn-success placement-action-btn me-2"
                                     onClick={handleApprove}
                                     disabled={placement.status === 'approved'}
                                 >
