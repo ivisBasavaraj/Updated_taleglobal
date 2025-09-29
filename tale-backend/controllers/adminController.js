@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
+const SubAdmin = require('../models/SubAdmin');
 const Candidate = require('../models/Candidate');
 const CandidateProfile = require('../models/CandidateProfile');
 const Employer = require('../models/Employer');
@@ -21,32 +22,48 @@ const generateToken = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
 };
 
+const checkSubAdminPermission = (userPermissions, requiredPermission) => {
+  return userPermissions && userPermissions.includes(requiredPermission);
+};
+
 // Authentication Controller
 exports.loginAdmin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const admin = await Admin.findOne({ email });
-    if (!admin || !(await admin.comparePassword(password))) {
+    // First check if it's a regular admin
+    let user = await Admin.findOne({ email });
+    let userType = 'admin';
+    
+    // If not found in Admin, check SubAdmin
+    if (!user) {
+      user = await SubAdmin.findOne({ email });
+      userType = 'sub-admin';
+    }
+    
+    if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
-    if (admin.status !== 'active') {
+    if (user.status !== 'active') {
       return res.status(401).json({ success: false, message: 'Account is inactive' });
     }
 
-    const token = generateToken(admin._id, 'admin');
+    const token = generateToken(user._id, userType);
 
-    res.json({
+    const responseData = {
       success: true,
       token,
-      admin: {
-        id: admin._id,
-        name: admin.name,
-        email: admin.email,
-        role: admin.role
+      [userType === 'admin' ? 'admin' : 'subAdmin']: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        ...(userType === 'sub-admin' && { permissions: user.permissions })
       }
-    });
+    };
+
+    res.json(responseData);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -976,3 +993,69 @@ exports.getCandidatesForCredits = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Sub Admin Management Controllers
+exports.createSubAdmin = async (req, res) => {
+  try {
+    const { name, firstName, lastName, username, email, phone, permissions, password } = req.body;
+    
+    // Check if username or email already exists
+    const existingSubAdmin = await SubAdmin.findOne({ 
+      $or: [{ email }, { username }] 
+    });
+    
+    if (existingSubAdmin) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Username or email already exists' 
+      });
+    }
+    
+    const subAdmin = await SubAdmin.create({
+      name,
+      firstName,
+      lastName,
+      username,
+      email,
+      phone,
+      permissions,
+      password,
+      createdBy: req.user.id
+    });
+    
+    const subAdminResponse = subAdmin.toObject();
+    delete subAdminResponse.password;
+    
+    res.status(201).json({ success: true, subAdmin: subAdminResponse });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.getAllSubAdmins = async (req, res) => {
+  try {
+    const subAdmins = await SubAdmin.find()
+      .select('-password')
+      .populate('createdBy', 'name email')
+      .sort({ createdAt: -1 });
+    
+    res.json({ success: true, subAdmins });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.deleteSubAdmin = async (req, res) => {
+  try {
+    const subAdmin = await SubAdmin.findByIdAndDelete(req.params.id);
+    
+    if (!subAdmin) {
+      return res.status(404).json({ success: false, message: 'Sub Admin not found' });
+    }
+    
+    res.json({ success: true, message: 'Sub Admin deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+

@@ -38,6 +38,7 @@ import BlogListPage from "../app/pannels/public-user/components/blogs/blogs-list
 import BlogDetailPage from "../app/pannels/public-user/components/blogs/blog-detail";
 import ForgotPassword from "../app/pannels/public-user/components/pages/forgot-password";
 import AdminLogin from "../app/admin-login/page";
+import SubAdminLogin from "../app/sub-admin-login/page";
 
 function PublicUserRoutes() {
     return (
@@ -65,6 +66,7 @@ function PublicUserRoutes() {
             <Route path={publicUser.pages.COMING} element={<ComingSoonPage />} />
             <Route path={publicUser.pages.LOGIN} element={<LoginPage />} />
             <Route path={publicUser.pages.ADMIN_LOGIN} element={<AdminLogin />} />
+            <Route path={publicUser.pages.SUB_ADMIN_LOGIN} element={<SubAdminLogin />} />
             <Route path={publicUser.pages.FORGOT} element={<ForgotPassword/>} />
             <Route path={publicUser.pages.ICONS} element={<IconsPage />} />
             <Route path={publicUser.candidate.GRID} element={<CandidateGridPage />} />

@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const Candidate = require('../models/Candidate');
 const Employer = require('../models/Employer');
 const Admin = require('../models/Admin');
+const SubAdmin = require('../models/SubAdmin');
 const Placement = require('../models/Placement');
 
 const auth = (roles = []) => {
@@ -22,6 +23,8 @@ const auth = (roles = []) => {
         user = await Employer.findById(decoded.id).select('-password');
       } else if (decoded.role === 'admin') {
         user = await Admin.findById(decoded.id).select('-password');
+      } else if (decoded.role === 'sub-admin') {
+        user = await SubAdmin.findById(decoded.id).select('-password');
       } else if (decoded.role === 'placement') {
         user = await Placement.findById(decoded.id).select('-password');
       }
@@ -31,7 +34,12 @@ const auth = (roles = []) => {
       }
 
       if (roles.length && !roles.includes(decoded.role)) {
-        return res.status(403).json({ message: 'Access denied' });
+        // Allow sub-admin to access admin routes
+        if (decoded.role === 'sub-admin' && roles.includes('admin')) {
+          // Sub-admin can access admin routes
+        } else {
+          return res.status(403).json({ message: 'Access denied' });
+        }
       }
 
       req.user = user;

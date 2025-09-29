@@ -36,6 +36,7 @@ export const publicUser = {
         COMING:         "/coming-soon",
         LOGIN:          "/login",
         ADMIN_LOGIN:    "/admin-login",
+        SUB_ADMIN_LOGIN: "/sub-admin-login",
         ICONS:          "/icons",
         FORGOT:         "/forgot-password"
     },
@@ -106,7 +107,9 @@ export const admin = {
     PLACEMENT_MANAGE: "/admin-placement-manage",
     PLACEMENT_APPROVE: "/admin-placement-approved",
     PLACEMENT_REJECT: "/admin-placement-rejected",
-    PLACEMENT_DETAILS: "/placement-details/:id"
+    PLACEMENT_DETAILS: "/placement-details/:id",
+    SUB_ADMIN: "/sub-admin",
+    SUB_ADMIN_ADD: "/sub-admin/add"
 }
 
 export function pubRoute(_route) {

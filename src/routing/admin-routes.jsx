@@ -16,6 +16,7 @@ import AdminPlacementOfficersAllRequest from "../app/pannels/admin/components/ad
 import AdminPlacementOfficersApproved from "../app/pannels/admin/components/admin-placement-approve";
 import AdminPlacementOfficersRejected from "../app/pannels/admin/components/admin-placement-reject";
 import PlacementDetails from "../app/pannels/admin/components/placement-details";
+import AdminSubAdmin from "../app/pannels/admin/components/admin-sub-admin";
 
 import RegisteredCandidatesPage from "../app/pannels/admin/components/registered-candidates";
 import AdminCandidateReviewPage from "../app/pannels/admin/components/admin-candidate-review";
@@ -47,6 +48,7 @@ function AdminRoutes() {
 				<Route path={admin.PLACEMENT_APPROVE} element={<AdminPlacementOfficersApproved />} />
 				<Route path={admin.PLACEMENT_REJECT} element={<AdminPlacementOfficersRejected />} />
 				<Route path={admin.PLACEMENT_DETAILS} element={<PlacementDetails />} />
+				<Route path={admin.SUB_ADMIN} element={<AdminSubAdmin />} />
 			</Routes>
 		);
 }

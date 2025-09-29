@@ -32,16 +32,28 @@ export default function AdminLogin() {
             });
 
             const data = await response.json();
+            console.log('Login response:', data);
 
-            if (data.success) {
+            if (response.ok && data.success) {
                 localStorage.setItem("adminToken", data.token);
-                localStorage.setItem("adminUser", JSON.stringify(data.admin));
+                
+                // Handle both admin and sub-admin login
+                if (data.admin) {
+                    localStorage.setItem("adminData", JSON.stringify(data.admin));
+                    localStorage.removeItem("subAdminData"); // Clear sub-admin data if exists
+                } else if (data.subAdmin) {
+                    localStorage.setItem("subAdminData", JSON.stringify(data.subAdmin));
+                    localStorage.removeItem("adminData"); // Clear admin data if exists
+                }
+                
                 navigate("/admin/dashboard");
             } else {
-                setError(data.message || "Login failed");
+                console.error('Login failed:', data);
+                setError(data.message || `Login failed (${response.status})`);
             }
         } catch (error) {
-            setError("Network error. Please try again.");
+            console.error('Network error:', error);
+            setError(`Network error: ${error.message}. Please ensure backend server is running on port 5000.`);
         } finally {
             setLoading(false);
         }
@@ -59,6 +71,11 @@ export default function AdminLogin() {
                                         <div className="twm-login-reg-title">
                                             <h4>Admin Login</h4>
                                             <p>Access Admin Panel</p>
+                                            <div className="alert alert-info mt-3">
+                                                <strong>Default Admin Credentials:</strong><br/>
+                                                Email: admin@tale.com<br/>
+                                                Password: admin123456
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
