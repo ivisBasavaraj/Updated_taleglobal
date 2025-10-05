@@ -10,6 +10,7 @@ function AdminSidebarSection(props) {
     const currentpath = useLocation().pathname;
     const [userPermissions, setUserPermissions] = useState([]);
     const [isSubAdmin, setIsSubAdmin] = useState(false);
+    const [openMenus, setOpenMenus] = useState({});
 
     useEffect(() => {
         loadScript("js/custom.js");
@@ -52,13 +53,17 @@ function AdminSidebarSection(props) {
                             <li
                                 className={
                                     setMenuActive(currentpath, adminRoute(admin.CAN_MANAGE)) +
-                                    setMenuActive(currentpath, adminRoute(admin.CAN_MANAGE))
+                                    setMenuActive(currentpath, adminRoute(admin.CAN_APPROVE)) +
+                                    setMenuActive(currentpath, adminRoute(admin.CAN_REJECT))
                                 }>
-                                <a href="#">
+                                <a href="#" onClick={(e) => {
+                                    e.preventDefault();
+                                    setOpenMenus(prev => ({...prev, employers: !prev.employers}));
+                                }}>
                                     <i className="fa fa-user-tie" />
                                     <span className="admin-nav-text">Employers</span>
                                 </a>
-                                <ul className="sub-menu">
+                                <ul className={`sub-menu ${openMenus.employers ? 'open' : ''}`}>
                                     <li><NavLink to={adminRoute(admin.CAN_MANAGE)} id="allList"><span className="admin-nav-text">All Submissions</span></NavLink></li>
                                     <li><NavLink to={adminRoute(admin.CAN_APPROVE)} id="approvedList"><span className="admin-nav-text">Approved</span></NavLink></li>
                                     <li><NavLink to={adminRoute(admin.CAN_REJECT)} id="rejectedList"><span className="admin-nav-text">Rejected</span></NavLink></li>
@@ -82,11 +87,14 @@ function AdminSidebarSection(props) {
                                     setMenuActive(currentpath, adminRoute(admin.PLACEMENT_APPROVE)) +
                                     setMenuActive(currentpath, adminRoute(admin.PLACEMENT_REJECT))
                                 }>
-                                <a href="#">
+                                <a href="#" onClick={(e) => {
+                                    e.preventDefault();
+                                    setOpenMenus(prev => ({...prev, placement: !prev.placement}));
+                                }}>
                                     <i className="fa fa-graduation-cap" />
                                     <span className="admin-nav-text">Placement Officers</span>
                                 </a>
-                                <ul className="sub-menu">
+                                <ul className={`sub-menu ${openMenus.placement ? 'open' : ''}`}>
                                     <li><NavLink to={adminRoute(admin.PLACEMENT_MANAGE)}><span className="admin-nav-text">All Submissions</span></NavLink></li>
                                     <li><NavLink to={adminRoute(admin.PLACEMENT_APPROVE)}><span className="admin-nav-text">Approved</span></NavLink></li>
                                     <li><NavLink to={adminRoute(admin.PLACEMENT_REJECT)}><span className="admin-nav-text">Rejected</span></NavLink></li>

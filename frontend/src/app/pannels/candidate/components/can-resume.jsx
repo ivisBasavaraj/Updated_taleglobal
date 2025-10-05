@@ -12,6 +12,7 @@ import SectionCanProjects from "../sections/resume/section-can-projects";
 import SectionCanResumeHeadline from "../sections/resume/section-can-resume-headline";
 import { loadScript } from "../../../../globals/constants";
 import { api } from "../../../../utils/api";
+import { initializeAllModals } from "../../../../utils/modalUtils";
 import "./resume-styles.css";
 
 function CanMyResumePage() {
@@ -21,6 +22,16 @@ function CanMyResumePage() {
     useEffect(()=>{
         fetchProfile();
     }, [])
+
+    useEffect(() => {
+        // Initialize all modals after component mounts and profile loads
+        if (!loading) {
+            const timer = setTimeout(() => {
+                initializeAllModals();
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [loading]);
 
     const fetchProfile = async () => {
         try {
@@ -79,6 +90,10 @@ function CanMyResumePage() {
 							</div>
 							<div className="panel panel-default mb-3">
 								<SectionCanPersonalDetail profile={profile} />
+							</div>
+
+							<div className="panel panel-default mb-3">
+								<SectionCanEducation profile={profile} onUpdate={handleProfileUpdate} />
 							</div>
 
 							<div className="panel panel-default mb-3">

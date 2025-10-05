@@ -1,13 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { api } from "../../../../../utils/api";
+import { initializeModal, showModal } from "../../../../../utils/modalUtils";
 
 function SectionCanResumeHeadline({ profile }) {
     const [headline, setHeadline] = useState('');
     const [loading, setLoading] = useState(false);
+    const modalRef = useRef(null);
 
     useEffect(() => {
         setHeadline(profile?.resumeHeadline || '');
     }, [profile]);
+
+    const handleEditClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setTimeout(() => showModal('Resume_Headline'), 50);
+    };
 
     const handleSave = async () => {
         setLoading(true);
@@ -30,7 +38,14 @@ function SectionCanResumeHeadline({ profile }) {
                     <i className="fa fa-newspaper-o site-text-primary me-2"></i>
                     Resume Headline
                 </h4>
-                <a data-bs-toggle="modal" href="#Resume_Headline" role="button" title="Edit" className="site-text-primary">
+                <a 
+                    data-bs-toggle="modal" 
+                    href="#Resume_Headline" 
+                    role="button" 
+                    title="Edit" 
+                    className="site-text-primary"
+                    onClick={handleEditClick}
+                >
                     <span className="fa fa-edit" />
                 </a>
             </div>
@@ -40,7 +55,7 @@ function SectionCanResumeHeadline({ profile }) {
                 </div>
             </div>
             {/*Modal Popup */}
-            <div className="modal fade twm-saved-jobs-view" id="Resume_Headline" tabIndex={-1}>
+            <div className="modal fade twm-saved-jobs-view" id="Resume_Headline" tabIndex={-1} ref={modalRef}>
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <form onSubmit={(e) => e.preventDefault()}>

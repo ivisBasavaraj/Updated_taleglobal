@@ -46,7 +46,7 @@ function EmpCompanyProfilePage() {
     });
 
     const [loading, setLoading] = useState(false);
-    const [authSections, setAuthSections] = useState([{ id: 1 }]);
+    const [authSections, setAuthSections] = useState([{ id: 1, companyName: '' }]);
 
     useEffect(() => {
         loadScript("js/custom.js");
@@ -56,14 +56,34 @@ function EmpCompanyProfilePage() {
     const fetchProfile = async () => {
         try {
             const token = localStorage.getItem('employerToken');
+            if (!token) {
+                alert('Please login to access your profile.');
+                window.location.href = '/employer/login';
+                return;
+            }
             const response = await fetch('http://localhost:5000/api/employer/profile', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
             const data = await response.json();
+            if (response.status === 401) {
+                alert('Session expired. Please login again.');
+                localStorage.removeItem('employerToken');
+                window.location.href = '/employer/login';
+                return;
+            }
             if (data.success && data.profile) {
                 setFormData(prev => ({ ...prev, ...data.profile }));
+                
+                // Populate authSections from existing authorization letters
+                if (data.profile.authorizationLetters && data.profile.authorizationLetters.length > 0) {
+                    const existingSections = data.profile.authorizationLetters.map((letter, index) => ({
+                        id: index + 1,
+                        companyName: letter.companyName || ''
+                    }));
+                    setAuthSections(existingSections.length > 0 ? existingSections : [{ id: 1, companyName: '' }]);
+                }
             }
         } catch (error) {
             console.error('Error fetching profile:', error);
@@ -134,12 +154,22 @@ function EmpCompanyProfilePage() {
         body.append('logo', file);
         try {
             const token = localStorage.getItem('employerToken');
+            if (!token) {
+                alert('Please login again to upload files.');
+                return;
+            }
             const response = await fetch('http://localhost:5000/api/employer/profile/logo', {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
                 body
             });
             const data = await response.json();
+            if (response.status === 401) {
+                alert('Session expired. Please login again.');
+                localStorage.removeItem('employerToken');
+                window.location.href = '/employer/login';
+                return;
+            }
             if (data.success) {
                 handleInputChange('logo', data.logo);
             } else {
@@ -171,12 +201,22 @@ function EmpCompanyProfilePage() {
         body.append('cover', file);
         try {
             const token = localStorage.getItem('employerToken');
+            if (!token) {
+                alert('Please login again to upload files.');
+                return;
+            }
             const response = await fetch('http://localhost:5000/api/employer/profile/cover', {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
                 body
             });
             const data = await response.json();
+            if (response.status === 401) {
+                alert('Session expired. Please login again.');
+                localStorage.removeItem('employerToken');
+                window.location.href = '/employer/login';
+                return;
+            }
             if (data.success) {
                 handleInputChange('coverImage', data.coverImage);
             } else {
@@ -209,12 +249,22 @@ function EmpCompanyProfilePage() {
         body.append('fieldName', fieldName);
         try {
             const token = localStorage.getItem('employerToken');
+            if (!token) {
+                alert('Please login again to upload files.');
+                return;
+            }
             const response = await fetch('http://localhost:5000/api/employer/profile/document', {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
                 body: body
             });
             const data = await response.json();
+            if (response.status === 401) {
+                alert('Session expired. Please login again.');
+                localStorage.removeItem('employerToken');
+                window.location.href = '/employer/login';
+                return;
+            }
             if (data.success) {
                 handleInputChange(fieldName, data.filePath);
             } else {
@@ -226,9 +276,19 @@ function EmpCompanyProfilePage() {
         }
     };
 
-    const handleAuthorizationLetterUpload = async (e) => {
+    const handleAuthorizationLetterUpload = async (e, sectionId) => {
         const file = e.target.files[0];
         if (!file) return;
+
+        // Get company name for this section
+        const section = authSections.find(s => s.id === sectionId);
+        const companyName = section?.companyName || '';
+
+        // For consultancy, require company name
+        if (formData.employerCategory === 'consultancy' && !companyName.trim()) {
+            alert('Please enter the company name before uploading the authorization letter.');
+            return;
+        }
 
         // Validate documents: <=5MB, allow images (jpg/png/jpeg) and PDF
         const maxBytes = 5 * 1024 * 1024;
@@ -244,14 +304,27 @@ function EmpCompanyProfilePage() {
 
         const body = new FormData();
         body.append('document', file);
+        if (companyName) {
+            body.append('companyName', companyName);
+        }
         try {
             const token = localStorage.getItem('employerToken');
+            if (!token) {
+                alert('Please login again to upload files.');
+                return;
+            }
             const response = await fetch('http://localhost:5000/api/employer/profile/authorization-letter', {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
                 body: body
             });
             const data = await response.json();
+            if (response.status === 401) {
+                alert('Session expired. Please login again.');
+                localStorage.removeItem('employerToken');
+                window.location.href = '/employer/login';
+                return;
+            }
             if (data.success) {
                 setFormData(prev => ({
                     ...prev,
@@ -276,11 +349,21 @@ function EmpCompanyProfilePage() {
 
         try {
             const token = localStorage.getItem('employerToken');
+            if (!token) {
+                alert('Please login again to delete files.');
+                return;
+            }
             const response = await fetch(`http://localhost:5000/api/employer/profile/authorization-letter/${documentId}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
+            if (response.status === 401) {
+                alert('Session expired. Please login again.');
+                localStorage.removeItem('employerToken');
+                window.location.href = '/employer/login';
+                return;
+            }
             if (data.success) {
                 setFormData(prev => ({
                     ...prev,
@@ -298,7 +381,13 @@ function EmpCompanyProfilePage() {
 
     const addNewAuthSection = () => {
         const newId = Math.max(...authSections.map(s => s.id)) + 1;
-        setAuthSections(prev => [...prev, { id: newId }]);
+        setAuthSections(prev => [...prev, { id: newId, companyName: '' }]);
+    };
+
+    const handleAuthSectionCompanyNameChange = (sectionId, companyName) => {
+        setAuthSections(prev => prev.map(section => 
+            section.id === sectionId ? { ...section, companyName } : section
+        ));
     };
 
     const removeAuthSection = (id) => {
@@ -312,24 +401,69 @@ function EmpCompanyProfilePage() {
         setLoading(true);
         try {
             const token = localStorage.getItem('employerToken');
+            
+            // Update authorization letters with current company names from authSections
+            if (formData.authorizationLetters && formData.authorizationLetters.length > 0) {
+                const updatedAuthLetters = formData.authorizationLetters.map((letter, index) => {
+                    const correspondingSection = authSections[index];
+                    return {
+                        ...letter,
+                        companyName: correspondingSection?.companyName || letter.companyName || ''
+                    };
+                });
+                
+                // Update authorization letters with company names
+                await fetch('http://localhost:5000/api/employer/profile/update-authorization-companies', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ authorizationLetters: updatedAuthLetters })
+                });
+            }
+            
+            // Create a copy of formData excluding large Base64 files to prevent request size issues
+            const profileData = { ...formData };
+            
+            // Remove Base64 encoded files from the request (these are uploaded separately)
+            delete profileData.logo;
+            delete profileData.coverImage;
+            delete profileData.panCardImage;
+            delete profileData.cinImage;
+            delete profileData.gstImage;
+            delete profileData.certificateOfIncorporation;
+            delete profileData.companyIdCardPicture;
+            delete profileData.authorizationLetters;
+            
             const response = await fetch('http://localhost:5000/api/employer/profile', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(profileData)
             });
 
             if (response.ok) {
                 alert('Profile updated successfully!');
+                // Refresh profile data to get latest state
+                fetchProfile();
             } else {
                 const error = await response.json();
-                alert(error.message || 'Failed to update profile');
+                if (response.status === 413) {
+                    alert('Request too large. Please ensure all files are uploaded individually before saving the profile.');
+                } else {
+                    alert(error.message || 'Failed to update profile');
+                }
             }
         } catch (error) {
             console.error('Error updating profile:', error);
-            alert('Failed to update profile. Please try again.');
+            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                alert('Network error or request too large. Please check your connection and ensure all files are uploaded individually.');
+            } else {
+                alert('Failed to update profile. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
@@ -341,6 +475,10 @@ function EmpCompanyProfilePage() {
                 <h2>Company Details</h2>
                 <div className="progress-indicator">
                     <div className="progress-bar" style={{width: '75%'}}></div>
+                </div>
+                <div className="alert alert-info mt-3" style={{fontSize: '14px'}}>
+                    <i className="fas fa-info-circle me-2"></i>
+                    <strong>Tip:</strong> Upload all files (logo, documents, etc.) individually first, then click "Save Profile" to save your text information.
                 </div>
             </div>
 
@@ -369,14 +507,14 @@ function EmpCompanyProfilePage() {
                                             style={{maxWidth: '150px', maxHeight: '150px', objectFit: 'contain', border: '1px solid #ddd'}} 
                                             onError={(e) => {
                                                 console.log('Logo load error'); 
-                                                e.target.src = '/images/default-logo.png';
+                                                e.target.style.display = 'none';
                                             }}
                                         />
                                         <p className="text-muted text-success">✓ Logo uploaded successfully</p>
                                     </div>
                                 )}
                                 <p className="text-muted mt-2">
-                                    <b>Company Logo:</b> Max file size is 1MB, Minimum dimension: 136 x 136 And Suitable files are .jpg & .png
+                                    <b>Company Logo:</b> Max file size is 1MB, Minimum dimension: 136 x 136. Suitable files are .jpg & .png
                                 </p>
                             </div>
                         </div>
@@ -398,7 +536,7 @@ function EmpCompanyProfilePage() {
                                             style={{width: '100%', maxWidth: '400px', height: 'auto', maxHeight: '200px', objectFit: 'contain', border: '1px solid #ddd', borderRadius: '4px'}} 
                                             onError={(e) => {
                                                 console.log('Cover load error'); 
-                                                e.target.src = '/images/default-cover.png';
+                                                e.target.style.display = 'none';
                                             }}
                                         />
                                         <p className="text-muted text-success">✓ Cover image uploaded successfully</p>
@@ -773,11 +911,25 @@ function EmpCompanyProfilePage() {
                                                         </button>
                                                     )}
                                                 </div>
+                                                
+                                                {formData.employerCategory === 'consultancy' && (
+                                                    <div className="mb-2">
+                                                        <label><Building size={14} className="me-1" /> Authorization Company Name</label>
+                                                        <input
+                                                            className="form-control"
+                                                            type="text"
+                                                            value={section.companyName}
+                                                            onChange={(e) => handleAuthSectionCompanyNameChange(section.id, e.target.value)}
+                                                            placeholder="Enter authorization company name"
+                                                        />
+                                                    </div>
+                                                )}
+                                                
                                                 <input
                                                     className="form-control"
                                                     type="file"
                                                     accept=".jpg,.jpeg,.png,.pdf"
-                                                    onChange={handleAuthorizationLetterUpload}
+                                                    onChange={(e) => handleAuthorizationLetterUpload(e, section.id)}
                                                 />
                                             </div>
                                         </div>
@@ -785,15 +937,17 @@ function EmpCompanyProfilePage() {
                                     
                                     </div>
                                     
-                                    <div className="mt-2">
-                                        <button 
-                                            type="button" 
-                                            className="btn btn-success btn-sm"
-                                            onClick={addNewAuthSection}
-                                        >
-                                            <i className="fas fa-plus me-1"></i> Add New Authorization Letter
-                                        </button>
-                                    </div>
+                                    {formData.employerCategory === 'consultancy' && (
+                                        <div className="mt-2">
+                                            <button 
+                                                type="button" 
+                                                className="btn btn-success btn-sm"
+                                                onClick={addNewAuthSection}
+                                            >
+                                                <i className="fas fa-plus me-1"></i> Add New Authorization Letter
+                                            </button>
+                                        </div>
+                                    )}
                                     
                                     {/* Display uploaded authorization letters */}
                                     {formData.authorizationLetters && formData.authorizationLetters.length > 0 && (
@@ -812,6 +966,14 @@ function EmpCompanyProfilePage() {
                                                                         <i className="fas fa-file-alt text-primary me-2"></i>
                                                                         <span className="fw-bold">{doc.fileName}</span>
                                                                     </div>
+                                                                    {doc.companyName && (
+                                                                        <div className="mb-1">
+                                                                            <small className="text-info">
+                                                                                <i className="fas fa-building me-1"></i>
+                                                                                {doc.companyName}
+                                                                            </small>
+                                                                        </div>
+                                                                    )}
                                                                     <small className="text-muted">
                                                                         <i className="fas fa-calendar me-1"></i>
                                                                         {new Date(doc.uploadedAt).toLocaleDateString()}
@@ -938,6 +1100,10 @@ function EmpCompanyProfilePage() {
                                                 src={formData.companyIdCardPicture.startsWith('data:') ? formData.companyIdCardPicture : `data:image/jpeg;base64,${formData.companyIdCardPicture}`} 
                                                 alt="Company ID Card" 
                                                 style={{maxWidth: '200px', maxHeight: '120px', objectFit: 'contain', border: '1px solid #ddd'}} 
+                                                onError={(e) => {
+                                                    console.log('Company ID Card load error'); 
+                                                    e.target.style.display = 'none';
+                                                }}
                                             />
                                             <p className="text-success mt-1">✓ Company ID Card uploaded</p>
                                         </div>

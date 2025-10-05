@@ -1,6 +1,15 @@
 import { useState } from 'react';
 
+const KARNATAKA_DISTRICTS = [
+    'Bagalkot', 'Ballari', 'Belagavi', 'Bengaluru Rural', 'Bengaluru Urban', 'Bidar',
+    'Chamarajanagar', 'Chikballapur', 'Chikkamagaluru', 'Chitradurga', 'Dakshina Kannada',
+    'Davanagere', 'Dharwad', 'Gadag', 'Hassan', 'Haveri', 'Kalaburagi', 'Kodagu',
+    'Kolar', 'Koppal', 'Mandya', 'Mysuru', 'Raichur', 'Ramanagara', 'Shivamogga',
+    'Tumakuru', 'Udupi', 'Uttara Kannada', 'Vijayapura', 'Yadgir'
+];
+
 function SectionCanEducation() {
+    console.log('Loading SIMPLE SectionCanEducation WITHOUT dropdown');
     const [educationList, setEducationList] = useState([
         { id: 1, degree: 'BCA - Bachelor of Computer Applications', institution: 'Sample University', year: '2004-2006', scoreType: 'percentage', scoreValue: '75' },
         { id: 2, degree: 'MCA - Master of Computer Application', institution: 'Sample University', year: '2006-2008', scoreType: 'cgpa', scoreValue: '8.5' },
@@ -14,10 +23,19 @@ function SectionCanEducation() {
         scoreType: 'percentage',
         scoreValue: ''
     });
+    const [showOtherLocation, setShowOtherLocation] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        if (name === 'institution' && value === 'Other') {
+            setShowOtherLocation(true);
+            setFormData(prev => ({ ...prev, [name]: '' }));
+        } else if (name === 'institution' && value !== 'Other') {
+            setShowOtherLocation(false);
+            setFormData(prev => ({ ...prev, [name]: value }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSave = () => {
@@ -39,6 +57,7 @@ function SectionCanEducation() {
             scoreType: 'percentage',
             scoreValue: ''
         });
+        setShowOtherLocation(false);
         
         // Close modal
         const modal = document.getElementById('AddEducation');
@@ -97,18 +116,48 @@ function SectionCanEducation() {
                                     </div>
                                     <div className="col-xl-12 col-lg-12">
                                         <div className="form-group">
-                                            <label>Institution Name</label>
+                                            <label>Location</label>
                                             <div className="ls-inputicon-box">
-                                                <input 
-                                                    className="form-control" 
-                                                    name="institution" 
-                                                    type="text" 
-                                                    placeholder="Enter Institution Name" 
-                                                    value={formData.institution}
-                                                    onChange={handleInputChange}
-                                                />
-                                                <i className="fs-input-icon fa fa-university" />
+                                                {!showOtherLocation ? (
+                                                    <select 
+                                                        className="form-control" 
+                                                        name="institution" 
+                                                        value={KARNATAKA_DISTRICTS.includes(formData.institution) ? formData.institution : 'Other'}
+                                                        onChange={handleInputChange}
+                                                        style={{backgroundColor: '#ffe4e1'}}
+                                                    >
+                                                        <option value="">Select Karnataka District (Components Version)</option>
+                                                        {KARNATAKA_DISTRICTS.map(district => (
+                                                            <option key={district} value={district}>{district}</option>
+                                                        ))}
+                                                        <option value="Other">Other (Manual Entry)</option>
+                                                    </select>
+                                                ) : (
+                                                    <input 
+                                                        className="form-control" 
+                                                        name="institution" 
+                                                        type="text" 
+                                                        placeholder="Enter Location" 
+                                                        value={formData.institution}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                )}
+                                                <i className="fs-input-icon fa fa-map-marker" />
                                             </div>
+                                            {showOtherLocation && (
+                                                <small className="text-muted mt-1 d-block">
+                                                    <button 
+                                                        type="button" 
+                                                        className="btn btn-link btn-sm p-0" 
+                                                        onClick={() => {
+                                                            setShowOtherLocation(false);
+                                                            setFormData(prev => ({ ...prev, institution: '' }));
+                                                        }}
+                                                    >
+                                                        ← Back to district selection
+                                                    </button>
+                                                </small>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="col-xl-12 col-lg-12">

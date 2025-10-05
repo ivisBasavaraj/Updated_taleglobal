@@ -24,7 +24,7 @@ function SignUpPopup() {
         phone: '',
         password: '',
         confirmPassword: '',
-        studentData: null
+        collegeName: ''
     });
     
     const [loading, setLoading] = useState(false);
@@ -64,21 +64,17 @@ function SignUpPopup() {
     };
 
     const handlePlacementChange = (e) => {
-        const { name, value, files } = e.target;
-        if (name === 'studentData') {
-            setPlacementData({ ...placementData, [name]: files[0] });
-        } else {
-            setPlacementData({ ...placementData, [name]: value });
+        const { name, value } = e.target;
+        setPlacementData({ ...placementData, [name]: value });
+        
+        if (name === 'confirmPassword' || name === 'password') {
+            const password = name === 'password' ? value : placementData.password;
+            const confirmPassword = name === 'confirmPassword' ? value : placementData.confirmPassword;
             
-            if (name === 'confirmPassword' || name === 'password') {
-                const password = name === 'password' ? value : placementData.password;
-                const confirmPassword = name === 'confirmPassword' ? value : placementData.confirmPassword;
-                
-                if (confirmPassword && password !== confirmPassword) {
-                    setPasswordError('Passwords do not match');
-                } else {
-                    setPasswordError('');
-                }
+            if (confirmPassword && password !== confirmPassword) {
+                setPasswordError('Passwords do not match');
+            } else {
+                setPasswordError('');
             }
         }
     };
@@ -177,25 +173,23 @@ function SignUpPopup() {
         setError('');
         
         try {
-            const formData = new FormData();
-            formData.append('name', placementData.name);
-            formData.append('email', placementData.email);
-            formData.append('phone', placementData.phone);
-            formData.append('password', placementData.password);
-            formData.append('confirmPassword', placementData.confirmPassword);
-            if (placementData.studentData) {
-                formData.append('studentData', placementData.studentData);
-            }
-            
             const response = await fetch('http://localhost:5000/api/placement/register', {
                 method: 'POST',
-                body: formData
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: placementData.name,
+                    email: placementData.email,
+                    phone: placementData.phone,
+                    password: placementData.password,
+                    confirmPassword: placementData.confirmPassword,
+                    collegeName: placementData.collegeName
+                })
             });
             
             const data = await response.json();
             if (data.success) {
                 alert('Registration successful! Please login.');
-                setPlacementData({ name: '', email: '', phone: '', password: '', confirmPassword: '', studentData: null });
+                setPlacementData({ name: '', email: '', phone: '', password: '', confirmPassword: '', collegeName: '' });
             } else {
                 setError(data.message || 'Registration failed');
             }
@@ -580,6 +574,20 @@ function SignUpPopup() {
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<input
+															name="collegeName"
+															type="text"
+															className="form-control"
+															placeholder="College Name*"
+															value={placementData.collegeName}
+															onChange={handlePlacementChange}
+															required
+														/>
+													</div>
+												</div>
+
+												<div className="col-lg-12">
+													<div className="form-group mb-3">
+														<input
 															name="password"
 															type="password"
 															className="form-control"
@@ -606,19 +614,7 @@ function SignUpPopup() {
 													</div>
 												</div>
 
-												<div className="col-lg-12">
-													<div className="form-group mb-3">
-														<label className="form-label">Upload Student Data (Excel/CSV)</label>
-														<input
-															name="studentData"
-															type="file"
-															className="form-control"
-															accept=".xlsx,.xls,.csv"
-															onChange={handlePlacementChange}
-														/>
-														<small className="text-muted">Optional: Upload Excel or CSV file with student data</small>
-													</div>
-												</div>
+
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">

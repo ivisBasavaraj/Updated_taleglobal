@@ -33,6 +33,7 @@ function EmployerDetails() {
             const data = await response.json();
             if (data.success) {
                 console.log('Profile data:', data.profile);
+                console.log('Authorization letters:', data.profile.authorizationLetters);
                 // Set default verification status for existing profiles
                 const profileWithDefaults = {
                     ...data.profile,
@@ -124,6 +125,70 @@ function EmployerDetails() {
         }
     };
 
+    const handleApproveAuthorizationLetter = async (letterId) => {
+        try {
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(`http://localhost:5000/api/admin/employers/${id}/authorization-letters/${letterId}/approve`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                // Update the local state
+                setProfile(prev => ({
+                    ...prev,
+                    authorizationLetters: prev.authorizationLetters.map(letter => 
+                        letter._id === letterId 
+                            ? { ...letter, status: 'approved', approvedAt: new Date() }
+                            : letter
+                    )
+                }));
+                alert('Authorization letter approved successfully! Notification sent to employer.');
+            } else {
+                const data = await response.json();
+                alert(data.message || 'Failed to approve authorization letter');
+            }
+        } catch (error) {
+            console.error('Approve error:', error);
+            alert('Error approving authorization letter');
+        }
+    };
+
+    const handleRejectAuthorizationLetter = async (letterId) => {
+        try {
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(`http://localhost:5000/api/admin/employers/${id}/authorization-letters/${letterId}/reject`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                // Update the local state
+                setProfile(prev => ({
+                    ...prev,
+                    authorizationLetters: prev.authorizationLetters.map(letter => 
+                        letter._id === letterId 
+                            ? { ...letter, status: 'rejected', rejectedAt: new Date() }
+                            : letter
+                    )
+                }));
+                alert('Authorization letter rejected successfully! Notification sent to employer.');
+            } else {
+                const data = await response.json();
+                alert(data.message || 'Failed to reject authorization letter');
+            }
+        } catch (error) {
+            console.error('Reject error:', error);
+            alert('Error rejecting authorization letter');
+        }
+    };
+
     if (loading) {
         return (
             <div className="employer-details-container">
@@ -175,7 +240,7 @@ function EmployerDetails() {
                     <div className="col-lg-6">
                         <div className="profile-field" data-aos="fade-right" data-aos-delay="200">
                             <h6><i className="fa fa-building"></i>Company Name</h6>
-                            <p>{profile.companyName || 'N/A'}</p>
+                            <p>{profile.companyName || profile.employerId?.companyName || 'N/A'}</p>
                         </div>
                         <div className="profile-field" data-aos="fade-right" data-aos-delay="250">
                             <h6><i className="fa fa-user"></i>Contact Full Name</h6>
@@ -307,6 +372,8 @@ function EmployerDetails() {
                     <h6><i className="fa fa-align-left"></i>Company Description</h6>
                     <p className="description-text">{profile.description || 'No description provided'}</p>
                 </div>
+
+
             </div>
 
             <div className="documents-section" data-aos="fade-up" data-aos-delay="300">
@@ -555,31 +622,41 @@ function EmployerDetails() {
                         <table className="table documents-table">
                             <thead>
                                 <tr>
+                                    <th><i className="fa fa-building me-2"></i>Authorization Company Name</th>
                                     <th><i className="fa fa-file me-2"></i>File Name</th>
                                     <th><i className="fa fa-calendar me-2"></i>Upload Date</th>
+                                    <th><i className="fa fa-check-circle me-2"></i>Status</th>
                                     <th><i className="fa fa-cogs me-2"></i>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {profile.authorizationLetters.map((doc, index) => (
-                                    <tr key={doc._id || index} data-aos="fade-left" data-aos-delay={500 + (index * 50)}>                                        <td><i className="fa fa-file-alt me-2 text-muted"></i>{doc.fileName}</td>
+                                    <tr key={doc._id || index} data-aos="fade-left" data-aos-delay={500 + (index * 50)}>
+                                        <td>
+                                            <i className="fa fa-building me-2 text-muted"></i>
+                                            {(() => {
+                                                console.log('Doc company name:', doc.companyName);
+                                                console.log('Profile company name:', profile.companyName);
+                                                console.log('Employer company name:', profile.employerId?.companyName);
+                                                return doc.companyName || profile.companyName || profile.employerId?.companyName || 'N/A';
+                                            })()}
+                                        </td>
+                                        <td><i className="fa fa-file-alt me-2 text-muted"></i>{doc.fileName}</td>
                                         <td><i className="fa fa-clock me-2 text-muted"></i>{formatDate(doc.uploadedAt)}</td>
                                         <td>
+                                            <span className={`status-badge ${
+                                                doc.status === 'approved' ? 'badge-approved' : 
+                                                doc.status === 'rejected' ? 'badge-rejected' : 'badge-pending'
+                                            }`}>
+                                                <i className={`fa ${
+                                                    doc.status === 'approved' ? 'fa-check' :
+                                                    doc.status === 'rejected' ? 'fa-times' : 'fa-clock'
+                                                }`}></i>
+                                                {doc.status === 'approved' ? 'Approved' : doc.status === 'rejected' ? 'Rejected' : 'Pending'}
+                                            </span>
+                                        </td>
+                                        <td>
                                             <div className="action-buttons-container">
-                                                <button 
-                                                    className="action-btn btn-download" 
-                                                    onClick={() => {
-                                                        const link = document.createElement('a');
-                                                        link.href = doc.fileData;
-                                                        link.download = doc.fileName;
-                                                        document.body.appendChild(link);
-                                                        link.click();
-                                                        document.body.removeChild(link);
-                                                    }}
-                                                >
-                                                    <i className="fa fa-download"></i>
-                                                    Download
-                                                </button>
                                                 {doc.fileData.startsWith('data:image') && (
                                                     <button 
                                                         className="action-btn btn-view-image"
@@ -589,7 +666,22 @@ function EmployerDetails() {
                                                         }}
                                                     >
                                                         <i className="fa fa-eye"></i>
-                                                        View
+                                                    </button>
+                                                )}
+                                                {doc.status !== 'approved' && (
+                                                    <button 
+                                                        className="action-btn btn-approve"
+                                                        onClick={() => handleApproveAuthorizationLetter(doc._id)}
+                                                    >
+                                                        <i className="fa fa-check"></i>
+                                                    </button>
+                                                )}
+                                                {doc.status !== 'rejected' && (
+                                                    <button 
+                                                        className="action-btn btn-reject"
+                                                        onClick={() => handleRejectAuthorizationLetter(doc._id)}
+                                                    >
+                                                        <i className="fa fa-times"></i>
                                                     </button>
                                                 )}
                                             </div>

@@ -22,8 +22,8 @@ function SignInPopup() {
         setError('');
         
         const result = await login({
-            email: canusername,
-            password: canpassword
+            email: canusername.trim(),
+            password: canpassword.trim()
         }, 'candidate');
         
         if (result.success) {

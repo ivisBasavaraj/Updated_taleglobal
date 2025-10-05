@@ -3,101 +3,187 @@ import { api } from "../../../../../utils/api";
 
 function SectionCanKeySkills({ profile }) {
     const [skills, setSkills] = useState([]);
-    const [skillInput, setSkillInput] = useState('');
+    const [selectedSkill, setSelectedSkill] = useState('');
+    const [customSkill, setCustomSkill] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showCustomInput, setShowCustomInput] = useState(false);
+
+    const predefinedSkills = [
+        // Programming Languages
+        'JavaScript', 'Python', 'Java', 'C++', 'C#', 'PHP', 'Ruby', 'Go', 'Swift', 'Kotlin',
+        // Web Technologies
+        'HTML', 'CSS', 'React', 'Angular', 'Vue.js', 'Node.js', 'Express.js', 'Bootstrap', 'jQuery',
+        // Databases
+        'MySQL', 'PostgreSQL', 'MongoDB', 'SQLite', 'Oracle', 'Redis',
+        // Cloud & DevOps
+        'AWS', 'Azure', 'Google Cloud', 'Docker', 'Kubernetes', 'Jenkins', 'Git',
+        // Business Skills
+        'Project Management', 'Team Leadership', 'Communication', 'Problem Solving', 'Critical Thinking',
+        // BCA/BBA Related
+        'Data Analysis', 'Business Analysis', 'Financial Analysis', 'Marketing', 'Sales', 'Accounting',
+        'Digital Marketing', 'Content Writing', 'SEO', 'Social Media Marketing',
+        // IT Industry
+        'Software Testing', 'Quality Assurance', 'System Administration', 'Network Administration',
+        'Cybersecurity', 'Data Science', 'Machine Learning', 'Artificial Intelligence'
+    ];
 
     useEffect(() => {
-        const profileSkills = profile?.skills || [];
-        setSkills(profileSkills);
-        setSkillInput(profileSkills.join(', '));
+        setSkills(profile?.skills || []);
     }, [profile]);
 
-    const handleSave = async () => {
+    const addSkill = async (skillToAdd) => {
+        if (!skillToAdd || skills.includes(skillToAdd)) return;
+        
         setLoading(true);
         try {
-            const skillsArray = skillInput.split(',').map(s => s.trim()).filter(s => s);
-            const response = await api.updateCandidateProfile({ skills: skillsArray });
+            const updatedSkills = [...skills, skillToAdd];
+            const response = await api.updateCandidateProfile({ skills: updatedSkills });
             if (response.success) {
-                setSkills(skillsArray);
-                alert('Skills updated successfully!');
+                setSkills(updatedSkills);
+                setSelectedSkill('');
+                setCustomSkill('');
+                setShowCustomInput(false);
                 window.dispatchEvent(new CustomEvent('profileUpdated'));
             }
         } catch (error) {
-            alert('Failed to update skills');
+            alert('Failed to add skill');
         } finally {
             setLoading(false);
         }
     };
+
+    const removeSkill = async (skillToRemove) => {
+        setLoading(true);
+        try {
+            const updatedSkills = skills.filter(skill => skill !== skillToRemove);
+            const response = await api.updateCandidateProfile({ skills: updatedSkills });
+            if (response.success) {
+                setSkills(updatedSkills);
+                window.dispatchEvent(new CustomEvent('profileUpdated'));
+            }
+        } catch (error) {
+            alert('Failed to remove skill');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleAddFromDropdown = () => {
+        if (selectedSkill === 'custom') {
+            setShowCustomInput(true);
+        } else if (selectedSkill) {
+            addSkill(selectedSkill);
+        }
+    };
+
+    const handleAddCustom = () => {
+        if (customSkill.trim()) {
+            addSkill(customSkill.trim());
+        }
+    };
     return (
         <>
-            <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
-                <h4 className="panel-tittle m-a0">
+            <div className="panel-heading wt-panel-heading p-a20">
+                <h4 className="panel-tittle m-a0 mb-3">
                     <i className="fa fa-cogs site-text-primary me-2"></i>
                     Key Skills
                 </h4>
-                <a data-bs-toggle="modal" href="#Key_Skills" role="button" title="Edit" className="site-text-primary">
-                    <span className="fa fa-edit" />
-                </a>
-            </div>
-            <div className="panel-body wt-panel-body p-a20 ">
-                <div className="tw-sidebar-tags-wrap">
-                    <div className="tagcloud">
-                        {skills.length > 0 ? (
-                            skills.map((skill, index) => (
-                                <a key={index} href="javascript:void(0)" className="skill-tag">
-                                    <i className="fa fa-tag me-1"></i>
-                                    {skill}
-                                </a>
-                            ))
-                        ) : (
-                            <p className="text-muted">
-                                <i className="fa fa-info-circle me-1"></i>
-                                No skills added yet. Click edit to add your skills.
-                            </p>
-                        )}
-                    </div>
+                
+                <div className="d-flex align-items-center gap-2 mb-3 flex-wrap">
+                    <select 
+                        className="form-select" 
+                        style={{width: '300px', height: '36px', fontSize: '13px'}}
+                        value={selectedSkill}
+                        onChange={(e) => setSelectedSkill(e.target.value)}
+                        disabled={loading}
+                    >
+                        <option value="">Select a skill from list</option>
+                        {predefinedSkills.filter(skill => !skills.includes(skill)).map(skill => (
+                            <option key={skill} value={skill}>{skill}</option>
+                        ))}
+                    </select>
+                    
+                    <button 
+                        className="btn btn-sm"
+                        style={{backgroundColor: '#0056b3', color: 'white', border: 'none', padding: '6px 16px', fontSize: '13px', height: '36px', minWidth: '70px', lineHeight: '1.2'}}
+                        onClick={handleAddFromDropdown}
+                        disabled={!selectedSkill || loading}
+                    >
+                        <i className="fa fa-plus me-1"></i>
+                        Add
+                    </button>
+                    
+                    <button 
+                        className="btn btn-sm btn-outline-primary"
+                        style={{padding: '6px 16px', fontSize: '13px', height: '36px', minWidth: '90px', lineHeight: '1.2'}}
+                        onClick={() => setShowCustomInput(true)}
+                        disabled={loading || showCustomInput}
+                    >
+                        <i className="fa fa-keyboard me-1"></i>
+                        Manual
+                    </button>
                 </div>
+                
+                {showCustomInput && (
+                    <div className="p-3 mb-3 bg-light rounded border">
+                        <div className="d-flex align-items-center gap-2 flex-wrap">
+                            <input 
+                                className="form-control"
+                                style={{width: '250px', height: '36px', fontSize: '13px'}}
+                                type="text"
+                                placeholder="Enter your custom skill"
+                                value={customSkill}
+                                onChange={(e) => setCustomSkill(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && handleAddCustom()}
+                                autoFocus
+                            />
+                            <button 
+                                className="btn btn-sm btn-success"
+                                style={{padding: '6px 16px', fontSize: '13px', height: '36px', minWidth: '70px', lineHeight: '1.2'}}
+                                onClick={handleAddCustom}
+                                disabled={!customSkill.trim() || loading}
+                            >
+                                <i className="fa fa-check me-1"></i>
+                                Add
+                            </button>
+                            <button 
+                                className="btn btn-sm btn-secondary"
+                                style={{padding: '6px 16px', fontSize: '13px', height: '36px', minWidth: '80px', lineHeight: '1.2'}}
+                                onClick={() => {setShowCustomInput(false); setCustomSkill(''); setSelectedSkill('');}}
+                            >
+                                <i className="fa fa-times me-1"></i>
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
-            {/*Modal popup */}
-            <div className="modal fade twm-saved-jobs-view" id="Key_Skills" tabIndex={-1}>
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-                        <form onSubmit={(e) => e.preventDefault()}>
-                            <div className="modal-header">
-                                <h2 className="modal-title">
-                                    <i className="fa fa-cogs me-2"></i>
-                                    Key Skills
-                                </h2>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-                            </div>
-                            <div className="modal-body">
-                                <p>It is the first thing recruiters notice in your profile. Write concisely what makes you unique and right person for the job you are looking for.</p>
-                                <div className="form-group">
-                                    <input 
-                                        className="form-control" 
-                                        type="text" 
-                                        placeholder="Enter skills separated by commas (e.g. React, JavaScript, Node.js)"
-                                        value={skillInput}
-                                        onChange={(e) => setSkillInput(e.target.value)}
-                                    />
-                                    <small className="text-muted">Separate multiple skills with commas</small>
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="site-button" data-bs-dismiss="modal">Close</button>
+            
+            <div className="panel-body wt-panel-body p-a20">
+                {skills.length > 0 ? (
+                    <div className="d-flex flex-wrap gap-2">
+                        {skills.map((skill, index) => (
+                            <span key={index} className="badge bg-white border d-flex align-items-center" style={{fontSize: '13px', padding: '6px 10px', borderRadius: '15px', color: '#333'}}>
+                                <i className="fa fa-tag me-2" style={{color: '#0056b3', fontSize: '11px'}}></i>
+                                {skill}
                                 <button 
-                                    type="button" 
-                                    className="site-button"
-                                    onClick={handleSave}
+                                    className="btn btn-sm ms-2 p-0"
+                                    style={{background: 'none', border: 'none', color: '#dc3545', fontSize: '11px', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}
+                                    onClick={() => removeSkill(skill)}
                                     disabled={loading}
-                                    data-bs-dismiss="modal"
+                                    title="Remove skill"
                                 >
-                                    {loading ? 'Saving...' : 'Save'}
+                                    <i className="fa fa-times"></i>
                                 </button>
-                            </div>
-                        </form>
+                            </span>
+                        ))}
                     </div>
-                </div>
+                ) : (
+                    <div className="text-center py-4">
+                        <i className="fa fa-info-circle text-muted mb-2" style={{fontSize: '20px'}}></i>
+                        <p className="text-muted mb-0" style={{fontSize: '14px'}}>No skills added yet. Use the options above to add your skills.</p>
+                    </div>
+                )}
             </div>
         </>
     )

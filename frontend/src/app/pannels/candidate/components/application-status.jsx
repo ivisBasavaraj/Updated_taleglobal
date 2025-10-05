@@ -7,11 +7,34 @@ import { api } from "../../../../utils/api";
 import CanPostedJobs from "./can-posted-jobs";
 import "./status-styles.css";
 
-// Add CSS for hover effect
+// Add CSS for hover effect and highlighting
 const styles = `
 .hover-primary:hover {
 	color: #0d6efd !important;
 	cursor: pointer;
+}
+
+.highlight-shortlisted {
+	animation: highlightPulse 2s ease-in-out 3;
+	box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+}
+
+.highlight-company-position {
+	animation: highlightCompanyPosition 3s ease-in-out 3;
+	box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
+	border: 2px solid #ff6b35 !important;
+}
+
+@keyframes highlightPulse {
+	0% { background-color: #e8f5e9; }
+	50% { background-color: #c8e6c9; }
+	100% { background-color: #e8f5e9; }
+}
+
+@keyframes highlightCompanyPosition {
+	0% { background-color: #fff3e0; }
+	50% { background-color: #ffe0b3; }
+	100% { background-color: #fff3e0; }
 }
 `;
 
@@ -28,10 +51,34 @@ function CanStatusPage() {
 	const [applications, setApplications] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [activeTab, setActiveTab] = useState('applications');
+	const [highlightShortlisted, setHighlightShortlisted] = useState(false);
+	const [highlightCompanyPosition, setHighlightCompanyPosition] = useState(false);
 
 	useEffect(() => {
 		loadScript("js/custom.js");
 		fetchApplications();
+		
+		// Check if we should highlight shortlisted applications
+		const shouldHighlight = sessionStorage.getItem('highlightShortlisted');
+		if (shouldHighlight === 'true') {
+			setHighlightShortlisted(true);
+			// Clear the flag after 5 seconds
+			setTimeout(() => {
+				setHighlightShortlisted(false);
+				sessionStorage.removeItem('highlightShortlisted');
+			}, 5000);
+		}
+		
+		// Check if we should highlight company and position columns
+		const shouldHighlightCP = sessionStorage.getItem('highlightCompanyPosition');
+		if (shouldHighlightCP === 'true') {
+			setHighlightCompanyPosition(true);
+			// Clear the flag after 5 seconds
+			setTimeout(() => {
+				setHighlightCompanyPosition(false);
+				sessionStorage.removeItem('highlightCompanyPosition');
+			}, 5000);
+		}
 		
 		// Set up polling to refresh data every 30 seconds
 		const interval = setInterval(() => {
@@ -44,18 +91,36 @@ function CanStatusPage() {
 	const fetchApplications = async () => {
 		setLoading(true);
 		try {
+			console.log('Fetching applications with company and position data...');
 			const response = await api.getCandidateApplicationsWithInterviews();
 			if (response.success) {
-				setApplications(response.applications || response.data || []);
-				console.log('Fetched applications with interview data:', response.applications);
+				const apps = response.applications || response.data || [];
+				console.log('Fetched applications:', apps.length);
+				
+				// Log company and position data for debugging
+				apps.forEach((app, index) => {
+					console.log(`Application ${index + 1}:`, {
+						company: app.employerId?.companyName,
+						position: app.jobId?.title,
+						status: app.status,
+						appliedDate: app.createdAt
+					});
+				});
+				
+				setApplications(apps);
+			} else {
+				console.error('API response not successful:', response);
 			}
 		} catch (error) {
 			console.error('Error fetching applications:', error);
 			// Fallback to regular applications if new endpoint fails
 			try {
+				console.log('Trying fallback API...');
 				const fallbackResponse = await api.getCandidateApplications();
 				if (fallbackResponse.success) {
-					setApplications(fallbackResponse.applications || fallbackResponse.data || []);
+					const apps = fallbackResponse.applications || fallbackResponse.data || [];
+					console.log('Fallback applications fetched:', apps.length);
+					setApplications(apps);
 				}
 			} catch (fallbackError) {
 				console.error('Fallback fetch also failed:', fallbackError);
@@ -144,6 +209,21 @@ function CanStatusPage() {
 
 
 
+			{/* Highlight notification */}
+			{highlightShortlisted && (
+				<div className="alert alert-success alert-dismissible fade show mb-3" role="alert">
+					<i className="fa fa-star me-2"></i>
+					<strong>Shortlisted Applications Highlighted!</strong> Your shortlisted applications are highlighted below.
+				</div>
+			)}
+			
+			{highlightCompanyPosition && (
+				<div className="alert alert-info alert-dismissible fade show mb-3" role="alert">
+					<i className="fa fa-building me-2"></i>
+					<strong>Company & Position Columns Highlighted!</strong> View your applied companies and positions below.
+				</div>
+			)}
+
 			{/* Refresh Controls */}
 			<div className="d-flex justify-content-between align-items-center mb-3">
 				<div className="d-flex align-items-center">
@@ -172,11 +252,11 @@ function CanStatusPage() {
 												<i className="fa fa-calendar me-2" style={{color: '#ff6b35'}}></i>
 												Applied Date
 											</th>
-											<th className="border-0 px-4 py-3 fw-semibold" style={{color: '#232323'}}>
+											<th className={`border-0 px-4 py-3 fw-semibold ${highlightCompanyPosition ? 'highlight-company-position' : ''}`} style={{color: '#232323', transition: 'all 0.3s ease'}}>
 												<i className="fa fa-building me-2" style={{color: '#ff6b35'}}></i>
 												Company
 											</th>
-											<th className="border-0 px-4 py-3 fw-semibold" style={{color: '#232323'}}>
+											<th className={`border-0 px-4 py-3 fw-semibold ${highlightCompanyPosition ? 'highlight-company-position' : ''}`} style={{color: '#232323', transition: 'all 0.3s ease'}}>
 												<i className="fa fa-briefcase me-2" style={{color: '#ff6b35'}}></i>
 												Position
 											</th>
@@ -218,8 +298,18 @@ function CanStatusPage() {
 										) : (
 											applications.map((app, index) => {
 												const interviewRounds = getInterviewRounds(app.jobId);
+												const isShortlisted = app.status === 'shortlisted';
+												const shouldHighlightRow = highlightShortlisted && isShortlisted;
 												return (
-													<tr key={index} className="border-bottom">
+													<tr 
+														key={index} 
+														className={`border-bottom ${shouldHighlightRow ? 'highlight-shortlisted' : ''}`}
+														style={{
+															backgroundColor: shouldHighlightRow ? '#e8f5e9' : 'transparent',
+															transition: 'background-color 0.3s ease',
+															border: shouldHighlightRow ? '2px solid #4caf50' : 'none'
+														}}
+													>
 														<td className="px-4 py-3">
 															<span className="text-dark fw-medium">
 																{new Date(app.createdAt || app.appliedAt).toLocaleDateString('en-US', {
@@ -229,7 +319,7 @@ function CanStatusPage() {
 																})}
 															</span>
 														</td>
-														<td className="px-4 py-3">
+														<td className={`px-4 py-3 ${highlightCompanyPosition ? 'highlight-company-position' : ''}`} style={{transition: 'all 0.3s ease'}}>
 															<div className="d-flex align-items-center">
 																<div className="me-3">
 																	<div className="rounded-circle d-flex align-items-center justify-content-center" style={{width: '45px', height: '45px', backgroundColor: '#fff3e0', border: '2px solid #ff6b35'}}>
@@ -239,19 +329,19 @@ function CanStatusPage() {
 																<div>
 																	<a href={`/emp-detail/${app.employerId?._id}`} className="text-decoration-none">
 																		<h6 className="mb-1 fw-semibold text-dark hover-primary">
-																			{app.employerId?.companyName || 'Company'}
+																			{app.employerId?.companyName || 'Company Name Not Available'}
 																		</h6>
 																	</a>
 																	<small className="text-muted">
 																		<i className="fas fa-map-marker-alt me-1"></i>
-																		{app.jobId?.location || 'Location'}
+																		{app.jobId?.location || 'Location Not Available'}
 																	</small>
 																</div>
 															</div>
 														</td>
-														<td className="px-4 py-3">
+														<td className={`px-4 py-3 ${highlightCompanyPosition ? 'highlight-company-position' : ''}`} style={{transition: 'all 0.3s ease'}}>
 															<span className="fw-medium text-dark">
-																{app.jobId?.title || 'Position'}
+																{app.jobId?.title || 'Position Not Available'}
 															</span>
 														</td>
 														<td className="px-4 py-3">

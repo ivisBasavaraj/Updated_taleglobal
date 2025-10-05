@@ -27,7 +27,7 @@ function CanDashboardPage() {
         const data = await response.json();
         if (data.success && data.profile) {
           setCandidate({
-            name: data.profile.name || 'Candidate',
+            name: data.profile.candidateId?.name || data.profile.name || 'Candidate',
             location: data.profile.location || 'Bangalore'
           });
         }

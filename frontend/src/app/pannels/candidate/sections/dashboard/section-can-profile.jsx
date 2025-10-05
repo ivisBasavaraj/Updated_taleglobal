@@ -48,7 +48,7 @@ function CompleteProfileCard() {
 	}
 	return (
 		<div className="bg-white p-4 rounded shadow-sm mb-4">
-			<h4 className="text-primary mb-2">Complete Your Profile</h4>
+			<h4 className="text-primary mb-2">Complete Your Resume</h4>
 			<p className="text-muted mb-3" style={{ fontSize: "14px" }}>
 				A complete profile increases your chances of getting hired
 			</p>
@@ -84,7 +84,7 @@ function CompleteProfileCard() {
 					className="btn btn-primary btn-sm"
 					onClick={() => (window.location.href = "/candidate/my-resume")}
 				>
-					Complete Profile
+					Complete Resume
 				</button>
 			</div>
 		</div>

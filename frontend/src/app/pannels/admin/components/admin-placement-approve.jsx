@@ -107,7 +107,7 @@ function AdminPlacementOfficersApproved() {
                                                         border: "none",
                                                         padding: "5px 10px",
                                                         borderRadius: "4px",
-                                                        cursor: "pointer",
+                                                        cursor: "pointer"
                                                     }}
                                                     onClick={() => window.open(`/admin/placement-details/${placement._id}`, '_blank')}
                                                 >

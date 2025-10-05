@@ -1,7 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { api } from '../../../../../utils/api';
 
+const KARNATAKA_DISTRICTS = [
+    'Bagalkot', 'Ballari', 'Belagavi', 'Bengaluru Rural', 'Bengaluru Urban', 'Bidar',
+    'Chamarajanagar', 'Chikballapur', 'Chikkamagaluru', 'Chitradurga', 'Dakshina Kannada',
+    'Davanagere', 'Dharwad', 'Gadag', 'Hassan', 'Haveri', 'Kalaburagi', 'Kodagu',
+    'Kolar', 'Koppal', 'Mandya', 'Mysuru', 'Raichur', 'Ramanagara', 'Shivamogga',
+    'Tumakuru', 'Udupi', 'Uttara Kannada', 'Vijayapura', 'Yadgir'
+];
+
 function SectionCanEducation({ profile, onUpdate }) {
+    console.log('Loading SectionCanEducation with Karnataka dropdown');
     const [educationList, setEducationList] = useState([]);
     const [formData, setFormData] = useState({
         degreeName: '',
@@ -11,8 +20,10 @@ function SectionCanEducation({ profile, onUpdate }) {
         scoreValue: '',
         marksheet: null
     });
+    const [showOtherLocation, setShowOtherLocation] = useState(false);
     const [editingIndex, setEditingIndex] = useState(-1);
     const [loading, setLoading] = useState(false);
+    const modalRef = useRef(null);
 
     useEffect(() => {
         if (profile?.education) {
@@ -20,9 +31,24 @@ function SectionCanEducation({ profile, onUpdate }) {
         }
     }, [profile]);
 
+    useEffect(() => {
+        // Initialize Bootstrap modal when component mounts
+        if (window.bootstrap && modalRef.current) {
+            new window.bootstrap.Modal(modalRef.current);
+        }
+    }, []);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        if (name === 'collegeName' && value === 'Other') {
+            setShowOtherLocation(true);
+            setFormData(prev => ({ ...prev, [name]: '' }));
+        } else if (name === 'collegeName' && value !== 'Other') {
+            setShowOtherLocation(false);
+            setFormData(prev => ({ ...prev, [name]: value }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleFileChange = (e) => {
@@ -46,10 +72,12 @@ function SectionCanEducation({ profile, onUpdate }) {
             marksheet: null
         });
         setEditingIndex(-1);
+        setShowOtherLocation(false);
     };
 
     const handleEdit = (index) => {
         const education = educationList[index];
+        const isOtherLocation = !KARNATAKA_DISTRICTS.includes(education.collegeName);
         setFormData({
             degreeName: education.degreeName || '',
             collegeName: education.collegeName || '',
@@ -58,6 +86,7 @@ function SectionCanEducation({ profile, onUpdate }) {
             scoreValue: education.scoreValue || education.percentage || '',
             marksheet: education.marksheet || null
         });
+        setShowOtherLocation(isOtherLocation);
         setEditingIndex(index);
     };
 
@@ -151,7 +180,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                 </div>
             </div>
             {/* Add Education Modal */}
-            <div className="modal fade twm-saved-jobs-view" id="AddEducation" tabIndex={-1}>
+            <div className="modal fade twm-saved-jobs-view" id="AddEducation" tabIndex={-1} ref={modalRef}>
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <form>
@@ -181,18 +210,48 @@ function SectionCanEducation({ profile, onUpdate }) {
                                     </div>
                                     <div className="col-xl-12 col-lg-12">
                                         <div className="form-group">
-                                            <label>Institution Name</label>
+                                            <label>Location</label>
                                             <div className="ls-inputicon-box">
-                                                <input 
-                                                    className="form-control" 
-                                                    name="collegeName" 
-                                                    type="text" 
-                                                    placeholder="Enter Institution Name" 
-                                                    value={formData.collegeName}
-                                                    onChange={handleInputChange}
-                                                />
-                                                <i className="fs-input-icon fa fa-university" />
+                                                {!showOtherLocation ? (
+                                                    <select 
+                                                        className="form-control" 
+                                                        name="collegeName" 
+                                                        value={KARNATAKA_DISTRICTS.includes(formData.collegeName) ? formData.collegeName : 'Other'}
+                                                        onChange={handleInputChange}
+                                                        style={{backgroundColor: '#f0f8ff'}}
+                                                    >
+                                                        <option value="">Select Karnataka District</option>
+                                                        {KARNATAKA_DISTRICTS.map(district => (
+                                                            <option key={district} value={district}>{district}</option>
+                                                        ))}
+                                                        <option value="Other">Other (Manual Entry)</option>
+                                                    </select>
+                                                ) : (
+                                                    <input 
+                                                        className="form-control" 
+                                                        name="collegeName" 
+                                                        type="text" 
+                                                        placeholder="Enter Location" 
+                                                        value={formData.collegeName}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                )}
+                                                <i className="fs-input-icon fa fa-map-marker" />
                                             </div>
+                                            {showOtherLocation && (
+                                                <small className="text-muted mt-1 d-block">
+                                                    <button 
+                                                        type="button" 
+                                                        className="btn btn-link btn-sm p-0" 
+                                                        onClick={() => {
+                                                            setShowOtherLocation(false);
+                                                            setFormData(prev => ({ ...prev, collegeName: '' }));
+                                                        }}
+                                                    >
+                                                        ← Back to district selection
+                                                    </button>
+                                                </small>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="col-xl-12 col-lg-12">

@@ -1,4 +1,30 @@
+import { useEffect, useRef } from "react";
+
 function SectionCanAccomplishments() {
+    const onlineProfileModalRef = useRef(null);
+    const workSampleModalRef = useRef(null);
+    const researchModalRef = useRef(null);
+    const presentationModalRef = useRef(null);
+    const certificationModalRef = useRef(null);
+    const patentModalRef = useRef(null);
+
+    useEffect(() => {
+        // Initialize all Bootstrap modals when component mounts
+        const modals = [
+            { ref: onlineProfileModalRef, id: 'Online_Profile' },
+            { ref: workSampleModalRef, id: 'Work_Sample' },
+            { ref: researchModalRef, id: 'Research_Publication' },
+            { ref: presentationModalRef, id: 'Presentation_modal' },
+            { ref: certificationModalRef, id: 'Certification_modal' },
+            { ref: patentModalRef, id: 'Patent_modal' }
+        ];
+
+        modals.forEach(({ ref }) => {
+            if (window.bootstrap && ref.current) {
+                new window.bootstrap.Modal(ref.current);
+            }
+        });
+    }, []);
     return (
         <>
             <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
@@ -16,7 +42,7 @@ function SectionCanAccomplishments() {
                         <p>Add link to Online profiles (e.g. Linkedin, Facebook etc.).</p>
                     </div>
                     {/*Online Profile Modal */}
-                    <div className="modal fade twm-saved-jobs-view" id="Online_Profile" tabIndex={-1}>
+                    <div className="modal fade twm-saved-jobs-view" id="Online_Profile" tabIndex={-1} ref={onlineProfileModalRef}>
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <form>
@@ -70,7 +96,7 @@ function SectionCanAccomplishments() {
                         <p>Add link to your Projects (e.g. Github links etc.).</p>
                     </div>
                     {/*Work Sample Modal */}
-                    <div className="modal fade twm-saved-jobs-view" id="Work_Sample" tabIndex={-1}>
+                    <div className="modal fade twm-saved-jobs-view" id="Work_Sample" tabIndex={-1} ref={workSampleModalRef}>
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <form>
@@ -152,7 +178,7 @@ function SectionCanAccomplishments() {
                         <p>Add links to your Online publications.</p>
                     </div>
                     {/*White Paper / Research Publication / Journal Entry Modal */}
-                    <div className="modal fade twm-saved-jobs-view" id="Research_Publication" tabIndex={-1}>
+                    <div className="modal fade twm-saved-jobs-view" id="Research_Publication" tabIndex={-1} ref={researchModalRef}>
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <form>
@@ -216,7 +242,7 @@ function SectionCanAccomplishments() {
                         <p>Add links to your Online presentations (e.g. Slideshare presentation links etc.).</p>
                     </div>
                     {/*Presentation Modal */}
-                    <div className="modal fade twm-saved-jobs-view" id="Presentation_modal" tabIndex={-1}>
+                    <div className="modal fade twm-saved-jobs-view" id="Presentation_modal" tabIndex={-1} ref={presentationModalRef}>
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <form>
@@ -270,7 +296,7 @@ function SectionCanAccomplishments() {
                         <p>Add details of Certification you have filed.</p>
                     </div>
                     {/*Certification Modal */}
-                    <div className="modal fade twm-saved-jobs-view" id="Certification_modal" tabIndex={-1}>
+                    <div className="modal fade twm-saved-jobs-view" id="Certification_modal" tabIndex={-1} ref={certificationModalRef}>
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <form>
@@ -340,7 +366,7 @@ function SectionCanAccomplishments() {
                         <p>Add details of Patents you have filed.</p>
                     </div>
                     {/*Patent Modal */}
-                    <div className="modal fade twm-saved-jobs-view" id="Patent_modal" tabIndex={-1}>
+                    <div className="modal fade twm-saved-jobs-view" id="Patent_modal" tabIndex={-1} ref={patentModalRef}>
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <form>

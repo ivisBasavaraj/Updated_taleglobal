@@ -2,6 +2,7 @@ import RootLayout from "./layouts/root-layout";
 import Loader from "./app/common/loader";
 import ScrollToTop from "./globals/scroll-to-top";
 import { AuthProvider } from "./contexts/AuthContext";
+import { WebSocketProvider } from "./contexts/WebSocketContext";
 import { useState, useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -26,9 +27,11 @@ function App() {
 
   return (
     <AuthProvider>
-      {isLoading && <Loader />}
-      <ScrollToTop />
-      <RootLayout />
+      <WebSocketProvider>
+        {isLoading && <Loader />}
+        <ScrollToTop />
+        <RootLayout />
+      </WebSocketProvider>
     </AuthProvider>
   )
 }

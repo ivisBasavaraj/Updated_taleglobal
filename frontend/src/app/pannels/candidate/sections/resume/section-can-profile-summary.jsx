@@ -1,13 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { api } from "../../../../../utils/api";
+import { initializeModal, showModal } from "../../../../../utils/modalUtils";
 
 function SectionCanProfileSummary({ profile }) {
     const [summary, setSummary] = useState('');
     const [loading, setLoading] = useState(false);
+    const modalRef = useRef(null);
 
     useEffect(() => {
         setSummary(profile?.profileSummary || '');
     }, [profile]);
+
+    const handleEditClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setTimeout(() => showModal('Profile_Summary'), 50);
+    };
 
     const handleSave = async () => {
         setLoading(true);
@@ -30,7 +38,14 @@ function SectionCanProfileSummary({ profile }) {
                     <i className="fa fa-user-circle site-text-primary me-2"></i>
                     Profile Summary
                 </h4>
-                <a data-bs-toggle="modal" href="#Profile_Summary" role="button" title="Edit" className="site-text-primary">
+                <a 
+                    data-bs-toggle="modal" 
+                    href="#Profile_Summary" 
+                    role="button" 
+                    title="Edit" 
+                    className="site-text-primary"
+                    onClick={handleEditClick}
+                >
                     <span className="fa fa-edit" />
                 </a>
             </div>
@@ -40,7 +55,7 @@ function SectionCanProfileSummary({ profile }) {
                 </div>
             </div>
             {/*Modal Popup */}
-            <div className="modal fade twm-saved-jobs-view" id="Profile_Summary" tabIndex={-1}>
+            <div className="modal fade twm-saved-jobs-view" id="Profile_Summary" tabIndex={-1} ref={modalRef}>
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <form onSubmit={(e) => e.preventDefault()}>

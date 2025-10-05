@@ -164,7 +164,7 @@ function SectionCandicateBasicInfo() {
                         <div className="col-md-6">
                             <label>
                                 <i className="fa fa-user me-2" style={{color: '#ff6b35'}}></i>
-                                Full Name (As per records)
+                                Full Name (As per 10th grade)
                             </label>
                             <input
                                 className="form-control"

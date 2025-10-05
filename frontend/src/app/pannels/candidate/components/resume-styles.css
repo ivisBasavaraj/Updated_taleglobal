@@ -43,13 +43,14 @@ h5 {
     margin-right: 4px;
 }
 
-/* Skill tags with icons */
+/* Skill tags with no color */
 .skill-tag {
     display: inline-block;
     padding: 6px 12px;
     margin: 4px;
-    background-color: #fff3e0;
-    color: #ff6b35;
+    background: none !important;
+    color: #333 !important;
+    border: 1px solid #ddd !important;
     border-radius: 20px;
     text-decoration: none;
     font-size: 13px;
@@ -57,13 +58,24 @@ h5 {
 }
 
 .skill-tag:hover {
-    background-color: #ff6b35;
-    color: #fff;
+    background: none !important;
+    color: #333 !important;
+    border-color: #999 !important;
     transform: translateY(-1px);
 }
 
 .skill-tag i {
     font-size: 11px;
+}
+
+.skill-tag button {
+    font-size: 10px;
+    opacity: 0.7;
+}
+
+.skill-tag button:hover {
+    opacity: 1;
+    color: #dc3545 !important;
 }
 
 /* Button icons */

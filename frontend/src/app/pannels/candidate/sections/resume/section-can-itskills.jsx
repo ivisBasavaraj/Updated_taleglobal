@@ -1,4 +1,14 @@
+import { useEffect, useRef } from "react";
+
 function SectionCanITSkills() {
+    const modalRef = useRef(null);
+
+    useEffect(() => {
+        // Initialize Bootstrap modal when component mounts
+        if (window.bootstrap && modalRef.current) {
+            new window.bootstrap.Modal(modalRef.current);
+        }
+    }, []);
     return (
         <>
             <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
@@ -88,7 +98,7 @@ function SectionCanITSkills() {
                 </div>
             </div>
             {/*IT_skills */}
-            <div className="modal fade twm-saved-jobs-view" id="IT_skills" tabIndex={-1}>
+            <div className="modal fade twm-saved-jobs-view" id="IT_skills" tabIndex={-1} ref={modalRef}>
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <form>

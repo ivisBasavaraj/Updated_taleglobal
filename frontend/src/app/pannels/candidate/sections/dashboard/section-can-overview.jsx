@@ -194,9 +194,13 @@
 
 
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CountUp from "react-countup";
+import { useWebSocket } from '../../../../../contexts/WebSocketContext';
 
 function SectionCandidateOverview() {
+	const navigate = useNavigate();
+	const { socket, joinCandidateRoom } = useWebSocket();
 	const [stats, setStats] = useState({
 		applied: 0,
 		inProgress: 0,
@@ -210,6 +214,66 @@ function SectionCandidateOverview() {
 		// Set up interval to refresh data every 30 seconds
 		const interval = setInterval(fetchDashboardData, 30000);
 		return () => clearInterval(interval);
+	}, []);
+
+	// WebSocket effect for real-time credit updates
+	useEffect(() => {
+		if (socket && candidate.name !== 'Loading...') {
+			// Get candidate ID from token
+			const token = localStorage.getItem('candidateToken');
+			if (token) {
+				try {
+					const payload = JSON.parse(atob(token.split('.')[1]));
+					const candidateId = payload.id;
+					
+					// Join candidate room for real-time updates
+					joinCandidateRoom(candidateId);
+					
+					// Listen for credit updates
+					socket.on('credit-updated', (data) => {
+						console.log('Credit update received:', data);
+						if (data.candidateId === candidateId) {
+							setCandidate(prev => ({
+								...prev,
+								credits: data.credits
+							}));
+							
+							// Add visual feedback
+							const creditElement = document.querySelector('.counter');
+							if (creditElement) {
+								creditElement.classList.add('credit-pulse');
+								setTimeout(() => {
+									creditElement.classList.remove('credit-pulse');
+								}, 500);
+							}
+							
+							// Show notification
+							if (window.Notification && Notification.permission === 'granted') {
+								new Notification('Credits Updated', {
+									body: `Your credits have been updated to ${data.credits}`,
+									icon: '/favicon.ico'
+								});
+							}
+						}
+					});
+				} catch (error) {
+					console.error('Error parsing token:', error);
+				}
+			}
+		}
+
+		return () => {
+			if (socket) {
+				socket.off('credit-updated');
+			}
+		};
+	}, [socket, candidate.name, joinCandidateRoom]);
+
+	// Request notification permission
+	useEffect(() => {
+		if (window.Notification && Notification.permission === 'default') {
+			Notification.requestPermission();
+		}
 	}, []);
 
 	const fetchDashboardData = async () => {
@@ -228,8 +292,10 @@ function SectionCandidateOverview() {
 			
 			if (statsResponse.ok) {
 				const data = await statsResponse.json();
+				console.log('Dashboard API Response:', data);
 				setStats(data.stats);
 				setCandidate(data.candidate);
+				console.log('Candidate credits:', data.candidate?.credits);
 			}
 
 			if (notificationResponse.ok) {
@@ -250,6 +316,12 @@ function SectionCandidateOverview() {
 			color: "text-info",
 			count: stats.applied,
 			label: "Applied",
+			clickable: true,
+			onClick: () => {
+				// Set flag to highlight company and position columns
+				sessionStorage.setItem('highlightCompanyPosition', 'true');
+				navigate('/candidate/status');
+			}
 		},
 		{
 			bg: "#fff3e0",
@@ -257,13 +329,21 @@ function SectionCandidateOverview() {
 			color: "text-warning",
 			count: stats.inProgress,
 			label: "In Progress",
+			clickable: true,
+			onClick: () => navigate('/candidate/status')
 		},
 		{
-			bg: "#e8f5e9",
+			bg: "#fff3e0",
 			icon: "flaticon-bell",
-			color: "text-success",
+			color: "text-warning",
 			count: stats.shortlisted,
 			label: "Shortlisted",
+			clickable: true,
+			onClick: () => {
+				// Set a flag to highlight shortlisted applications
+				sessionStorage.setItem('highlightShortlisted', 'true');
+				navigate('/candidate/status');
+			}
 		},
 	];
 
@@ -272,29 +352,58 @@ function SectionCandidateOverview() {
 		icon: "flaticon-job",
 		color: "text-primary",
 		count: candidate.credits || 0,
-		label: "Credits Available",
+		label: "Credits (From Excel)",
+		clickable: false
 	};
 
-	// Only show credits for placement candidates
+	// Show credits only for placement candidates
 	const hasCredits = candidate.registrationMethod === 'placement';
 	const cards = hasCredits ? [creditsCard, ...baseCards] : baseCards;
 
 	return (
 		<>
-			<div className="row" style={{ marginBottom: '2rem' }}>
+			<div className="d-flex justify-content-between align-items-center mb-4">
+				<div>
+					<h5 className="mb-1" style={{ color: '#111827', fontWeight: '700' }}>Dashboard Overview</h5>
+					<p className="text-muted mb-0" style={{ fontSize: '0.875rem' }}>Track your job applications and profile activity</p>
+				</div>
+				{candidate.registrationMethod === 'placement' && (
+					<div className="text-end">
+						<small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>Available Credits</small>
+						<span className="fw-bold" style={{ color: '#f97316', fontSize: '1.1rem' }}>{candidate.credits || 0}</span>
+					</div>
+				)}
+			</div>
+			<div className="row g-3" style={{ marginBottom: '2rem' }}>
 				{cards.map((card, index) => (
-					<div className={`col-xl-${hasCredits ? '3' : '4'} col-lg-${hasCredits ? '3' : '4'} col-md-6 mb-3`} key={index}>
+					<div className={`col-xl-${hasCredits ? '3' : '4'} col-lg-${hasCredits ? '3' : '4'} col-md-6`} key={index}>
 						<div className="panel panel-default">
-							<div className="panel-body wt-panel-body dashboard-card-2" style={{ backgroundColor: card.bg }}>
-								<div className="d-flex align-items-center" style={{ display: "flex", justifyContent: "flex-end" }}>
-									<div className={`wt-card-icon-2 me-3 fs-2 ${card.color}`} style={{ lineHeight: "1" }}>
+							<div 
+								className="panel-body wt-panel-body dashboard-card-2" 
+								style={{ 
+									backgroundColor: card.bg,
+									cursor: card.clickable ? 'pointer' : 'default',
+									minHeight: '120px',
+									display: 'flex',
+									alignItems: 'center'
+								}}
+								onClick={card.clickable ? card.onClick : undefined}
+
+							>
+								<div className="d-flex align-items-center justify-content-between w-100">
+									<div className={`wt-card-icon-2 ${card.color}`}>
 										<i className={card.icon} />
 									</div>
-									<div>
-										<div className={`counter fw-bold fs-4 ${card.color}`}>
+									<div className="text-end">
+										<div className={`counter ${card.color}`}>
 											<CountUp end={card.count} duration={2} />
 										</div>
-										<h5 className="mb-0 mt-1">{card.label}</h5>
+										<h5 className="mb-0">{card.label}</h5>
+										{card.label.includes('Excel') && candidate.placement?.collegeName && (
+											<small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>
+												From: {candidate.placement.collegeName}
+											</small>
+										)}
 									</div>
 								</div>
 							</div>
