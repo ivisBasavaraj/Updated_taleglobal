@@ -4,6 +4,7 @@ import { loadScript } from "../../../../globals/constants";
 import SectionCandidateOverview from "../sections/dashboard/section-can-overview";
 import CompleteProfileCard from "../sections/dashboard/section-can-profile";
 import SectionNotifications from "../sections/dashboard/section-notifications";
+import SectionRecommendedJobs from "../sections/dashboard/section-recommended-jobs";
 import './can-dashboard.css';
 
 function CanDashboardPage() {
@@ -65,6 +66,13 @@ function CanDashboardPage() {
             </div>
             <div className="col-xl-4 col-lg-4 col-md-12 mb-4">
               <SectionNotifications />
+            </div>
+          </div>
+
+          {/* Recommended Jobs */}
+          <div className="row">
+            <div className="col-12 mb-4">
+              <SectionRecommendedJobs />
             </div>
           </div>
         </div>

@@ -380,27 +380,41 @@
 }
 
 /* Personal Info Styles */
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 25px;
+.personal-info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 
-.info-card {
-    background: #f8f9fa;
-    border-radius: 15px;
-    padding: 25px;
-    border: 1px solid #e9ecef;
-    transition: all 0.3s ease;
-    animation: cardSlideIn 0.6s ease-out forwards;
+.info-section {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid #e3e6ea;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: all 0.4s ease;
+    animation: sectionSlideIn 0.6s ease-out forwards;
     opacity: 0;
+    position: relative;
+    overflow: hidden;
 }
 
-.info-card:nth-child(1) { animation-delay: 0.1s; }
-.info-card:nth-child(2) { animation-delay: 0.2s; }
-.info-card:nth-child(3) { animation-delay: 0.3s; }
+.info-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #727d8f, #ff9c00);
+    border-radius: 20px 20px 0 0;
+}
 
-@keyframes cardSlideIn {
+.info-section:nth-child(1) { animation-delay: 0.1s; }
+.info-section:nth-child(2) { animation-delay: 0.2s; }
+.info-section:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes sectionSlideIn {
     from {
         opacity: 0;
         transform: translateY(30px);
@@ -411,57 +425,121 @@
     }
 }
 
-.info-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+.info-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
 }
 
-.info-card.full-width {
-    grid-column: 1 / -1;
-}
-
-.card-header {
+.section-title {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 15px;
+    margin-bottom: 25px;
     padding-bottom: 15px;
     border-bottom: 2px solid #e9ecef;
 }
 
-.card-header i {
-    font-size: 1.3rem;
-    color: #727d8f;
+.title-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #727d8f, #ff9c00);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.4rem;
+    box-shadow: 0 4px 15px rgba(114, 125, 143, 0.3);
 }
 
-.card-header h4 {
+.section-title h3 {
     margin: 0;
     color: #232323;
-    font-weight: 600;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
-.info-item {
+.info-rows {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.info-row.single-field {
+    grid-template-columns: 1fr;
+}
+
+.info-field {
+    display: flex;
     align-items: flex-start;
-    padding: 12px 0;
-    border-bottom: 1px solid #e9ecef;
+    gap: 15px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
-.info-item:last-child {
-    border-bottom: none;
+.info-field:hover {
+    border-color: #727d8f;
+    box-shadow: 0 4px 15px rgba(114, 125, 143, 0.15);
+    transform: translateY(-2px);
 }
 
-.info-item label {
+.info-field.full-width {
+    width: 100%;
+}
+
+.field-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cc7a00;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    border: 1px solid #dee2e6;
+}
+
+.field-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.field-content label {
     font-weight: 600;
     color: #495057;
-    min-width: 150px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
 }
 
-.info-item span {
-    color: #6c757d;
-    text-align: right;
-    flex: 1;
+.field-content span {
+    color: #232323;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.field-content span:empty::before {
+    content: 'Not provided';
+    color: #adb5bd;
+    font-style: italic;
 }
 
 /* Education Timeline */
@@ -508,7 +586,7 @@
     top: 0;
     width: 30px;
     height: 30px;
-    background: linear-gradient(135deg, #727d8f, #ff9c00);
+    background: #cc7a00;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -608,7 +686,7 @@
 
 .section-header i {
     font-size: 1.3rem;
-    color: #727d8f;
+    color: #cc7a00;
 }
 
 .section-header h4 {
@@ -714,7 +792,7 @@
 
 .document-icon i {
     font-size: 3rem;
-    color: #ff9c00;
+    color: #cc7a00;
 }
 
 .document-info {
@@ -855,7 +933,7 @@
 }
 
 .company-icon {
-    color: #727d8f;
+    color: #cc7a00;
     font-size: 1.1rem;
 }
 
@@ -931,7 +1009,7 @@
 
 .no-data-content i {
     font-size: 4rem;
-    color: #adb5bd;
+    color: #cc7a00;
     margin-bottom: 20px;
 }
 
@@ -978,8 +1056,29 @@
         padding: 12px 15px;
     }
     
-    .info-grid {
+    .info-row {
         grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .info-field {
+        padding: 15px;
+    }
+    
+    .field-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .section-title h3 {
+        font-size: 1.2rem;
+    }
+    
+    .title-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
     }
     
     .education-timeline {
@@ -1048,8 +1147,24 @@
         padding: 20px;
     }
     
-    .info-card, .education-content {
+    .info-section, .education-content {
         padding: 20px;
+    }
+    
+    .personal-info-container {
+        gap: 20px;
+    }
+    
+    .info-rows {
+        gap: 15px;
+    }
+    
+    .field-content label {
+        font-size: 0.8rem;
+    }
+    
+    .field-content span {
+        font-size: 0.9rem;
     }
     
     .company-details-table {

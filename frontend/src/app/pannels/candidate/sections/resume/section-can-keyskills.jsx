@@ -104,9 +104,14 @@ function SectionCanKeySkills({ profile }) {
                     </select>
                     
                     <button 
+                        type="button"
                         className="btn btn-sm"
                         style={{backgroundColor: '#0056b3', color: 'white', border: 'none', padding: '6px 16px', fontSize: '13px', height: '36px', minWidth: '70px', lineHeight: '1.2'}}
-                        onClick={handleAddFromDropdown}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleAddFromDropdown();
+                        }}
                         disabled={!selectedSkill || loading}
                     >
                         <i className="fa fa-plus me-1"></i>
@@ -114,9 +119,14 @@ function SectionCanKeySkills({ profile }) {
                     </button>
                     
                     <button 
+                        type="button"
                         className="btn btn-sm btn-outline-primary"
                         style={{padding: '6px 16px', fontSize: '13px', height: '36px', minWidth: '90px', lineHeight: '1.2'}}
-                        onClick={() => setShowCustomInput(true)}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setShowCustomInput(true);
+                        }}
                         disabled={loading || showCustomInput}
                     >
                         <i className="fa fa-keyboard me-1"></i>

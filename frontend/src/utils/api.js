@@ -62,7 +62,13 @@ export const api = {
   getCandidateProfile: () => {
     return fetch(`${API_BASE_URL}/candidate/profile`, {
       headers: getAuthHeaders('candidate'),
-    }).then((res) => res.json());
+    }).then(async (res) => {
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({ message: 'Network error' }));
+        throw new Error(`HTTP ${res.status}: ${errorData.message || 'Request failed'}`);
+      }
+      return res.json();
+    });
   },
 
   updateCandidateProfile: (data) => {
@@ -101,6 +107,12 @@ export const api = {
 
   getCandidateApplicationsWithInterviews: () => {
     return fetch(`${API_BASE_URL}/candidate/applications/interviews`, {
+      headers: getAuthHeaders('candidate'),
+    }).then((res) => res.json());
+  },
+
+  getRecommendedJobs: () => {
+    return fetch(`${API_BASE_URL}/candidate/recommended-jobs`, {
       headers: getAuthHeaders('candidate'),
     }).then((res) => res.json());
   },

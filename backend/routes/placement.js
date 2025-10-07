@@ -74,4 +74,7 @@ router.get('/files/:fileId/view', auth(['placement']), placementController.viewF
 // Save dashboard state
 router.post('/save-dashboard-state', auth(['placement']), placementController.saveDashboardState);
 
+// Upload logo
+router.post('/upload-logo', auth(['placement']), placementController.uploadLogo);
+
 module.exports = router;

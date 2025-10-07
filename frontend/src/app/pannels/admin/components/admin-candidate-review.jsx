@@ -193,70 +193,152 @@ function AdminCandidateReviewPage() {
                 {/* Personal Information Tab */}
                 {activeTab === 'personal' && (
                     <div className="tab-panel personal-info">
-                        <div className="info-grid">
-                            <div className="info-card">
-                                <div className="card-header">
-                                    <i className="fas fa-id-card"></i>
-                                    <h4>Basic Information</h4>
+                        <div className="personal-info-container">
+                            {/* Basic Information Section */}
+                            <div className="info-section">
+                                <div className="section-title">
+                                    <div className="title-icon">
+                                        <i className="fas fa-user-circle"></i>
+                                    </div>
+                                    <h3>Basic Information</h3>
                                 </div>
-                                <div className="card-content">
-                                    <div className="info-item">
-                                        <label>Full Name</label>
-                                        <span>{candidate.name}</span>
+                                <div className="info-rows">
+                                    <div className="info-row">
+                                        <div className="info-field">
+                                            <div className="field-icon">
+                                                <i className="fas fa-user"></i>
+                                            </div>
+                                            <div className="field-content">
+                                                <label>Full Name</label>
+                                                <span>{candidate.name || 'Not provided'}</span>
+                                            </div>
+                                        </div>
+                                        <div className="info-field">
+                                            <div className="field-icon">
+                                                <i className="fas fa-envelope"></i>
+                                            </div>
+                                            <div className="field-content">
+                                                <label>Email Address</label>
+                                                <span>{candidate.email || 'Not provided'}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="info-item">
-                                        <label>Email Address</label>
-                                        <span>{candidate.email}</span>
+                                    <div className="info-row">
+                                        <div className="info-field">
+                                            <div className="field-icon">
+                                                <i className="fas fa-phone"></i>
+                                            </div>
+                                            <div className="field-content">
+                                                <label>Mobile Number</label>
+                                                <span>{candidate.phone || 'Not provided'}</span>
+                                            </div>
+                                        </div>
+                                        <div className="info-field">
+                                            <div className="field-icon">
+                                                <i className="fas fa-calendar-alt"></i>
+                                            </div>
+                                            <div className="field-content">
+                                                <label>Date of Birth</label>
+                                                <span>{candidate.dateOfBirth ? formatDate(candidate.dateOfBirth) : 'Not provided'}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="info-item">
-                                        <label>Mobile Number</label>
-                                        <span>{candidate.phone || 'Not provided'}</span>
-                                    </div>
-                                    <div className="info-item">
-                                        <label>Date of Birth</label>
-                                        <span>{candidate.dateOfBirth ? formatDate(candidate.dateOfBirth) : 'Not provided'}</span>
-                                    </div>
-                                    <div className="info-item">
-                                        <label>Gender</label>
-                                        <span>{candidate.gender || 'Not provided'}</span>
+                                    <div className="info-row">
+                                        <div className="info-field">
+                                            <div className="field-icon">
+                                                <i className="fas fa-venus-mars"></i>
+                                            </div>
+                                            <div className="field-content">
+                                                <label>Gender</label>
+                                                <span>{candidate.gender || 'Not provided'}</span>
+                                            </div>
+                                        </div>
+                                        <div className="info-field">
+                                            <div className="field-icon">
+                                                <i className="fas fa-clock"></i>
+                                            </div>
+                                            <div className="field-content">
+                                                <label>Registration Date</label>
+                                                <span>{formatDate(candidate.createdAt)}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="info-card">
-                                <div className="card-header">
-                                    <i className="fas fa-users"></i>
-                                    <h4>Family Information</h4>
-                                </div>
-                                <div className="card-content">
-                                    <div className="info-item">
-                                        <label>Father's/Husband's Name</label>
-                                        <span>{candidate.fatherName || 'Not provided'}</span>
+                            {/* Family Information Section */}
+                            <div className="info-section">
+                                <div className="section-title">
+                                    <div className="title-icon">
+                                        <i className="fas fa-users"></i>
                                     </div>
-                                    <div className="info-item">
-                                        <label>Mother's Name</label>
-                                        <span>{candidate.motherName || 'Not provided'}</span>
+                                    <h3>Family Information</h3>
+                                </div>
+                                <div className="info-rows">
+                                    <div className="info-row">
+                                        <div className="info-field">
+                                            <div className="field-icon">
+                                                <i className="fas fa-male"></i>
+                                            </div>
+                                            <div className="field-content">
+                                                <label>Father's/Husband's Name</label>
+                                                <span>{candidate.fatherName || 'Not provided'}</span>
+                                            </div>
+                                        </div>
+                                        <div className="info-field">
+                                            <div className="field-icon">
+                                                <i className="fas fa-female"></i>
+                                            </div>
+                                            <div className="field-content">
+                                                <label>Mother's Name</label>
+                                                <span>{candidate.motherName || 'Not provided'}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="info-card full-width">
-                                <div className="card-header">
-                                    <i className="fas fa-map-marker-alt"></i>
-                                    <h4>Address Information</h4>
+                            {/* Address Information Section */}
+                            <div className="info-section">
+                                <div className="section-title">
+                                    <div className="title-icon">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <h3>Address Information</h3>
                                 </div>
-                                <div className="card-content">
-                                    <div className="info-item">
-                                        <label>Residential Address</label>
-                                        <span>{candidate.residentialAddress || 'Not provided'}</span>
+                                <div className="info-rows">
+                                    <div className="info-row single-field">
+                                        <div className="info-field full-width">
+                                            <div className="field-icon">
+                                                <i className="fas fa-home"></i>
+                                            </div>
+                                            <div className="field-content">
+                                                <label>Residential Address</label>
+                                                <span>{candidate.residentialAddress || 'Not provided'}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="info-item">
-                                        <label>Permanent Address</label>
-                                        <span>{candidate.permanentAddress || 'Not provided'}</span>
+                                    <div className="info-row single-field">
+                                        <div className="info-field full-width">
+                                            <div className="field-icon">
+                                                <i className="fas fa-building"></i>
+                                            </div>
+                                            <div className="field-content">
+                                                <label>Permanent Address</label>
+                                                <span>{candidate.permanentAddress || 'Not provided'}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="info-item">
-                                        <label>Correspondence Address</label>
-                                        <span>{candidate.correspondenceAddress || 'Not provided'}</span>
+                                    <div className="info-row single-field">
+                                        <div className="info-field full-width">
+                                            <div className="field-icon">
+                                                <i className="fas fa-mail-bulk"></i>
+                                            </div>
+                                            <div className="field-content">
+                                                <label>Correspondence Address</label>
+                                                <span>{candidate.correspondenceAddress || 'Not provided'}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -5,6 +5,73 @@ import CountUp from "react-countup";
 import { publicUser } from "../../../../../globals/route-names";
 import { NavLink } from "react-router-dom";
 
+function TopRecruitersSection() {
+    const [recruiters, setRecruiters] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchTopRecruiters();
+    }, []);
+
+    const fetchTopRecruiters = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/public/top-recruiters?limit=8');
+            const data = await response.json();
+            console.log('Top recruiters data:', data);
+            if (data.success) {
+                setRecruiters(data.recruiters);
+            }
+        } catch (error) {
+            console.error('Error fetching top recruiters:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="section-full p-t120 site-bg-white twm-companies-wrap">
+            <div className="section-head center wt-small-separator-outer">
+                <div className="wt-small-separator site-text-primary">
+                    <div>Top Recruiters</div>
+                </div>
+                <h2 className="wt-title">Discover your next career move</h2>
+            </div>
+            <div className="container">
+                <div className="section-content">
+                    {loading ? (
+                        <div className="text-center p-5">Loading recruiters...</div>
+                    ) : recruiters.length > 0 ? (
+                        <div className="row">
+                            {recruiters.map((recruiter) => (
+                                <div key={recruiter._id} className="col-lg-3 col-md-4 col-sm-6 mb-4">
+                                    <div className="client-logo-card" style={{padding: '20px', textAlign: 'center', border: '1px solid #eee', borderRadius: '8px', height: '120px', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+                                        <NavLink to={`${publicUser.employer.DETAIL1}/${recruiter._id}`} style={{textDecoration: 'none', color: 'inherit'}}>
+                                            {recruiter.logo ? (
+                                                <img src={recruiter.logo} alt={recruiter.companyName} style={{maxHeight: '60px', objectFit: 'contain', marginBottom: '10px'}} />
+                                            ) : (
+                                                <div>
+                                                    <strong style={{fontSize: '16px', color: '#333'}}>{recruiter.companyName}</strong>
+                                                </div>
+                                            )}
+                                            <div style={{fontSize: '12px', color: '#666', marginTop: '5px'}}>
+                                                {recruiter.jobCount} active jobs
+                                            </div>
+                                        </NavLink>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center p-5">
+                            <p>No recruiters found</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
 const popularCities = [
     'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad',
     'Jaipur', 'Surat', 'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Thane', 'Bhopal',
@@ -447,82 +514,9 @@ function Home1Page() {
                 </div>
             </div>
             {/* EXPLORE NEW LIFE END */}
-            {/* TOP COMPANIES START */}
-            <div className="section-full p-t120  site-bg-white twm-companies-wrap">
-                {/* title="" START*/}
-                <div className="section-head center wt-small-separator-outer">
-                    <div className="wt-small-separator site-text-primary">
-                        <div>Top Companies</div>
-                    </div>
-                    <h2 className="wt-title">Get hired in top companies</h2>
-                </div>
-                {/* title="" END*/}
-                <div className="container">
-                    <div className="section-content">
-                        <div className="owl-carousel home-client-carousel2 owl-btn-vertical-center">
-                            <div className="item">
-                                <div className="ow-client-logo">
-                                    <div className="client-logo client-logo-media">
-                                        <NavLink to={publicUser.employer.LIST}><JobZImage src="images/client-logo/w1.png" alt="" /></NavLink></div>
-                                </div>
-                            </div>
-                            <div className="item">
-                                <div className="ow-client-logo">
-                                    <div className="client-logo client-logo-media">
-                                        <NavLink to={publicUser.employer.LIST}><JobZImage src="images/client-logo/w2.png" alt="" /></NavLink></div>
-                                </div>
-                            </div>
-                            <div className="item">
-                                <div className="ow-client-logo">
-                                    <div className="client-logo client-logo-media">
-                                        <NavLink to={publicUser.employer.LIST}><JobZImage src="images/client-logo/w3.png" alt="" /></NavLink></div>
-                                </div>
-                            </div>
-                            <div className="item">
-                                <div className="ow-client-logo">
-                                    <div className="client-logo client-logo-media">
-                                        <NavLink to={publicUser.employer.LIST}><JobZImage src="images/client-logo/w4.png" alt="" /></NavLink></div>
-                                </div>
-                            </div>
-                            <div className="item">
-                                <div className="ow-client-logo">
-                                    <div className="client-logo client-logo-media">
-                                        <NavLink to={publicUser.employer.LIST}><JobZImage src="images/client-logo/w5.png" alt="" /></NavLink></div>
-                                </div>
-                            </div>
-                            <div className="item">
-                                <div className="ow-client-logo">
-                                    <div className="client-logo client-logo-media">
-                                        <NavLink to={publicUser.employer.LIST}><JobZImage src="images/client-logo/w6.png" alt="" /></NavLink></div>
-                                </div>
-                            </div>
-                            <div className="item">
-                                <div className="ow-client-logo">
-                                    <div className="client-logo client-logo-media">
-                                        <NavLink to={publicUser.employer.LIST}><JobZImage src="images/client-logo/w1.png" alt="" /></NavLink></div>
-                                </div>
-                            </div>
-                            <div className="item">
-                                <div className="ow-client-logo">
-                                    <div className="client-logo client-logo-media">
-                                        <NavLink to={publicUser.employer.LIST}><JobZImage src="images/client-logo/w2.png" alt="" /></NavLink></div>
-                                </div>
-                            </div>
-                            <div className="item">
-                                <div className="ow-client-logo">
-                                    <div className="client-logo client-logo-media">
-                                        <NavLink to={publicUser.employer.LIST}><JobZImage src="images/client-logo/w3.png" alt="" /></NavLink></div>
-                                </div>
-                            </div>
-                            <div className="item">
-                                <div className="ow-client-logo">
-                                    <div className="client-logo client-logo-media">
-                                        <NavLink to={publicUser.employer.LIST}><JobZImage src="images/client-logo/w5.png" alt="" /></NavLink></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            {/* TOP RECRUITERS START */}
+            <TopRecruitersSection />
+            {/* TOP RECRUITERS END */}
                 <div className="twm-company-approch-outer">
                     <div className="twm-company-approch">
                         <div className="row">
@@ -567,23 +561,7 @@ function Home1Page() {
                 </div>
             </div>
             {/* TOP COMPANIES END */}
-            {/* JOB POST START */}
-            <div className="section-full p-t120 p-b90 site-bg-light-purple twm-bg-ring-wrap">
-                <div className="twm-bg-ring-right" />
-                <div className="twm-bg-ring-left" />
-                <div className="container">
-                    {/* title="" START*/}
-                    <div className="section-head center wt-small-separator-outer">
-                        <div className="wt-small-separator site-text-primary">
-                            <div>All Jobs Post</div>
-                        </div>
-                        <h2 className="wt-title">Find Your Career You Deserve it</h2>
-                    </div>
-                    {/* title="" END*/}
-                    <HomeJobsList />
-                </div>
-            </div>
-            {/* JOB POST END */}
+
             {/* TESTIMONIAL SECTION START */}
             <div className="section-full p-t120 p-b90 site-bg-white twm-testimonial-1-area">
                 <div className="container">

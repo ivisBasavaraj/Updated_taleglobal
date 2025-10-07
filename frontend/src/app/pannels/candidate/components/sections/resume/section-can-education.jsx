@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
-const KARNATAKA_DISTRICTS = [
+const LOCATIONS = [
     'Bagalkot', 'Ballari', 'Belagavi', 'Bengaluru Rural', 'Bengaluru Urban', 'Bidar',
     'Chamarajanagar', 'Chikballapur', 'Chikkamagaluru', 'Chitradurga', 'Dakshina Kannada',
     'Davanagere', 'Dharwad', 'Gadag', 'Hassan', 'Haveri', 'Kalaburagi', 'Kodagu',
     'Kolar', 'Koppal', 'Mandya', 'Mysuru', 'Raichur', 'Ramanagara', 'Shivamogga',
-    'Tumakuru', 'Udupi', 'Uttara Kannada', 'Vijayapura', 'Yadgir'
+    'Tumakuru', 'Udupi', 'Uttara Kannada', 'Vijayapura', 'Yadgir',
+    'Mumbai', 'Delhi', 'Chennai', 'Kolkata', 'Hyderabad', 'Pune', 'Ahmedabad', 'Jaipur',
+    'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Thane', 'Bhopal', 'Visakhapatnam', 'Pimpri-Chinchwad'
 ];
 
 function SectionCanEducation() {
@@ -23,20 +25,44 @@ function SectionCanEducation() {
         scoreType: 'percentage',
         scoreValue: ''
     });
-    const [showOtherLocation, setShowOtherLocation] = useState(false);
+    const [locationSearch, setLocationSearch] = useState('');
+    const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+    const [filteredLocations, setFilteredLocations] = useState(LOCATIONS);
+    const locationInputRef = useRef(null);
+    const dropdownRef = useRef(null);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        if (name === 'institution' && value === 'Other') {
-            setShowOtherLocation(true);
-            setFormData(prev => ({ ...prev, [name]: '' }));
-        } else if (name === 'institution' && value !== 'Other') {
-            setShowOtherLocation(false);
-            setFormData(prev => ({ ...prev, [name]: value }));
-        } else {
-            setFormData(prev => ({ ...prev, [name]: value }));
-        }
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
+
+    const handleLocationSearch = (e) => {
+        const value = e.target.value;
+        setLocationSearch(value);
+        setFormData(prev => ({ ...prev, institution: value }));
+        
+        const filtered = LOCATIONS.filter(location => 
+            location.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredLocations(filtered);
+        setShowLocationDropdown(true);
+    };
+
+    const selectLocation = (location) => {
+        setLocationSearch(location);
+        setFormData(prev => ({ ...prev, institution: location }));
+        setShowLocationDropdown(false);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowLocationDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const handleSave = () => {
         if (!formData.degree || !formData.institution || !formData.passoutYear || !formData.scoreValue) {
@@ -57,7 +83,8 @@ function SectionCanEducation() {
             scoreType: 'percentage',
             scoreValue: ''
         });
-        setShowOtherLocation(false);
+        setLocationSearch('');
+        setShowLocationDropdown(false);
         
         // Close modal
         const modal = document.getElementById('AddEducation');
@@ -79,9 +106,20 @@ function SectionCanEducation() {
                 <div className="twm-panel-inner">
                     {educationList.map((education) => (
                         <div key={education.id} className="education-item mb-3">
-                            <p><b>{education.degree}</b></p>
-                            <p>{education.institution}</p>
-                            <p>{education.year || education.passoutYear} | {education.scoreType?.toUpperCase()}: {education.scoreValue}</p>
+                            <div className="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p><b>{education.degree}</b></p>
+                                    <p><i className="fa fa-map-marker text-primary me-1"></i>{education.institution}</p>
+                                    <p>{education.year || education.passoutYear} | {education.scoreType?.toUpperCase()}: {education.scoreValue}</p>
+                                </div>
+                                <button 
+                                    className="btn btn-sm btn-outline-danger"
+                                    onClick={() => setEducationList(educationList.filter(e => e.id !== education.id))}
+                                    title="Delete"
+                                >
+                                    <i className="fa fa-trash"></i>
+                                </button>
+                            </div>
                             <hr />
                         </div>
                     ))}
@@ -117,47 +155,51 @@ function SectionCanEducation() {
                                     <div className="col-xl-12 col-lg-12">
                                         <div className="form-group">
                                             <label>Location</label>
-                                            <div className="ls-inputicon-box">
-                                                {!showOtherLocation ? (
-                                                    <select 
-                                                        className="form-control" 
-                                                        name="institution" 
-                                                        value={KARNATAKA_DISTRICTS.includes(formData.institution) ? formData.institution : 'Other'}
-                                                        onChange={handleInputChange}
-                                                        style={{backgroundColor: '#ffe4e1'}}
-                                                    >
-                                                        <option value="">Select Karnataka District (Components Version)</option>
-                                                        {KARNATAKA_DISTRICTS.map(district => (
-                                                            <option key={district} value={district}>{district}</option>
-                                                        ))}
-                                                        <option value="Other">Other (Manual Entry)</option>
-                                                    </select>
-                                                ) : (
-                                                    <input 
-                                                        className="form-control" 
-                                                        name="institution" 
-                                                        type="text" 
-                                                        placeholder="Enter Location" 
-                                                        value={formData.institution}
-                                                        onChange={handleInputChange}
-                                                    />
-                                                )}
+                                            <div className="ls-inputicon-box" style={{position: 'relative'}} ref={dropdownRef}>
+                                                <input 
+                                                    ref={locationInputRef}
+                                                    className="form-control" 
+                                                    name="locationSearch" 
+                                                    type="text" 
+                                                    placeholder="Type to search location..." 
+                                                    value={locationSearch}
+                                                    onChange={handleLocationSearch}
+                                                    onFocus={() => setShowLocationDropdown(true)}
+                                                    autoComplete="off"
+                                                />
                                                 <i className="fs-input-icon fa fa-map-marker" />
+                                                {showLocationDropdown && filteredLocations.length > 0 && (
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        top: '100%',
+                                                        left: 0,
+                                                        right: 0,
+                                                        backgroundColor: 'white',
+                                                        border: '1px solid #ddd',
+                                                        borderRadius: '4px',
+                                                        maxHeight: '200px',
+                                                        overflowY: 'auto',
+                                                        zIndex: 1000,
+                                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                                                    }}>
+                                                        {filteredLocations.map((location, index) => (
+                                                            <div 
+                                                                key={index}
+                                                                onClick={() => selectLocation(location)}
+                                                                style={{
+                                                                    padding: '8px 12px',
+                                                                    cursor: 'pointer',
+                                                                    borderBottom: index < filteredLocations.length - 1 ? '1px solid #eee' : 'none'
+                                                                }}
+                                                                onMouseEnter={(e) => e.target.style.backgroundColor = '#f5f5f5'}
+                                                                onMouseLeave={(e) => e.target.style.backgroundColor = 'white'}
+                                                            >
+                                                                {location}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
                                             </div>
-                                            {showOtherLocation && (
-                                                <small className="text-muted mt-1 d-block">
-                                                    <button 
-                                                        type="button" 
-                                                        className="btn btn-link btn-sm p-0" 
-                                                        onClick={() => {
-                                                            setShowOtherLocation(false);
-                                                            setFormData(prev => ({ ...prev, institution: '' }));
-                                                        }}
-                                                    >
-                                                        ← Back to district selection
-                                                    </button>
-                                                </small>
-                                            )}
                                         </div>
                                     </div>
                                     <div className="col-xl-12 col-lg-12">
@@ -213,7 +255,7 @@ function SectionCanEducation() {
                                     </div>
                                     <div className="col-xl-12 col-lg-12">
                                         <div className="form-group">
-                                            <label>Upload Marksheet</label>
+                                            <label>Upload Academic Records</label>
                                             <div className="ls-inputicon-box">
                                                 <input className="form-control" name="marksheet" type="file" accept=".pdf,.jpg,.jpeg,.png" />
                                                 <i className="fs-input-icon fa fa-upload" />

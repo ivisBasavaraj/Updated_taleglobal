@@ -38,7 +38,9 @@ export const publicUser = {
         ADMIN_LOGIN:    "/admin-login",
         SUB_ADMIN_LOGIN: "/sub-admin-login",
         ICONS:          "/icons",
-        FORGOT:         "/forgot-password"
+        FORGOT:         "/forgot-password",
+        TERMS:          "/terms-conditions",
+        PRIVACY:        "/privacy-policy"
     },
     candidate: {
         GRID: "/can-grid",

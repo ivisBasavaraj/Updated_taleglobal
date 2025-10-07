@@ -31,6 +31,8 @@ function SectionCanPersonalDetail({ profile }) {
         return levels[index] || 'Additional Qualification';
     };
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [touched, setTouched] = useState({});
 
     useEffect(() => {
         if (profile) {
@@ -85,8 +87,58 @@ function SectionCanPersonalDetail({ profile }) {
         }
     }, [profile]);
 
+    const validateField = (field, value) => {
+        const newErrors = { ...errors };
+        
+        switch (field) {
+            case 'dateOfBirth':
+                if (value) {
+                    const birthDate = new Date(value);
+                    const today = new Date();
+                    const age = today.getFullYear() - birthDate.getFullYear();
+                    if (age < 16 || age > 65) {
+                        newErrors.dateOfBirth = 'Age must be between 16 and 65 years';
+                    } else {
+                        delete newErrors.dateOfBirth;
+                    }
+                } else {
+                    delete newErrors.dateOfBirth;
+                }
+                break;
+            
+            case 'fatherName':
+            case 'motherName':
+                if (value && (value.length < 2 || value.length > 50)) {
+                    newErrors[field] = 'Name must be between 2 and 50 characters';
+                } else if (value && !/^[a-zA-Z\s]+$/.test(value)) {
+                    newErrors[field] = 'Name can only contain letters and spaces';
+                } else {
+                    delete newErrors[field];
+                }
+                break;
+            
+            case 'residentialAddress':
+            case 'permanentAddress':
+            case 'correspondenceAddress':
+                if (value && value.length > 200) {
+                    newErrors[field] = 'Address cannot exceed 200 characters';
+                } else {
+                    delete newErrors[field];
+                }
+                break;
+        }
+        
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleInputChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
+        
+        // Validate field if it has been touched
+        if (touched[field]) {
+            validateField(field, value);
+        }
         
         // Auto-save after a short delay
         clearTimeout(window.autoSaveTimeout);
@@ -95,18 +147,47 @@ function SectionCanPersonalDetail({ profile }) {
         }, 1000);
     };
 
+    const handleBlur = (field, value) => {
+        setTouched(prev => ({ ...prev, [field]: true }));
+        validateField(field, value);
+    };
+
+    const validateForm = () => {
+        const fieldsToValidate = ['dateOfBirth', 'fatherName', 'motherName', 'residentialAddress', 'permanentAddress', 'correspondenceAddress'];
+        let isValid = true;
+        
+        fieldsToValidate.forEach(field => {
+            const fieldValid = validateField(field, formData[field]);
+            if (!fieldValid) isValid = false;
+        });
+        
+        // Mark all fields as touched
+        const allTouched = {};
+        fieldsToValidate.forEach(field => {
+            allTouched[field] = true;
+        });
+        setTouched(allTouched);
+        
+        return isValid;
+    };
+
     const handleSubmit = async () => {
+        if (!validateForm()) {
+            alert('Please fix the validation errors before submitting.');
+            return;
+        }
+        
         setLoading(true);
         try {
             const updateData = {
                 dateOfBirth: formData.dateOfBirth,
                 gender: formData.gender,
                 location: formData.location,
-                fatherName: formData.fatherName,
-                motherName: formData.motherName,
-                residentialAddress: formData.residentialAddress,
-                permanentAddress: formData.permanentAddress,
-                correspondenceAddress: formData.correspondenceAddress,
+                fatherName: formData.fatherName.trim(),
+                motherName: formData.motherName.trim(),
+                residentialAddress: formData.residentialAddress.trim(),
+                permanentAddress: formData.permanentAddress.trim(),
+                correspondenceAddress: formData.correspondenceAddress.trim(),
                 education: educationList.map(edu => ({
                     degreeName: edu.degreeName,
                     collegeName: edu.collegeName,
@@ -128,7 +209,12 @@ function SectionCanPersonalDetail({ profile }) {
                 window.dispatchEvent(new CustomEvent('profileUpdated'));
             }
         } catch (error) {
-            alert('Failed to update profile');
+            if (error.response && error.response.data && error.response.data.errors) {
+                const errorMessages = error.response.data.errors.map(err => err.msg).join('\n');
+                alert('Validation errors:\n' + errorMessages);
+            } else {
+                alert('Failed to update profile: ' + error.message);
+            }
         } finally {
             setLoading(false);
         }
@@ -203,11 +289,13 @@ function SectionCanPersonalDetail({ profile }) {
                             <div className="col-md-6">
                                 <label><i className="fa fa-calendar me-1"></i> Date of Birth</label>
                                 <input
-                                    className="form-control"
+                                    className={`form-control ${errors.dateOfBirth ? 'is-invalid' : touched.dateOfBirth && !errors.dateOfBirth ? 'is-valid' : ''}`}
                                     type="date"
                                     value={formData.dateOfBirth ? formData.dateOfBirth.split('T')[0] : ''}
                                     onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
+                                    onBlur={(e) => handleBlur('dateOfBirth', e.target.value)}
                                 />
+                                {errors.dateOfBirth && <div className="invalid-feedback">{errors.dateOfBirth}</div>}
                             </div>
 
                             <div className="col-md-6">
@@ -280,56 +368,66 @@ function SectionCanPersonalDetail({ profile }) {
                             <div className="col-md-6">
                                 <label><i className="fa fa-male me-1"></i> Father's / Husband's Name</label>
                                 <input
-                                    className="form-control"
+                                    className={`form-control ${errors.fatherName ? 'is-invalid' : touched.fatherName && !errors.fatherName ? 'is-valid' : ''}`}
                                     type="text"
                                     placeholder="Enter name"
                                     value={formData.fatherName}
                                     onChange={(e) => handleInputChange('fatherName', e.target.value)}
+                                    onBlur={(e) => handleBlur('fatherName', e.target.value)}
                                 />
+                                {errors.fatherName && <div className="invalid-feedback">{errors.fatherName}</div>}
                             </div>
 
                             <div className="col-md-6">
                                 <label><i className="fa fa-female me-1"></i> Mother's Name</label>
                                 <input
-                                    className="form-control"
+                                    className={`form-control ${errors.motherName ? 'is-invalid' : touched.motherName && !errors.motherName ? 'is-valid' : ''}`}
                                     type="text"
                                     placeholder="Enter name"
                                     value={formData.motherName}
                                     onChange={(e) => handleInputChange('motherName', e.target.value)}
+                                    onBlur={(e) => handleBlur('motherName', e.target.value)}
                                 />
+                                {errors.motherName && <div className="invalid-feedback">{errors.motherName}</div>}
                             </div>
 
                             <div className="col-md-12">
                                 <label><i className="fa fa-home me-1"></i> Residential Address</label>
                                 <textarea
-                                    className="form-control"
+                                    className={`form-control ${errors.residentialAddress ? 'is-invalid' : touched.residentialAddress && !errors.residentialAddress ? 'is-valid' : ''}`}
                                     rows={2}
                                     placeholder="Enter address"
                                     value={formData.residentialAddress}
                                     onChange={(e) => handleInputChange('residentialAddress', e.target.value)}
+                                    onBlur={(e) => handleBlur('residentialAddress', e.target.value)}
                                 ></textarea>
+                                {errors.residentialAddress && <div className="invalid-feedback">{errors.residentialAddress}</div>}
                             </div>
 
                             <div className="col-md-12">
                                 <label><i className="fa fa-map-marker me-1"></i> Permanent Address</label>
                                 <textarea
-                                    className="form-control"
+                                    className={`form-control ${errors.permanentAddress ? 'is-invalid' : touched.permanentAddress && !errors.permanentAddress ? 'is-valid' : ''}`}
                                     rows={2}
                                     placeholder="Enter permanent address"
                                     value={formData.permanentAddress}
                                     onChange={(e) => handleInputChange('permanentAddress', e.target.value)}
+                                    onBlur={(e) => handleBlur('permanentAddress', e.target.value)}
                                 ></textarea>
+                                {errors.permanentAddress && <div className="invalid-feedback">{errors.permanentAddress}</div>}
                             </div>
 
                             <div className="col-md-12">
                                 <label><i className="fa fa-envelope me-1"></i> Correspondence Address</label>
                                 <textarea
-                                    className="form-control"
+                                    className={`form-control ${errors.correspondenceAddress ? 'is-invalid' : touched.correspondenceAddress && !errors.correspondenceAddress ? 'is-valid' : ''}`}
                                     rows={2}
                                     placeholder="Enter correspondence address"
                                     value={formData.correspondenceAddress}
                                     onChange={(e) => handleInputChange('correspondenceAddress', e.target.value)}
+                                    onBlur={(e) => handleBlur('correspondenceAddress', e.target.value)}
                                 ></textarea>
+                                {errors.correspondenceAddress && <div className="invalid-feedback">{errors.correspondenceAddress}</div>}
                             </div>
                         </div>
 
@@ -614,10 +712,15 @@ function SectionCanPersonalDetail({ profile }) {
                         </div>
 
                         <div className="text-left mt-4">
-                            <button type="button" onClick={handleSubmit} className="btn btn-primary" disabled={loading}>
+                            <button type="button" onClick={handleSubmit} className="btn btn-primary" disabled={loading || Object.keys(errors).length > 0}>
                                 <i className="fa fa-save me-1"></i>
                                 {loading ? 'Saving...' : 'Save Changes'}
                             </button>
+                            {Object.keys(errors).length > 0 && (
+                                <div className="text-danger mt-2">
+                                    <small><i className="fa fa-exclamation-triangle me-1"></i>Please fix the validation errors above</small>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

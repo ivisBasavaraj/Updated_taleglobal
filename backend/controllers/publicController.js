@@ -389,6 +389,63 @@ exports.getEmployers = async (req, res) => {
   }
 };
 
+exports.getTopRecruiters = async (req, res) => {
+  try {
+    const { limit = 8 } = req.query;
+    const Employer = require('../models/Employer');
+    const EmployerProfile = require('../models/EmployerProfile');
+    
+    // Get active and approved employers
+    const employers = await Employer.find({ 
+      status: 'active', 
+      isApproved: true 
+    }).select('_id companyName employerType createdAt');
+    
+    // Get job counts and profiles for each employer
+    const recruitersWithData = await Promise.all(
+      employers.map(async (employer) => {
+        // Get job count for this employer
+        const jobCount = await Job.countDocuments({
+          employerId: employer._id,
+          status: { $in: ['active', 'pending'] }
+        });
+        
+        // Get employer profile
+        const profile = await EmployerProfile.findOne({ employerId: employer._id });
+        
+        return {
+          _id: employer._id,
+          companyName: employer.companyName,
+          employerType: employer.employerType,
+          jobCount,
+          logo: profile?.logo || null,
+          description: profile?.description || profile?.companyDescription || 'Leading recruitment company',
+          location: profile?.location || profile?.corporateAddress || 'Multiple Locations',
+          industry: profile?.industry || profile?.industrySector || 'Various Industries',
+          establishedSince: profile?.establishedSince || profile?.foundedYear || null,
+          teamSize: profile?.teamSize || profile?.companySize || null,
+          website: profile?.website || null
+        };
+      })
+    );
+    
+    // Sort by job count (descending) and take top recruiters
+    const topRecruiters = recruitersWithData
+      .filter(recruiter => recruiter.jobCount > 0) // Only include recruiters with active jobs
+      .sort((a, b) => b.jobCount - a.jobCount)
+      .slice(0, parseInt(limit));
+    
+    res.json({ 
+      success: true, 
+      recruiters: topRecruiters,
+      total: topRecruiters.length
+    });
+  } catch (error) {
+    console.error('Error in getTopRecruiters:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // Apply for job without login
 exports.applyForJob = async (req, res) => {
   try {

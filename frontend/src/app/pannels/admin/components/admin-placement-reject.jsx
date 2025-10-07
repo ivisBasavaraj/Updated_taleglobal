@@ -65,7 +65,6 @@ function AdminPlacementOfficersRejected() {
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Join Date</th>
-                                    <th>File Uploaded</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -74,7 +73,7 @@ function AdminPlacementOfficersRejected() {
                             <tbody>
                                 {placements.length === 0 ? (
                                     <tr>
-                                        <td colSpan="7" className="text-center">No rejected placement officers found</td>
+                                        <td colSpan="6" className="text-center">No rejected placement officers found</td>
                                     </tr>
                                 ) : (
                                     placements.map((placement) => (
@@ -87,15 +86,6 @@ function AdminPlacementOfficersRejected() {
                                             <td>{placement.email}</td>
                                             <td>{placement.phone || 'N/A'}</td>
                                             <td>{formatDate(placement.createdAt)}</td>
-                                            <td>
-                                                {placement.fileName ? (
-                                                    <span className="text-success">
-                                                        <i className="fa fa-check"></i> {placement.fileName}
-                                                    </span>
-                                                ) : (
-                                                    <span className="text-muted">No file</span>
-                                                )}
-                                            </td>
                                             <td>
                                                 <span className="text-danger">Rejected</span>
                                             </td>

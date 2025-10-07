@@ -17,17 +17,17 @@ const DARK_GREY = "#333333";
 const LIGHT_GREY_TEXT = "#6c757d";
 
 const categories = [
-  { name: "Management", jobs: 70, Icon: FaBriefcase },
-  { name: "Accountant", jobs: 65, Icon: FaCalculator },
-  { name: "Software", jobs: 55, Icon: FaCode },
-  { name: "Human Resource", jobs: 45, Icon: FaUsers },
+  { name: "IT", Icon: FaCode },
+  { name: "Sales", Icon: FaBriefcase },
+  { name: "Marketing", Icon: FaUsers },
+  { name: "Finance", Icon: FaCalculator },
 ];
 
 const HeroSection = () => {
   return (
     <div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
       {/* Top Navbar */}
-      <Navbar bg="white" expand="lg" className="shadow-sm" sticky="top">
+      <Navbar bg="white" expand="lg" className="shadow-sm" sticky="top" style={{ backgroundColor: "#ffffff" }}>
         <Container>
           {/* Left: Logo */}
           <Navbar.Brand href="#" className="fw-bold" style={{ color: DARK_GREY }}>
@@ -74,19 +74,27 @@ const HeroSection = () => {
 
       {/* Hero Section */}
       <Container className="py-5">
-        <Row className="justify-content-center text-center">
-          <Col lg={10} xl={8}>
+        <Row className="align-items-center">
+          <Col lg={6}>
             <h1 className="fw-bold display-5" style={{ color: DARK_GREY, lineHeight: 1.2 }}>
-              Find the <span style={{ color: ORANGE }}>job</span> that fits your life
+              Find the <span style={{ color: "#e68900" }}>job</span> that fits your life
             </h1>
             <p className="mt-3 mb-4" style={{ color: LIGHT_GREY_TEXT, fontSize: "1.05rem" }}>
               Type your keyword, then click search to find your perfect job.
             </p>
           </Col>
+          <Col lg={6} className="text-center">
+            <img 
+              src="/assets/images/Resume-amico.png" 
+              alt="Find Job" 
+              className="img-fluid" 
+              style={{ maxHeight: "400px" }}
+            />
+          </Col>
         </Row>
 
         {/* Search Card */}
-        <Row className="justify-content-center">
+        <Row className="justify-content-center mt-4">
           <Col lg={10} xl={8}>
             <Card className="shadow-sm rounded-4 border-0">
               <Card.Body className="p-3 p-md-4">
@@ -119,28 +127,29 @@ const HeroSection = () => {
                     </Col>
 
                     {/* LOCATION */}
-                    <Col xs={12} md={4}>
+                    <Col xs={12} md={3}>
                       <Form.Label className="mb-1 fw-semibold" style={{ color: DARK_GREY }}>
                         LOCATION
                       </Form.Label>
-                      <InputGroup>
-                        <InputGroup.Text className="bg-white border-end-0 rounded-start-3">
-                          🔍
-                        </InputGroup.Text>
-                        <Form.Control
-                          placeholder="Search..."
-                          className="rounded-end-3"
-                          style={{ borderLeft: "0" }}
-                        />
-                      </InputGroup>
+                      <Form.Select className="rounded-3" defaultValue="All Locations">
+                        <option>All Locations</option>
+                        <option>Mumbai</option>
+                        <option>Delhi</option>
+                        <option>Bangalore</option>
+                        <option>Hyderabad</option>
+                        <option>Chennai</option>
+                        <option>Pune</option>
+                        <option>Kolkata</option>
+                        <option>Remote</option>
+                      </Form.Select>
                     </Col>
 
                     {/* BUTTON */}
-                    <Col xs={12} md={2} className="d-grid">
+                    <Col xs={12} md={3} className="d-grid">
                       <Form.Label className="mb-1 opacity-0">Find Job</Form.Label>
                       <Button
                         type="submit"
-                        className="rounded-pill py-2"
+                        className="rounded-pill py-1"
                         style={{ backgroundColor: ORANGE, border: "none" }}
                       >
                         Find Job
@@ -182,11 +191,6 @@ const HeroSection = () => {
                       title={cat.name}
                     >
                       {cat.Icon ? <cat.Icon size={18} /> : "•"}
-                    </div>
-
-                    {/* Jobs count */}
-                    <div className="text-muted" style={{ color: LIGHT_GREY_TEXT }}>
-                      {cat.jobs} Jobs
                     </div>
 
                     {/* Category name */}

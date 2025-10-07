@@ -31,6 +31,8 @@ function EmpCompanyProfilePage() {
         
         // Primary Contact
         contactFullName: '',
+        contactMiddleName: '',
+        contactLastName: '',
         contactDesignation: '',
         contactOfficialEmail: '',
         contactMobile: '',
@@ -47,6 +49,7 @@ function EmpCompanyProfilePage() {
 
     const [loading, setLoading] = useState(false);
     const [authSections, setAuthSections] = useState([{ id: 1, companyName: '' }]);
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         loadScript("js/custom.js");
@@ -92,6 +95,18 @@ function EmpCompanyProfilePage() {
 
     const handleInputChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
+        if (errors[field]) {
+            setErrors(prev => ({ ...prev, [field]: '' }));
+        }
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formData.contactLastName?.trim()) {
+            newErrors.contactLastName = 'Last name is required';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     // Validate image file by size, type, and minimum dimensions
@@ -398,6 +413,12 @@ function EmpCompanyProfilePage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (!validateForm()) {
+            setLoading(false);
+            return;
+        }
+        
         setLoading(true);
         try {
             const token = localStorage.getItem('employerToken');
@@ -1043,6 +1064,37 @@ function EmpCompanyProfilePage() {
                                         onChange={(e) => handleInputChange('contactFullName', e.target.value)}
                                         placeholder="Enter Full Name"
                                     />
+                                </div>
+                            </div>
+
+                            <div className="col-lg-4 col-md-6">
+                                <div className="form-group">
+                                    <label><UserIcon size={16} className="me-2" /> Middle Name</label>
+                                    <input
+                                        className="form-control"
+                                        type="text"
+                                        value={formData.contactMiddleName}
+                                        onChange={(e) => handleInputChange('contactMiddleName', e.target.value)}
+                                        placeholder="Enter Middle Name (Optional)"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="col-lg-4 col-md-6">
+                                <div className="form-group">
+                                    <label><UserIcon size={16} className="me-2" /> Last Name</label>
+                                    <input
+                                        className={`form-control ${errors.contactLastName ? 'is-invalid' : ''}`}
+                                        type="text"
+                                        value={formData.contactLastName}
+                                        onChange={(e) => handleInputChange('contactLastName', e.target.value)}
+                                        placeholder="Enter Last Name"
+                                    />
+                                    {errors.contactLastName && (
+                                        <div className="text-danger mt-1" style={{fontSize: '12px'}}>
+                                            {errors.contactLastName}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 

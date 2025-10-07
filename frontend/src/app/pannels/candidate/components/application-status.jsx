@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { loadScript } from "../../../../globals/constants";
 import { api } from "../../../../utils/api";
 import CanPostedJobs from "./can-posted-jobs";
+import PopupInterviewRoundDetails from "../../../common/popups/popup-interview-round-details";
 import "./status-styles.css";
 
 // Add CSS for hover effect and highlighting
@@ -53,6 +54,9 @@ function CanStatusPage() {
 	const [activeTab, setActiveTab] = useState('applications');
 	const [highlightShortlisted, setHighlightShortlisted] = useState(false);
 	const [highlightCompanyPosition, setHighlightCompanyPosition] = useState(false);
+	const [showRoundDetails, setShowRoundDetails] = useState(false);
+	const [selectedRoundDetails, setSelectedRoundDetails] = useState(null);
+	const [selectedRoundType, setSelectedRoundType] = useState(null);
 
 	useEffect(() => {
 		loadScript("js/custom.js");
@@ -194,6 +198,12 @@ function CanStatusPage() {
 		return { text: 'Not Started', class: 'bg-secondary text-white', feedback: '' };
 	};
 
+	const handleViewRoundDetails = (roundType, roundDetails) => {
+		setSelectedRoundType(roundType);
+		setSelectedRoundDetails(roundDetails);
+		setShowRoundDetails(true);
+	};
+
 	return (
 		<>
 			{/* Enhanced Header */}
@@ -268,13 +278,17 @@ function CanStatusPage() {
 												<i className="fa fa-tasks me-2" style={{color: '#ff6b35'}}></i>
 												Interview Progress
 											</th>
+											<th className="border-0 px-4 py-3 fw-semibold" style={{color: '#232323'}}>
+												<i className="fa fa-eye me-2" style={{color: '#ff6b35'}}></i>
+												View Details
+											</th>
 										</tr>
 									</thead>
 
 									<tbody>
 										{loading ? (
 											<tr>
-												<td colSpan="5" className="text-center py-5">
+												<td colSpan="6" className="text-center py-5">
 													<div className="d-flex flex-column align-items-center">
 														<i className="fa fa-spinner fa-spin fa-3x mb-3" style={{color: '#ff6b35'}}></i>
 														<p className="text-muted mb-0">Loading your applications...</p>
@@ -283,7 +297,7 @@ function CanStatusPage() {
 											</tr>
 										) : applications.length === 0 ? (
 											<tr>
-												<td colSpan="5" className="text-center py-5">
+												<td colSpan="6" className="text-center py-5">
 													<div className="d-flex flex-column align-items-center">
 														<i className="fa fa-search fa-3x mb-3" style={{color: '#ff6b35'}}></i>
 														<h5 style={{color: '#232323'}}>No Applications Yet</h5>
@@ -413,6 +427,37 @@ function CanStatusPage() {
 																)}
 															</div>
 														</td>
+														<td className="px-4 py-3">
+															<div className="d-flex flex-wrap gap-1">
+																{interviewRounds.length > 0 ? (
+																	interviewRounds.map((round, roundIndex) => {
+																		const roundTypeMap = {
+																			'Technical': 'technical',
+																			'HR': 'hr',
+																			'Managerial': 'managerial',
+																			'Non-Technical': 'nonTechnical',
+																			'Final': 'final'
+																		};
+																		const roundKey = roundTypeMap[round];
+																		const roundDetails = app.jobId?.interviewRoundDetails?.[roundKey];
+																		return (
+																			<button
+																				key={roundIndex}
+																				className="btn btn-sm btn-outline-primary"
+																				style={{fontSize: '10px', padding: '2px 6px', margin: '1px'}}
+																				onClick={() => handleViewRoundDetails(roundKey, roundDetails)}
+																				title={`View ${round} details`}
+																			>
+																				<i className="fa fa-eye me-1"></i>
+																				{round}
+																			</button>
+																		);
+																	})
+																) : (
+																	<span className="text-muted fst-italic" style={{fontSize: '11px'}}>No rounds</span>
+																)}
+															</div>
+														</td>
 													</tr>
 												);
 											})
@@ -425,6 +470,14 @@ function CanStatusPage() {
 					</div>
 				</div>
 			</div>
+			
+			{/* Interview Round Details Popup */}
+			<PopupInterviewRoundDetails
+				isOpen={showRoundDetails}
+				onClose={() => setShowRoundDetails(false)}
+				roundDetails={selectedRoundDetails}
+				roundType={selectedRoundType}
+			/>
 		</>
 	);
 }

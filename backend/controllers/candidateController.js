@@ -118,7 +118,7 @@ exports.updateProfile = async (req, res) => {
     console.log('Request file:', req.file);
     console.log('User ID:', req.user._id);
     
-    const { name, phone, email, ...profileData } = req.body;
+    const { name, phone, email, middleName, lastName, ...profileData } = req.body;
     
     // Update candidate basic info
     if (name || phone || email) {
@@ -132,6 +132,9 @@ exports.updateProfile = async (req, res) => {
     
     // Prepare profile update data
     const updateData = { ...profileData };
+
+    if (middleName !== undefined) updateData.middleName = middleName;
+    if (lastName !== undefined) updateData.lastName = lastName;
     if (req.file) {
       const { fileToBase64 } = require('../middlewares/upload');
       updateData.profilePicture = fileToBase64(req.file);
@@ -679,6 +682,48 @@ exports.getCandidateCompleteProfile = async (req, res) => {
     });
   } catch (error) {
     console.error('Error getting complete candidate profile:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Get recommended jobs based on candidate skills
+exports.getRecommendedJobs = async (req, res) => {
+  try {
+    const profile = await CandidateProfile.findOne({ candidateId: req.user._id });
+    
+    if (!profile || !profile.skills || profile.skills.length === 0) {
+      return res.json({ success: true, jobs: [] });
+    }
+
+    // Get active jobs that match candidate skills
+    const jobs = await Job.find({
+      status: 'active',
+      requiredSkills: { $in: profile.skills }
+    })
+    .populate('employerId', 'companyName')
+    .sort({ createdAt: -1 })
+    .limit(10);
+
+    // Calculate skill match score for each job
+    const jobsWithScore = jobs.map(job => {
+      const jobObj = job.toObject();
+      const matchingSkills = job.requiredSkills.filter(skill => 
+        profile.skills.includes(skill)
+      );
+      const matchScore = Math.round((matchingSkills.length / job.requiredSkills.length) * 100);
+      
+      return {
+        ...jobObj,
+        matchingSkills,
+        matchScore
+      };
+    });
+
+    // Sort by match score (highest first)
+    jobsWithScore.sort((a, b) => b.matchScore - a.matchScore);
+
+    res.json({ success: true, jobs: jobsWithScore });
+  } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };

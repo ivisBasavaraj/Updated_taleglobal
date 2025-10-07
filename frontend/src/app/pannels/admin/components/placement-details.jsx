@@ -123,7 +123,7 @@ function PlacementDetails() {
     const handleFileApprove = async (fileId, fileName) => {
         const file = placement?.fileHistory?.find(f => f._id === fileId);
         const displayName = file?.customName || fileName;
-        if (!confirm(`Are you sure you want to approve and process the file "${displayName}"? This will create candidate accounts from the file data.`)) {
+        if (!window.confirm(`Are you sure you want to approve and process the file "${displayName}"? This will create candidate accounts from the file data.`)) {
             return;
         }
         
@@ -164,7 +164,7 @@ function PlacementDetails() {
     const handleFileReject = async (fileId, fileName) => {
         const file = placement?.fileHistory?.find(f => f._id === fileId);
         const displayName = file?.customName || fileName;
-        if (!confirm(`Are you sure you want to reject the file "${displayName}"? This action cannot be undone.`)) {
+        if (!window.confirm(`Are you sure you want to reject the file "${displayName}"? This action cannot be undone.`)) {
             return;
         }
         
@@ -286,7 +286,7 @@ function PlacementDetails() {
     const handleProcessData = async (fileId, fileName) => {
         const file = placement?.fileHistory?.find(f => f._id === fileId);
         const displayName = file?.customName || fileName;
-        if (!confirm(`Are you sure you want to process the file "${displayName}"?\n\nThis will:\n• Create candidate accounts from Excel data\n• Enable immediate login with email/password from Excel\n• Store data in database permanently\n• Allow candidates to access their dashboard`)) {
+        if (!window.confirm(`Are you sure you want to process the file "${displayName}"?\n\nThis will:\n• Create candidate accounts from Excel data\n• Enable immediate login with email/password from Excel\n• Store data in database permanently\n• Allow candidates to access their dashboard`)) {
             return;
         }
         
@@ -375,7 +375,7 @@ function PlacementDetails() {
     };
 
     const handleStoreExcelData = async () => {
-        if (!confirm('This will store all Excel data from uploaded files in MongoDB. Continue?')) {
+        if (!window.confirm('This will store all Excel data from uploaded files in MongoDB. Continue?')) {
             return;
         }
         
@@ -469,9 +469,9 @@ function PlacementDetails() {
             <div className="modern-card mb-4 p-4">
                 <div className="row align-items-center mb-4">
                     <div className="col-md-2 text-center">
-                        {localStorage.getItem('placementLogo') ? (
+                        {placement.logo ? (
                             <img 
-                                src={localStorage.getItem('placementLogo')} 
+                                src={placement.logo} 
                                 alt="College Logo" 
                                 style={{
                                     width: '100px',

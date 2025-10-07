@@ -129,7 +129,7 @@ function PlacementDashboard() {
             alert('Placement ID not found');
             return;
         }
-        if (!confirm(`Approve file "${fileName}"?`)) return;
+        if (!window.confirm(`Approve file "${fileName}"?`)) return;
         
         try {
             setProcessingFiles(prev => ({...prev, [fileId]: 'approving'}));
@@ -159,7 +159,7 @@ function PlacementDashboard() {
             alert('Placement ID not found');
             return;
         }
-        if (!confirm(`Reject file "${fileName}"?`)) return;
+        if (!window.confirm(`Reject file "${fileName}"?`)) return;
         
         try {
             setProcessingFiles(prev => ({...prev, [fileId]: 'rejecting'}));
@@ -275,6 +275,49 @@ function PlacementDashboard() {
         }
     };
 
+    const handleLogoUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            return;
+        }
+        
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image size should be less than 2MB');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            try {
+                const base64Logo = event.target.result;
+                const token = localStorage.getItem('placementToken');
+                
+                const response = await fetch('http://localhost:5000/api/placement/upload-logo', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ logo: base64Logo })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    alert('Logo uploaded successfully!');
+                    fetchPlacementDetails();
+                } else {
+                    alert('Failed to upload logo');
+                }
+            } catch (error) {
+                alert('Error uploading logo');
+            }
+        };
+        reader.readAsDataURL(file);
+    };
+
     if (loading) {
         return (
             <div className="container-fluid p-4" style={{background: '#f8f9fa', minHeight: '100vh'}}>
@@ -322,9 +365,9 @@ function PlacementDashboard() {
             <div className="modern-card mb-4 p-4">
                 <div className="row align-items-center mb-4">
                     <div className="col-md-2 text-center">
-                        {localStorage.getItem('placementLogo') ? (
+                        {placementData.logo ? (
                             <img 
-                                src={localStorage.getItem('placementLogo')} 
+                                src={placementData.logo} 
                                 alt="College Logo" 
                                 style={{
                                     width: '100px',
@@ -332,8 +375,10 @@ function PlacementDashboard() {
                                     objectFit: 'contain',
                                     borderRadius: '12px',
                                     border: '2px solid #e9ecef',
-                                    background: '#f8f9fa'
+                                    background: '#f8f9fa',
+                                    cursor: 'pointer'
                                 }}
+                                onClick={() => document.getElementById('logoInput').click()}
                             />
                         ) : (
                             <div 
@@ -345,12 +390,21 @@ function PlacementDashboard() {
                                     background: '#f8f9fa',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    justifyContent: 'center'
+                                    justifyContent: 'center',
+                                    cursor: 'pointer'
                                 }}
+                                onClick={() => document.getElementById('logoInput').click()}
                             >
                                 <i className="fa fa-university fa-2x text-muted"></i>
                             </div>
                         )}
+                        <input 
+                            id="logoInput"
+                            type="file" 
+                            accept="image/*"
+                            style={{display: 'none'}}
+                            onChange={handleLogoUpload}
+                        />
                         <small className="text-muted d-block mt-2">College Logo</small>
                     </div>
                     <div className="col-md-10">
@@ -369,8 +423,18 @@ function PlacementDashboard() {
                 <div className="row">
                     <div className="col-lg-3 col-md-6 mb-3">
                         <div className="info-card">
-                            <div className="info-icon" style={{background: '#007bff20', color: '#007bff'}}>
-                                <i className="fa fa-users"></i>
+                            <div className="info-icon" style={{
+                                background: '#ff8c00 !important', 
+                                color: '#fff !important',
+                                width: '50px !important',
+                                height: '50px !important',
+                                borderRadius: '12px !important',
+                                display: 'flex !important',
+                                alignItems: 'center !important',
+                                justifyContent: 'center !important',
+                                marginRight: '15px !important'
+                            }}>
+                                <i className="fa fa-users" style={{fontSize: '20px !important', color: '#ffffff !important'}}></i>
                             </div>
                             <div>
                                 <label className="text-muted mb-1">Total Students</label>
@@ -378,24 +442,21 @@ function PlacementDashboard() {
                             </div>
                         </div>
                     </div>
-                    <div className="col-lg-3 col-md-6 mb-3">
-                        <div className="info-card">
-                            <div className="info-icon" style={{background: '#17a2b820', color: '#17a2b8'}}>
-                                <i className="fa fa-credit-card"></i>
-                            </div>
-                            <div>
-                                <label className="text-muted mb-1">Credits</label>
-                                <p className="mb-0 font-weight-bold">{placementData.credits || 0}</p>
-                            </div>
-                        </div>
-                    </div>
+
                     <div className="col-lg-3 col-md-6 mb-3">
                         <div className="info-card">
                             <div className="info-icon" style={{
-                                background: placementData.status === 'approved' ? '#28a74520' : '#ffc10720',
-                                color: placementData.status === 'approved' ? '#28a745' : '#ffc107'
+                                background: '#ff8c00 !important', 
+                                color: '#fff !important',
+                                width: '50px !important',
+                                height: '50px !important',
+                                borderRadius: '12px !important',
+                                display: 'flex !important',
+                                alignItems: 'center !important',
+                                justifyContent: 'center !important',
+                                marginRight: '15px !important'
                             }}>
-                                <i className={`fa ${placementData.status === 'approved' ? 'fa-check-circle' : 'fa-clock-o'}`}></i>
+                                <i className={`fa ${placementData.status === 'approved' ? 'fa-check-circle' : 'fa-clock-o'}`} style={{fontSize: '20px !important', color: '#ffffff !important'}}></i>
                             </div>
                             <div>
                                 <label className="text-muted mb-1">Status</label>
@@ -410,8 +471,18 @@ function PlacementDashboard() {
                     </div>
                     <div className="col-lg-3 col-md-6 mb-3">
                         <div className="info-card">
-                            <div className="info-icon" style={{background: '#28a74520', color: '#28a745'}}>
-                                <i className="fa fa-file-excel-o"></i>
+                            <div className="info-icon" style={{
+                                background: '#ff8c00 !important', 
+                                color: '#fff !important',
+                                width: '50px !important',
+                                height: '50px !important',
+                                borderRadius: '12px !important',
+                                display: 'flex !important',
+                                alignItems: 'center !important',
+                                justifyContent: 'center !important',
+                                marginRight: '15px !important'
+                            }}>
+                                <i className="fa fa-file-excel-o" style={{fontSize: '20px !important', color: '#ffffff !important'}}></i>
                             </div>
                             <div>
                                 <label className="text-muted mb-1">Files Uploaded</label>

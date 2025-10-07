@@ -321,6 +321,18 @@ input[type="file"]:focus {
   }
 }
 
+/* Validation error styling */
+.form-control.is-invalid {
+  border-color: #e53e3e !important;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1) !important;
+  animation: shakeError 0.5s ease-out;
+}
+
+.form-control.is-invalid:focus {
+  border-color: #e53e3e !important;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.2) !important;
+}
+
 /* Document card animations */
 .document-card {
   transition: all 0.3s ease;

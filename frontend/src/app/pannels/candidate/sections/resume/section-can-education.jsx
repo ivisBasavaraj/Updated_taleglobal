@@ -307,7 +307,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                                     </div>
                                     <div className="col-xl-12 col-lg-12">
                                         <div className="form-group">
-                                            <label>Upload Marksheet</label>
+                                            <label>Upload Academic Records</label>
                                             <div className="ls-inputicon-box">
                                                 <input 
                                                     className="form-control" 

@@ -1,14 +1,56 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { api } from "../../../../../utils/api";
 
-function SectionCanEmployment() {
+function SectionCanEmployment({ profile }) {
     const modalRef = useRef(null);
+    const [formData, setFormData] = useState({
+        designation: '',
+        organization: '',
+        isCurrent: false,
+        startDate: '',
+        endDate: '',
+        description: ''
+    });
+    const [loading, setLoading] = useState(false);
+    const [employment, setEmployment] = useState([]);
 
     useEffect(() => {
-        // Initialize Bootstrap modal when component mounts
         if (window.bootstrap && modalRef.current) {
             new window.bootstrap.Modal(modalRef.current);
         }
-    }, []);
+        if (profile?.employment) {
+            setEmployment(profile.employment);
+        }
+    }, [profile]);
+
+    const handleInputChange = (field, value) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+    };
+
+    const handleSave = async () => {
+        if (!formData.designation || !formData.organization) {
+            alert('Please fill in designation and organization');
+            return;
+        }
+        
+        setLoading(true);
+        try {
+            const newEmployment = [...employment, formData];
+            const response = await api.updateCandidateProfile({ employment: newEmployment });
+            if (response.success) {
+                setEmployment(newEmployment);
+                setFormData({ designation: '', organization: '', isCurrent: false, startDate: '', endDate: '', description: '' });
+                alert('Employment added successfully!');
+                window.dispatchEvent(new CustomEvent('profileUpdated'));
+                const modal = window.bootstrap.Modal.getInstance(modalRef.current);
+                if (modal) modal.hide();
+            }
+        } catch (error) {
+            alert('Failed to save employment');
+        } finally {
+            setLoading(false);
+        }
+    };
     return (
         <>
             <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
@@ -19,10 +61,18 @@ function SectionCanEmployment() {
             </div>
             <div className="panel-body wt-panel-body p-a20 ">
                 <div className="twm-panel-inner">
-                    <p><b>Senior UI / UX Designer and Developer</b></p>
-                    <p>Google INC</p>
-                    <p>Experience (6 Year)</p>
-                    <p>Available to join in 1 Months</p>
+                    {employment.length > 0 ? (
+                        employment.map((emp, index) => (
+                            <div key={index} className="mb-3">
+                                <p><b>{emp.designation}</b></p>
+                                <p>{emp.organization}</p>
+                                <p>{emp.startDate} - {emp.isCurrent ? 'Present' : emp.endDate}</p>
+                                {emp.description && <p>{emp.description}</p>}
+                            </div>
+                        ))
+                    ) : (
+                        <p>No employment history added yet. Click the edit button to add your work experience.</p>
+                    )}
                 </div>
             </div>
             {/*Employment */}
@@ -40,7 +90,13 @@ function SectionCanEmployment() {
                                         <div className="form-group">
                                             <label>Your Designation</label>
                                             <div className="ls-inputicon-box">
-                                                <input className="form-control" type="text" placeholder="Enter Your Designation" />
+                                                <input 
+                                                    className="form-control" 
+                                                    type="text" 
+                                                    placeholder="Enter Your Designation" 
+                                                    value={formData.designation}
+                                                    onChange={(e) => handleInputChange('designation', e.target.value)}
+                                                />
                                                 <i className="fs-input-icon fa fa-address-card" />
                                             </div>
                                         </div>
@@ -49,7 +105,13 @@ function SectionCanEmployment() {
                                         <div className="form-group">
                                             <label>Your Organization</label>
                                             <div className="ls-inputicon-box">
-                                                <input className="form-control" type="text" placeholder="Enter Your Organization" />
+                                                <input 
+                                                    className="form-control" 
+                                                    type="text" 
+                                                    placeholder="Enter Your Organization" 
+                                                    value={formData.organization}
+                                                    onChange={(e) => handleInputChange('organization', e.target.value)}
+                                                />
                                                 <i className="fs-input-icon fa fa-building" />
                                             </div>
                                         </div>
@@ -59,13 +121,27 @@ function SectionCanEmployment() {
                                             <label>Is this your current company?</label>
                                             <div className="row twm-form-radio-inline">
                                                 <div className="col-md-6">
-                                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                                                    <input 
+                                                        className="form-check-input" 
+                                                        type="radio" 
+                                                        name="flexRadioDefault" 
+                                                        id="flexRadioDefault1" 
+                                                        checked={formData.isCurrent}
+                                                        onChange={() => handleInputChange('isCurrent', true)}
+                                                    />
                                                     <label className="form-check-label" htmlFor="flexRadioDefault1">
                                                         Yes
                                                     </label>
                                                 </div>
                                                 <div className="col-md-6">
-                                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="S_no" defaultChecked />
+                                                    <input 
+                                                        className="form-check-input" 
+                                                        type="radio" 
+                                                        name="flexRadioDefault" 
+                                                        id="S_no" 
+                                                        checked={!formData.isCurrent}
+                                                        onChange={() => handleInputChange('isCurrent', false)}
+                                                    />
                                                     <label className="form-check-label" htmlFor="S_no">
                                                         No
                                                     </label>
@@ -78,7 +154,12 @@ function SectionCanEmployment() {
                                         <div className="form-group">
                                             <label>Started Working From</label>
                                             <div className="ls-inputicon-box">
-                                                <input className="form-control datepicker" data-provide="datepicker" name="company_since" type="text" placeholder="mm/dd/yyyy" />
+                                                <input 
+                                                    className="form-control" 
+                                                    type="date" 
+                                                    value={formData.startDate}
+                                                    onChange={(e) => handleInputChange('startDate', e.target.value)}
+                                                />
                                                 <i className="fs-input-icon far fa-calendar" />
                                             </div>
                                         </div>
@@ -88,7 +169,13 @@ function SectionCanEmployment() {
                                         <div className="form-group">
                                             <label>Worked Till</label>
                                             <div className="ls-inputicon-box">
-                                                <input className="form-control datepicker" data-provide="datepicker" name="company_since" type="text" placeholder="mm/dd/yyyy" />
+                                                <input 
+                                                    className="form-control" 
+                                                    type="date" 
+                                                    value={formData.endDate}
+                                                    onChange={(e) => handleInputChange('endDate', e.target.value)}
+                                                    disabled={formData.isCurrent}
+                                                />
                                                 <i className="fs-input-icon far fa-calendar" />
                                             </div>
                                         </div>
@@ -96,14 +183,27 @@ function SectionCanEmployment() {
                                     <div className="col-md-12">
                                         <div className="form-group mb-0">
                                             <label>Describe your Job Profile</label>
-                                            <textarea className="form-control" rows={3} placeholder="Describe your Job" defaultValue={""} />
+                                            <textarea 
+                                                className="form-control" 
+                                                rows={3} 
+                                                placeholder="Describe your Job" 
+                                                value={formData.description}
+                                                onChange={(e) => handleInputChange('description', e.target.value)}
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="site-button" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="site-button">Save</button>
+                                <button 
+                                    type="button" 
+                                    className="site-button" 
+                                    onClick={handleSave}
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Saving...' : 'Save'}
+                                </button>
                             </div>
                         </form>
                     </div>

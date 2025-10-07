@@ -154,34 +154,8 @@ function SectionJobsGrid({ filters, onTotalChange }) {
                                     </h6>
                                     <button 
                                         className="btn btn-sm apply-now-button"
-                                        onClick={async (e) => {
-                                            e.preventDefault();
-                                            const token = localStorage.getItem('candidateToken');
-                                            if (!token) {
-                                                alert('Please login before you apply');
-                                                // Store the job ID to redirect after login
-                                                localStorage.setItem('redirectAfterLogin', `/job-detail/${job._id}`);
-                                                window.location.href = '/login';
-                                            } else {
-                                                try {
-                                                    const profileResponse = await fetch('http://localhost:5000/api/candidate/profile', {
-                                                        headers: { 'Authorization': `Bearer ${token}` }
-                                                    });
-                                                    const profileData = await profileResponse.json();
-                                                    
-                                                    if (!profileData.success || !profileData.profile?.resume) {
-                                                        alert('Please upload your resume first before applying for jobs. Go to My Resume section to upload.');
-                                                        window.location.href = '/candidate/my-resume';
-                                                        return;
-                                                    }
-                                                    
-                                                    // Navigate to job detail if resume exists
-                                                    window.location.href = `/job-detail/${job._id}`;
-                                                } catch (error) {
-                                                    console.error('Error checking profile:', error);
-                                                    alert('Please upload your resume first.');
-                                                }
-                                            }
+                                        onClick={() => {
+                                            window.location.href = `/job-detail/${job._id}`;
                                         }}
                                     >
                                         Apply Now

@@ -51,6 +51,8 @@ const employerProfileSchema = new mongoose.Schema({
   
   // Primary Contact
   contactFullName: { type: String },
+  contactMiddleName: { type: String },
+  contactLastName: { type: String },
   contactDesignation: { type: String },
   contactOfficialEmail: { type: String },
   contactMobile: { type: String },

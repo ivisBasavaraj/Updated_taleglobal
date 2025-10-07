@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const candidateProfileSchema = new mongoose.Schema({
   candidateId: { type: mongoose.Schema.Types.ObjectId, ref: 'Candidate', required: true, unique: true },
   firstName: { type: String },
+  middleName: { type: String },
   lastName: { type: String },
   dateOfBirth: { type: Date },
   location: { type: String },

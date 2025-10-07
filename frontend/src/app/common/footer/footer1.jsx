@@ -63,19 +63,19 @@ function Footer1() {
 													</li>
 
 													<li>
-														<NavLink to={publicUser.candidate.GRID}>
+														<NavLink to={publicUser.jobs.GRID}>
 															Jobs
 														</NavLink>
 													</li>
 
 													<li>
-														<NavLink to={publicUser.blog.LIST}>
+														<NavLink to={publicUser.employer.GRID}>
 															Employers
 														</NavLink>
 													</li>
 
 													<li>
-														<NavLink to={publicUser.blog.DETAIL}>
+														<NavLink to={publicUser.pages.CONTACT}>
 															Contact Us
 														</NavLink>
 													</li>
@@ -88,25 +88,25 @@ function Footer1() {
 												<h3 className="widget-title">Helpful Links</h3>
 												<ul>
 													<li>
-														<NavLink to={publicUser.blog.GRID1}>
+														<NavLink to={publicUser.pages.LOGIN}>
 															Candidate Dashboard
 														</NavLink>
 													</li>
 
 													<li>
-														<NavLink to={publicUser.pages.CONTACT}>
+														<NavLink to={publicUser.pages.LOGIN}>
 															Employers Dashboard
 														</NavLink>
 													</li>
 
 													<li>
-														<NavLink to={publicUser.jobs.LIST}>
+														<NavLink to={publicUser.pages.TERMS}>
 															Terms & Conditions
 														</NavLink>
 													</li>
 
 													<li>
-														<NavLink to={publicUser.jobs.DETAIL1}>
+														<NavLink to={publicUser.pages.PRIVACY}>
 															Privacy Policy
 														</NavLink>
 													</li>

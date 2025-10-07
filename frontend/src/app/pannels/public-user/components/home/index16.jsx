@@ -14,6 +14,7 @@ function Home16Page() {
     const [filteredJobs, setFilteredJobs] = useState([]);
     const [stats, setStats] = useState({ totalJobs: 0, totalEmployers: 0, totalApplications: 0 });
     const [categories, setCategories] = useState([]);
+    const [recruiters, setRecruiters] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isFiltered, setIsFiltered] = useState(false);
     const [showingCount, setShowingCount] = useState(6);
@@ -46,7 +47,7 @@ function Home16Page() {
 
     const fetchHomeData = async () => {
         try {
-            const [jobsData, statsData] = await Promise.all([
+            const [jobsData, statsData, recruitersData] = await Promise.all([
                 (async () => {
                     const res = await api.getJobs({ limit: 50 }); // Get more jobs for filtering
                     return res;
@@ -57,6 +58,10 @@ function Home16Page() {
                     if (pub && pub.success) return pub;
                     const adm = await api.getAdminStats();
                     return adm;
+                })(),
+                (async () => {
+                    const response = await fetch('http://localhost:5000/api/public/top-recruiters?limit=12');
+                    return await response.json();
                 })(),
             ]);
 
@@ -82,6 +87,7 @@ function Home16Page() {
                 setCategories(categoryList);
             }
             if (statsData.success) setStats(statsData.stats);
+            if (recruitersData.success) setRecruiters(recruitersData.recruiters);
         } catch (error) {
             console.error('Error fetching home data:', error);
         } finally {
@@ -661,29 +667,8 @@ function Home16Page() {
 
                                                     <button
                                                         className="btn btn-sm apply-now-button"
-                                                        onClick={async () => {
-                                                            const token = localStorage.getItem('candidateToken');
-                                                            if (!token) {
-                                                                window.location.href = '/login';
-                                                            } else {
-                                                                try {
-                                                                    const profileResponse = await fetch('http://localhost:5000/api/candidate/profile', {
-                                                                        headers: { 'Authorization': `Bearer ${token}` }
-                                                                    });
-                                                                    const profileData = await profileResponse.json();
-                                                                    
-                                                                    if (!profileData.success || !profileData.profile?.resume) {
-                                                                        alert('Please upload your resume first before applying for jobs. Go to My Resume section to upload.');
-                                                                        window.location.href = '/candidate/my-resume';
-                                                                        return;
-                                                                    }
-                                                                    
-                                                                    alert('Application submitted successfully!');
-                                                                } catch (error) {
-                                                                    console.error('Error checking profile:', error);
-                                                                    alert('Please upload your resume first.');
-                                                                }
-                                                            }
+                                                        onClick={() => {
+                                                            window.location.href = `/job-detail/${job._id}`;
                                                         }}
                                                     >
                                                         Apply Now
@@ -718,17 +703,7 @@ function Home16Page() {
                                 )}
                             </Row>
                             
-                            {/* Show More Button */}
-                            {((isFiltered && filteredJobs.length > showingCount) || (!isFiltered && allJobs.length > showingCount)) && (
-                                <div className="text-center mt-4">
-                                    <button 
-                                        className="site-button"
-                                        onClick={handleShowMore}
-                                    >
-                                        Show More Jobs ({isFiltered ? filteredJobs.length - showingCount : allJobs.length - showingCount} remaining)
-                                    </button>
-                                </div>
-                            )}
+
                         </div>
                     </div>
                 </Container>
@@ -749,212 +724,63 @@ function Home16Page() {
 
                     <div className="section-content">
                         <div className="twm-recruiters5-wrap">
-                            <div className="twm-column-5 m-b30">
+                            <div className="twm-column-5 m-b30" style={{
+                                '--cards-per-row': '6'
+                            }}>
                                 <ul>
-                                    {/*1*/}
-                                    <li>
-                                        <div className="twm-recruiters5-box hover-card">
-                                            <div className="twm-rec-top">
-                                                <div className="twm-rec-media">
-                                                    <JobZImage
-                                                        src="images/home-5/recruiters/1.jpg"
-                                                        alt="#"
-                                                    />
+                                    {recruiters.length > 0 ? recruiters.map((recruiter, index) => (
+                                        <li key={recruiter._id}>
+                                            <div className="twm-recruiters5-box hover-card">
+                                                <div className="twm-rec-top">
+                                                    <div className="twm-rec-media">
+                                                        {recruiter.logo ? (
+                                                            <img src={recruiter.logo} alt={recruiter.companyName} />
+                                                        ) : (
+                                                            <JobZImage src={`images/home-5/recruiters/${(index % 8) + 1}.jpg`} alt="#" />
+                                                        )}
+                                                    </div>
+                                                    <div className="twm-rec-jobs">{recruiter.jobCount} Jobs</div>
                                                 </div>
-                                                <div className="twm-rec-jobs">25 Jobs</div>
-                                            </div>
-                                            <div className="twm-rec-content">
-                                                <h4 className="twm-title">
-                                                    <NavLink to={"#!"}>Tesla</NavLink>
-                                                </h4>
-
-                                                <div className="twm-job-address">
-                                                    <i className="feather-map-pin" />
-                                                    Sahakar Nagar, Bengaluru
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    {/*2*/}
-                                    <li>
-                                        <div className="twm-recruiters5-box hover-card">
-                                            <div className="twm-rec-top">
-                                                <div className="twm-rec-media">
-                                                    <JobZImage
-                                                        src="images/home-5/recruiters/2.jpg"
-                                                        alt="#"
-                                                    />
-                                                </div>
-                                                <div className="twm-rec-jobs">25 Jobs</div>
-                                            </div>
-                                            <div className="twm-rec-content">
-                                                <h4 className="twm-title">
-                                                    <NavLink to={"#!"}>Lamborghini</NavLink>
-                                                </h4>
-
-                                                <div className="twm-job-address">
-                                                    <i className="feather-map-pin" />
-                                                    Sahakar Nagar, Bengaluru
+                                                <div className="twm-rec-content">
+                                                    <h4 className="twm-title">
+                                                        <NavLink to={`/emp-detail/${recruiter._id}`}>{recruiter.companyName}</NavLink>
+                                                    </h4>
+                                                    <div className="twm-job-address">
+                                                        <i className="feather-map-pin" />
+                                                        {recruiter.location || 'Multiple Locations'}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
-
-                                    {/*3*/}
-                                    <li>
-                                        <div className="twm-recruiters5-box hover-card">
-                                            <div className="twm-rec-top">
-                                                <div className="twm-rec-media">
-                                                    <JobZImage
-                                                        src="images/home-5/recruiters/5.jpg"
-                                                        alt="#"
-                                                    />
+                                        </li>
+                                    )) : (
+                                        // Fallback to show loading or empty state
+                                        Array.from({length: 12}, (_, index) => (
+                                            <li key={index}>
+                                                <div className="twm-recruiters5-box hover-card">
+                                                    <div className="twm-rec-top">
+                                                        <div className="twm-rec-media">
+                                                            <JobZImage src={`images/home-5/recruiters/${index + 1}.jpg`} alt="#" />
+                                                        </div>
+                                                        <div className="twm-rec-jobs">Loading...</div>
+                                                    </div>
+                                                    <div className="twm-rec-content">
+                                                        <h4 className="twm-title">
+                                                            <NavLink to={"#!"}>Loading...</NavLink>
+                                                        </h4>
+                                                        <div className="twm-job-address">
+                                                            <i className="feather-map-pin" />
+                                                            Loading...
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="twm-rec-jobs">25 Jobs</div>
-                                            </div>
-                                            <div className="twm-rec-content">
-                                                <h4 className="twm-title">
-                                                    <NavLink to={"#!"}>Elite</NavLink>
-                                                </h4>
-
-                                                <div className="twm-job-address">
-                                                    <i className="feather-map-pin" />
-                                                    Sahakar Nagar, Bengaluru
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    {/*4*/}
-                                    <li>
-                                        <div className="twm-recruiters5-box hover-card">
-                                            <div className="twm-rec-top">
-                                                <div className="twm-rec-media">
-                                                    <JobZImage
-                                                        src="images/home-5/recruiters/8.jpg"
-                                                        alt="#"
-                                                    />
-                                                </div>
-                                                <div className="twm-rec-jobs">25 Jobs</div>
-                                            </div>
-                                            <div className="twm-rec-content">
-                                                <h4 className="twm-title">
-                                                    <NavLink to={"#!"}>Cybercode</NavLink>
-                                                </h4>
-
-                                                <div className="twm-job-address">
-                                                    <i className="feather-map-pin" />
-                                                    Sahakar Nagar, Bengaluru
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    {/*5*/}
-                                    <li>
-                                        <div className="twm-recruiters5-box hover-card">
-                                            <div className="twm-rec-top">
-                                                <div className="twm-rec-media">
-                                                    <JobZImage
-                                                        src="images/home-5/recruiters/10.jpg"
-                                                        alt="#"
-                                                    />
-                                                </div>
-                                                <div className="twm-rec-jobs">25 Jobs</div>
-                                            </div>
-                                            <div className="twm-rec-content">
-                                                <h4 className="twm-title">
-                                                    <NavLink to={"#!"}>B.Live</NavLink>
-                                                </h4>
-
-                                                <div className="twm-job-address">
-                                                    <i className="feather-map-pin" />
-                                                    Sahakar Nagar, Bengaluru
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    {/*06*/}
-                                    <li>
-                                        <div className="twm-recruiters5-box hover-card">
-                                            <div className="twm-rec-top">
-                                                <div className="twm-rec-media">
-                                                    <JobZImage
-                                                        src="images/home-5/recruiters/11.jpg"
-                                                        alt="#"
-                                                    />
-                                                </div>
-                                                <div className="twm-rec-jobs">25 Jobs</div>
-                                            </div>
-                                            <div className="twm-rec-content">
-                                                <h4 className="twm-title">
-                                                    <NavLink to={"#!"}>Coffee shop</NavLink>
-                                                </h4>
-
-                                                <div className="twm-job-address">
-                                                    <i className="feather-map-pin" />
-                                                    Sahakar Nagar, Bengaluru
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    {/*12*/}
-                                    <li>
-                                        <div className="twm-recruiters5-box hover-card">
-                                            <div className="twm-rec-top">
-                                                <div className="twm-rec-media">
-                                                    <JobZImage
-                                                        src="images/home-5/recruiters/12.jpg"
-                                                        alt="#"
-                                                    />
-                                                </div>
-                                                <div className="twm-rec-jobs">25 Jobs</div>
-                                            </div>
-                                            <div className="twm-rec-content">
-                                                <h4 className="twm-title">
-                                                    <NavLink to={"#!"}>H Luxury</NavLink>
-                                                </h4>
-
-                                                <div className="twm-job-address">
-                                                    <i className="feather-map-pin" />
-                                                    Sahakar Nagar, Bengaluru
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    {/*14*/}
-                                    <li>
-                                        <div className="twm-recruiters5-box hover-card">
-                                            <div className="twm-rec-top">
-                                                <div className="twm-rec-media">
-                                                    <JobZImage
-                                                        src="images/home-5/recruiters/14.jpg"
-                                                        alt="#"
-                                                    />
-                                                </div>
-                                                <div className="twm-rec-jobs">25 Jobs</div>
-                                            </div>
-                                            <div className="twm-rec-content">
-                                                <h4 className="twm-title">
-                                                    <NavLink to={"#!"}>Birdwing</NavLink>
-                                                </h4>
-
-                                                <div className="twm-job-address">
-                                                    <i className="feather-map-pin" />
-                                                    Sahakar Nagar, Bengaluru
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
+                                            </li>
+                                        ))
+                                    )}
                                 </ul>
                             </div>
 
                             <div className="text-center m-b30">
-                                <NavLink to={"#!"} className=" site-button">
+                                <NavLink to="/emp-grid" className=" site-button">
                                     View All
                                 </NavLink>
                             </div>

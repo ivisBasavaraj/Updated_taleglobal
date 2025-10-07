@@ -37,6 +37,8 @@ import BlogGrid3Page from "../app/pannels/public-user/components/blogs/blogs-gri
 import BlogListPage from "../app/pannels/public-user/components/blogs/blogs-list";
 import BlogDetailPage from "../app/pannels/public-user/components/blogs/blog-detail";
 import ForgotPassword from "../app/pannels/public-user/components/pages/forgot-password";
+import TermsConditionsPage from "../app/pannels/public-user/components/pages/terms-conditions";
+import PrivacyPolicyPage from "../app/pannels/public-user/components/pages/privacy-policy";
 import AdminLogin from "../app/admin-login/page";
 import SubAdminLogin from "../app/sub-admin-login/page";
 
@@ -68,6 +70,8 @@ function PublicUserRoutes() {
             <Route path={publicUser.pages.ADMIN_LOGIN} element={<AdminLogin />} />
             <Route path={publicUser.pages.SUB_ADMIN_LOGIN} element={<SubAdminLogin />} />
             <Route path={publicUser.pages.FORGOT} element={<ForgotPassword/>} />
+            <Route path={publicUser.pages.TERMS} element={<TermsConditionsPage />} />
+            <Route path={publicUser.pages.PRIVACY} element={<PrivacyPolicyPage />} />
             <Route path={publicUser.pages.ICONS} element={<IconsPage />} />
             <Route path={publicUser.candidate.GRID} element={<CandidateGridPage />} />
             <Route path={publicUser.candidate.LIST} element={<CandidateListPage />} />

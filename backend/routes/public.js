@@ -33,6 +33,7 @@ router.get('/stats', publicController.getPublicStats);
 // Employer Profile
 router.get('/employers/:id', publicController.getEmployerProfile);
 router.get('/employers', publicController.getEmployers);
+router.get('/top-recruiters', publicController.getTopRecruiters);
 
 // Apply for job without login
 router.post('/apply-job', upload.single('resume'), [

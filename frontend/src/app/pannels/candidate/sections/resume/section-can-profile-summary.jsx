@@ -1,102 +1,113 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../../../../../utils/api";
-import { initializeModal, showModal } from "../../../../../utils/modalUtils";
 
 function SectionCanProfileSummary({ profile }) {
     const [summary, setSummary] = useState('');
     const [loading, setLoading] = useState(false);
-    const modalRef = useRef(null);
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         setSummary(profile?.profileSummary || '');
     }, [profile]);
 
-    const handleEditClick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setTimeout(() => showModal('Profile_Summary'), 50);
-    };
-
     const handleSave = async () => {
         setLoading(true);
         try {
-            const response = await api.updateCandidateProfile({ profileSummary: summary });
-            if (response.success) {
+            const token = localStorage.getItem('candidateToken');
+            
+            const response = await fetch('http://localhost:5000/api/candidate/profile', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ profileSummary: summary.trim() })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok && data.success) {
+                setIsEditing(false);
                 alert('Profile summary updated successfully!');
                 window.dispatchEvent(new CustomEvent('profileUpdated'));
+            } else {
+                alert('Failed to update profile summary: ' + (data.message || 'Unknown error'));
             }
         } catch (error) {
-            alert('Failed to update profile summary');
+            alert('Failed to update profile summary: ' + error.message);
         } finally {
             setLoading(false);
         }
     };
     return (
         <>
-            <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+            <div className="panel-heading wt-panel-heading p-a20 d-flex justify-content-between align-items-center">
                 <h4 className="panel-tittle m-a0">
                     <i className="fa fa-user-circle site-text-primary me-2"></i>
                     Profile Summary
                 </h4>
-                <a 
-                    data-bs-toggle="modal" 
-                    href="#Profile_Summary" 
-                    role="button" 
-                    title="Edit" 
-                    className="site-text-primary"
-                    onClick={handleEditClick}
+                <button 
+                    type="button"
+                    className="btn btn-link site-text-primary p-0"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsEditing(!isEditing);
+                    }}
                 >
-                    <span className="fa fa-edit" />
-                </a>
+                    <i className={isEditing ? "fa fa-times" : "fa fa-edit"}></i>
+                </button>
             </div>
-            <div className="panel-body wt-panel-body p-a20 ">
-                <div className="twm-panel-inner">
-                    <p>{summary || 'Add your profile summary to highlight your career and education'}</p>
-                </div>
-            </div>
-            {/*Modal Popup */}
-            <div className="modal fade twm-saved-jobs-view" id="Profile_Summary" tabIndex={-1} ref={modalRef}>
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-                        <form onSubmit={(e) => e.preventDefault()}>
-                            <div className="modal-header">
-                                <h2 className="modal-title">
-                                    <i className="fa fa-user-circle me-2"></i>
-                                    Profile Summary
-                                </h2>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-                            </div>
-                            <div className="modal-body">
-                                <p>Your Profile Summary should mention the highlights of your career and education, what your professional interests are, and what kind of a career you are looking for. Write a meaningful summary of more than 50 characters.</p>
-                                <div className="row">
-                                    <div className="col-lg-12 col-md-12">
-                                        <div className="form-group twm-textarea-full">
-                                            <textarea 
-                                                className="form-control" 
-                                                placeholder="Write your profile summary"
-                                                value={summary}
-                                                onChange={(e) => setSummary(e.target.value)}
-                                                rows={4}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="site-button" data-bs-dismiss="modal">Close</button>
+            <div className="panel-body wt-panel-body p-a20">
+                {isEditing ? (
+                    <div className="edit-form">
+                        <div className="alert alert-info mb-3">
+                            <i className="fa fa-info-circle me-2"></i>
+                            Mention highlights of your career, education, and professional interests.
+                        </div>
+                        <textarea 
+                            className="form-control mb-3" 
+                            placeholder="e.g., Passionate software developer with 2+ years of experience in full-stack development. Skilled in React, Node.js, and database management."
+                            value={summary}
+                            onChange={(e) => setSummary(e.target.value)}
+                            rows={5}
+                            maxLength={1000}
+                        />
+                        <div className="d-flex justify-content-between align-items-center">
+                            <small className="text-muted">{summary.length}/1000 characters</small>
+                            <div>
                                 <button 
-                                    type="button" 
-                                    className="site-button"
-                                    onClick={handleSave}
+                                    type="button"
+                                    className="btn btn-secondary btn-sm me-2"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setIsEditing(false);
+                                    }}
                                     disabled={loading}
-                                    data-bs-dismiss="modal"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="button"
+                                    className="btn btn-primary btn-sm"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleSave();
+                                    }}
+                                    disabled={loading}
                                 >
                                     {loading ? 'Saving...' : 'Save'}
                                 </button>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="twm-panel-inner">
+                        <p>{summary || 'Add your profile summary to highlight your career and education'}</p>
+                    </div>
+                )}
             </div>
         </>
     )

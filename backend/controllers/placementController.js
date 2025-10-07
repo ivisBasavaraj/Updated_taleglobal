@@ -973,3 +973,24 @@ exports.getPlacementCandidates = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Upload logo
+exports.uploadLogo = async (req, res) => {
+  try {
+    const placementId = req.user.id;
+    const { logo } = req.body;
+    
+    if (!logo) {
+      return res.status(400).json({ success: false, message: 'Logo data is required' });
+    }
+    
+    await Placement.findByIdAndUpdate(placementId, {
+      $set: { logo: logo }
+    });
+    
+    res.json({ success: true, message: 'Logo uploaded successfully' });
+  } catch (error) {
+    console.error('Error uploading logo:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

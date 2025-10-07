@@ -164,7 +164,7 @@
   display: block;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #9E9E9E;
+  color: #000000;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -179,6 +179,10 @@
   background: white;
   cursor: pointer;
   transition: border-color 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 140px;
 }
 
 .search-select:focus {
@@ -207,11 +211,41 @@
   padding-left: 2.5rem;
 }
 
+.location-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.suggestion-item {
+  padding: 0.75rem;
+  cursor: pointer;
+  border-bottom: 1px solid #f5f5f5;
+  transition: background-color 0.2s ease;
+}
+
+.suggestion-item:hover {
+  background-color: #f8f9fa;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
 .search-btn {
   background: #ff9c00;
   color: white;
   border: none;
-  padding: 0.875rem 2rem;
+  padding: 0.875rem 1rem;
   border-radius: 6px;
   font-size: 1rem;
   font-weight: 600;
@@ -244,6 +278,15 @@
   display: none;
 }
 
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .category-card {
   background: white;
   border-radius: 10px;
@@ -271,6 +314,7 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem;
+  color: #ff9c00;
 }
 
 /* smaller variant used for hero categories */
@@ -278,6 +322,7 @@
   width: 40px;
   height: 40px;
   margin-bottom: 0.5rem;
+  color: #ff9c00;
 }
 
 .category-jobs {
