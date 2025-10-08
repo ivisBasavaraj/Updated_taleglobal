@@ -293,20 +293,31 @@ input[type="file"]:focus {
   color: #e53e3e;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .text-danger::before {
-  content: '⚠';
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
-  color: white;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 20px;
+  content: '⚠️';
+  font-size: 14px;
+  animation: pulse 1s infinite;
+}
+
+/* Success message styling */
+.text-success {
+  color: #48bb78;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
+  font-weight: 500;
+}
+
+.text-success::before {
+  content: '✅';
+  font-size: 14px;
+  animation: bounce 0.5s ease-out;
 }
 
 @keyframes shakeError {
@@ -326,11 +337,26 @@ input[type="file"]:focus {
   border-color: #e53e3e !important;
   box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1) !important;
   animation: shakeError 0.5s ease-out;
+  background-color: #fef2f2;
 }
 
 .form-control.is-invalid:focus {
   border-color: #e53e3e !important;
   box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.2) !important;
+  background-color: #fef2f2;
+}
+
+/* Valid input styling */
+.form-control.is-valid {
+  border-color: #48bb78 !important;
+  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1) !important;
+  background-color: #f0fff4;
+}
+
+.form-control.is-valid:focus {
+  border-color: #48bb78 !important;
+  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2) !important;
+  background-color: #f0fff4;
 }
 
 /* Document card animations */
@@ -642,4 +668,11 @@ html {
 .site-button:focus-visible {
   outline: 2px solid #667eea;
   outline-offset: 2px;
+}
+
+/* Required field indicator */
+.required-field::after {
+  content: ' *';
+  color: #e53e3e;
+  font-weight: bold;
 }

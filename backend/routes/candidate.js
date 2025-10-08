@@ -48,7 +48,7 @@ router.put('/profile', upload.single('profilePicture'), (req, res, next) => {
   
   // Skip validation for personal details updates (contains multiple fields)
   const personalDetailsFields = ['dateOfBirth', 'gender', 'location', 'fatherName', 'motherName', 'residentialAddress', 'permanentAddress', 'correspondenceAddress', 'education'];
-  const hasPersonalDetailsFields = personalDetailsFields.some(field => req.body.hasOwnProperty(field));
+  const hasPersonalDetailsFields = personalDetailsFields.some(field => field in req.body);
   
   if (isResumeHeadlineOnly || isProfileSummaryOnly || isSkillsOnly || hasPersonalDetailsFields) {
     return candidateController.updateProfile(req, res);
