@@ -25,7 +25,14 @@ const categories = [
 
 const HeroSection = () => {
   return (
-    <div style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
+    <div style={{ 
+      backgroundColor: "#f8f9fa", 
+      minHeight: "100vh",
+      backgroundImage: "url('/assets/images/photo_2025-10-09_11-01-43.png')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat"
+    }}>
       {/* Top Navbar */}
       <Navbar bg="white" expand="lg" className="shadow-sm" sticky="top" style={{ backgroundColor: "#ffffff" }}>
         <Container>

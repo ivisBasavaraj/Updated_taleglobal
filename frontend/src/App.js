@@ -15,15 +15,17 @@ function App() {
 
   useEffect(() => {
     AOS.init({
-      duration: 800,
+      duration: 300,
       once: true,
       offset: 50,
     });
+    
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, []);
-
-  setTimeout(() => {
-    setLoading(false);
-  }, 500);
 
   return (
     <AuthProvider>

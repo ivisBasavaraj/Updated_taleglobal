@@ -1,50 +1,48 @@
 
 import { Route, Routes } from "react-router-dom";
 import { publicUser } from "../globals/route-names";
+import { lazy, Suspense } from "react";
 
-import Home16Page from "../app/pannels/public-user/components/home/index16";
-
-import JobsGridPage from "../app/pannels/public-user/components/jobs/jobs-grid";
-import JobsGridMapPage from "../app/pannels/public-user/components/jobs/jobs-grid-map";
-import JobsListPage from "../app/pannels/public-user/components/jobs/jobs-list";
-import JobDetail1Page from "../app/pannels/public-user/components/jobs/job-detail1";
-import JobDetail2Page from "../app/pannels/public-user/components/jobs/job-detail2";
-import ApplyJobPage from "../app/pannels/public-user/components/jobs/apply-job";
-
-import EmployersGridPage from "../app/pannels/public-user/components/employers/emp-grid";
-import EmployersListPage from "../app/pannels/public-user/components/employers/emp-list";
-import EmployersDetail1Page from "../app/pannels/public-user/components/employers/emp-detail1";
-import EmployersDetail2Page from "../app/pannels/public-user/components/employers/emp-detail2";
-
-import AboutUsPage from "../app/pannels/public-user/components/pages/about-us";
-import PricingPage from "../app/pannels/public-user/components/pages/pricing";
-import Error404Page from "../app/pannels/public-user/components/pages/error404";
-import FaqPage from "../app/pannels/public-user/components/pages/faq";
-import ContactUsPage from "../app/pannels/public-user/components/pages/contact-us";
-import UnderMaintenancePage from "../app/pannels/public-user/components/pages/under-maintenance";
-import ComingSoonPage from "../app/pannels/public-user/components/pages/coming-soon";
-import LoginPage from "../app/pannels/public-user/components/pages/login";
-import IconsPage from "../app/pannels/public-user/components/pages/icons";
-
-import CandidateGridPage from "../app/pannels/public-user/components/candidates/can-grid";
-import CandidateListPage from "../app/pannels/public-user/components/candidates/can-list";
-import CandidateDetail1Page from "../app/pannels/public-user/components/candidates/can-detail1";
-import CandidateDetail2Page from "../app/pannels/public-user/components/candidates/can-detail2";
-
-import BlogGrid1Page from "../app/pannels/public-user/components/blogs/blogs-grid1";
-import BlogGrid2Page from "../app/pannels/public-user/components/blogs/blogs-grid2";
-import BlogGrid3Page from "../app/pannels/public-user/components/blogs/blogs-grid3";
-import BlogListPage from "../app/pannels/public-user/components/blogs/blogs-list";
-import BlogDetailPage from "../app/pannels/public-user/components/blogs/blog-detail";
-import ForgotPassword from "../app/pannels/public-user/components/pages/forgot-password";
-import TermsConditionsPage from "../app/pannels/public-user/components/pages/terms-conditions";
-import PrivacyPolicyPage from "../app/pannels/public-user/components/pages/privacy-policy";
-import AdminLogin from "../app/admin-login/page";
-import SubAdminLogin from "../app/sub-admin-login/page";
+// Lazy load components for better performance
+const Home16Page = lazy(() => import("../app/pannels/public-user/components/home/index16"));
+const JobsGridPage = lazy(() => import("../app/pannels/public-user/components/jobs/jobs-grid"));
+const JobsGridMapPage = lazy(() => import("../app/pannels/public-user/components/jobs/jobs-grid-map"));
+const JobsListPage = lazy(() => import("../app/pannels/public-user/components/jobs/jobs-list"));
+const JobDetail1Page = lazy(() => import("../app/pannels/public-user/components/jobs/job-detail1"));
+const JobDetail2Page = lazy(() => import("../app/pannels/public-user/components/jobs/job-detail2"));
+const ApplyJobPage = lazy(() => import("../app/pannels/public-user/components/jobs/apply-job"));
+const EmployersGridPage = lazy(() => import("../app/pannels/public-user/components/employers/emp-grid"));
+const EmployersListPage = lazy(() => import("../app/pannels/public-user/components/employers/emp-list"));
+const EmployersDetail1Page = lazy(() => import("../app/pannels/public-user/components/employers/emp-detail1"));
+const EmployersDetail2Page = lazy(() => import("../app/pannels/public-user/components/employers/emp-detail2"));
+const AboutUsPage = lazy(() => import("../app/pannels/public-user/components/pages/about-us"));
+const PricingPage = lazy(() => import("../app/pannels/public-user/components/pages/pricing"));
+const Error404Page = lazy(() => import("../app/pannels/public-user/components/pages/error404"));
+const FaqPage = lazy(() => import("../app/pannels/public-user/components/pages/faq"));
+const ContactUsPage = lazy(() => import("../app/pannels/public-user/components/pages/contact-us"));
+const UnderMaintenancePage = lazy(() => import("../app/pannels/public-user/components/pages/under-maintenance"));
+const ComingSoonPage = lazy(() => import("../app/pannels/public-user/components/pages/coming-soon"));
+const LoginPage = lazy(() => import("../app/pannels/public-user/components/pages/login"));
+const IconsPage = lazy(() => import("../app/pannels/public-user/components/pages/icons"));
+const CandidateGridPage = lazy(() => import("../app/pannels/public-user/components/candidates/can-grid"));
+const CandidateListPage = lazy(() => import("../app/pannels/public-user/components/candidates/can-list"));
+const CandidateDetail1Page = lazy(() => import("../app/pannels/public-user/components/candidates/can-detail1"));
+const CandidateDetail2Page = lazy(() => import("../app/pannels/public-user/components/candidates/can-detail2"));
+const BlogGrid1Page = lazy(() => import("../app/pannels/public-user/components/blogs/blogs-grid1"));
+const BlogGrid2Page = lazy(() => import("../app/pannels/public-user/components/blogs/blogs-grid2"));
+const BlogGrid3Page = lazy(() => import("../app/pannels/public-user/components/blogs/blogs-grid3"));
+const BlogListPage = lazy(() => import("../app/pannels/public-user/components/blogs/blogs-list"));
+const BlogDetailPage = lazy(() => import("../app/pannels/public-user/components/blogs/blog-detail"));
+const ForgotPassword = lazy(() => import("../app/pannels/public-user/components/pages/forgot-password"));
+const TermsConditionsPage = lazy(() => import("../app/pannels/public-user/components/pages/terms-conditions"));
+const PrivacyPolicyPage = lazy(() => import("../app/pannels/public-user/components/pages/privacy-policy"));
+const AdminLogin = lazy(() => import("../app/admin-login/page"));
+const SubAdminLogin = lazy(() => import("../app/sub-admin-login/page"));
 
 function PublicUserRoutes() {
     return (
-        <Routes>
+        <Suspense fallback={<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px'}}><div>Loading...</div></div>}>
+            <Routes>
             <Route path={publicUser.INITIAL} element={<Home16Page />} />
 
             <Route path={publicUser.jobs.GRID} element={<JobsGridPage />} />
@@ -83,7 +81,8 @@ function PublicUserRoutes() {
             <Route path={publicUser.blog.LIST} element={<BlogListPage />} />
             <Route path={publicUser.blog.DETAIL} element={<BlogDetailPage />} />
             <Route path="*" element={<Error404Page />} />
-        </Routes>
+            </Routes>
+        </Suspense>
     )
 }
 

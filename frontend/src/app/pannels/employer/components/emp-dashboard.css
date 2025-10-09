@@ -110,6 +110,20 @@
   transition: transform 0.2s ease;
 }
 
+/* Hide checkmark on Shortlisted card */
+.emp-dashboard .dashboard-card-2[style*="#e8f5e9"]::before,
+.emp-dashboard .dashboard-card-2[style*="#e8f5e9"]::after,
+.emp-dashboard .dashboard-card-2[style*="#e8f5e9"] *::before,
+.emp-dashboard .dashboard-card-2[style*="#e8f5e9"] *::after,
+.emp-dashboard .panel-default:nth-child(3) .panel-body::before,
+.emp-dashboard .panel-default:nth-child(3) .panel-body::after,
+.emp-dashboard .panel-default:nth-child(3)::before,
+.emp-dashboard .panel-default:nth-child(3)::after {
+  content: none !important;
+  display: none !important;
+  visibility: hidden !important;
+}
+
 /* Responsive paddings */
 @media (max-width: 992px) {
   .emp-dashboard .wt-admin-right-page-header { padding: 20px !important; }

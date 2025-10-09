@@ -2,15 +2,15 @@
 import JobZImage from "../jobz-img";
 import { NavLink } from "react-router-dom";
 import { publicUser } from "../../../globals/route-names";
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
 
-function Header1({ _config }) {
+const Header1 = memo(function Header1({ _config }) {
 
     const [menuActive, setMenuActive] = useState(false);
 
-    function handleNavigationClick () {
-        setMenuActive(!menuActive);
-    };
+    const handleNavigationClick = useCallback(() => {
+        setMenuActive(prev => !prev);
+    }, []);
 
     return (
         <>
@@ -60,10 +60,10 @@ function Header1({ _config }) {
                             {/* MAIN Vav */}
                             <div className="nav-animation header-nav navbar-collapse d-flex justify-content-center" style={{display: 'flex !important'}}>
                                 <ul className="nav navbar-nav" style={{display: 'flex', listStyle: 'none', gap: '2rem'}}>
-                                    <li className="has-mega-menu"><a href="/" style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}>Home</a></li>
-                                    <li className="has-child"><a href="/job-grid" style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}>Jobs</a></li>
-                                    <li className="has-child"><a href="/emp-grid" style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}>Employers</a></li>
-                                    <li className="has-child"><a href="/contact-us" style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}>Contact Us</a></li>
+                                    <li className="has-mega-menu"><NavLink to="/" style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}>Home</NavLink></li>
+                                    <li className="has-child"><NavLink to="/job-grid" style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}>Jobs</NavLink></li>
+                                    <li className="has-child"><NavLink to="/emp-grid" style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}>Employers</NavLink></li>
+                                    <li className="has-child"><NavLink to="/contact-us" style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}>Contact Us</NavLink></li>
                                 </ul>
                             </div>
 
@@ -105,6 +105,6 @@ function Header1({ _config }) {
 
         </>
     )
-}
+});
 
 export default Header1;

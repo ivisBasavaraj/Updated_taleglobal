@@ -406,169 +406,244 @@ export default function EmpPostJob({ onNext }) {
 
 	/* Inline style objects */
 	const page = {
-		padding: 20,
-		maxWidth: 1100,
-		margin: "10px auto",
-		fontFamily: "Inter, Arial, sans-serif",
+		padding: "30px 20px",
+		maxWidth: 1200,
+		margin: "0 auto",
+		fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
+		background: "#f8f9fa",
+		minHeight: "100vh",
 	};
 	const card = {
 		background: "#fff",
-		padding: 20,
-		borderRadius: 8,
-		boxShadow: "0 0 0 1px rgba(15,23,42,0.03)",
+		padding: "32px",
+		borderRadius: 12,
+		boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+		marginBottom: 24,
 	};
 	const heading = {
 		margin: 0,
-		marginBottom: 6,
-		fontSize: 18,
-		color: "#111827",
-	};
-	const sub = { color: "#6b7280", marginBottom: 12, fontSize: 13 };
-	const progressWrap = {
-		display: "flex",
-		alignItems: "center",
-		gap: 12,
-		marginBottom: 18,
-	};
-	const progressBar = {
-		flex: 1,
-		height: 8,
-		background: "#f3f4f6",
-		borderRadius: 6,
-		position: "relative",
-		overflow: "hidden",
-	};
-	const progressFill = {
-		position: "absolute",
-		left: 0,
-		top: 0,
-		bottom: 0,
-		width: "33%",
-		background: "#0f172a",
-	};
-	const stepCircle = (active) => ({
-		width: 28,
-		height: 28,
-		borderRadius: "50%",
-		background: active ? "#0f172a" : "#fff",
-		color: active ? "#fff" : "#6b7280",
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
-		border: active ? "none" : "1px solid #e5e7eb",
-		fontSize: 13,
+		marginBottom: 8,
+		fontSize: 24,
+		color: "#1d1d1d",
 		fontWeight: 600,
-	});
+	};
+	const sub = { 
+		color: "#6b7280", 
+		marginBottom: 24, 
+		fontSize: 14,
+		lineHeight: 1.5,
+	};
 
 	const grid = {
 		display: "grid",
 		gridTemplateColumns: "1fr 1fr",
-		gap: 16,
+		gap: 24,
 		alignItems: "start",
 	};
 	const fullRow = { gridColumn: "1 / -1" };
 	const label = {
 		display: "block",
-		fontSize: 13,
+		fontSize: 14,
 		color: "#374151",
-		marginBottom: 6,
+		marginBottom: 8,
+		fontWeight: 500,
 	};
 	const input = {
 		width: "100%",
-		padding: "10px 12px",
+		padding: "12px 14px",
 		borderRadius: 8,
-		border: "1px solid #e6eef6",
-		background: "#f6fbff",
+		border: "1px solid #d1d5db",
+		background: "#fff",
 		outline: "none",
 		fontSize: 14,
 		boxSizing: "border-box",
+		transition: "all 0.2s ease",
+	};
+	const inputFocus = {
+		borderColor: "#ff6b35",
+		boxShadow: "0 0 0 3px rgba(255,107,53,0.1)",
 	};
 	const smallInput = { ...input, width: 180 };
 	const plusBtn = {
-		marginLeft: 8,
-		width: 38,
-		height: 38,
+		marginLeft: 10,
+		width: 42,
+		height: 42,
 		borderRadius: 8,
 		border: "none",
-		background: "#0f172a",
+		background: "#ff6b35",
 		color: "#fff",
 		cursor: "pointer",
 		fontSize: 20,
 		lineHeight: 1,
+		transition: "all 0.2s ease",
+		fontWeight: 600,
 	};
 	const chip = {
-		padding: "6px 10px",
-		background: "#eef2ff",
-		borderRadius: 999,
+		padding: "8px 14px",
+		background: "#e7f3ff",
+		borderRadius: 20,
 		display: "inline-flex",
 		gap: 8,
 		alignItems: "center",
 		fontSize: 13,
+		fontWeight: 500,
+		color: "#0066cc",
+		border: "1px solid #b3d9ff",
 	};
 	const chipX = {
 		marginLeft: 6,
 		cursor: "pointer",
 		color: "#ef4444",
 		fontWeight: 700,
+		fontSize: 16,
+	};
+	const sectionHeader = {
+		margin: "32px 0 20px 0",
+		fontSize: 18,
+		color: "#1d1d1d",
+		fontWeight: 600,
+		paddingBottom: 12,
+		borderBottom: "2px solid #f3f4f6",
+		display: "flex",
+		alignItems: "center",
+		gap: 10,
 	};
 
 	return (
 		<div style={page}>
+			{/* Header */}
+			<div style={{marginBottom: 24}}>
+				<h1 style={heading}>
+					{isEditMode ? (
+						<><i className="fa fa-edit" style={{color: '#ff6b35', marginRight: 12}}></i>Edit Job Posting</>
+					) : (
+						<><i className="fa fa-plus-circle" style={{color: '#ff6b35', marginRight: 12}}></i>Post a New Job</>
+					)}
+				</h1>
+				<p style={sub}>
+					{isEditMode 
+						? 'Update your job posting details below. All fields marked with * are required.'
+						: 'Fill in the details below to create a new job posting. All fields marked with * are required.'}
+				</p>
+			</div>
+
 			{/* Card */}
 			<div style={card}>
-				<h3 style={{ marginTop: 0, marginBottom: 14, fontSize: 16 }}>
-					{isEditMode ? 'Edit Job Information' : 'Job Information'}
-				</h3>
-
 				<div style={grid}>
 					{/* Consultant Fields */}
 					{employerType === 'consultant' && (
 						<>
 							<div style={fullRow}>
-								<h4 style={{ margin: "12px 0", fontSize: 15, color: "#0f172a", background: '#e8f5e8', padding: '8px', borderRadius: '4px' }}>
-									✓ Company Information (Consultant Mode)
-								</h4>
+								<div style={{
+									background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+									padding: '16px 20px',
+									borderRadius: 10,
+									color: '#fff',
+									marginBottom: 8,
+								}}>
+									<h4 style={{ margin: 0, fontSize: 16, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 10 }}>
+										<i className="fa fa-briefcase"></i>
+										Company Information (Consultant Mode)
+									</h4>
+									<p style={{margin: '6px 0 0 0', fontSize: 13, opacity: 0.9}}>
+										As a consultant, please provide details about the hiring company
+									</p>
+								</div>
 							</div>
 							<div>
-								<label style={label}><i className="fa fa-image" style={{marginRight: '6px', color: '#ff6b35'}}></i>Company Logo</label>
+								<label style={label}>
+									<i className="fa fa-image" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+									Company Logo
+								</label>
 								<input
-									style={input}
+									style={{...input, padding: '10px'}}
 									type="file"
 									accept="image/*"
 									onChange={handleLogoUpload}
 								/>
 								{formData.companyLogo && (
-									<img src={formData.companyLogo} alt="Company Logo" style={{width: '60px', height: '60px', marginTop: '8px', objectFit: 'cover'}} />
+									<div style={{marginTop: 12}}>
+										<img 
+											src={formData.companyLogo} 
+											alt="Company Logo" 
+											style={{
+												width: '80px', 
+												height: '80px', 
+												borderRadius: 8,
+												objectFit: 'cover',
+												border: '2px solid #e5e7eb',
+												boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+											}} 
+										/>
+									</div>
 								)}
 							</div>
 							<div>
-								<label style={{...label, color: '#d32f2f', fontWeight: 'bold'}}><i className="fa fa-building" style={{marginRight: '6px', color: '#d32f2f'}}></i>Company Name * (Required for Consultants)</label>
+								<label style={{...label, color: '#dc2626'}}>
+									<i className="fa fa-building" style={{marginRight: '8px'}}></i>
+									Company Name *
+									<span style={{fontSize: 11, color: '#dc2626', marginLeft: 6}}>(Required)</span>
+								</label>
 								<input
-									style={{...input, borderColor: formData.companyName ? '#4caf50' : '#f44336'}}
+									style={{
+										...input, 
+										borderColor: formData.companyName ? '#10b981' : '#dc2626',
+										borderWidth: 2,
+									}}
 									placeholder="e.g., Tech Solutions Inc."
 									value={formData.companyName}
 									onChange={(e) => update({ companyName: e.target.value })}
 									required
 								/>
-								{!formData.companyName && <p style={{color: '#f44336', fontSize: '12px', margin: '4px 0 0 0'}}>Please enter company name</p>}
+								{!formData.companyName && (
+									<p style={{color: '#dc2626', fontSize: 12, margin: '6px 0 0 0', display: 'flex', alignItems: 'center', gap: 4}}>
+										<i className="fa fa-exclamation-circle"></i>
+										Please enter company name
+									</p>
+								)}
 							</div>
 							<div style={fullRow}>
-								<label style={{...label, color: '#d32f2f', fontWeight: 'bold'}}><i className="fa fa-info-circle" style={{marginRight: '6px', color: '#d32f2f'}}></i>Company Description * (Required for Consultants)</label>
+								<label style={{...label, color: '#dc2626'}}>
+									<i className="fa fa-info-circle" style={{marginRight: '8px'}}></i>
+									Company Description *
+									<span style={{fontSize: 11, color: '#dc2626', marginLeft: 6}}>(Required)</span>
+								</label>
 								<textarea
-									style={{...input, minHeight: '80px', borderColor: formData.companyDescription ? '#4caf50' : '#f44336'}}
-									placeholder="Brief description about the company..."
+									style={{
+										...input, 
+										minHeight: '100px',
+										borderColor: formData.companyDescription ? '#10b981' : '#dc2626',
+										borderWidth: 2,
+									}}
+									placeholder="Brief description about the company, its culture, and what makes it unique..."
 									value={formData.companyDescription}
 									onChange={(e) => update({ companyDescription: e.target.value })}
 									required
 								/>
-								{!formData.companyDescription && <p style={{color: '#f44336', fontSize: '12px', margin: '4px 0 0 0'}}>Please enter company description</p>}
+								{!formData.companyDescription && (
+									<p style={{color: '#dc2626', fontSize: 12, margin: '6px 0 0 0', display: 'flex', alignItems: 'center', gap: 4}}>
+										<i className="fa fa-exclamation-circle"></i>
+										Please enter company description
+									</p>
+								)}
 							</div>
 						</>
 					)}
 
+					{/* Basic Job Information Section */}
+					<div style={fullRow}>
+						<h3 style={sectionHeader}>
+							<i className="fa fa-info-circle" style={{color: '#ff6b35'}}></i>
+							Basic Job Information
+						</h3>
+					</div>
+
 					{/* Row 1 */}
 					<div>
-						<label style={label}><i className="fa fa-briefcase" style={{marginRight: '6px', color: '#ff6b35'}}></i>Job Title / Designation *</label>
+						<label style={label}>
+							<i className="fa fa-briefcase" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Job Title / Designation *
+						</label>
 						<input
 							style={input}
 							placeholder="e.g., Senior Software Engineer"
@@ -578,9 +653,12 @@ export default function EmpPostJob({ onNext }) {
 					</div>
 
 					<div>
-						<label style={label}><i className="fa fa-tags" style={{marginRight: '6px', color: '#ff6b35'}}></i>Job Category *</label>
+						<label style={label}>
+							<i className="fa fa-tags" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Job Category *
+						</label>
 						<select
-							style={{ ...input, appearance: "none", backgroundImage: "none" }}
+							style={{ ...input, cursor: 'pointer' }}
 							value={formData.category}
 							onChange={(e) => update({ category: e.target.value })}
 						>
@@ -601,9 +679,12 @@ export default function EmpPostJob({ onNext }) {
 					</div>
 
 					<div>
-						<label style={label}><i className="fa fa-clock" style={{marginRight: '6px', color: '#ff6b35'}}></i>Job Type *</label>
+						<label style={label}>
+							<i className="fa fa-clock" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Job Type *
+						</label>
 						<select
-							style={{ ...input, appearance: "none", backgroundImage: "none" }}
+							style={{ ...input, cursor: 'pointer' }}
 							value={formData.jobType}
 							onChange={(e) => update({ jobType: e.target.value })}
 						>
@@ -614,15 +695,15 @@ export default function EmpPostJob({ onNext }) {
 							<option>Internship (Unpaid)</option>
 							<option>Work From Home</option>
 							<option>Contract</option>
-							<option>Design</option>
-							<option>Healthcare</option>
-							<option>Marketing</option>
 						</select>
 					</div>
 
 					{/* Row 2 */}
 					<div>
-						<label style={label}><i className="fa fa-map-marker-alt" style={{marginRight: '6px', color: '#ff6b35'}}></i>Job Location *</label>
+						<label style={label}>
+							<i className="fa fa-map-marker-alt" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Job Location *
+						</label>
 						<input
 							style={input}
 							placeholder="e.g., Bangalore, Mumbai, Remote"
@@ -631,34 +712,66 @@ export default function EmpPostJob({ onNext }) {
 						/>
 					</div>
 
+					{/* Compensation Section */}
+					<div style={fullRow}>
+						<h3 style={sectionHeader}>
+							<i className="fa fa-money-bill-wave" style={{color: '#ff6b35'}}></i>
+							Compensation & Openings
+						</h3>
+					</div>
+
 					<div>
-						<label style={label}><i className="fa fa-rupee-sign" style={{marginRight: '6px', color: '#ff6b35'}}></i>CTC (Annual) 
-							<span style={{fontSize: '11px', color: '#10b981', fontWeight: 'normal'}}>✓ Auto-saved</span>
+						<label style={label}>
+							<i className="fa fa-rupee-sign" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							CTC (Annual)
+							<span style={{
+								fontSize: 11, 
+								color: '#10b981', 
+								fontWeight: 500,
+								marginLeft: 8,
+								background: '#d1fae5',
+								padding: '2px 8px',
+								borderRadius: 4,
+							}}>
+								✓ Auto-saved
+							</span>
 						</label>
 						<input
 							style={input}
-							placeholder="e.g., 8 L.P.A"
+							placeholder="e.g., 8 L.P.A or 6-8 L.P.A"
 							value={formData.ctc}
 							onChange={(e) => update({ ctc: e.target.value })}
 						/>
+						<small style={{color: '#6b7280', fontSize: 12, marginTop: 4, display: 'block'}}>
+							Enter annual CTC in lakhs (e.g., 8 or 6-8)
+						</small>
 					</div>
 
-					{/* Row 3 */}
 					<div>
-						<label style={label}><i className="fa fa-money-bill-wave" style={{marginRight: '6px', color: '#ff6b35'}}></i>Net Salary (Monthly)</label>
+						<label style={label}>
+							<i className="fa fa-money-bill-wave" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Net Salary (Monthly)
+						</label>
 						<input
 							style={input}
-							placeholder="e.g., ₹50,000"
+							placeholder="e.g., 50000 or 40000-50000"
 							value={formData.netSalary}
 							onChange={(e) => update({ netSalary: e.target.value })}
 						/>
+						<small style={{color: '#6b7280', fontSize: 12, marginTop: 4, display: 'block'}}>
+							Enter monthly take-home salary in rupees
+						</small>
 					</div>
 
 					<div>
-						<label style={label}><i className="fa fa-users" style={{marginRight: '6px', color: '#ff6b35'}}></i>Number of Vacancies *</label>
+						<label style={label}>
+							<i className="fa fa-users" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Number of Vacancies *
+						</label>
 						<input
 							style={input}
 							type="number"
+							min="1"
 							placeholder="e.g., 5"
 							value={formData.vacancies}
 							onChange={(e) => update({ vacancies: e.target.value })}
@@ -666,21 +779,61 @@ export default function EmpPostJob({ onNext }) {
 					</div>
 
 					<div>
-						<label style={label}><i className="fa fa-file-alt" style={{marginRight: '6px', color: '#ff6b35'}}></i>Application Limit *</label>
+						<label style={label}>
+							<i className="fa fa-file-alt" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Application Limit *
+						</label>
 						<input
 							style={input}
 							type="number"
+							min="1"
 							placeholder="e.g., 100"
 							value={formData.applicationLimit}
 							onChange={(e) => update({ applicationLimit: e.target.value })}
 						/>
+						<small style={{color: '#6b7280', fontSize: 12, marginTop: 4, display: 'block'}}>
+							Maximum number of applications to accept
+						</small>
 					</div>
 
-					{/* Row 4 */}
+					{/* Requirements Section */}
+					<div style={fullRow}>
+						<h3 style={sectionHeader}>
+							<i className="fa fa-clipboard-check" style={{color: '#ff6b35'}}></i>
+							Requirements & Qualifications
+						</h3>
+					</div>
+
 					<div>
-						<label style={label}><i className="fa fa-question-circle" style={{marginRight: '6px', color: '#ff6b35'}}></i>Are Backlogs Allowed?</label>
+						<label style={label}>
+							<i className="fa fa-graduation-cap" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Required Educational Background *
+						</label>
 						<select
-							style={{ ...input, appearance: "none" }}
+							style={{ ...input, cursor: 'pointer' }}
+							value={formData.education}
+							onChange={(e) => update({ education: e.target.value })}
+						>
+							<option value="" disabled>Select Education Level</option>
+							<option value="Any">Any</option>
+							<option value="B.Tech">B.Tech</option>
+							<option value="M.Tech">M.Tech</option>
+							<option value="B.Sc">B.Sc</option>
+							<option value="M.Sc">M.Sc</option>
+							<option value="MBA">MBA</option>
+							<option value="BBA">BBA</option>
+							<option value="B.Com">B.Com</option>
+							<option value="M.Com">M.Com</option>
+						</select>
+					</div>
+
+					<div>
+						<label style={label}>
+							<i className="fa fa-question-circle" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Are Backlogs Allowed?
+						</label>
+						<select
+							style={{ ...input, cursor: 'pointer' }}
 							value={formData.backlogsAllowed ? "Yes" : "No"}
 							onChange={(e) =>
 								update({ backlogsAllowed: e.target.value === "Yes" })
@@ -691,32 +844,19 @@ export default function EmpPostJob({ onNext }) {
 						</select>
 					</div>
 
-					<div>
-						<label style={label}><i className="fa fa-graduation-cap" style={{marginRight: '6px', color: '#ff6b35'}}></i>Required Educational Background *</label>
-						<select
-							style={{ ...input, appearance: "none" }}
-							value={formData.education}
-							onChange={(e) => update({ education: e.target.value })}
-						>
-							<option value="" disabled>
-								Select Education Level
-							</option>
-							<option value="Any">Any</option>
-							<option value="B.Tech">B.Tech</option>
-							<option value="M.Tech">M.Tech</option>
-							<option value="B.Sc">B.Sc</option>
-							<option value="M.Sc">M.Sc</option>
-							<option value="MBA">MBA</option>
-						</select>
-					</div>
-
 					{/* Skills (full width) */}
 					<div style={fullRow}>
-						<label style={label}><i className="fa fa-cogs" style={{marginRight: '6px', color: '#ff6b35'}}></i>Required Skills</label>
-						<div style={{ display: "flex", alignItems: "center" }}>
+						<label style={label}>
+							<i className="fa fa-cogs" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Required Skills
+							<span style={{fontSize: 12, color: '#6b7280', fontWeight: 'normal', marginLeft: 8}}>
+								({formData.requiredSkills.length} skills added)
+							</span>
+						</label>
+						<div style={{ display: "flex", alignItems: "center", gap: 10 }}>
 							<input
-								style={{ ...input, marginBottom: 0 }}
-								placeholder="Add a skill (e.g., React, Java, Python)"
+								style={{ ...input, marginBottom: 0, flex: 1 }}
+								placeholder="Type a skill and press Enter or click + (e.g., React, Java, Python)"
 								value={formData.skillInput}
 								onChange={(e) => update({ skillInput: e.target.value })}
 								onKeyDown={(e) => {
@@ -732,36 +872,66 @@ export default function EmpPostJob({ onNext }) {
 								style={plusBtn}
 								aria-label="Add skill"
 								title="Add skill"
+								onMouseEnter={(e) => e.currentTarget.style.background = '#e55a2b'}
+								onMouseLeave={(e) => e.currentTarget.style.background = '#ff6b35'}
 							>
 								+
 							</button>
 						</div>
 
 						{/* chips */}
-						<div
-							style={{
-								marginTop: 10,
-								display: "flex",
-								gap: 8,
-								flexWrap: "wrap",
-							}}
-						>
-							{formData.requiredSkills.map((s, i) => (
-								<div key={i} style={chip}>
-									<span>{s}</span>
-									<span style={chipX} onClick={() => removeSkill(s)}>
-										×
-									</span>
-								</div>
-							))}
-						</div>
+						{formData.requiredSkills.length > 0 && (
+							<div
+								style={{
+									marginTop: 14,
+									display: "flex",
+									gap: 10,
+									flexWrap: "wrap",
+									padding: 12,
+									background: '#f9fafb',
+									borderRadius: 8,
+									border: '1px solid #e5e7eb',
+								}}
+							>
+								{formData.requiredSkills.map((s, i) => (
+									<div key={i} style={chip}>
+										<span>{s}</span>
+										<span 
+											style={chipX} 
+											onClick={() => removeSkill(s)}
+											title="Remove skill"
+										>
+											×
+										</span>
+									</div>
+								))}
+							</div>
+						)}
 					</div>
 
 					{/* Experience & Rounds */}
 					<div>
-						<label style={label}><i className="fa fa-chart-line" style={{marginRight: '6px', color: '#ff6b35'}}></i>Experience Level</label>
-						<div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-							<label style={{ fontSize: 14, color: "#374151" }}>
+						<label style={label}>
+							<i className="fa fa-chart-line" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Experience Level
+						</label>
+						<div style={{ 
+							display: "flex", 
+							gap: 16, 
+							alignItems: "center",
+							flexWrap: "wrap",
+							padding: 12,
+							background: '#f9fafb',
+							borderRadius: 8,
+						}}>
+							<label style={{ 
+								fontSize: 14, 
+								color: "#374151",
+								display: 'flex',
+								alignItems: 'center',
+								gap: 6,
+								cursor: 'pointer',
+							}}>
 								<input
 									type="radio"
 									name="experience"
@@ -769,21 +939,37 @@ export default function EmpPostJob({ onNext }) {
 									onChange={() =>
 										update({ experienceLevel: "freshers", minExperience: "" })
 									}
-								/>{" "}
+									style={{cursor: 'pointer'}}
+								/>
 								Fresher
 							</label>
 
-							<label style={{ fontSize: 14, color: "#374151" }}>
+							<label style={{ 
+								fontSize: 14, 
+								color: "#374151",
+								display: 'flex',
+								alignItems: 'center',
+								gap: 6,
+								cursor: 'pointer',
+							}}>
 								<input
 									type="radio"
 									name="experience"
 									checked={formData.experienceLevel === "minimum"}
 									onChange={() => update({ experienceLevel: "minimum" })}
-								/>{" "}
+									style={{cursor: 'pointer'}}
+								/>
 								Experienced
 							</label>
 
-							<label style={{ fontSize: 14, color: "#374151" }}>
+							<label style={{ 
+								fontSize: 14, 
+								color: "#374151",
+								display: 'flex',
+								alignItems: 'center',
+								gap: 6,
+								cursor: 'pointer',
+							}}>
 								<input
 									type="radio"
 									name="both"
@@ -791,49 +977,102 @@ export default function EmpPostJob({ onNext }) {
 									onChange={() =>
 										update({ experienceLevel: "both", minExperience: "" })
 									}
-								/>{" "}
+									style={{cursor: 'pointer'}}
+								/>
 								Both
 							</label>
 
 							{formData.experienceLevel === "minimum" && (
-								<input
-									style={{ ...smallInput, marginLeft: 8 }}
-									type="number"
-									placeholder="Years"
-									value={formData.minExperience}
-									onChange={(e) => update({ minExperience: e.target.value })}
-								/>
+								<div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+									<span style={{fontSize: 13, color: '#6b7280'}}>Min. Years:</span>
+									<input
+										style={{ ...input, width: 100, marginBottom: 0 }}
+										type="number"
+										min="0"
+										placeholder="Years"
+										value={formData.minExperience}
+										onChange={(e) => update({ minExperience: e.target.value })}
+									/>
+								</div>
 							)}
 						</div>
 					</div>
 
 					<div>
-						<label style={label}><i className="fa fa-comments" style={{marginRight: '6px', color: '#ff6b35'}}></i>Number of Interview Rounds *</label>
+						<label style={label}>
+							<i className="fa fa-comments" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Number of Interview Rounds *
+						</label>
 						<input
 							style={input}
 							type="number"
+							min="1"
 							placeholder="e.g., 3"
 							value={formData.interviewRoundsCount}
 							onChange={(e) => update({ interviewRoundsCount: e.target.value })}
 						/>
 					</div>
 
+					{/* Interview Process Section */}
+					<div style={fullRow}>
+						<h3 style={sectionHeader}>
+							<i className="fa fa-clipboard-list" style={{color: '#ff6b35'}}></i>
+							Interview Process
+						</h3>
+					</div>
+
 					{/* Interview Round Types - full row */}
 					<div style={fullRow}>
-						<label style={label}><i className="fa fa-list-check" style={{marginRight: '6px', color: '#ff6b35'}}></i>Interview Round Types 
-							<span style={{fontSize: '11px', color: '#6b7280', fontWeight: 'normal'}}>
-								({Object.values(formData.interviewRoundTypes).filter(Boolean).length} selected)
+						<label style={label}>
+							<i className="fa fa-list-check" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Interview Round Types
+							<span style={{
+								fontSize: 12, 
+								color: '#10b981', 
+								fontWeight: 500,
+								marginLeft: 8,
+								background: '#d1fae5',
+								padding: '2px 8px',
+								borderRadius: 4,
+							}}>
+								{Object.values(formData.interviewRoundTypes).filter(Boolean).length} selected
 							</span>
 						</label>
 						<div
 							style={{
 								display: "grid",
 								gridTemplateColumns: "repeat(2, 1fr)",
-								gap: 8,
+								gap: 12,
+								padding: 16,
+								background: '#f9fafb',
+								borderRadius: 8,
+								border: '1px solid #e5e7eb',
 							}}
 						>
-							<label style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<span style={{fontSize: '11px', color: '#6b7280', minWidth: '15px'}}>
+							<label style={{ 
+								display: "flex", 
+								alignItems: "center", 
+								gap: 10,
+								cursor: 'pointer',
+								padding: 8,
+								borderRadius: 6,
+								transition: 'background 0.2s',
+							}}
+							onMouseEnter={(e) => e.currentTarget.style.background = '#fff'}
+							onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+							>
+								<span style={{
+									fontSize: 12, 
+									color: '#fff', 
+									minWidth: '20px',
+									height: '20px',
+									background: formData.interviewRoundTypes.technical ? '#10b981' : '#d1d5db',
+									borderRadius: '50%',
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+									fontWeight: 600,
+								}}>
 									{formData.interviewRoundTypes.technical ? (formData.interviewRoundOrder || []).indexOf('technical') + 1 : ''}
 								</span>
 								<input
@@ -842,12 +1081,35 @@ export default function EmpPostJob({ onNext }) {
 									onChange={() =>
 										toggleNested("interviewRoundTypes", "technical")
 									}
+									style={{cursor: 'pointer'}}
 								/>
-								Technical
+								<span style={{fontSize: 14, fontWeight: 500}}>Technical</span>
 							</label>
 
-							<label style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<span style={{fontSize: '11px', color: '#6b7280', minWidth: '15px'}}>
+							<label style={{ 
+								display: "flex", 
+								alignItems: "center", 
+								gap: 10,
+								cursor: 'pointer',
+								padding: 8,
+								borderRadius: 6,
+								transition: 'background 0.2s',
+							}}
+							onMouseEnter={(e) => e.currentTarget.style.background = '#fff'}
+							onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+							>
+								<span style={{
+									fontSize: 12, 
+									color: '#fff', 
+									minWidth: '20px',
+									height: '20px',
+									background: formData.interviewRoundTypes.nonTechnical ? '#10b981' : '#d1d5db',
+									borderRadius: '50%',
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+									fontWeight: 600,
+								}}>
 									{formData.interviewRoundTypes.nonTechnical ? (formData.interviewRoundOrder || []).indexOf('nonTechnical') + 1 : ''}
 								</span>
 								<input
@@ -856,12 +1118,35 @@ export default function EmpPostJob({ onNext }) {
 									onChange={() =>
 										toggleNested("interviewRoundTypes", "nonTechnical")
 									}
+									style={{cursor: 'pointer'}}
 								/>
-								Non-Technical
+								<span style={{fontSize: 14, fontWeight: 500}}>Non-Technical</span>
 							</label>
 
-							<label style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<span style={{fontSize: '11px', color: '#6b7280', minWidth: '15px'}}>
+							<label style={{ 
+								display: "flex", 
+								alignItems: "center", 
+								gap: 10,
+								cursor: 'pointer',
+								padding: 8,
+								borderRadius: 6,
+								transition: 'background 0.2s',
+							}}
+							onMouseEnter={(e) => e.currentTarget.style.background = '#fff'}
+							onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+							>
+								<span style={{
+									fontSize: 12, 
+									color: '#fff', 
+									minWidth: '20px',
+									height: '20px',
+									background: formData.interviewRoundTypes.managerial ? '#10b981' : '#d1d5db',
+									borderRadius: '50%',
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+									fontWeight: 600,
+								}}>
 									{formData.interviewRoundTypes.managerial ? (formData.interviewRoundOrder || []).indexOf('managerial') + 1 : ''}
 								</span>
 								<input
@@ -870,32 +1155,79 @@ export default function EmpPostJob({ onNext }) {
 									onChange={() =>
 										toggleNested("interviewRoundTypes", "managerial")
 									}
+									style={{cursor: 'pointer'}}
 								/>
-								Managerial Round
+								<span style={{fontSize: 14, fontWeight: 500}}>Managerial Round</span>
 							</label>
 
-							<label style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<span style={{fontSize: '11px', color: '#6b7280', minWidth: '15px'}}>
+							<label style={{ 
+								display: "flex", 
+								alignItems: "center", 
+								gap: 10,
+								cursor: 'pointer',
+								padding: 8,
+								borderRadius: 6,
+								transition: 'background 0.2s',
+							}}
+							onMouseEnter={(e) => e.currentTarget.style.background = '#fff'}
+							onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+							>
+								<span style={{
+									fontSize: 12, 
+									color: '#fff', 
+									minWidth: '20px',
+									height: '20px',
+									background: formData.interviewRoundTypes.final ? '#10b981' : '#d1d5db',
+									borderRadius: '50%',
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+									fontWeight: 600,
+								}}>
 									{formData.interviewRoundTypes.final ? (formData.interviewRoundOrder || []).indexOf('final') + 1 : ''}
 								</span>
 								<input
 									type="checkbox"
 									checked={formData.interviewRoundTypes.final}
 									onChange={() => toggleNested("interviewRoundTypes", "final")}
+									style={{cursor: 'pointer'}}
 								/>
-								Final Round
+								<span style={{fontSize: 14, fontWeight: 500}}>Final Round</span>
 							</label>
 
-							<label style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<span style={{fontSize: '11px', color: '#6b7280', minWidth: '15px'}}>
+							<label style={{ 
+								display: "flex", 
+								alignItems: "center", 
+								gap: 10,
+								cursor: 'pointer',
+								padding: 8,
+								borderRadius: 6,
+								transition: 'background 0.2s',
+							}}
+							onMouseEnter={(e) => e.currentTarget.style.background = '#fff'}
+							onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+							>
+								<span style={{
+									fontSize: 12, 
+									color: '#fff', 
+									minWidth: '20px',
+									height: '20px',
+									background: formData.interviewRoundTypes.hr ? '#10b981' : '#d1d5db',
+									borderRadius: '50%',
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+									fontWeight: 600,
+								}}>
 									{formData.interviewRoundTypes.hr ? (formData.interviewRoundOrder || []).indexOf('hr') + 1 : ''}
 								</span>
 								<input
 									type="checkbox"
 									checked={formData.interviewRoundTypes.hr}
 									onChange={() => toggleNested("interviewRoundTypes", "hr")}
+									style={{cursor: 'pointer'}}
 								/>
-								HR Round
+								<span style={{fontSize: 14, fontWeight: 500}}>HR Round</span>
 							</label>
 						</div>
 					</div>
@@ -972,102 +1304,192 @@ export default function EmpPostJob({ onNext }) {
 						</div>
 					)}
 
+					{/* Additional Details Section */}
+					<div style={fullRow}>
+						<h3 style={sectionHeader}>
+							<i className="fa fa-file-alt" style={{color: '#ff6b35'}}></i>
+							Additional Details
+						</h3>
+					</div>
+
 					{/* Dates */}
 					<div>
-						<label style={label}><i className="fa fa-calendar-alt" style={{marginRight: '6px', color: '#ff6b35'}}></i>Offer Letter Release Date *</label>
+						<label style={label}>
+							<i className="fa fa-calendar-alt" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Offer Letter Release Date *
+						</label>
 						<input
 							style={input}
 							type="date"
 							value={formData.offerLetterDate}
 							onChange={(e) => update({ offerLetterDate: e.target.value })}
-							placeholder="dd/mm/yyyy"
 						/>
+					</div>
+
+					{/* Transportation */}
+					<div>
+						<label style={label}>
+							<i className="fa fa-car" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Transportation Options
+						</label>
+						<div style={{
+							display: "flex",
+							flexDirection: "column",
+							gap: 10,
+							padding: 12,
+							background: '#f9fafb',
+							borderRadius: 8,
+							border: '1px solid #e5e7eb',
+						}}>
+							<label style={{ 
+								display: "flex", 
+								alignItems: "center", 
+								gap: 8,
+								cursor: 'pointer',
+								fontSize: 14,
+							}}>
+								<input
+									type="checkbox"
+									checked={formData.transportation.oneWay}
+									onChange={() => toggleNested("transportation", "oneWay")}
+									style={{cursor: 'pointer'}}
+								/>
+								One-way Cab
+							</label>
+
+							<label style={{ 
+								display: "flex", 
+								alignItems: "center", 
+								gap: 8,
+								cursor: 'pointer',
+								fontSize: 14,
+							}}>
+								<input
+									type="checkbox"
+									checked={formData.transportation.twoWay}
+									onChange={() => toggleNested("transportation", "twoWay")}
+									style={{cursor: 'pointer'}}
+								/>
+								Two-way Cab
+							</label>
+
+							<label style={{ 
+								display: "flex", 
+								alignItems: "center", 
+								gap: 8,
+								cursor: 'pointer',
+								fontSize: 14,
+							}}>
+								<input
+									type="checkbox"
+									checked={formData.transportation.noCab}
+									onChange={() => toggleNested("transportation", "noCab")}
+									style={{cursor: 'pointer'}}
+								/>
+								No Cab Facility
+							</label>
+						</div>
 					</div>
 					
 					{/* Job Description */}
 					<div style={fullRow}>
-						<label style={label}><i className="fa fa-align-left" style={{marginRight: '6px', color: '#ff6b35'}}></i>Job Description *</label>
+						<label style={label}>
+							<i className="fa fa-align-left" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Job Description *
+						</label>
 						<textarea 
-							style={{...input, minHeight: '100px'}} 
+							style={{
+								...input, 
+								minHeight: '140px',
+								lineHeight: 1.6,
+								fontFamily: 'inherit',
+							}} 
 							value={formData.jobDescription}
 							onChange={(e) => update({ jobDescription: e.target.value })}
-							placeholder="Enter detailed job description..."
+							placeholder="Provide a detailed description of the job role, responsibilities, and expectations..."
 						/>
-					</div>
-
-					{/* Candidate Transportation & Interview Facility (full row) */}
-					<div style={fullRow}>
-						<h4 style={{ margin: "12px 0", fontSize: 15 }}>
-							<i className="fa fa-car" style={{marginRight: '8px', color: '#ff6b35'}}></i>Candidate Transportation Options
-						</h4>
-
-						<div
-							style={{
-								display: "grid",
-								gridTemplateColumns: "1fr 1fr 1fr",
-								gap: 16,
-							}}
-						>
-							<div>
-								<label style={{ display: "block" }}>
-									<input
-										type="checkbox"
-										checked={formData.transportation.oneWay}
-										onChange={() => toggleNested("transportation", "oneWay")}
-									/>{" "}
-									One-way Cab
-								</label>
-
-								<label style={{ display: "block" }}>
-									<input
-										type="checkbox"
-										checked={formData.transportation.twoWay}
-										onChange={() => toggleNested("transportation", "twoWay")}
-									/>{" "}
-									Two-way Cab
-								</label>
-
-								<label style={{ display: "block" }}>
-									<input
-										type="checkbox"
-										checked={formData.transportation.noCab}
-										onChange={() => toggleNested("transportation", "noCab")}
-									/>{" "}
-									No Cab
-								</label>
-							</div>
-						</div>
+						<small style={{color: '#6b7280', fontSize: 12, marginTop: 6, display: 'block'}}>
+							Include key responsibilities, day-to-day tasks, and what makes this role unique
+						</small>
 					</div>
 				</div>
 
-				<div style={{ display: "flex", justifyContent: "space-between", marginTop: 22 }}>
-					<NavLink to={empRoute(employer.MANAGE_JOBS)}>
+				{/* Action Buttons */}
+				<div style={{ 
+					display: "flex", 
+					justifyContent: "space-between", 
+					marginTop: 32,
+					paddingTop: 24,
+					borderTop: '2px solid #f3f4f6',
+					gap: 16,
+				}}>
+					<NavLink to={empRoute(employer.MANAGE_JOBS)} style={{textDecoration: 'none'}}>
 						<button
-						style={{
-							background: "#0f172a",
-							color: "#fff",
-							border: "none",
-							padding: "10px 18px",
-							borderRadius: 8,
-							cursor: "pointer",
+							style={{
+								background: "#fff",
+								color: "#374151",
+								border: "2px solid #d1d5db",
+								padding: "12px 28px",
+								borderRadius: 8,
+								cursor: "pointer",
+								fontSize: 15,
+								fontWeight: 600,
+								transition: "all 0.2s ease",
+								display: 'flex',
+								alignItems: 'center',
+								gap: 8,
+							}}
+							onMouseEnter={(e) => {
+								e.currentTarget.style.background = '#f9fafb';
+								e.currentTarget.style.borderColor = '#9ca3af';
+							}}
+							onMouseLeave={(e) => {
+								e.currentTarget.style.background = '#fff';
+								e.currentTarget.style.borderColor = '#d1d5db';
 							}}
 						>
-							Back
+							<i className="fa fa-arrow-left"></i>
+							Back to Jobs
 						</button>
 					</NavLink>
 					
 					<button
 						onClick={submitNext}
 						style={{
-							background: "#0f172a",
+							background: "linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%)",
 							color: "#fff",
 							border: "none",
-							padding: "10px 18px",
+							padding: "12px 32px",
 							borderRadius: 8,
 							cursor: "pointer",
+							fontSize: 15,
+							fontWeight: 600,
+							transition: "all 0.2s ease",
+							boxShadow: "0 4px 12px rgba(255,107,53,0.3)",
+							display: 'flex',
+							alignItems: 'center',
+							gap: 8,
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.transform = 'translateY(-2px)';
+							e.currentTarget.style.boxShadow = '0 6px 16px rgba(255,107,53,0.4)';
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.transform = 'translateY(0)';
+							e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,107,53,0.3)';
 						}}
 					>
-						{isEditMode ? 'Update Job' : 'Next'}
+						{isEditMode ? (
+							<>
+								<i className="fa fa-save"></i>
+								Update Job
+							</>
+						) : (
+							<>
+								<i className="fa fa-paper-plane"></i>
+								Submit Job
+							</>
+						)}
 					</button>
 				</div>
 			</div>

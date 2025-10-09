@@ -120,6 +120,29 @@ exports.updateProfile = async (req, res) => {
     
     const { name, phone, email, middleName, lastName, ...profileData } = req.body;
     
+    // Validation for middleName and lastName
+    const errors = [];
+    
+    if (middleName && middleName.trim()) {
+      if (middleName.length > 30) {
+        errors.push({ field: 'middleName', msg: 'Middle name cannot exceed 30 characters' });
+      } else if (!/^[a-zA-Z\s]*$/.test(middleName)) {
+        errors.push({ field: 'middleName', msg: 'Middle name can only contain letters and spaces' });
+      }
+    }
+    
+    if (lastName && lastName.trim()) {
+      if (lastName.length > 30) {
+        errors.push({ field: 'lastName', msg: 'Last name cannot exceed 30 characters' });
+      } else if (!/^[a-zA-Z\s]*$/.test(lastName)) {
+        errors.push({ field: 'lastName', msg: 'Last name can only contain letters and spaces' });
+      }
+    }
+    
+    if (errors.length > 0) {
+      return res.status(400).json({ success: false, message: 'Validation failed', errors });
+    }
+    
     // Update candidate basic info
     if (name || phone || email) {
       const updatedCandidate = await Candidate.findByIdAndUpdate(req.user._id, {
@@ -133,8 +156,8 @@ exports.updateProfile = async (req, res) => {
     // Prepare profile update data
     const updateData = { ...profileData };
 
-    if (middleName !== undefined) updateData.middleName = middleName;
-    if (lastName !== undefined) updateData.lastName = lastName;
+    if (middleName !== undefined) updateData.middleName = middleName.trim();
+    if (lastName !== undefined) updateData.lastName = lastName.trim();
     if (req.file) {
       const { fileToBase64 } = require('../middlewares/upload');
       updateData.profilePicture = fileToBase64(req.file);

@@ -12,6 +12,16 @@ const HeroBody = ({ onSearch }) => {
   });
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [errors, setErrors] = useState({
+    what: '',
+    type: '',
+    location: ''
+  });
+  const [touched, setTouched] = useState({
+    what: false,
+    type: false,
+    location: false
+  });
 
   const locations = [
     'Agra', 'Ahmedabad', 'Ajmer', 'Aligarh', 'Allahabad', 'Amritsar', 'Aurangabad', 'Bangalore', 'Bareilly', 'Belgaum',
@@ -25,8 +35,71 @@ const HeroBody = ({ onSearch }) => {
     'Udaipur', 'Ujjain', 'Vadodara', 'Varanasi', 'Vijayawada', 'Visakhapatnam', 'Warangal', 'Remote', 'Work From Home'
   ];
 
+  // Validation functions
+  const validateField = (name, value) => {
+    let error = '';
+    
+    switch(name) {
+      case 'what':
+        if (value && value.length < 2) {
+          error = 'Job title must be at least 2 characters';
+        } else if (value && value.length > 100) {
+          error = 'Job title must not exceed 100 characters';
+        } else if (value && !/^[a-zA-Z0-9\s/\-()]+$/.test(value)) {
+          error = 'Job title contains invalid characters';
+        }
+        break;
+      case 'type':
+        // Type is optional, no validation needed
+        break;
+      case 'location':
+        if (value && value.length < 2) {
+          error = 'Location must be at least 2 characters';
+        } else if (value && value.length > 100) {
+          error = 'Location must not exceed 100 characters';
+        } else if (value && !/^[a-zA-Z\s]+$/.test(value)) {
+          error = 'Location should only contain letters and spaces';
+        }
+        break;
+      default:
+        break;
+    }
+    
+    return error;
+  };
+
+  const validateAllFields = () => {
+    const newErrors = {
+      what: validateField('what', searchData.what),
+      type: validateField('type', searchData.type),
+      location: validateField('location', searchData.location)
+    };
+    
+    setErrors(newErrors);
+    
+    // Return true if no errors
+    return !Object.values(newErrors).some(error => error !== '');
+  };
+
+  const handleFieldChange = (name, value) => {
+    setSearchData({...searchData, [name]: value});
+    
+    // Validate on change if field has been touched
+    if (touched[name]) {
+      const error = validateField(name, value);
+      setErrors({...errors, [name]: error});
+    }
+  };
+
+  const handleFieldBlur = (name) => {
+    setTouched({...touched, [name]: true});
+    const error = validateField(name, searchData[name]);
+    setErrors({...errors, [name]: error});
+  };
+
   const handleLocationChange = (value) => {
-    setSearchData({...searchData, location: value});
+    handleFieldChange('location', value);
+    
     if (value.length > 0) {
       const filtered = locations.filter(loc => 
         loc.toLowerCase().includes(value.toLowerCase())
@@ -41,6 +114,9 @@ const HeroBody = ({ onSearch }) => {
   const selectLocation = (location) => {
     setSearchData({...searchData, location});
     setShowSuggestions(false);
+    // Clear location error when selecting from suggestions
+    setErrors({...errors, location: ''});
+    setTouched({...touched, location: true});
   };
 
   const jobCategories = [
@@ -54,10 +130,30 @@ const HeroBody = ({ onSearch }) => {
   ];
 
   const handleSearch = () => {
+    // Mark all fields as touched
+    setTouched({
+      what: true,
+      type: true,
+      location: true
+    });
+    
+    // Validate all fields
+    if (!validateAllFields()) {
+      // Show error message
+      alert('Please fix the validation errors before searching');
+      return;
+    }
+    
+    // Check if at least one search criteria is provided
+    if (!searchData.what && !searchData.type && !searchData.location) {
+      alert('Please enter at least one search criteria (Job Title, Type, or Location)');
+      return;
+    }
+    
     const filters = {};
-    if (searchData.what && searchData.what !== '') filters.search = searchData.what;
+    if (searchData.what && searchData.what !== '') filters.search = searchData.what.trim();
     if (searchData.type && searchData.type !== '') filters.jobType = searchData.type;
-    if (searchData.location && searchData.location !== '') filters.location = searchData.location;
+    if (searchData.location && searchData.location !== '') filters.location = searchData.location.trim();
     
     console.log('Search filters:', filters);
     
@@ -70,7 +166,12 @@ const HeroBody = ({ onSearch }) => {
   };
 
   return (
-    <div className="hero-body">
+    <div className="hero-body" style={{
+      backgroundImage: "url('/assets/images/photo_2025-10-09_11-01-43.png')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat"
+    }}>
       {/* Hero Section */}
       <div className="hero-content">
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '0.5rem' }}>
@@ -107,7 +208,11 @@ const HeroBody = ({ onSearch }) => {
                 <select 
                   className="search-select"
                   value={searchData.what}
-                  onChange={(e) => setSearchData({...searchData, what: e.target.value})}
+                  onChange={(e) => handleFieldChange('what', e.target.value)}
+                  onBlur={() => handleFieldBlur('what')}
+                  style={{
+                    borderColor: touched.what && errors.what ? '#dc3545' : undefined
+                  }}
                 >
                   <option value="">Job Title</option>
                   <option value="Software Developer">Software Developer</option>
@@ -127,6 +232,16 @@ const HeroBody = ({ onSearch }) => {
                   <option value="Accountant">Accountant</option>
                   <option value="Consultant">Consultant</option>
                 </select>
+                {touched.what && errors.what && (
+                  <div style={{
+                    color: '#dc3545',
+                    fontSize: '12px',
+                    marginTop: '4px',
+                    position: 'absolute'
+                  }}>
+                    {errors.what}
+                  </div>
+                )}
               </div>
               
               <div className="search-field">
@@ -134,8 +249,12 @@ const HeroBody = ({ onSearch }) => {
                 <select 
                   className="search-select"
                   value={searchData.type}
-                  onChange={(e) => setSearchData({...searchData, type: e.target.value})}
-                  style={{ minWidth: '140px' }}
+                  onChange={(e) => handleFieldChange('type', e.target.value)}
+                  onBlur={() => handleFieldBlur('type')}
+                  style={{ 
+                    minWidth: '140px',
+                    borderColor: touched.type && errors.type ? '#dc3545' : undefined
+                  }}
                 >
                   <option value="">All Category</option>
                   <option value="Full Time">Full Time</option>
@@ -146,6 +265,16 @@ const HeroBody = ({ onSearch }) => {
                   <option value="Remote">Remote</option>
                   <option value="Work From Home">Work From Home</option>
                 </select>
+                {touched.type && errors.type && (
+                  <div style={{
+                    color: '#dc3545',
+                    fontSize: '12px',
+                    marginTop: '4px',
+                    position: 'absolute'
+                  }}>
+                    {errors.type}
+                  </div>
+                )}
               </div>
               
               <div className="search-field location-field">
@@ -161,8 +290,14 @@ const HeroBody = ({ onSearch }) => {
                     value={searchData.location}
                     onChange={(e) => handleLocationChange(e.target.value)}
                     onFocus={() => searchData.location && setShowSuggestions(true)}
-                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                    onBlur={() => {
+                      handleFieldBlur('location');
+                      setTimeout(() => setShowSuggestions(false), 200);
+                    }}
                     placeholder="Search location..."
+                    style={{
+                      borderColor: touched.location && errors.location ? '#dc3545' : undefined
+                    }}
                   />
                   {showSuggestions && locationSuggestions.length > 0 && (
                     <div className="location-suggestions">
@@ -178,6 +313,16 @@ const HeroBody = ({ onSearch }) => {
                     </div>
                   )}
                 </div>
+                {touched.location && errors.location && (
+                  <div style={{
+                    color: '#dc3545',
+                    fontSize: '12px',
+                    marginTop: '4px',
+                    position: 'absolute'
+                  }}>
+                    {errors.location}
+                  </div>
+                )}
               </div>
               
               <button className="search-btn" onClick={handleSearch}>
@@ -204,7 +349,11 @@ const HeroBody = ({ onSearch }) => {
           }}>
             {[...jobCategories, ...jobCategories].map((category, index) => (
               <div key={index} className="category-card" style={{minWidth: '140px', flex: 'none'}}>
-                <div className="category-icon small">
+                <div className="category-icon small" style={{
+                  backgroundColor: 'rgba(255, 156, 0, 0.1)',
+                  border: '1px solid rgba(255, 156, 0, 0.3)',
+                  color: '#e68900'
+                }}>
                   {category.icon ? <category.icon size={16} /> : null}
                 </div>
                 <div className="category-info">

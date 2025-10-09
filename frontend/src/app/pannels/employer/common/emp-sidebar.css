@@ -1,0 +1,203 @@
+/* Modern Employer Sidebar Styles */
+#sidebar-admin-wraper {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.15) !important;
+    border-right: none !important;
+}
+
+/* Override any existing background styles */
+nav#sidebar-admin-wraper {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+    background-image: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+}
+
+#sidebar-admin-wraper .page-logo {
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05);
+}
+
+#sidebar-admin-wraper .page-logo img {
+    max-height: 45px;
+    filter: brightness(0) invert(1);
+}
+
+#sidebar-admin-wraper .admin-nav {
+    padding: 1.5rem 0;
+}
+
+#sidebar-admin-wraper .admin-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sidebar-admin-wraper .admin-nav ul li {
+    margin: 0.4rem 1rem;
+}
+
+#sidebar-admin-wraper .admin-nav ul li a {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0.85rem 1.2rem !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    text-decoration: none !important;
+    border-radius: 10px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+#sidebar-admin-wraper .admin-nav ul li a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: #fff;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+#sidebar-admin-wraper .admin-nav ul li a:hover::before {
+    transform: scaleY(1);
+}
+
+#sidebar-admin-wraper .admin-nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    transform: translateX(5px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+#sidebar-admin-wraper .admin-nav ul li a:hover i {
+    color: #ffffff !important;
+    transform: scale(1.1);
+}
+
+#sidebar-admin-wraper .admin-nav ul li.active a,
+#sidebar-admin-wraper .admin-nav ul li a.active {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+    font-weight: 600 !important;
+}
+
+#sidebar-admin-wraper .admin-nav ul li.active a::before,
+#sidebar-admin-wraper .admin-nav ul li a.active::before {
+    transform: scaleY(1);
+}
+
+#sidebar-admin-wraper .admin-nav ul li.active a i,
+#sidebar-admin-wraper .admin-nav ul li a.active i {
+    color: #ffffff !important;
+    transform: scale(1.15);
+}
+
+#sidebar-admin-wraper .admin-nav ul li a i {
+    width: 24px !important;
+    min-width: 24px !important;
+    text-align: center !important;
+    margin-right: 0.85rem !important;
+    font-size: 1.1rem !important;
+    flex-shrink: 0 !important;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    transition: all 0.3s ease !important;
+}
+
+#sidebar-admin-wraper .admin-nav-text {
+    flex: 1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-weight: 500 !important;
+}
+
+/* Logout button special styling */
+#sidebar-admin-wraper .admin-nav ul li:last-child {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+#sidebar-admin-wraper .admin-nav ul li:last-child a {
+    background: rgba(220, 53, 69, 0.15) !important;
+}
+
+#sidebar-admin-wraper .admin-nav ul li:last-child a:hover {
+    background: rgba(220, 53, 69, 0.3) !important;
+}
+
+/* Scrollbar styling */
+#sidebar-admin-wraper .admin-nav.scrollbar-macosx::-webkit-scrollbar {
+    width: 6px;
+}
+
+#sidebar-admin-wraper .admin-nav.scrollbar-macosx::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+#sidebar-admin-wraper .admin-nav.scrollbar-macosx::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+#sidebar-admin-wraper .admin-nav.scrollbar-macosx::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    #sidebar-admin-wraper {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    #sidebar-admin-wraper.active {
+        transform: translateX(0);
+    }
+}
+
+/* Animation for sidebar items */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+#sidebar-admin-wraper .admin-nav ul li {
+    animation: slideInLeft 0.3s ease forwards;
+}
+
+#sidebar-admin-wraper .admin-nav ul li:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+#sidebar-admin-wraper .admin-nav ul li:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+#sidebar-admin-wraper .admin-nav ul li:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+#sidebar-admin-wraper .admin-nav ul li:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+#sidebar-admin-wraper .admin-nav ul li:nth-child(5) {
+    animation-delay: 0.5s;
+}
