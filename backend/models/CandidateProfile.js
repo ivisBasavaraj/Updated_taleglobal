@@ -9,6 +9,8 @@ const candidateProfileSchema = new mongoose.Schema({
   location: { type: String },
   bio: { type: String },
   resume: { type: String }, // Base64 encoded document
+  resumeFileName: { type: String },
+  resumeMimeType: { type: String },
   profilePicture: { type: String }, // Base64 encoded image
   resumeHeadline: { type: String },
   profileSummary: { type: String },

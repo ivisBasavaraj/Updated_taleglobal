@@ -106,7 +106,16 @@ exports.getProfile = async (req, res) => {
       return res.json({ success: true, profile: null });
     }
 
-    res.json({ success: true, profile });
+    const profileData = profile.toObject({ getters: true });
+
+    res.json({
+      success: true,
+      profile: {
+        ...profileData,
+        resumeFileName: profileData.resumeFileName || null,
+        resumeMimeType: profileData.resumeMimeType || null,
+      }
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -202,7 +211,11 @@ exports.uploadResume = async (req, res) => {
 
     const profile = await CandidateProfile.findOneAndUpdate(
       { candidateId: req.user._id },
-      { resume: resumeBase64 },
+      {
+        resume: resumeBase64,
+        resumeFileName: req.file.originalname,
+        resumeMimeType: req.file.mimetype
+      },
       { new: true, upsert: true }
     );
 

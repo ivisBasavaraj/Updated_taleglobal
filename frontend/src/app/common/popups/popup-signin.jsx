@@ -53,10 +53,16 @@ function SignInPopup() {
     }
 
     const moveToCandidate = () => {
+        const modal = document.getElementById('sign_up_popup2');
+        const bootstrapModal = window.bootstrap?.Modal?.getInstance(modal);
+        bootstrapModal?.hide();
         navigate(canRoute(candidate.DASHBOARD));
     }
 
     const moveToEmployer = () => {
+        const modal = document.getElementById('sign_up_popup2');
+        const bootstrapModal = window.bootstrap?.Modal?.getInstance(modal);
+        bootstrapModal?.hide();
         navigate(empRoute(employer.DASHBOARD));
     }
 
@@ -79,6 +85,9 @@ function SignInPopup() {
     }
 
     const moveToPlacement = () => {
+        const modal = document.getElementById('sign_up_popup2');
+        const bootstrapModal = window.bootstrap?.Modal?.getInstance(modal);
+        bootstrapModal?.hide();
         navigate(placementRoute(placement.DASHBOARD));
     }
 
@@ -169,7 +178,7 @@ function SignInPopup() {
 															type="text"
 															required
 															className="form-control"
-															placeholder="Usearname*"
+															placeholder="Email*"
 															value={canusername}
 															onChange={(event) => {
 																setCanUsername(event.target.value);
@@ -216,7 +225,6 @@ function SignInPopup() {
 													<button
 														type="submit"
 														className="site-button"
-														data-bs-dismiss="modal"
 													>
 														Log in
 													</button>
@@ -243,6 +251,11 @@ function SignInPopup() {
 											id="login-Employer"
 										>
 											<div className="row">
+												{error && (
+													<div className="col-12">
+														<div className="alert alert-danger">{error}</div>
+													</div>
+												)}
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<input
@@ -250,7 +263,7 @@ function SignInPopup() {
 															type="text"
 															required
 															className="form-control"
-															placeholder="Usearname*"
+															placeholder="Email*"
 															value={empusername}
 															onChange={(event) => {
 																setEmpUsername(event.target.value);
@@ -297,7 +310,6 @@ function SignInPopup() {
 													<button
 														type="submit"
 														className="site-button"
-														data-bs-dismiss="modal"
 													>
 														Log in
 													</button>
@@ -324,6 +336,11 @@ function SignInPopup() {
 											id="login-Placement"
 										>
 											<div className="row">
+												{error && (
+													<div className="col-12">
+														<div className="alert alert-danger">{error}</div>
+													</div>
+												)}
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<input
@@ -360,7 +377,6 @@ function SignInPopup() {
 													<button
 														type="submit"
 														className="site-button"
-														data-bs-dismiss="modal"
 													>
 														Log in
 													</button>
