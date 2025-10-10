@@ -174,11 +174,15 @@ function EmpCompanyProfilePage() {
             newErrors.companyName = 'Company name must be at least 2 characters';
         }
         
-        if (formData.phone && !/^[+]?[0-9\s\-\(\)]{10,15}$/.test(formData.phone.replace(/\s/g, ''))) {
-            newErrors.phone = 'Please enter a valid phone number';
+        if (!formData.phone?.trim()) {
+            newErrors.phone = 'Phone number is required';
+        } else if (!/^[6-9]\d{9}$/.test(formData.phone.replace(/\s/g, ''))) {
+            newErrors.phone = 'Phone number must be 10 digits starting with 6-9';
         }
         
-        if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        if (!formData.email?.trim()) {
+            newErrors.email = 'Email address is required';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
             newErrors.email = 'Please enter a valid email address';
         }
         
@@ -228,16 +232,22 @@ function EmpCompanyProfilePage() {
             newErrors.contactLastName = 'Last name must be at least 2 characters';
         }
         
-        if (formData.contactDesignation && formData.contactDesignation.length < 2) {
+        if (!formData.contactDesignation?.trim()) {
+            newErrors.contactDesignation = 'Designation is required';
+        } else if (formData.contactDesignation.length < 2) {
             newErrors.contactDesignation = 'Designation must be at least 2 characters';
         }
         
-        if (formData.contactOfficialEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.contactOfficialEmail)) {
+        if (!formData.contactOfficialEmail?.trim()) {
+            newErrors.contactOfficialEmail = 'Official email is required';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.contactOfficialEmail)) {
             newErrors.contactOfficialEmail = 'Please enter a valid email address';
         }
         
-        if (formData.contactMobile && !/^[+]?[0-9\s\-\(\)]{10,15}$/.test(formData.contactMobile.replace(/\s/g, ''))) {
-            newErrors.contactMobile = 'Please enter a valid mobile number';
+        if (!formData.contactMobile?.trim()) {
+            newErrors.contactMobile = 'Mobile number is required';
+        } else if (!/^[6-9]\d{9}$/.test(formData.contactMobile.replace(/\s/g, ''))) {
+            newErrors.contactMobile = 'Mobile number must be 10 digits starting with 6-9';
         }
         
         if (formData.alternateContact && !/^[+]?[0-9\s\-\(\)]{10,15}$/.test(formData.alternateContact.replace(/\s/g, ''))) {
@@ -760,7 +770,7 @@ function EmpCompanyProfilePage() {
 
                             <div className="col-xl-4 col-lg-12 col-md-12">
                                 <div className="form-group">
-                                    <label><Phone size={16} className="me-2" /> Phone</label>
+                                    <label className="required-field"><Phone size={16} className="me-2" /> Phone *</label>
                                     <input
                                         className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
                                         type="text"
@@ -778,7 +788,7 @@ function EmpCompanyProfilePage() {
 
                             <div className="col-xl-4 col-lg-12 col-md-12">
                                 <div className="form-group">
-                                    <label><Mail size={16} className="me-2" /> Email Address</label>
+                                    <label className="required-field"><Mail size={16} className="me-2" /> Email Address *</label>
                                     <input
                                         className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                                         type="email"
@@ -1306,7 +1316,7 @@ function EmpCompanyProfilePage() {
 
                             <div className="col-lg-4 col-md-6">
                                 <div className="form-group">
-                                    <label><Briefcase size={16} className="me-2" /> Designation</label>
+                                    <label className="required-field"><Briefcase size={16} className="me-2" /> Designation *</label>
                                     <input
                                         className={`form-control ${errors.contactDesignation ? 'is-invalid' : ''}`}
                                         type="text"
@@ -1324,7 +1334,7 @@ function EmpCompanyProfilePage() {
 
                             <div className="col-lg-4 col-md-6">
                                 <div className="form-group">
-                                    <label>Official Email ID</label>
+                                    <label className="required-field">Official Email ID *</label>
                                     <input
                                         className={`form-control ${errors.contactOfficialEmail ? 'is-invalid' : ''}`}
                                         type="email"
@@ -1342,7 +1352,7 @@ function EmpCompanyProfilePage() {
 
                             <div className="col-lg-4 col-md-6">
                                 <div className="form-group">
-                                    <label>Mobile Number</label>
+                                    <label className="required-field">Mobile Number *</label>
                                     <input
                                         className={`form-control ${errors.contactMobile ? 'is-invalid' : ''}`}
                                         type="tel"

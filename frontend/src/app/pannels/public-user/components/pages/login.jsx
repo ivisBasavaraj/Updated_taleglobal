@@ -186,9 +186,12 @@ function LoginPage() {
                                                     <div className="col-lg-12">
                                                         <div className="twm-forgot-wrap">
                                                             <div className="form-group mb-3">
-                                                                <div className="form-check">
-                                                                    <input type="checkbox" className="form-check-input" id="Password4" />
-                                                                    <label className="form-check-label rem-forgot" htmlFor="Password4">Remember me <a href="#" className="site-text-primary">Forgot Password</a></label>
+                                                                <div className="d-flex justify-content-between align-items-center">
+                                                                    <div className="form-check">
+                                                                        <input type="checkbox" className="form-check-input" id="rememberCandidate" />
+                                                                        <label className="form-check-label" htmlFor="rememberCandidate">Remember me</label>
+                                                                    </div>
+                                                                    <NavLink to={publicUser.pages.FORGOT} className="site-text-primary">Forgot Password</NavLink>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -257,9 +260,12 @@ function LoginPage() {
                                                     <div className="col-lg-12">
                                                         <div className="twm-forgot-wrap">
                                                             <div className="form-group mb-3">
-                                                                <div className="form-check">
-                                                                    <input type="checkbox" className="form-check-input" id="Password4" />
-                                                                    <label className="form-check-label rem-forgot" htmlFor="Password4">Remember me <a href="#" className="site-text-primary">Forgot Password</a></label>
+                                                                <div className="d-flex justify-content-between align-items-center">
+                                                                    <div className="form-check">
+                                                                        <input type="checkbox" className="form-check-input" id="rememberEmployer" />
+                                                                        <label className="form-check-label" htmlFor="rememberEmployer">Remember me</label>
+                                                                    </div>
+                                                                    <NavLink to={publicUser.pages.FORGOT} className="site-text-primary">Forgot Password</NavLink>
                                                                 </div>
                                                             </div>
                                                         </div>

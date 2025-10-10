@@ -542,11 +542,61 @@ exports.changePassword = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Current password is incorrect' });
     }
 
+    // For placement candidates, change registration method to 'signup' so password gets hashed
+    if (candidate.registrationMethod === 'placement') {
+      console.log('🔄 Converting placement candidate to signup method for password hashing');
+      candidate.registrationMethod = 'signup';
+    }
+    
     candidate.password = newPassword;
     await candidate.save();
 
     res.json({ success: true, message: 'Password updated successfully' });
   } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.updatePasswordReset = async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+    console.log('🔄 Password reset request for:', email);
+    console.log('🔑 New password provided:', !!newPassword, 'Length:', newPassword?.length);
+    
+    if (!email || !newPassword) {
+      console.log('❌ Missing required fields');
+      return res.status(400).json({ success: false, message: 'Email and new password are required' });
+    }
+
+    const candidate = await Candidate.findOne({ email });
+    if (!candidate) {
+      console.log('❌ Candidate not found for email:', email);
+      return res.status(404).json({ success: false, message: 'Candidate not found' });
+    }
+
+    console.log('✅ Found candidate:', candidate.email);
+    console.log('📝 Registration method:', candidate.registrationMethod);
+    console.log('🔐 Old password length:', candidate.password ? candidate.password.length : 0);
+    console.log('🔐 Old password is hashed:', candidate.password ? candidate.password.startsWith('$2') : false);
+    
+    // For placement candidates, change to signup method so password gets hashed
+    if (candidate.registrationMethod === 'placement') {
+      console.log('🔄 Converting placement candidate to signup method for password hashing');
+      candidate.registrationMethod = 'signup';
+    }
+    
+    candidate.password = newPassword;
+    candidate.markModified('password');
+    await candidate.save();
+    
+    console.log('✅ Password updated successfully');
+    console.log('🔑 New password length:', candidate.password ? candidate.password.length : 0);
+    console.log('🔑 New password is hashed:', candidate.password ? candidate.password.startsWith('$2') : false);
+    console.log('💾 Database save completed');
+
+    res.json({ success: true, message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('❌ Password reset error:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@googlemaps/markerclusterer": "^2.5.0",
     "@popperjs/core": "^2.11.8",
     "@testing-library/jest-dom": "^5.16.5",

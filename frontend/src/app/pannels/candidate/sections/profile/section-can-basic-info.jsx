@@ -161,9 +161,11 @@ function SectionCandicateBasicInfo() {
                 break;
             
             case 'middleName':
-                if (value && value.trim() && value.length > 30) {
+                if (!value || !value.trim()) {
+                    newErrors.middleName = 'Middle name is required';
+                } else if (value.length > 30) {
                     newErrors.middleName = 'Middle name cannot exceed 30 characters';
-                } else if (value && value.trim() && !/^[a-zA-Z\s]*$/.test(value)) {
+                } else if (!/^[a-zA-Z\s]*$/.test(value)) {
                     newErrors.middleName = 'Middle name can only contain letters and spaces';
                 } else {
                     delete newErrors.middleName;
@@ -171,9 +173,11 @@ function SectionCandicateBasicInfo() {
                 break;
             
             case 'lastName':
-                if (value && value.trim() && value.length > 30) {
+                if (!value || !value.trim()) {
+                    newErrors.lastName = 'Last name is required';
+                } else if (value.length > 30) {
                     newErrors.lastName = 'Last name cannot exceed 30 characters';
-                } else if (value && value.trim() && !/^[a-zA-Z\s]*$/.test(value)) {
+                } else if (!/^[a-zA-Z\s]*$/.test(value)) {
                     newErrors.lastName = 'Last name can only contain letters and spaces';
                 } else {
                     delete newErrors.lastName;
@@ -181,8 +185,10 @@ function SectionCandicateBasicInfo() {
                 break;
             
             case 'phone':
-                if (value && value.trim() && !/^[6-9]\d{9}$/.test(value)) {
-                    newErrors.phone = 'Phone number must be a valid 10-digit Indian mobile number';
+                if (!value || !value.trim()) {
+                    newErrors.phone = 'Mobile number is required';
+                } else if (!/^[6-9]\d{9}$/.test(value)) {
+                    newErrors.phone = 'Mobile number must be 10 digits starting with 6-9';
                 } else {
                     delete newErrors.phone;
                 }
@@ -199,9 +205,11 @@ function SectionCandicateBasicInfo() {
                 break;
             
             case 'location':
-                if (value && value.trim() && value.length > 100) {
+                if (!value || !value.trim()) {
+                    newErrors.location = 'Location is required';
+                } else if (value.length > 100) {
                     newErrors.location = 'Location cannot exceed 100 characters';
-                } else if (value && value.trim() && !/^[a-zA-Z0-9\s,.-]*$/.test(value)) {
+                } else if (!/^[a-zA-Z0-9\s,.-]*$/.test(value)) {
                     newErrors.location = 'Location contains invalid characters';
                 } else {
                     delete newErrors.location;
@@ -427,7 +435,7 @@ function SectionCandicateBasicInfo() {
                             {errors.name && <div className="invalid-feedback">{errors.name}</div>}
                         </div>
                         <div className="col-md-4 mb-3">
-                            <label className="form-label"><i className="fa fa-user me-2" style={{color: '#ff6b35'}}></i>Middle Name</label>
+                            <label className="form-label"><i className="fa fa-user me-2" style={{color: '#ff6b35'}}></i>Middle Name *</label>
                             <input
                                 className={`form-control ${errors.middleName ? 'is-invalid' : ''}`}
                                 type="text"
@@ -436,11 +444,12 @@ function SectionCandicateBasicInfo() {
                                 onChange={handleInputChange}
                                 onBlur={handleBlur}
                                 placeholder="Middle name"
+                                required
                             />
                             {errors.middleName && <div className="invalid-feedback">{errors.middleName}</div>}
                         </div>
                         <div className="col-md-4 mb-3">
-                            <label className="form-label"><i className="fa fa-user me-2" style={{color: '#ff6b35'}}></i>Last Name</label>
+                            <label className="form-label"><i className="fa fa-user me-2" style={{color: '#ff6b35'}}></i>Last Name *</label>
                             <input
                                 className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
                                 type="text"
@@ -449,11 +458,12 @@ function SectionCandicateBasicInfo() {
                                 onChange={handleInputChange}
                                 onBlur={handleBlur}
                                 placeholder="Last name"
+                                required
                             />
                             {errors.lastName && <div className="invalid-feedback">{errors.lastName}</div>}
                         </div>
                         <div className="col-md-4 mb-3">
-                            <label className="form-label"><i className="fa fa-phone me-2" style={{color: '#ff6b35'}}></i>Mobile Number</label>
+                            <label className="form-label"><i className="fa fa-phone me-2" style={{color: '#ff6b35'}}></i>Mobile Number *</label>
                             <input
                                 className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
                                 type="tel"
@@ -463,6 +473,7 @@ function SectionCandicateBasicInfo() {
                                 onBlur={handleBlur}
                                 placeholder="Enter 10-digit mobile number"
                                 maxLength="10"
+                                required
                             />
                             {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
                             <small className="text-muted">Enter 10-digit Indian mobile number (starting with 6-9)</small>
@@ -482,7 +493,7 @@ function SectionCandicateBasicInfo() {
                             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                         </div>
                         <div className="col-md-4 mb-3">
-                            <label className="form-label"><i className="fa fa-map-marker me-2" style={{color: '#ff6b35'}}></i>Location</label>
+                            <label className="form-label"><i className="fa fa-map-marker me-2" style={{color: '#ff6b35'}}></i>Location *</label>
                             <LocationDropdown 
                                 value={formData.location}
                                 onChange={(value) => {

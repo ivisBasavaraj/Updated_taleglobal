@@ -34,6 +34,11 @@ router.post('/password/confirm-reset', [
   body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
 ], handleValidationErrors, candidateController.confirmResetPassword);
 
+router.post('/password/update-reset', [
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+], handleValidationErrors, candidateController.updatePasswordReset);
+
 // Protected Routes
 router.use(auth(['candidate']));
 

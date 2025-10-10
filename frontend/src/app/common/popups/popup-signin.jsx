@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { canRoute, candidate, empRoute, employer, placementRoute, placement } from "../../../globals/route-names";
+import { NavLink, useNavigate } from "react-router-dom";
+import { canRoute, candidate, empRoute, employer, placementRoute, placement, pubRoute, publicUser } from "../../../globals/route-names";
 import { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 
@@ -206,7 +206,7 @@ function SignInPopup() {
 																className="form-check-label rem-forgot"
 																htmlFor="Password3"
 															>
-																<a href="#">Forgot Password</a>
+																<NavLink to={pubRoute(publicUser.pages.FORGOT)} onClick={() => navigate(pubRoute(publicUser.pages.FORGOT))}>Forgot Password</NavLink>
 															</label>
 														</div>
 													</div>

@@ -1,31 +1,25 @@
-const nodemailer = require('nodemailer');
+const emailjs = require('@emailjs/nodejs');
 
-const transporter = nodemailer.createTransporter({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+const buildTemplatePayload = (email, resetUrl) => ({
+  service_id: process.env.EMAILJS_SERVICE_ID,
+  template_id: process.env.EMAILJS_TEMPLATE_ID,
+  user_id: process.env.EMAILJS_PUBLIC_KEY,
+  accessToken: process.env.EMAILJS_PRIVATE_KEY,
+  template_params: {
+    user_email: email,
+    reset_link: resetUrl
   }
 });
 
 const sendResetEmail = async (email, resetToken, userType) => {
-  const resetUrl = `${process.env.FRONTEND_URL}/${userType}/reset-password/${resetToken}`;
-  
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: 'Password Reset Request',
-    html: `
-      <h2>Password Reset Request</h2>
-      <p>Click the link below to reset your password:</p>
-      <a href="${resetUrl}">Reset Password</a>
-      <p>This link expires in 10 minutes.</p>
-    `
-  };
+  const basePath = userType === 'employer' ? '/employer' : userType === 'placement' ? '/placement' : '/candidate';
+  const resetUrl = `${process.env.FRONTEND_URL}${basePath}/reset-password/${resetToken}`;
+  const payload = buildTemplatePayload(email, resetUrl);
 
-  await transporter.sendMail(mailOptions);
+  await emailjs.send(payload.service_id, payload.template_id, payload.template_params, {
+    publicKey: payload.user_id,
+    privateKey: payload.accessToken
+  });
 };
 
 module.exports = { sendResetEmail };

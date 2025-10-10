@@ -13,30 +13,12 @@ function SectionCanPersonalDetail({ profile }) {
         correspondenceAddress: ''
     });
     
-    const indianCities = [
-        'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad',
-        'Surat', 'Jaipur', 'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Thane', 'Bhopal',
-        'Visakhapatnam', 'Pimpri-Chinchwad', 'Patna', 'Vadodara', 'Ghaziabad', 'Ludhiana',
-        'Agra', 'Nashik', 'Faridabad', 'Meerut', 'Rajkot', 'Kalyan-Dombivali', 'Vasai-Virar',
-        'Varanasi', 'Srinagar', 'Aurangabad', 'Dhanbad', 'Amritsar', 'Navi Mumbai', 'Allahabad',
-        'Ranchi', 'Howrah', 'Coimbatore', 'Jabalpur', 'Gwalior', 'Vijayawada', 'Jodhpur',
-        'Madurai', 'Raipur', 'Kota', 'Guwahati', 'Chandigarh', 'Solapur', 'Hubli-Dharwad'
-    ];
-    const [educationList, setEducationList] = useState([]);
-    const [otherSelected, setOtherSelected] = useState({});
-    const [locationOtherSelected, setLocationOtherSelected] = useState(false);
-    
-    const getEducationLevelLabel = (index) => {
-        const levels = ['10th School Name', 'PUC/Diploma College Name', 'Degree', 'Masters', 'PhD/Doctorate'];
-        return levels[index] || 'Additional Qualification';
-    };
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
-    const [touched, setTouched] = useState({});
 
     useEffect(() => {
         if (profile) {
-            const newFormData = {
+            setFormData({
                 dateOfBirth: profile.dateOfBirth || '',
                 gender: profile.gender || '',
                 location: profile.location || '',
@@ -45,45 +27,7 @@ function SectionCanPersonalDetail({ profile }) {
                 residentialAddress: profile.residentialAddress || '',
                 permanentAddress: profile.permanentAddress || '',
                 correspondenceAddress: profile.correspondenceAddress || ''
-            };
-            setFormData(newFormData);
-            
-            // Check if location is custom (not in indianCities)
-            const isCustomLocation = profile.location && !indianCities.includes(profile.location) && profile.location !== '';
-            setLocationOtherSelected(isCustomLocation);
-            console.log('Profile loaded - Location:', profile.location, 'Is custom:', isCustomLocation);
-            if (profile.education && profile.education.length > 0) {
-                const educationWithCalculations = profile.education.map((edu, index) => {
-                    const percentage = parseFloat(edu.percentage) || 0;
-                    const cgpa = edu.cgpa || (percentage > 0 ? (percentage / 9.5).toFixed(2) : '');
-                    const sgpa = edu.sgpa || (percentage > 0 ? (percentage / 10).toFixed(2) : '');
-                    let grade = edu.grade || '';
-                    if (!grade && percentage > 0) {
-                        if (percentage >= 90) grade = 'A+';
-                        else if (percentage >= 80) grade = 'A';
-                        else if (percentage >= 70) grade = 'B+';
-                        else if (percentage >= 60) grade = 'B';
-                        else if (percentage >= 50) grade = 'C';
-                        else if (percentage >= 40) grade = 'D';
-                        else grade = 'F';
-                    }
-                    // Set otherSelected state if collegeName is not in indianCities
-                    if (edu.collegeName && !indianCities.includes(edu.collegeName) && edu.collegeName !== '') {
-                        setOtherSelected(prev => ({...prev, [index]: true}));
-                    }
-                    return {
-                        ...edu,
-                        startYear: edu.startYear || edu.joiningYear || '',
-                        joiningYear: edu.joiningYear || edu.startYear || '',
-                        cgpa,
-                        sgpa,
-                        grade
-                    };
-                });
-                setEducationList(educationWithCalculations);
-            } else {
-                setEducationList([]);
-            }
+            });
         }
     }, [profile]);
 
@@ -92,7 +36,9 @@ function SectionCanPersonalDetail({ profile }) {
         
         switch (field) {
             case 'dateOfBirth':
-                if (value) {
+                if (!value || !value.trim()) {
+                    newErrors.dateOfBirth = 'Date of birth is required';
+                } else {
                     const birthDate = new Date(value);
                     const today = new Date();
                     const age = today.getFullYear() - birthDate.getFullYear();
@@ -101,16 +47,16 @@ function SectionCanPersonalDetail({ profile }) {
                     } else {
                         delete newErrors.dateOfBirth;
                     }
-                } else {
-                    delete newErrors.dateOfBirth;
                 }
                 break;
             
             case 'fatherName':
             case 'motherName':
-                if (value && (value.length < 2 || value.length > 50)) {
+                if (!value || !value.trim()) {
+                    newErrors[field] = 'This field is required';
+                } else if (value.length < 2 || value.length > 50) {
                     newErrors[field] = 'Name must be between 2 and 50 characters';
-                } else if (value && !/^[a-zA-Z\s]+$/.test(value)) {
+                } else if (!/^[a-zA-Z\s]+$/.test(value)) {
                     newErrors[field] = 'Name can only contain letters and spaces';
                 } else {
                     delete newErrors[field];
@@ -120,7 +66,9 @@ function SectionCanPersonalDetail({ profile }) {
             case 'residentialAddress':
             case 'permanentAddress':
             case 'correspondenceAddress':
-                if (value && value.length > 200) {
+                if (!value || !value.trim()) {
+                    newErrors[field] = 'This field is required';
+                } else if (value.length > 200) {
                     newErrors[field] = 'Address cannot exceed 200 characters';
                 } else {
                     delete newErrors[field];
@@ -135,11 +83,6 @@ function SectionCanPersonalDetail({ profile }) {
     const handleInputChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
         
-        // Validate field if it has been touched
-        if (touched[field]) {
-            validateField(field, value);
-        }
-        
         // Auto-save after a short delay
         clearTimeout(window.autoSaveTimeout);
         window.autoSaveTimeout = setTimeout(() => {
@@ -147,36 +90,25 @@ function SectionCanPersonalDetail({ profile }) {
         }, 1000);
     };
 
-    const handleBlur = (field, value) => {
-        setTouched(prev => ({ ...prev, [field]: true }));
-        validateField(field, value);
-    };
-
-    const validateForm = () => {
-        const fieldsToValidate = ['dateOfBirth', 'fatherName', 'motherName', 'residentialAddress', 'permanentAddress', 'correspondenceAddress'];
-        let isValid = true;
-        
-        fieldsToValidate.forEach(field => {
-            const fieldValid = validateField(field, formData[field]);
-            if (!fieldValid) isValid = false;
-        });
-        
-        // Mark all fields as touched
-        const allTouched = {};
-        fieldsToValidate.forEach(field => {
-            allTouched[field] = true;
-        });
-        setTouched(allTouched);
-        
-        return isValid;
+    const autoSave = async () => {
+        try {
+            const updateData = {
+                dateOfBirth: formData.dateOfBirth,
+                gender: formData.gender,
+                location: formData.location,
+                fatherName: formData.fatherName,
+                motherName: formData.motherName,
+                residentialAddress: formData.residentialAddress,
+                permanentAddress: formData.permanentAddress,
+                correspondenceAddress: formData.correspondenceAddress
+            };
+            await api.updateCandidateProfile(updateData);
+        } catch (error) {
+            console.error('Auto-save failed:', error);
+        }
     };
 
     const handleSubmit = async () => {
-        if (!validateForm()) {
-            alert('Please fix the validation errors before submitting.');
-            return;
-        }
-        
         setLoading(true);
         try {
             const updateData = {
@@ -187,95 +119,24 @@ function SectionCanPersonalDetail({ profile }) {
                 motherName: formData.motherName.trim(),
                 residentialAddress: formData.residentialAddress.trim(),
                 permanentAddress: formData.permanentAddress.trim(),
-                correspondenceAddress: formData.correspondenceAddress.trim(),
-                education: educationList.map(edu => ({
-                    degreeName: edu.degreeName,
-                    collegeName: edu.collegeName,
-                    startYear: edu.startYear || edu.joiningYear,
-                    joiningYear: edu.joiningYear || edu.startYear,
-                    passYear: edu.passYear,
-                    percentage: edu.percentage,
-                    cgpa: edu.cgpa,
-                    sgpa: edu.sgpa,
-                    grade: edu.grade,
-                    marksheet: edu.marksheet
-                }))
+                correspondenceAddress: formData.correspondenceAddress.trim()
             };
-            console.log('Sending data:', updateData);
+            
             const response = await api.updateCandidateProfile(updateData);
             if (response.success) {
                 alert('Profile updated successfully!');
-                // Trigger parent component to refresh profile
                 window.dispatchEvent(new CustomEvent('profileUpdated'));
             }
         } catch (error) {
-            if (error.response && error.response.data && error.response.data.errors) {
-                const errorMessages = error.response.data.errors.map(err => err.msg).join('\n');
-                alert('Validation errors:\n' + errorMessages);
-            } else {
-                alert('Failed to update profile: ' + error.message);
-            }
+            alert('Failed to update profile: ' + error.message);
         } finally {
             setLoading(false);
         }
     };
-    
-    const handleAddEducation = () => {
-        setEducationList([
-            ...educationList,
-            { degreeName: "", collegeName: "", startYear: "", joiningYear: "", passYear: "", percentage: "", cgpa: "", sgpa: "", grade: "", marksheet: null },
-        ]);
-    };
-
-    const handleEducationChange = (index, field, value) => {
-        const updated = [...educationList];
-        updated[index][field] = value;
-        setEducationList(updated);
-        
-        // Auto-save after a short delay
-        clearTimeout(window.autoSaveTimeout);
-        window.autoSaveTimeout = setTimeout(() => {
-            autoSave(updated);
-        }, 1000);
-    };
-
-    const autoSave = async (updatedEducation = educationList) => {
-        try {
-            const updateData = {
-                dateOfBirth: formData.dateOfBirth,
-                gender: formData.gender,
-                location: formData.location,
-                fatherName: formData.fatherName,
-                motherName: formData.motherName,
-                residentialAddress: formData.residentialAddress,
-                permanentAddress: formData.permanentAddress,
-                correspondenceAddress: formData.correspondenceAddress,
-                education: updatedEducation.map(edu => ({
-                    degreeName: edu.degreeName,
-                    collegeName: edu.collegeName,
-                    startYear: edu.startYear || edu.joiningYear,
-                    joiningYear: edu.joiningYear || edu.startYear,
-                    passYear: edu.passYear,
-                    percentage: edu.percentage,
-                    cgpa: edu.cgpa,
-                    sgpa: edu.sgpa,
-                    grade: edu.grade,
-                    marksheet: edu.marksheet
-                }))
-            };
-            console.log('Auto-saving location:', formData.location);
-            const response = await api.updateCandidateProfile(updateData);
-            console.log('Auto-save response:', response);
-        } catch (error) {
-            console.error('Auto-save failed:', error);
-        }
-    };
-
-
 
     return (
         <>
-            <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+            <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn">
                 <h4 className="panel-tittle m-a0">
                     <i className="fa fa-id-card site-text-primary me-2"></i>
                     Personal Details
@@ -287,23 +148,24 @@ function SectionCanPersonalDetail({ profile }) {
                     <div className="panel-body wt-panel-body p-a20 m-b30">
                         <div className="row">
                             <div className="col-md-6">
-                                <label><i className="fa fa-calendar me-1"></i> Date of Birth</label>
+                                <label><i className="fa fa-calendar me-1"></i> Date of Birth *</label>
                                 <input
-                                    className={`form-control ${errors.dateOfBirth ? 'is-invalid' : touched.dateOfBirth && !errors.dateOfBirth ? 'is-valid' : ''}`}
+                                    className={`form-control ${errors.dateOfBirth ? 'is-invalid' : ''}`}
                                     type="date"
                                     value={formData.dateOfBirth ? formData.dateOfBirth.split('T')[0] : ''}
                                     onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
-                                    onBlur={(e) => handleBlur('dateOfBirth', e.target.value)}
+                                    required
                                 />
                                 {errors.dateOfBirth && <div className="invalid-feedback">{errors.dateOfBirth}</div>}
                             </div>
 
                             <div className="col-md-6">
-                                <label><i className="fa fa-venus-mars me-1"></i> Gender</label>
+                                <label><i className="fa fa-venus-mars me-1"></i> Gender *</label>
                                 <select 
                                     className="form-control"
                                     value={formData.gender}
                                     onChange={(e) => handleInputChange('gender', e.target.value)}
+                                    required
                                 >
                                     <option value="">Select Gender</option>
                                     <option value="male">Male</option>
@@ -311,404 +173,70 @@ function SectionCanPersonalDetail({ profile }) {
                                 </select>
                             </div>
 
-                            <div className="col-md-12">
-                                <label><i className="fa fa-map-marker me-1"></i> Current Location</label>
-                                {locationOtherSelected ? (
-                                    <div className="d-flex">
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            value={formData.location}
-                                            onChange={(e) => {
-                                                handleInputChange('location', e.target.value);
-                                            }}
-                                            placeholder="Enter custom location"
-                                            onBlur={() => {
-                                                // Force save when user leaves the input field
-                                                clearTimeout(window.autoSaveTimeout);
-                                                autoSave();
-                                            }}
-                                        />
-                                        <button
-                                            type="button"
-                                            className="btn btn-outline-secondary ms-2"
-                                            onClick={() => {
-                                                setFormData(prev => ({ ...prev, location: '' }));
-                                                setLocationOtherSelected(false);
-                                                // Auto-save the empty location
-                                                setTimeout(() => autoSave(), 100);
-                                            }}
-                                            title="Back to dropdown"
-                                        >
-                                            ↩
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <select 
-                                        className="form-control"
-                                        value={formData.location && indianCities.includes(formData.location) ? formData.location : ''}
-                                        onChange={(e) => {
-                                            if (e.target.value === 'Other') {
-                                                setLocationOtherSelected(true);
-                                            } else {
-                                                handleInputChange('location', e.target.value);
-                                                setLocationOtherSelected(false);
-                                            }
-                                        }}
-                                    >
-                                        <option value="">Select Location</option>
-                                        {indianCities.map(city => (
-                                            <option key={city} value={city}>{city}</option>
-                                        ))}
-                                        <option value="Other" style={{fontWeight: 'bold', color: '#ff6b35'}}>Other</option>
-                                    </select>
-                                )}
-                            </div>
-
                             <div className="col-md-6">
-                                <label><i className="fa fa-male me-1"></i> Father's / Husband's Name</label>
+                                <label><i className="fa fa-male me-1"></i> Father's / Husband's Name *</label>
                                 <input
-                                    className={`form-control ${errors.fatherName ? 'is-invalid' : touched.fatherName && !errors.fatherName ? 'is-valid' : ''}`}
+                                    className={`form-control ${errors.fatherName ? 'is-invalid' : ''}`}
                                     type="text"
                                     placeholder="Enter name"
                                     value={formData.fatherName}
                                     onChange={(e) => handleInputChange('fatherName', e.target.value)}
-                                    onBlur={(e) => handleBlur('fatherName', e.target.value)}
+                                    required
                                 />
                                 {errors.fatherName && <div className="invalid-feedback">{errors.fatherName}</div>}
                             </div>
 
                             <div className="col-md-6">
-                                <label><i className="fa fa-female me-1"></i> Mother's Name</label>
+                                <label><i className="fa fa-female me-1"></i> Mother's Name *</label>
                                 <input
-                                    className={`form-control ${errors.motherName ? 'is-invalid' : touched.motherName && !errors.motherName ? 'is-valid' : ''}`}
+                                    className={`form-control ${errors.motherName ? 'is-invalid' : ''}`}
                                     type="text"
                                     placeholder="Enter name"
                                     value={formData.motherName}
                                     onChange={(e) => handleInputChange('motherName', e.target.value)}
-                                    onBlur={(e) => handleBlur('motherName', e.target.value)}
+                                    required
                                 />
                                 {errors.motherName && <div className="invalid-feedback">{errors.motherName}</div>}
                             </div>
 
                             <div className="col-md-12">
-                                <label><i className="fa fa-home me-1"></i> Residential Address</label>
+                                <label><i className="fa fa-home me-1"></i> Residential Address *</label>
                                 <textarea
-                                    className={`form-control ${errors.residentialAddress ? 'is-invalid' : touched.residentialAddress && !errors.residentialAddress ? 'is-valid' : ''}`}
+                                    className={`form-control ${errors.residentialAddress ? 'is-invalid' : ''}`}
                                     rows={2}
                                     placeholder="Enter address"
                                     value={formData.residentialAddress}
                                     onChange={(e) => handleInputChange('residentialAddress', e.target.value)}
-                                    onBlur={(e) => handleBlur('residentialAddress', e.target.value)}
+                                    required
                                 ></textarea>
                                 {errors.residentialAddress && <div className="invalid-feedback">{errors.residentialAddress}</div>}
                             </div>
 
                             <div className="col-md-12">
-                                <label><i className="fa fa-map-marker me-1"></i> Permanent Address</label>
+                                <label><i className="fa fa-map-marker me-1"></i> Permanent Address *</label>
                                 <textarea
-                                    className={`form-control ${errors.permanentAddress ? 'is-invalid' : touched.permanentAddress && !errors.permanentAddress ? 'is-valid' : ''}`}
+                                    className={`form-control ${errors.permanentAddress ? 'is-invalid' : ''}`}
                                     rows={2}
                                     placeholder="Enter permanent address"
                                     value={formData.permanentAddress}
                                     onChange={(e) => handleInputChange('permanentAddress', e.target.value)}
-                                    onBlur={(e) => handleBlur('permanentAddress', e.target.value)}
+                                    required
                                 ></textarea>
                                 {errors.permanentAddress && <div className="invalid-feedback">{errors.permanentAddress}</div>}
                             </div>
 
                             <div className="col-md-12">
-                                <label><i className="fa fa-envelope me-1"></i> Correspondence Address</label>
+                                <label><i className="fa fa-envelope me-1"></i> Correspondence Address *</label>
                                 <textarea
-                                    className={`form-control ${errors.correspondenceAddress ? 'is-invalid' : touched.correspondenceAddress && !errors.correspondenceAddress ? 'is-valid' : ''}`}
+                                    className={`form-control ${errors.correspondenceAddress ? 'is-invalid' : ''}`}
                                     rows={2}
                                     placeholder="Enter correspondence address"
                                     value={formData.correspondenceAddress}
                                     onChange={(e) => handleInputChange('correspondenceAddress', e.target.value)}
-                                    onBlur={(e) => handleBlur('correspondenceAddress', e.target.value)}
+                                    required
                                 ></textarea>
                                 {errors.correspondenceAddress && <div className="invalid-feedback">{errors.correspondenceAddress}</div>}
                             </div>
-                        </div>
-
-                        <hr />
-
-                        <div className="mt-4">
-                            <div className="d-flex align-items-center justify-content-between mb-3">
-                                <h5 className="mb-0">
-                                    <i className="fa fa-graduation-cap site-text-primary me-2"></i>
-                                    Educational Qualification Details
-                                </h5>
-                            </div>
-
-                            {educationList.map((edu, index) => (
-                                <div className="card mb-3 shadow-sm" key={index}>
-                                    <div className="card-header bg-light d-flex justify-content-between align-items-center">
-                                        <h6 className="mb-0 text-primary">
-                                            <i className="fa fa-book me-2"></i>
-                                            {getEducationLevelLabel(index)}
-                                        </h6>
-                                        <button
-                                            type="button"
-                                            className="btn btn-sm btn-outline-danger"
-                                            onClick={() => {
-                                                const updated = educationList.filter((_, i) => i !== index);
-                                                setEducationList(updated);
-                                            }}
-                                            title="Remove this education entry"
-                                        >
-                                            <i className="fa fa-trash"></i>
-                                        </button>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="row g-3">
-                                            <div className="col-md-6">
-                                                <label className="form-label fw-bold text-muted">
-                                                    <i className="fa fa-graduation-cap me-1"></i>
-                                                    {getEducationLevelLabel(index)}
-                                                </label>
-                                                <input
-                                                    className="form-control"
-                                                    type="text"
-                                                    value={edu.degreeName}
-                                                    onChange={(e) =>
-                                                        handleEducationChange(index, "degreeName", e.target.value)
-                                                    }
-                                                    placeholder={`Enter ${getEducationLevelLabel(index)}`}
-                                                />
-                                            </div>
-
-                                            <div className="col-md-6">
-                                                <label className="form-label fw-bold text-muted">
-                                                    <i className="fa fa-map-marker me-1"></i>
-                                                    Location
-                                                </label>
-                                                {otherSelected[index] ? (
-                                                    <div className="d-flex">
-                                                        <input
-                                                            className="form-control"
-                                                            type="text"
-                                                            value={edu.customLocation || ''}
-                                                            onChange={(e) => {
-                                                                handleEducationChange(index, "customLocation", e.target.value);
-                                                                handleEducationChange(index, "collegeName", e.target.value);
-                                                            }}
-                                                            placeholder="Enter custom location"
-                                                        />
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary ms-2"
-                                                            onClick={() => {
-                                                                handleEducationChange(index, "collegeName", '');
-                                                                handleEducationChange(index, "customLocation", '');
-                                                                setOtherSelected(prev => ({...prev, [index]: false}));
-                                                            }}
-                                                            title="Back to dropdown"
-                                                        >
-                                                            ↩
-                                                        </button>
-                                                    </div>
-                                                ) : (
-                                                    <select
-                                                        className="form-control"
-                                                        value={edu.collegeName}
-                                                        onChange={(e) => {
-                                                            if (e.target.value === 'Other') {
-                                                                setOtherSelected(prev => ({...prev, [index]: true}));
-                                                                handleEducationChange(index, "collegeName", '');
-                                                                handleEducationChange(index, "customLocation", '');
-                                                            } else {
-                                                                handleEducationChange(index, "collegeName", e.target.value);
-                                                            }
-                                                        }}
-                                                    >
-                                                        <option value="">Select Location</option>
-                                                        {indianCities.map(city => (
-                                                            <option key={city} value={city}>{city}</option>
-                                                        ))}
-                                                        <option value="Other" style={{fontWeight: 'bold', color: '#ff6b35'}}>Other</option>
-                                                    </select>
-                                                )}
-                                            </div>
-
-                                            <div className="col-md-6">
-                                                <label className="form-label fw-bold text-muted">
-                                                    <i className="fa fa-calendar me-1"></i>
-                                                    Year of Joining
-                                                </label>
-                                                <input
-                                                    className="form-control"
-                                                    type="text"
-                                                    value={edu.startYear || edu.joiningYear || ''}
-                                                    onChange={(e) => {
-                                                        handleEducationChange(index, "startYear", e.target.value);
-                                                        handleEducationChange(index, "joiningYear", e.target.value);
-                                                    }}
-                                                    placeholder="Enter Year"
-                                                />
-                                            </div>
-
-                                            <div className="col-md-6">
-                                                <label className="form-label fw-bold text-muted">
-                                                    <i className="fa fa-calendar-check me-1"></i>
-                                                    Passout Year
-                                                </label>
-                                                <input
-                                                    className="form-control"
-                                                    type="text"
-                                                    value={edu.passYear}
-                                                    onChange={(e) =>
-                                                        handleEducationChange(index, "passYear", e.target.value)
-                                                    }
-                                                    placeholder="Enter Year"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <hr className="my-3" />
-                                        
-                                        <h6 className="text-muted mb-3">
-                                            <i className="fa fa-chart-line me-2"></i>
-                                            Academic Performance
-                                        </h6>
-                                        
-                                        <div className="row g-3">
-                                            <div className="col-md-3">
-                                                <label className="form-label fw-bold text-primary">
-                                                    <i className="fa fa-percent me-1"></i>
-                                                    Percentage
-                                                </label>
-                                                <div className="input-group">
-                                                    <input
-                                                        className="form-control"
-                                                        type="text"
-                                                        value={edu.percentage || ''}
-                                                        onChange={(e) => {
-                                                            const percentage = parseFloat(e.target.value) || 0;
-                                                            const cgpa = (percentage / 9.5).toFixed(2);
-                                                            const sgpa = (percentage / 10).toFixed(2);
-                                                            let grade = 'F';
-                                                            if (percentage >= 90) grade = 'A+';
-                                                            else if (percentage >= 80) grade = 'A';
-                                                            else if (percentage >= 70) grade = 'B+';
-                                                            else if (percentage >= 60) grade = 'B';
-                                                            else if (percentage >= 50) grade = 'C';
-                                                            else if (percentage >= 40) grade = 'D';
-                                                            
-                                                            handleEducationChange(index, "percentage", e.target.value);
-                                                            handleEducationChange(index, "cgpa", cgpa);
-                                                            handleEducationChange(index, "sgpa", sgpa);
-                                                            handleEducationChange(index, "grade", grade);
-                                                        }}
-                                                        placeholder="Enter %"
-                                                    />
-                                                    <span className="input-group-text bg-primary text-white">%</span>
-                                                </div>
-                                            </div>
-                                            
-                                            <div className="col-md-3">
-                                                <label className="form-label fw-bold text-success">
-                                                    <i className="fa fa-calculator me-1"></i>
-                                                    CGPA
-                                                </label>
-                                                <input
-                                                    className="form-control bg-light"
-                                                    type="text"
-                                                    value={edu.cgpa || ''}
-                                                    readOnly
-                                                    placeholder="Auto"
-                                                />
-                                            </div>
-                                            
-                                            <div className="col-md-3">
-                                                <label className="form-label fw-bold text-info">
-                                                    <i className="fa fa-calculator me-1"></i>
-                                                    SGPA
-                                                </label>
-                                                <input
-                                                    className="form-control bg-light"
-                                                    type="text"
-                                                    value={edu.sgpa || ''}
-                                                    readOnly
-                                                    placeholder="Auto"
-                                                />
-                                            </div>
-                                            
-                                            <div className="col-md-3">
-                                                <label className="form-label fw-bold text-warning">
-                                                    <i className="fa fa-star me-1"></i>
-                                                    Grade
-                                                </label>
-                                                <input
-                                                    className="form-control bg-light text-center fw-bold"
-                                                    type="text"
-                                                    value={edu.grade || ''}
-                                                    readOnly
-                                                    placeholder="Auto"
-                                                />
-                                            </div>
-                                        </div>
-                                        
-                                        <hr className="my-3" />
-                                        
-                                        <div className="row">
-                                            <div className="col-md-6">
-                                                <label className="form-label fw-bold text-muted">
-                                                    <i className="fa fa-upload me-1"></i>
-                                                    Upload Marksheet
-                                                </label>
-                                                <input
-                                                    className="form-control"
-                                                    type="file"
-                                                    accept=".pdf,.jpg,.jpeg,.png"
-                                                    onChange={async (e) => {
-                                                        const file = e.target.files[0];
-                                                        if (file) {
-                                                            const formData = new FormData();
-                                                            formData.append('marksheet', file);
-
-                                                            try {
-                                                                const response = await fetch('http://localhost:5000/api/candidate/upload-marksheet', {
-                                                                    method: 'POST',
-                                                                    headers: {
-                                                                        'Authorization': `Bearer ${localStorage.getItem('candidateToken')}`
-                                                                    },
-                                                                    body: formData
-                                                                });
-                                                                const data = await response.json();
-                                                                if (data.success) {
-                                                                    handleEducationChange(index, "marksheet", data.filePath);
-                                                                }
-                                                            } catch (error) {
-                                                                console.error('Upload failed:', error);
-                                                            }
-                                                        }
-                                                    }}
-                                                />
-                                                {edu.marksheet && (
-                                                    <div className="mt-2">
-                                                        <span className="badge bg-success">
-                                                            <i className="fa fa-check me-1"></i>
-                                                            Marksheet uploaded successfully
-                                                        </span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="text-center mt-4">
-                            <button
-                                type="button"
-                                className="btn btn-outline-primary btn-lg"
-                                onClick={handleAddEducation}
-                            >
-                                <i className="fa fa-plus-circle me-2"></i>
-                                Add New Education
-                            </button>
                         </div>
 
                         <div className="text-left mt-4">
@@ -728,4 +256,5 @@ function SectionCanPersonalDetail({ profile }) {
         </>
     )
 }
+
 export default SectionCanPersonalDetail;

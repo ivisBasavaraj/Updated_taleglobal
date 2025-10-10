@@ -198,6 +198,7 @@ All JavaScript fuctions Start
 			//---
 		} else {
 			jQuery("<div id='arrowId' class='fa fa-angle-right submenu-toogle'></div>").insertAfter(".has-child > a");
+		jQuery('li.has-child > a').off('click.doubleTapFix');
 		}
 
 		jQuery('.has-child a+.submenu-toogle').unbind('click').click(function (ev) {

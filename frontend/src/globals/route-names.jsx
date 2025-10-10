@@ -38,6 +38,7 @@ export const publicUser = {
         SUB_ADMIN_LOGIN: "/sub-admin-login",
         ICONS:          "/icons",
         FORGOT:         "/forgot-password",
+        RESET_PASSWORD: "/reset-password/:token",
         TERMS:          "/terms-conditions",
         PRIVACY:        "/privacy-policy"
     },

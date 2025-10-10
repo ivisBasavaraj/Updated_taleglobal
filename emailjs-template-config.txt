@@ -1,0 +1,19 @@
+EmailJS Template Configuration Fix:
+
+PROBLEM: "The recipients address is empty" - EmailJS can't find recipient email
+
+SOLUTION: Update your EmailJS template settings:
+
+1. Go to EmailJS Dashboard > Templates > template_7vg4zm5
+2. In "Settings" tab, set:
+   - To Email: {{to_email}}
+   - To Name: {{to_name}}
+   
+3. In "Content" tab, use these variables:
+   - {{to_email}} - recipient email
+   - {{to_name}} - recipient name  
+   - {{otp_code}} - the OTP code
+
+4. Make sure "To Email" field in template settings points to {{to_email}}
+
+The template must have the recipient email configured in the EmailJS dashboard settings, not just in the content.
