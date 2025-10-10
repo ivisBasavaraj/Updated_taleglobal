@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../../../../utils/api";
 
 function SectionCanAttachment({ profile }) {
     const [uploading, setUploading] = useState(false);
     const [resumeFile, setResumeFile] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+
+    useEffect(() => {
+        if (profile?.resumeFileName) {
+            setResumeFile(profile.resumeFileName);
+        } else {
+            setResumeFile(null);
+        }
+    }, [profile?.resumeFileName]);
 
     const handleFileSelect = (e) => {
         const file = e.target.files[0];
@@ -53,13 +61,19 @@ function SectionCanAttachment({ profile }) {
                                 <i className="fa fa-file-text me-1"></i>
                                 Choose Resume File
                             </label>
-                            <input 
-                                type="file" 
-                                accept=".pdf,.doc,.docx" 
-                                onChange={handleFileSelect}
-                                disabled={uploading}
-                                className="form-control"
-                            />
+                            <div className="position-relative">
+                                <input 
+                                    type="file" 
+                                    accept=".pdf,.doc,.docx" 
+                                    onChange={handleFileSelect}
+                                    disabled={uploading}
+                                    className="form-control"
+                                    style={{opacity: 0, position: 'absolute', zIndex: 2}}
+                                />
+                                <div className="form-control d-flex align-items-center" style={{cursor: 'pointer', color: '#6c757d'}}>
+                                    {resumeFile ? `Current: ${resumeFile}` : 'No file chosen'}
+                                </div>
+                            </div>
                         </div>
                         {selectedFile && (
                             <p className="text-info">
@@ -79,13 +93,7 @@ function SectionCanAttachment({ profile }) {
                         {resumeFile && (
                             <p className="text-success">
                                 <i className="fa fa-check-circle me-1"></i>
-                                Current resume: <span style={{color: '#28a745', fontWeight: 'bold'}}>Resume uploaded successfully</span>
-                            </p>
-                        )}
-                        {resumeFile && (
-                            <p className="text-muted">
-                                <i className="fa fa-file-pdf-o me-1"></i>
-                                Uploaded: {resumeFile}
+                                Current resume: <span style={{color: '#28a745', fontWeight: 'bold'}}>{resumeFile}</span>
                             </p>
                         )}
                         <p className="text-muted small">
