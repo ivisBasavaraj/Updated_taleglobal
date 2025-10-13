@@ -1,47 +1,44 @@
-const mongoose = require('mongoose');
-const Candidate = require('./models/Candidate');
-require('dotenv').config();
+const fetch = require('node-fetch');
 
 async function testPlacementLogin() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('Connected to MongoDB');
+    const API_BASE_URL = 'http://localhost:5000/api';
+    
+    console.log('Testing placement login...');
+    
+    // Test login
+    const loginResponse = await fetch(`${API_BASE_URL}/placement/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: 'placement@test.com',
+        password: 'password123'
+      })
+    });
 
-    // Find a placement candidate
-    const placementCandidate = await Candidate.findOne({ 
-      registrationMethod: 'placement' 
-    }).select('name email password registrationMethod credits');
+    console.log('Login response status:', loginResponse.status);
+    const loginData = await loginResponse.json();
+    console.log('Login response data:', loginData);
 
-    if (!placementCandidate) {
-      console.log('No placement candidates found');
-      return;
+    if (loginData.success && loginData.token) {
+      console.log('\nTesting profile endpoint with login token...');
+      
+      const profileResponse = await fetch(`${API_BASE_URL}/placement/profile`, {
+        headers: {
+          'Authorization': `Bearer ${loginData.token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('Profile response status:', profileResponse.status);
+      const profileData = await profileResponse.json();
+      console.log('Profile response data:', profileData);
     }
 
-    console.log('Found placement candidate:');
-    console.log('Name:', placementCandidate.name);
-    console.log('Email:', placementCandidate.email);
-    console.log('Password (stored):', placementCandidate.password);
-    console.log('Registration Method:', placementCandidate.registrationMethod);
-    console.log('Credits:', placementCandidate.credits);
-
-    // Test password comparison
-    const testPassword = placementCandidate.password;
-    const passwordMatch = await placementCandidate.comparePassword(testPassword);
-    console.log('\nPassword comparison test:');
-    console.log('Test password:', testPassword);
-    console.log('Password match result:', passwordMatch);
-
-    // Test login simulation
-    console.log('\n=== LOGIN SIMULATION ===');
-    console.log('Login URL: http://localhost:3000/candidate/login');
-    console.log('Email:', placementCandidate.email);
-    console.log('Password:', placementCandidate.password);
-    console.log('Expected result: SUCCESS (candidate can login to dashboard)');
-
   } catch (error) {
-    console.error('Error:', error);
-  } finally {
-    await mongoose.disconnect();
+    console.error('Test failed:', error);
   }
 }
 

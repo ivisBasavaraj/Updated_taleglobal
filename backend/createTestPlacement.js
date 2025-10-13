@@ -1,51 +1,37 @@
 const mongoose = require('mongoose');
-const Placement = require('./models/Placement');
+require('dotenv').config();
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/jobportal', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+const connectDB = require('./config/database');
+const Placement = require('./models/Placement');
 
 async function createTestPlacement() {
   try {
-    console.log('=== CREATING TEST PLACEMENT OFFICER ===');
-    
+    await connectDB();
+    console.log('Connected to database');
+
     // Create a test placement officer
-    const placement = await Placement.create({
+    const placementData = {
       name: 'Test Placement Officer',
-      email: 'placement@test.edu',
+      email: 'placement@test.com',
       password: 'password123',
       phone: '1234567890',
       collegeName: 'Test College',
       status: 'active',
-      fileHistory: [
-        {
-          fileName: 'test_students.xlsx',
-          uploadedAt: new Date(),
-          status: 'pending',
-          fileData: 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,UEsDBBQAAAAIAA==', // Sample base64
-          fileType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          credits: 5
-        }
-      ]
+      isVerified: true
+    };
+
+    const placement = await Placement.create(placementData);
+    console.log('Created test placement officer:', {
+      id: placement._id,
+      name: placement.name,
+      email: placement.email,
+      status: placement.status
     });
-    
-    console.log('Test placement officer created:');
-    console.log(`ID: ${placement._id}`);
-    console.log(`Name: ${placement.name}`);
-    console.log(`Email: ${placement.email}`);
-    console.log(`Files: ${placement.fileHistory.length}`);
-    
-    if (placement.fileHistory.length > 0) {
-      console.log(`First file ID: ${placement.fileHistory[0]._id}`);
-      console.log(`First file name: ${placement.fileHistory[0].fileName}`);
-    }
-    
-    process.exit(0);
+
   } catch (error) {
-    console.error('Error creating test placement:', error);
-    process.exit(1);
+    console.error('Error:', error);
+  } finally {
+    mongoose.connection.close();
   }
 }
 

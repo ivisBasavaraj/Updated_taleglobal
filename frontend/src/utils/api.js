@@ -226,6 +226,35 @@ export const api = {
     }).then((res) => res.json());
   },
 
+  getPlacementProfile: () => {
+    return fetch(`${API_BASE_URL}/placement/profile`, {
+      headers: getAuthHeaders('placement'),
+    }).then(handleApiResponse);
+  },
+
+  getPlacementDashboard: () => {
+    return fetch(`${API_BASE_URL}/placement/dashboard`, {
+      headers: getAuthHeaders('placement'),
+    }).then(handleApiResponse);
+  },
+
+  uploadStudentData: (formData) => {
+    const token = localStorage.getItem('placementToken');
+    return fetch(`${API_BASE_URL}/placement/upload-student-data`, {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: formData,
+    }).then(handleApiResponse);
+  },
+
+  viewPlacementFile: (fileId) => {
+    return fetch(`${API_BASE_URL}/placement/files/${fileId}/view`, {
+      headers: getAuthHeaders('placement'),
+    }).then(handleApiResponse);
+  },
+
   // Admin APIs
   adminLogin: (data) => {
     return fetch(`${API_BASE_URL}/admin/login`, {
@@ -347,6 +376,18 @@ export const api = {
       method: 'POST',
       headers: getAuthHeaders('admin'),
     }).then((res) => res.json());
+  },
+
+  getPlacementData: (placementId) => {
+    return fetch(`${API_BASE_URL}/admin/placements/${placementId}/data`, {
+      headers: getAuthHeaders('admin'),
+    }).then(handleApiResponse);
+  },
+
+  getMyPlacementData: () => {
+    return fetch(`${API_BASE_URL}/placement/data`, {
+      headers: getAuthHeaders('placement'),
+    }).then(handleApiResponse);
   },
 };
 

@@ -78,7 +78,7 @@ function PlacementDashboard() {
         try {
             const token = localStorage.getItem('placementToken');
             const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-        await fetch(`${API_BASE_URL}/placement/save-dashboard-state`, {
+            await fetch(`${API_BASE_URL}/placement/save-dashboard-state`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -93,14 +93,12 @@ function PlacementDashboard() {
 
     const fetchStudentData = async (placementId) => {
         try {
-            const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-            const response = await fetch(`${API_BASE_URL}/admin/placements/${placementId}/data`, {
-                headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
-            });
-            
-            if (response.ok) {
-                const data = await response.json();
+            // Use placement-specific endpoint instead of admin endpoint
+            const data = await api.getMyPlacementData();
+            if (data.success) {
                 setStudentData(data.students || []);
+            } else {
+                console.error('Failed to fetch student data:', data.message);
             }
         } catch (error) {
             console.error('Error fetching student data:', error);
@@ -140,7 +138,7 @@ function PlacementDashboard() {
             const response = await fetch(`${API_BASE_URL}/admin/placements/${placementId}/files/${fileId}/approve`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('placementToken')}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -171,7 +169,7 @@ function PlacementDashboard() {
             const response = await fetch(`${API_BASE_URL}/admin/placements/${placementId}/files/${fileId}/reject`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('placementToken')}`,
                     'Content-Type': 'application/json'
                 }
             });
