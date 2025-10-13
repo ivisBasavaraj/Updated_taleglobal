@@ -38,14 +38,12 @@ function PlacementDashboard() {
                 return;
             }
             
-            const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-            const profileResponse = await fetch(`${API_BASE_URL}/placement/profile`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            
-            if (!profileResponse.ok) return;
-            
-            const profileData = await profileResponse.json();
+            // Get placement profile first
+            const profileData = await api.getPlacementProfile();
+            if (!profileData.success) {
+                console.error('Failed to get placement profile:', profileData.message);
+                return;
+            }
             const userEmail = profileData.placement?.email;
             
             if (!userEmail) return;
