@@ -28,6 +28,8 @@ function TopRecruitersSection() {
         }
     };
 
+    const displayRecruiters = recruiters.slice(0, 8);
+
     return (
         <div className="section-full p-t120 site-bg-white twm-companies-wrap">
             <div className="section-head center wt-small-separator-outer">
@@ -40,22 +42,20 @@ function TopRecruitersSection() {
                 <div className="section-content">
                     {loading ? (
                         <div className="text-center p-5">Loading recruiters...</div>
-                    ) : recruiters.length > 0 ? (
-                        <div className="row">
-                            {recruiters.map((recruiter) => (
-                                <div key={recruiter._id} className="col-lg-3 col-md-4 col-sm-6 mb-4">
-                                    <div className="client-logo-card" style={{padding: '20px', textAlign: 'center', border: '1px solid #eee', borderRadius: '8px', height: '120px', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-                                        <NavLink to={`${publicUser.employer.DETAIL1}/${recruiter._id}`} style={{textDecoration: 'none', color: 'inherit'}}>
+                    ) : displayRecruiters.length > 0 ? (
+                        <div className="top-recruiters-grid">
+                            {displayRecruiters.map((recruiter) => (
+                                <div key={recruiter._id} className="top-recruiter-grid-item">
+                                    <div className="top-recruiter-card">
+                                        <NavLink to={`${publicUser.employer.DETAIL1}/${recruiter._id}`} className="top-recruiter-link">
                                             {recruiter.logo ? (
-                                                <img src={recruiter.logo} alt={recruiter.companyName} style={{maxHeight: '60px', objectFit: 'contain', marginBottom: '10px'}} />
+                                                <img className="top-recruiter-logo" src={recruiter.logo} alt={recruiter.companyName} />
                                             ) : (
-                                                <div>
-                                                    <strong style={{fontSize: '16px', color: '#333'}}>{recruiter.companyName}</strong>
+                                                <div className="top-recruiter-placeholder">
+                                                    <strong className="top-recruiter-name">{recruiter.companyName}</strong>
                                                 </div>
                                             )}
-                                            <div style={{fontSize: '12px', color: '#666', marginTop: '5px'}}>
-                                                {recruiter.jobCount} active jobs
-                                            </div>
+                                            <div className="top-recruiter-jobs">{recruiter.jobCount ?? 0} active jobs</div>
                                         </NavLink>
                                     </div>
                                 </div>

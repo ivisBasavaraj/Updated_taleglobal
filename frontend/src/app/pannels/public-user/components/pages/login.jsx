@@ -4,6 +4,7 @@ import { canRoute, candidate, empRoute, employer, placementRoute, placement, pub
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../../../contexts/AuthContext";
 import { loadScript, publicUrlFor } from "../../../../../globals/constants";
+import { handleFacebookLogin, handleGoogleLogin } from "../../../../../utils/socialAuth";
 
 
 function LoginPage() {
@@ -109,268 +110,179 @@ function LoginPage() {
 
     return (
         <>
-            <div className="section-full site-bg-white">
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-xl-8 col-lg-6 col-md-5 twm-log-reg-media-wrap">
-                            <div className="twm-log-reg-media">
-                                <div className="twm-l-media">
-                                    <JobZImage src="images/login-image.jpg" alt="" style={{width: '100%', height: '100vh', objectFit: 'cover'}} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xl-4 col-lg-6 col-md-7">
-                            <div className="twm-log-reg-form-wrap">
-                                <div className="twm-log-reg-logo-head">
-                                    <NavLink to={publicUser.HOME1}>
-                                        <JobZImage src="images/logo-dark.png" alt="" className="logo" />
-                                    </NavLink>
-                                </div>
-                                <div className="twm-log-reg-inner">
-                                    <div className="twm-log-reg-head">
-                                        <div className="twm-log-reg-logo">
-                                            <span className="log-reg-form-title">Log In</span>
+            <div className="min-vh-100 d-flex align-items-center" style={{background: 'radial-gradient(ellipse at center, white 40%, #FFE5CC 100%)'}}>
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-lg-11 col-xl-10">
+                            <div className="row g-0">
+                                    <div className="col-md-6 position-relative">
+                                        <div className="h-100 d-flex align-items-center justify-content-center" style={{background: 'white', minHeight: '600px'}}>
+                                            <JobZImage src="images/login-image.svg" alt="" style={{width: '95%', maxWidth: '400px'}} />
                                         </div>
                                     </div>
+                                    <div className="col-md-6" style={{borderLeft: '4px solid #FF6A00'}}>
+                                        <div className="p-5 d-flex flex-column justify-content-center" style={{minHeight: '600px'}}>
+                                            <div className="text-center mb-4">
+                                                <NavLink to={publicUser.HOME1}>
+                                                    <JobZImage src="images/logo-dark.png" alt="" className="mb-3" style={{maxHeight: '45px'}} />
+                                                </NavLink>
+                                                <h3 className="fw-bold text-dark mb-2">Welcome Back</h3>
+                                                <p className="text-muted mb-0">Sign in to your account</p>
+                                            </div>
                                     {error && (
                                         <div className="alert alert-danger" role="alert">
                                             {error}
                                         </div>
                                     )}
-                                    <div className="twm-tabs-style-2">
-                                        <ul className="nav nav-tabs" id="myTab2" role="tablist">
-                                            {/*Login Candidate*/}
-                                            <li className="nav-item">
-                                                <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#twm-login-candidate" type="button"><i className="fas fa-user-tie" />Candidate</button>
-                                            </li>
-                                            {/*Login Employer*/}
-                                            <li className="nav-item">
-                                                <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Employer" type="button"><i className="fas fa-building" />Employer</button>
-                                            </li>
-                                            {/*Login Placement*/}
-                                            <li className="nav-item">
-                                                <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Placement" type="button"><i className="fas fa-graduation-cap" />Placement</button>
-                                            </li>
-                                        </ul>
-                                        <div className="tab-content" id="myTab2Content">
+                                            <div className="mb-4">
+                                                <ul className="nav nav-pills nav-fill" id="myTab2" role="tablist" style={{background: '#f8f9fa', borderRadius: '12px', padding: '6px', marginBottom: '24px'}}>
+                                                    <li className="nav-item">
+                                                        <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#twm-login-candidate" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-user-tie me-2" />Candidate</button>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Employer" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-building me-2" />Employer</button>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Placement" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-graduation-cap me-2" />Placement</button>
+                                                    </li>
+                                                </ul>
+                                                <div className="tab-content" id="myTab2Content">
                                             {/*Login Candidate Content*/}
                                             <form onSubmit={handleCandidateLogin} className="tab-pane fade show active" id="twm-login-candidate">
-                                                <div className="row">
-                                                    <div className="col-lg-12">
-                                                        <div className="form-group mb-3">
-                                                            <input name="email"
-                                                                type="email"
-                                                                required
-                                                                className="form-control"
-                                                                placeholder="Email*"
-                                                                value={canusername}
-                                                                onChange={(event) => {
-                                                                    setCanUsername(event.target.value);
-                                                                }} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-12">
-                                                        <div className="form-group mb-3">
-                                                            <input
-                                                                name="password"
-                                                                type="password"
-                                                                className="form-control"
-                                                                required
-                                                                placeholder="Password*"
-                                                                value={canpassword}
-                                                                onChange={(event) => {
-                                                                    setCanPassword(event.target.value);
-                                                                }} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-12">
-                                                        <div className="twm-forgot-wrap">
-                                                            <div className="form-group mb-3">
-                                                                <div className="d-flex justify-content-between align-items-center">
-                                                                    <div className="form-check">
-                                                                        <input type="checkbox" className="form-check-input" id="rememberCandidate" />
-                                                                        <label className="form-check-label" htmlFor="rememberCandidate">Remember me</label>
-                                                                    </div>
-                                                                    <NavLink to={publicUser.pages.FORGOT} className="site-text-primary">Forgot Password</NavLink>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <button type="submit" className="site-button" disabled={loading}>
-                                                                {loading ? 'Logging in...' : 'Log in'}
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <span className="center-text-or">Or</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <button type="submit" className="log_with_facebook">
-                                                                <i className="fab fa-facebook" />
-                                                                Continue with Facebook
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <button type="submit" className="log_with_google">
-                                                                <JobZImage src="images/google-icon.png" alt="" />
-                                                                Continue with Google
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                                                <div className="mb-3">
+                                                    <input name="email"
+                                                        type="email"
+                                                        required
+                                                        className="form-control"
+                                                        placeholder="Email*"
+                                                        value={canusername}
+                                                        onChange={(event) => setCanUsername(event.target.value)}
+                                                        style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #e0e0e0'}} />
                                                 </div>
+                                                <div className="mb-3">
+                                                    <input
+                                                        name="password"
+                                                        type="password"
+                                                        className="form-control"
+                                                        required
+                                                        placeholder="Password*"
+                                                        value={canpassword}
+                                                        onChange={(event) => setCanPassword(event.target.value)}
+                                                        style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #e0e0e0'}} />
+                                                </div>
+                                                <div className="d-flex justify-content-between align-items-center mb-4">
+                                                    <div className="form-check">
+                                                        <input type="checkbox" className="form-check-input" id="rememberCandidate" />
+                                                        <label className="form-check-label text-muted" htmlFor="rememberCandidate" style={{fontSize: '14px'}}>Remember me</label>
+                                                    </div>
+                                                    <NavLink to={publicUser.pages.FORGOT} className="site-text-primary" style={{fontSize: '14px', textDecoration: 'none'}}>Forgot Password</NavLink>
+                                                </div>
+                                                <button type="submit" className="btn btn-primary w-100 mb-3" disabled={loading} style={{padding: '12px', borderRadius: '8px', fontWeight: '500'}}>
+                                                    {loading ? 'Logging in...' : 'Log in'}
+                                                </button>
+                                                <div className="text-center mb-3">
+                                                    <span className="text-muted" style={{fontSize: '14px'}}>Or</span>
+                                                </div>
+                                                <button type="button" className="btn btn-outline-primary w-100 mb-2" style={{padding: '10px', borderRadius: '8px', fontSize: '14px'}} onClick={handleFacebookLogin}>
+                                                    <i className="fab fa-facebook me-2" />Continue with Facebook
+                                                </button>
+                                                <button type="button" className="btn btn-outline-secondary w-100" style={{padding: '10px', borderRadius: '8px', fontSize: '14px'}} onClick={handleGoogleLogin}>
+                                                    <JobZImage src="images/google-icon.png" alt="" style={{width: '16px', marginRight: '8px'}} />
+                                                    Continue with Google
+                                                </button>
                                             </form>
                                             {/*Login Employer Content*/}
                                             <form onSubmit={handleEmployerLogin} className="tab-pane fade" id="twm-login-Employer">
-                                                <div className="row">
-                                                    <div className="col-lg-12">
-                                                        <div className="form-group mb-3">
-                                                            <input
-                                                                name="username"
-                                                                type="text"
-                                                                required
-                                                                className="form-control"
-                                                                placeholder="Usearname*"
-                                                                value={empusername}
-                                                                onChange={(event) => {
-                                                                    setEmpUsername(event.target.value);
-                                                                }} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-12">
-                                                        <div className="form-group mb-3">
-                                                            <input
-                                                                name="password"
-                                                                type="password"
-                                                                className="form-control"
-                                                                required
-                                                                placeholder="Password*"
-                                                                value={emppassword}
-                                                                onChange={(event) => {
-                                                                    setEmpPassword(event.target.value);
-                                                                }} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-12">
-                                                        <div className="twm-forgot-wrap">
-                                                            <div className="form-group mb-3">
-                                                                <div className="d-flex justify-content-between align-items-center">
-                                                                    <div className="form-check">
-                                                                        <input type="checkbox" className="form-check-input" id="rememberEmployer" />
-                                                                        <label className="form-check-label" htmlFor="rememberEmployer">Remember me</label>
-                                                                    </div>
-                                                                    <NavLink to={publicUser.pages.FORGOT} className="site-text-primary">Forgot Password</NavLink>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <button type="submit" className="site-button" disabled={loading}>
-                                                                {loading ? 'Logging in...' : 'Log in'}
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <span className="center-text-or">Or</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <button type="submit" className="log_with_facebook">
-                                                                <i className="fab fa-facebook" />
-                                                                Continue with Facebook
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <button type="submit" className="log_with_google">
-                                                                <JobZImage src="images/google-icon.png" alt="" />
-                                                                Continue with Google
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                                                <div className="mb-3">
+                                                    <input
+                                                        name="username"
+                                                        type="text"
+                                                        required
+                                                        className="form-control"
+                                                        placeholder="Username*"
+                                                        value={empusername}
+                                                        onChange={(event) => setEmpUsername(event.target.value)}
+                                                        style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #e0e0e0'}} />
                                                 </div>
+                                                <div className="mb-3">
+                                                    <input
+                                                        name="password"
+                                                        type="password"
+                                                        className="form-control"
+                                                        required
+                                                        placeholder="Password*"
+                                                        value={emppassword}
+                                                        onChange={(event) => setEmpPassword(event.target.value)}
+                                                        style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #e0e0e0'}} />
+                                                </div>
+                                                <div className="d-flex justify-content-between align-items-center mb-4">
+                                                    <div className="form-check">
+                                                        <input type="checkbox" className="form-check-input" id="rememberEmployer" />
+                                                        <label className="form-check-label text-muted" htmlFor="rememberEmployer" style={{fontSize: '14px'}}>Remember me</label>
+                                                    </div>
+                                                    <NavLink to={publicUser.pages.FORGOT} className="site-text-primary" style={{fontSize: '14px', textDecoration: 'none'}}>Forgot Password</NavLink>
+                                                </div>
+                                                <button type="submit" className="btn btn-primary w-100 mb-3" disabled={loading} style={{padding: '12px', borderRadius: '8px', fontWeight: '500'}}>
+                                                    {loading ? 'Logging in...' : 'Log in'}
+                                                </button>
+                                                <div className="text-center mb-3">
+                                                    <span className="text-muted" style={{fontSize: '14px'}}>Or</span>
+                                                </div>
+                                                <button type="button" className="btn btn-outline-primary w-100 mb-2" style={{padding: '10px', borderRadius: '8px', fontSize: '14px'}} onClick={handleFacebookLogin}>
+                                                    <i className="fab fa-facebook me-2" />Continue with Facebook
+                                                </button>
+                                                <button type="button" className="btn btn-outline-secondary w-100" style={{padding: '10px', borderRadius: '8px', fontSize: '14px'}} onClick={handleGoogleLogin}>
+                                                    <JobZImage src="images/google-icon.png" alt="" style={{width: '16px', marginRight: '8px'}} />
+                                                    Continue with Google
+                                                </button>
                                             </form>
                                             {/*Login Placement Content*/}
                                             <form onSubmit={handlePlacementLogin} className="tab-pane fade" id="twm-login-Placement">
-                                                <div className="row">
-                                                    <div className="col-lg-12">
-                                                        <div className="form-group mb-3">
-                                                            <input
-                                                                name="username"
-                                                                type="text"
-                                                                required
-                                                                className="form-control"
-                                                                placeholder="Email*"
-                                                                value={placementusername}
-                                                                onChange={(event) => {
-                                                                    setPlacementUsername(event.target.value);
-                                                                }} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-12">
-                                                        <div className="form-group mb-3">
-                                                            <input
-                                                                name="password"
-                                                                type="password"
-                                                                className="form-control"
-                                                                required
-                                                                placeholder="Password*"
-                                                                value={placementpassword}
-                                                                onChange={(event) => {
-                                                                    setPlacementPassword(event.target.value);
-                                                                }} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <button type="submit" className="site-button" disabled={loading}>
-                                                                {loading ? 'Logging in...' : 'Log in'}
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <span className="center-text-or">Or</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <button type="submit" className="log_with_facebook">
-                                                                <i className="fab fa-facebook" />
-                                                                Continue with Facebook
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <button type="submit" className="log_with_google">
-                                                                <JobZImage src="images/google-icon.png" alt="" />
-                                                                Continue with Google
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                                                <div className="mb-3">
+                                                    <input
+                                                        name="username"
+                                                        type="text"
+                                                        required
+                                                        className="form-control"
+                                                        placeholder="Email*"
+                                                        value={placementusername}
+                                                        onChange={(event) => setPlacementUsername(event.target.value)}
+                                                        style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #e0e0e0'}} />
                                                 </div>
+                                                <div className="mb-4">
+                                                    <input
+                                                        name="password"
+                                                        type="password"
+                                                        className="form-control"
+                                                        required
+                                                        placeholder="Password*"
+                                                        value={placementpassword}
+                                                        onChange={(event) => setPlacementPassword(event.target.value)}
+                                                        style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #e0e0e0'}} />
+                                                </div>
+                                                <button type="submit" className="btn btn-primary w-100 mb-3" disabled={loading} style={{padding: '12px', borderRadius: '8px', fontWeight: '500'}}>
+                                                    {loading ? 'Logging in...' : 'Log in'}
+                                                </button>
+                                                <div className="text-center mb-3">
+                                                    <span className="text-muted" style={{fontSize: '14px'}}>Or</span>
+                                                </div>
+                                                <button type="button" className="btn btn-outline-primary w-100 mb-2" style={{padding: '10px', borderRadius: '8px', fontSize: '14px'}} onClick={handleFacebookLogin}>
+                                                    <i className="fab fa-facebook me-2" />Continue with Facebook
+                                                </button>
+                                                <button type="button" className="btn btn-outline-secondary w-100" style={{padding: '10px', borderRadius: '8px', fontSize: '14px'}} onClick={handleGoogleLogin}>
+                                                    <JobZImage src="images/google-icon.png" alt="" style={{width: '16px', marginRight: '8px'}} />
+                                                    Continue with Google
+                                                </button>
                                             </form>
                                         </div>
                                     </div>
-                                </div>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </>
     )
 }

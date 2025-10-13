@@ -130,19 +130,16 @@ function EmployersDetail1Page() {
 												<h4 className="twm-s-title">Why Join Us</h4>
 												<ul className="description-list-2">
 													<li>
-														<i className="feather-check" />
 														Establish and promote design guidelines, best practices
 														and standards.
 													</li>
 
 													<li>
-														<i className="feather-check" />
 														Accurately estimate design tickets during planning
 														sessions.
 													</li>
 
 													<li>
-														<i className="feather-check" />
 														Partnering with product and engineering to translate
 														business and user goals.
 													</li>

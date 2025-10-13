@@ -302,6 +302,8 @@ function JobDetail1Page() {
 										)}
 										<h4 className="twm-s-title">Job Description:</h4>
 										<p>{job.description}</p>
+
+
 										
 										<div className="job-details-grid" style={{background: '#f8f9fa', padding: '24px', borderRadius: '12px', marginBottom: '24px'}}>
 											<div className="row">
@@ -310,29 +312,21 @@ function JobDetail1Page() {
 														<h5><i className="feather-briefcase" style={{marginRight: '8px'}}></i>Job Type:</h5>
 														<p>{job.jobType}</p>
 													</div>
-													<div className="detail-item">
-														<h5><i className="feather-users" style={{marginRight: '8px'}}></i>Vacancies:</h5>
-														<p>{job.vacancies || 'Not specified'}</p>
-													</div>
-													<div className="detail-item">
-														<h5><i className="feather-book" style={{marginRight: '8px'}}></i>Education:</h5>
-														<p>{job.education || 'Not specified'}</p>
-													</div>
 												</div>
 												<div className="col-md-6">
-													<div className="detail-item">
-														<h5><i className="feather-trending-up" style={{marginRight: '8px'}}></i>Experience Level:</h5>
-														<p>{job.experienceLevel || 'Not specified'}</p>
-													</div>
-													<div className="detail-item">
-														<h5><i className="feather-clock" style={{marginRight: '8px'}}></i>Min Experience:</h5>
-														<p>{job.minExperience || 0} years</p>
-													</div>
 													<div className="detail-item">
 														<h5><i className="feather-check-circle" style={{marginRight: '8px'}}></i>Backlogs Allowed:</h5>
 														<p><span className={`badge ${job.backlogsAllowed ? 'badge-success' : 'badge-danger'}`}>{job.backlogsAllowed ? 'Yes' : 'No'}</span></p>
 													</div>
 												</div>
+												{job.employerProfile?.website && (
+													<div className="col-md-6">
+														<div className="detail-item">
+															<h5><i className="feather-globe" style={{marginRight: '8px'}}></i>Website:</h5>
+															<p><a href={job.employerProfile.website} target="_blank" rel="noopener noreferrer">{job.employerProfile.website}</a></p>
+														</div>
+													</div>
+												)}
 											</div>
 										</div>
 
