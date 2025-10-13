@@ -116,7 +116,7 @@ exports.loginPlacement = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
-    if (placement.status !== 'active') {
+    if (placement.status !== 'active' && placement.status !== 'pending') {
       return res.status(401).json({ success: false, message: 'Account is inactive' });
     }
 
