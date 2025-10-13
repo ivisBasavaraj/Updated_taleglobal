@@ -169,6 +169,41 @@ router.get('/applications', candidateController.getAppliedJobs);
 router.get('/applications/interviews', candidateController.getCandidateApplicationsWithInterviews);
 router.get('/applications/:applicationId/status', candidateController.getApplicationStatus);
 
+// Optimized endpoints
+router.get('/applications/status/:jobId', async (req, res) => {
+  try {
+    const Application = require('../models/Application');
+    const application = await Application.findOne({
+      candidateId: req.user.id,
+      jobId: req.params.jobId
+    }).select('_id').lean();
+    
+    res.json({ success: true, hasApplied: !!application });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.get('/credits', async (req, res) => {
+  try {
+    const Candidate = require('../models/Candidate');
+    const candidate = await Candidate.findById(req.user.id)
+      .select('credits registrationMethod').lean();
+    
+    if (!candidate) {
+      return res.status(404).json({ success: false, message: 'Candidate not found' });
+    }
+    
+    res.json({
+      success: true,
+      credits: candidate.credits || 0,
+      registrationMethod: candidate.registrationMethod
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 // Messaging Routes
 router.post('/messages', [
   body('receiverId').notEmpty().withMessage('Receiver ID is required'),

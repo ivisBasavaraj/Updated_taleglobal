@@ -1,95 +1,113 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { loadScript } from "../../../../../globals/constants";
 import JobZImage from "../../../../common/jobz-img";
 import ApplyJobPopup from "../../../../common/popups/popup-apply-job";
-import SectionJobLocation from "../../sections/jobs/detail/section-job-location";
-import SectionOfficePhotos1 from "../../sections/common/section-office-photos1";
-import SectionOfficeVideo1 from "../../sections/common/section-office-video1";
 import SectionShareProfile from "../../sections/common/section-share-profile";
 import SectionJobsSidebar2 from "../../sections/jobs/sidebar/section-jobs-sidebar2";
 import "./job-detail.css";
+import "../../../../../performance-optimizations.css";
 
 function JobDetail1Page() {
     const { id, param1 } = useParams();
-    // Use 'id' if it exists, otherwise use 'param1' (for backward compatibility)
     const jobId = id || param1;
     const navigate = useNavigate();
     const [job, setJob] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
     const [hasApplied, setHasApplied] = useState(false);
     const [candidateId, setCandidateId] = useState(null);
     const [scrollProgress, setScrollProgress] = useState(0);
     const [candidateCredits, setCandidateCredits] = useState(0);
 
-    useEffect(() => {
+    const authState = useMemo(() => {
         const token = localStorage.getItem('candidateToken');
         const storedCandidateId = localStorage.getItem('candidateId');
-        setIsLoggedIn(!!token);
-        setCandidateId(storedCandidateId);
+        return { token, candidateId: storedCandidateId, isLoggedIn: !!token };
+    }, []);
+
+    const { limitReached, isEnded } = useMemo(() => {
+        if (!job) return { limitReached: false, isEnded: false };
+        const limitReached = typeof job.applicationLimit === 'number' && job.applicationLimit > 0 && (job.applicationCount || 0) >= job.applicationLimit;
+        const isEnded = (job.status && job.status !== 'active') || limitReached;
+        return { limitReached, isEnded };
+    }, [job]);
+
+    useEffect(() => {
+        setIsLoggedIn(authState.isLoggedIn);
+        setCandidateId(authState.candidateId);
         
-        if (token && storedCandidateId && jobId) {
-            checkApplicationStatus();
-            fetchCandidateCredits();
+        if (authState.token && authState.candidateId && jobId) {
+            Promise.all([
+                checkApplicationStatus(),
+                fetchCandidateCredits()
+            ]);
         }
-    }, [jobId]);
+    }, [jobId, authState.token, authState.candidateId]);
 
     const sidebarConfig = {
         showJobInfo: true
     }
 
-    useEffect(()=>{
+    const handleScroll = useCallback(() => {
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = Math.min((window.scrollY / totalHeight) * 100, 100);
+        setScrollProgress(progress);
+    }, []);
+
+    useEffect(() => {
         loadScript("js/custom.js");
         if (jobId) {
             fetchJobDetails();
         }
         
-        // Scroll progress tracking
-        const handleScroll = () => {
-            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = (window.scrollY / totalHeight) * 100;
-            setScrollProgress(progress);
+        let ticking = false;
+        const throttledScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    handleScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
         };
         
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [jobId]);
+        window.addEventListener('scroll', throttledScroll, { passive: true });
+        return () => window.removeEventListener('scroll', throttledScroll);
+    }, [jobId, handleScroll, fetchJobDetails]);
 
-    const checkApplicationStatus = async () => {
+    const checkApplicationStatus = useCallback(async () => {
         try {
             const token = localStorage.getItem('candidateToken');
-            const response = await fetch(`http://localhost:5000/api/candidate/applications`, {
+            const response = await fetch(`http://localhost:5000/api/candidate/applications/status/${jobId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
             if (data.success) {
-                const applied = data.applications.some(app => app.jobId._id === jobId);
-                setHasApplied(applied);
+                setHasApplied(data.hasApplied);
             }
         } catch (error) {
             console.error('Error checking application status:', error);
         }
-    };
+    }, [jobId]);
 
-    const fetchCandidateCredits = async () => {
+    const fetchCandidateCredits = useCallback(async () => {
         try {
             const token = localStorage.getItem('candidateToken');
-            const response = await fetch('http://localhost:5000/api/candidate/dashboard/stats', {
+            const response = await fetch('http://localhost:5000/api/candidate/credits', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
             if (data.success) {
-                setCandidateCredits(data.candidate.credits || 0);
+                setCandidateCredits(data.credits || 0);
             }
         } catch (error) {
             console.error('Error fetching candidate credits:', error);
         }
-    };
+    }, []);
 
-    const fetchJobDetails = async () => {
+    const fetchJobDetails = useCallback(async () => {
         try {
             const response = await fetch(`http://localhost:5000/api/public/jobs/${jobId}`);
             const data = await response.json();
@@ -101,7 +119,7 @@ function JobDetail1Page() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [jobId]);
 
     if (loading) {
         return (
@@ -120,9 +138,6 @@ function JobDetail1Page() {
             </div>
         );
     }
-
-    const limitReached = typeof job?.applicationLimit === 'number' && job.applicationLimit > 0 && (job?.applicationCount || 0) >= job.applicationLimit;
-    const isEnded = (job?.status && job.status !== 'active') || limitReached;
 
     const handleApplyClick = async () => {
         if (isEnded) return; // Guard
@@ -209,7 +224,12 @@ function JobDetail1Page() {
 												<div className="twm-job-self-top">
 													<div className="twm-media-bg">
 														{job.employerProfile?.coverImage ? (
-															<img src={job.employerProfile.coverImage.startsWith('data:') ? job.employerProfile.coverImage : `data:image/jpeg;base64,${job.employerProfile.coverImage}`} alt="Company Cover" />
+															<img 
+																src={job.employerProfile.coverImage.startsWith('data:') ? job.employerProfile.coverImage : `data:image/jpeg;base64,${job.employerProfile.coverImage}`} 
+																alt="Company Cover"
+																loading="lazy"
+																style={{objectFit: 'cover', width: '100%', height: 'auto'}}
+															/>
 														) : (
 															<JobZImage src="images/job-detail-bg.jpg" alt="#" />
 														)}
@@ -221,9 +241,13 @@ function JobDetail1Page() {
 													<div className="twm-mid-content">
 														<div className="twm-media">
 															{job.companyLogo ? (
-																<img src={job.companyLogo} alt="Company Logo" />
+																<img src={job.companyLogo} alt="Company Logo" loading="lazy" />
 															) : job.employerProfile?.logo ? (
-																<img src={job.employerProfile.logo.startsWith('data:') ? job.employerProfile.logo : `data:image/jpeg;base64,${job.employerProfile.logo}`} alt="Company Logo" />
+																<img 
+																	src={job.employerProfile.logo.startsWith('data:') ? job.employerProfile.logo : `data:image/jpeg;base64,${job.employerProfile.logo}`} 
+																	alt="Company Logo" 
+																	loading="lazy"
+																/>
 															) : (
 																<JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
 															)}
@@ -283,6 +307,7 @@ function JobDetail1Page() {
 																	src={job.employerProfile.logo.startsWith('data:') ? job.employerProfile.logo : `data:image/jpeg;base64,${job.employerProfile.logo}`} 
 																	alt="Consultant Logo" 
 																	style={{width: '80px', height: '80px', objectFit: 'contain', borderRadius: '8px'}}
+																	loading="lazy"
 																/>
 															)}
 														</div>
@@ -362,17 +387,7 @@ function JobDetail1Page() {
 										<SectionShareProfile />
 										{/* <SectionJobLocation /> */}
 
-										<div className="twm-two-part-section">
-											<div className="row">
-												<div className="col-lg-6 col-md-12">
-													{/* <SectionOfficePhotos1 /> */}
-												</div>
-												
-												<div className="col-lg-6 col-md-12">
-													{/* <SectionOfficeVideo1 /> */}
-												</div>
-											</div>
-										</div>
+
 									</div>
 								</div>
 								

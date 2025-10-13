@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import PlacementRoutes from "../routing/placement-routes";
 
 function PlacementLayout() {
-    const currentpath = useLocation().pathname;
+    // const currentpath = useLocation().pathname; // Unused variable
 
     return (
         <>

@@ -90,6 +90,15 @@ const jobSchema = new mongoose.Schema({
   timestamps: true
 });
 
-jobSchema.index({ title: 'text', description: 'text' });
+// Optimized compound indexes for faster queries
+jobSchema.index({ status: 1, createdAt: -1 }); // Most common sort
+jobSchema.index({ status: 1, employerId: 1, createdAt: -1 }); // Employer jobs
+jobSchema.index({ status: 1, category: 1, createdAt: -1 }); // Category filter
+jobSchema.index({ status: 1, location: 1, createdAt: -1 }); // Location filter
+jobSchema.index({ status: 1, jobType: 1, createdAt: -1 }); // Job type filter
+jobSchema.index({ status: 1, category: 1, location: 1, createdAt: -1 }); // Combined filters
+jobSchema.index({ title: 'text', description: 'text', requiredSkills: 'text' }); // Text search
+jobSchema.index({ 'ctc.min': 1, 'ctc.max': 1 }); // Salary sorting
+jobSchema.index({ employerId: 1 }); // Employer lookup
 
 module.exports = mongoose.model('Job', jobSchema);

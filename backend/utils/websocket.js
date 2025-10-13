@@ -5,7 +5,9 @@ let io;
 const initializeWebSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: process.env.NODE_ENV === 'production' 
+        ? ['https://taleglobal.cloud', 'https://www.taleglobal.cloud']
+        : "http://localhost:3000",
       methods: ["GET", "POST"]
     }
   });

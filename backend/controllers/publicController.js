@@ -4,141 +4,151 @@ const Contact = require('../models/Contact');
 const Testimonial = require('../models/Testimonial');
 const Partner = require('../models/Partner');
 const FAQ = require('../models/FAQ');
+const { cache } = require('../utils/cache');
 
 // Job Controllers
 exports.getJobs = async (req, res) => {
   try {
     const { location, jobType, category, search, title, employerId, employmentType, skills, keyword, jobTitle, page = 1, limit = 10, sortBy } = req.query;
     
-    let query = { status: { $in: ['active', 'pending'] } };
+    // Create cache key for this specific query
+    const cacheKey = `jobs_${JSON.stringify({ location, jobType, category, search, title, employerId, employmentType, skills, keyword, jobTitle, page, limit, sortBy })}`;
+    const cached = cache.get(cacheKey);
+    
+    if (cached) {
+      return res.json(cached);
+    }
+
+    // Optimized query building
+    let query = { 
+      status: { $in: ['active', 'pending'] },
+      'employerId': { $exists: true }
+    };
     
     if (employerId) query.employerId = employerId;
-    if (title) query.title = new RegExp(title, 'i');
-    if (location) query.location = new RegExp(location, 'i');
+    if (title) query.title = { $regex: title, $options: 'i' };
+    if (location) query.location = { $regex: location, $options: 'i' };
 
-    // Handle both jobType and employmentType (employmentType takes priority)
     if (employmentType) {
       query.jobType = employmentType;
     } else if (jobType) {
-      if (Array.isArray(jobType)) {
-        query.jobType = { $in: jobType };
-      } else {
-        query.jobType = jobType;
-      }
+      query.jobType = Array.isArray(jobType) ? { $in: jobType } : jobType;
     }
     
-    // Combine all search terms
-    const searchTerms = [];
-    if (search) searchTerms.push(search);
-    if (keyword) searchTerms.push(keyword);
-    if (jobTitle) searchTerms.push(jobTitle);
-    
+    const searchTerms = [search, keyword, jobTitle].filter(Boolean);
     if (searchTerms.length > 0) {
-      const orConditions = [];
-      searchTerms.forEach(term => {
-        orConditions.push(
-          { title: new RegExp(term, 'i') },
-          { description: new RegExp(term, 'i') },
-          { requiredSkills: { $in: [new RegExp(term, 'i')] } }
-        );
-      });
-      query.$or = orConditions;
+      const searchRegex = new RegExp(searchTerms.join('|'), 'i');
+      query.$or = [
+        { title: searchRegex },
+        { description: searchRegex },
+        { requiredSkills: { $in: [searchRegex] } }
+      ];
     }
-    if (category) {
-      query.category = new RegExp(category, 'i');
-    }
+    
+    if (category) query.category = { $regex: category, $options: 'i' };
     if (skills) {
       const skillsArray = Array.isArray(skills) ? skills : [skills];
       query.requiredSkills = { $in: skillsArray.map(skill => new RegExp(skill, 'i')) };
     }
 
-    // Determine sort criteria
-    let sortCriteria = { createdAt: -1 }; // Default: Most Recent
-    
-    if (sortBy) {
-      switch (sortBy) {
-        case 'Most Recent':
-          sortCriteria = { createdAt: -1 };
-          break;
-        case 'Oldest':
-          sortCriteria = { createdAt: 1 };
-          break;
-        case 'Salary High to Low':
-          sortCriteria = { 'salary.max': -1, 'salary.min': -1 };
-          break;
-        case 'Salary Low to High':
-          sortCriteria = { 'salary.min': 1, 'salary.max': 1 };
-          break;
-        case 'A-Z':
-          sortCriteria = { title: 1 };
-          break;
-        case 'Z-A':
-          sortCriteria = { title: -1 };
-          break;
-        default:
-          sortCriteria = { createdAt: -1 };
-      }
-    }
+    const sortMap = {
+      'Most Recent': { createdAt: -1 },
+      'Oldest': { createdAt: 1 },
+      'Salary High to Low': { 'ctc.max': -1, 'ctc.min': -1 },
+      'Salary Low to High': { 'ctc.min': 1, 'ctc.max': 1 },
+      'A-Z': { title: 1 },
+      'Z-A': { title: -1 }
+    };
+    const sortCriteria = sortMap[sortBy] || { createdAt: -1 };
 
-    console.log('Query for jobs:', JSON.stringify(query, null, 2));
+    // Single optimized aggregation pipeline
+    const pipeline = [
+      { $match: query },
+      {
+        $lookup: {
+          from: 'employers',
+          localField: 'employerId',
+          foreignField: '_id',
+          as: 'employer',
+          pipeline: [
+            { $match: { status: 'active', isApproved: true } },
+            { $project: { companyName: 1, employerType: 1 } }
+          ]
+        }
+      },
+      { $match: { 'employer.0': { $exists: true } } },
+      {
+        $lookup: {
+          from: 'employerprofiles',
+          localField: 'employerId',
+          foreignField: 'employerId',
+          as: 'employerProfile',
+          pipeline: [
+            { $project: { logo: 1, description: 1, website: 1, location: 1 } }
+          ]
+        }
+      },
+      {
+        $addFields: {
+          employerId: { $arrayElemAt: ['$employer', 0] },
+          employerProfile: { $arrayElemAt: ['$employerProfile', 0] },
+          postedBy: {
+            $cond: {
+              if: { $eq: [{ $arrayElemAt: ['$employer.employerType', 0] }, 'consultant'] },
+              then: 'Consultant',
+              else: 'Company'
+            }
+          }
+        }
+      },
+      {
+        $project: {
+          title: 1,
+          location: 1,
+          jobType: 1,
+          vacancies: 1,
+          category: 1,
+          ctc: 1,
+          createdAt: 1,
+          employerId: 1,
+          employerProfile: 1,
+          postedBy: 1,
+          companyName: 1
+        }
+      },
+      { $sort: sortCriteria },
+      {
+        $facet: {
+          jobs: [
+            { $skip: (parseInt(page) - 1) * parseInt(limit) },
+            { $limit: parseInt(limit) }
+          ],
+          totalCount: [{ $count: 'count' }]
+        }
+      }
+    ];
+
+    const [result] = await Job.aggregate(pipeline);
+    const jobs = result.jobs || [];
+    const totalJobs = result.totalCount[0]?.count || 0;
     
-    const jobs = await Job.find(query)
-      .select('title location jobType salary vacancies description requiredSkills status createdAt employerId companyName category ctc netSalary')
-      .populate({
-        path: 'employerId',
-        select: 'companyName status isApproved employerType',
-        match: { status: 'active', isApproved: true }
-      })
-      .sort(sortCriteria)
-      .limit(parseInt(limit))
-      .skip((parseInt(page) - 1) * parseInt(limit));
-    
-    console.log(`Found ${jobs.length} jobs before filtering`);
-    const approvedJobs = jobs.filter(job => job.employerId);
-    console.log(`Found ${approvedJobs.length} jobs after employer approval filtering`);
-    
-    if (employerId) {
-      console.log(`Found ${approvedJobs.length} jobs for employer ${employerId}`);
-      console.log('Jobs for employer:', approvedJobs.map(job => ({ 
-        title: job.title, 
-        employerId: job.employerId?._id,
-        status: job.status 
-      })));
-    }
-    
-    if (category) {
-      console.log(`Found ${approvedJobs.length} jobs after category filter for '${category}'`);
-      console.log('Job categories:', approvedJobs.map(job => ({ title: job.title, category: job.category })));
-    } 
-    
-    const EmployerProfile = require('../models/EmployerProfile');
-    const jobsWithProfiles = await Promise.all(
-      approvedJobs.map(async (job) => {
-        const employerProfile = await EmployerProfile.findOne({ employerId: job.employerId._id });
-        return {
-          ...job.toObject(),
-          employerProfile: employerProfile,
-          postedBy: job.employerId.employerType === 'consultant' ? 'Consultant' : 'Company'
-        };
-      })
-    );
-    
-    // Get total count for pagination
-    const totalJobs = await Job.countDocuments(query);
-    
-    res.json({
+    const response = {
       success: true,
-      jobs: jobsWithProfiles,
-      total: jobsWithProfiles.length,
+      jobs,
+      total: jobs.length,
       totalCount: totalJobs,
       currentPage: parseInt(page),
       totalPages: Math.ceil(totalJobs / parseInt(limit)),
       hasNextPage: parseInt(page) < Math.ceil(totalJobs / parseInt(limit)),
       hasPrevPage: parseInt(page) > 1
-    });
+    };
+    
+    // Cache for 5 minutes
+    cache.set(cacheKey, response, 300000);
+    
+    res.json(response);
   } catch (error) {
     console.error('Error in getJobs:', error);
-    // Return empty jobs array when DB is unavailable
     res.json({ success: true, jobs: [], total: 0 });
   }
 };
@@ -169,25 +179,37 @@ exports.getJobsByCategory = async (req, res) => {
 
 exports.getJobById = async (req, res) => {
   try {
+    const cacheKey = `job_${req.params.id}`;
+    const cached = cache.get(cacheKey);
+    
+    if (cached) {
+      return res.json(cached);
+    }
+
     const job = await Job.findById(req.params.id)
-      .populate('employerId', 'companyName email phone employerType');
+      .populate({
+        path: 'employerId',
+        select: 'companyName email phone employerType'
+      })
+      .lean();
     
     if (!job) {
       return res.status(404).json({ success: false, message: 'Job not found' });
     }
 
-    // Get employer profile for logo and cover image
     const EmployerProfile = require('../models/EmployerProfile');
-    const employerProfile = await EmployerProfile.findOne({ employerId: job.employerId._id });
+    const employerProfile = await EmployerProfile.findOne({ employerId: job.employerId._id }).lean();
     
-    // Add profile data to job object
     const jobWithProfile = {
-      ...job.toObject(),
-      employerProfile: employerProfile,
+      ...job,
+      employerProfile,
       postedBy: job.employerId.employerType === 'consultant' ? 'Consultant' : 'Company'
     };
 
-    res.json({ success: true, job: jobWithProfile });
+    const response = { success: true, job: jobWithProfile };
+    cache.set(cacheKey, response, 600000); // Cache for 10 minutes
+    
+    res.json(response);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -380,11 +402,94 @@ exports.getEmployerProfile = async (req, res) => {
 
 exports.getEmployers = async (req, res) => {
   try {
-    const Employer = require('../models/Employer');
-    const employers = await Employer.find({ status: 'active', isApproved: true }).select('-password');
+    const { page = 1, limit = 10, sortBy } = req.query;
     
-    res.json({ success: true, employers });
+    const cacheKey = `employers_${JSON.stringify({ page, limit, sortBy })}`;
+    const cached = cache.get(cacheKey);
+    
+    if (cached) {
+      return res.json(cached);
+    }
+
+    const Employer = require('../models/Employer');
+    const EmployerProfile = require('../models/EmployerProfile');
+    
+    const sortMap = {
+      'Most Recent': { createdAt: -1 },
+      'Oldest': { createdAt: 1 },
+      'A-Z': { companyName: 1 },
+      'Z-A': { companyName: -1 }
+    };
+    const sortCriteria = sortMap[sortBy] || { createdAt: -1 };
+
+    const pipeline = [
+      { $match: { status: 'active', isApproved: true } },
+      {
+        $lookup: {
+          from: 'employerprofiles',
+          localField: '_id',
+          foreignField: 'employerId',
+          as: 'profile',
+          pipeline: [
+            { $project: { logo: 1, corporateAddress: 1, website: 1, description: 1, industry: 1 } }
+          ]
+        }
+      },
+      {
+        $lookup: {
+          from: 'jobs',
+          localField: '_id',
+          foreignField: 'employerId',
+          as: 'jobs',
+          pipeline: [
+            { $match: { status: { $in: ['active', 'pending'] } } },
+            { $count: 'count' }
+          ]
+        }
+      },
+      {
+        $addFields: {
+          profile: { $arrayElemAt: ['$profile', 0] },
+          jobCount: { $ifNull: [{ $arrayElemAt: ['$jobs.count', 0] }, 0] }
+        }
+      },
+      {
+        $project: {
+          password: 0,
+          jobs: 0
+        }
+      },
+      { $sort: sortCriteria },
+      {
+        $facet: {
+          employers: [
+            { $skip: (parseInt(page) - 1) * parseInt(limit) },
+            { $limit: parseInt(limit) }
+          ],
+          totalCount: [{ $count: 'count' }]
+        }
+      }
+    ];
+
+    const [result] = await Employer.aggregate(pipeline);
+    const employers = result.employers || [];
+    const totalEmployers = result.totalCount[0]?.count || 0;
+    
+    const response = {
+      success: true,
+      employers,
+      total: employers.length,
+      totalCount: totalEmployers,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalEmployers / parseInt(limit)),
+      hasNextPage: parseInt(page) < Math.ceil(totalEmployers / parseInt(limit)),
+      hasPrevPage: parseInt(page) > 1
+    };
+    
+    cache.set(cacheKey, response, 300000);
+    res.json(response);
   } catch (error) {
+    console.error('Error in getEmployers:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

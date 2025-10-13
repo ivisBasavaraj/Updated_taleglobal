@@ -27,4 +27,11 @@ employerSchema.methods.comparePassword = async function(password) {
   return await bcrypt.compare(password, this.password);
 };
 
+// Optimized indexes for employer queries
+employerSchema.index({ status: 1, isApproved: 1, createdAt: -1 });
+employerSchema.index({ email: 1 });
+employerSchema.index({ companyName: 1 });
+employerSchema.index({ employerType: 1 });
+employerSchema.index({ companyName: 'text' });
+
 module.exports = mongoose.model('Employer', employerSchema);

@@ -1,0 +1,138 @@
+/* Job Grid Performance Optimizations */
+
+/* Skeleton Loading Styles */
+.job-card-skeleton {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
+}
+
+.skeleton-logo {
+  width: 60px;
+  height: 60px;
+  background: #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.skeleton-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-line {
+  height: 16px;
+  background: #e9ecef;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.skeleton-line.short {
+  width: 60%;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Job Card Optimizations */
+.job-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform;
+}
+
+.job-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Image Loading Optimization */
+.twm-media img {
+  object-fit: contain;
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+}
+
+/* Apply Button Optimization */
+.apply-now-button {
+  background: #1967d2;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.apply-now-button:hover {
+  background: #1557b0;
+  color: white;
+}
+
+/* Performance optimizations */
+.job-grid-page {
+  contain: layout style paint;
+}
+
+.twm-jobs-grid-style1 {
+  contain: layout style;
+}
+
+/* Reduce layout thrashing */
+.twm-job-title h4 {
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.twm-job-address {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Optimize text rendering */
+.twm-jobs-amount {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Loading state improvements */
+.loading-overlay {
+  position: relative;
+}
+
+.loading-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* Responsive optimizations */
+@media (max-width: 768px) {
+  .job-card {
+    margin-bottom: 16px;
+  }
+  
+  .skeleton-logo {
+    width: 50px;
+    height: 50px;
+  }
+}

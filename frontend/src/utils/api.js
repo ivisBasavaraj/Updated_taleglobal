@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 // Helper function to get auth headers
 const getAuthHeaders = (userType = 'candidate') => {
@@ -7,6 +7,23 @@ const getAuthHeaders = (userType = 'candidate') => {
     'Content-Type': 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
+};
+
+// Helper function to handle API responses
+const handleApiResponse = async (response) => {
+  if (!response.ok) {
+    if (response.status === 401) {
+      // Token expired or invalid - redirect to login
+      const currentPath = window.location.pathname;
+      if (!currentPath.includes('/login')) {
+        localStorage.clear();
+        window.location.href = '/login';
+      }
+    }
+    const errorData = await response.json().catch(() => ({ message: 'Network error' }));
+    throw new Error(`HTTP ${response.status}: ${errorData.message || 'Request failed'}`);
+  }
+  return response.json();
 };
 
 export const api = {
@@ -299,7 +316,7 @@ export const api = {
     const queryString = new URLSearchParams(params).toString();
     return fetch(`${API_BASE_URL}/admin/placements?${queryString}`, {
       headers: getAuthHeaders('admin'),
-    }).then((res) => res.json());
+    }).then(handleApiResponse);
   },
 
   updatePlacementStatus: (placementId, status) => {

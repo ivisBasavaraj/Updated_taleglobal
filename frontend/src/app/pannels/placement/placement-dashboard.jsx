@@ -33,7 +33,8 @@ function PlacementDashboard() {
             const token = localStorage.getItem('placementToken');
             if (!token) return;
             
-            const profileResponse = await fetch('http://localhost:5000/api/placement/profile', {
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+            const profileResponse = await fetch(`${API_BASE_URL}/placement/profile`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             
@@ -76,7 +77,8 @@ function PlacementDashboard() {
     const saveDashboardData = async (dashboardData) => {
         try {
             const token = localStorage.getItem('placementToken');
-            await fetch('http://localhost:5000/api/placement/save-dashboard-state', {
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+        await fetch(`${API_BASE_URL}/placement/save-dashboard-state`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -91,7 +93,8 @@ function PlacementDashboard() {
 
     const fetchStudentData = async (placementId) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/admin/placements/${placementId}/data`, {
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+            const response = await fetch(`${API_BASE_URL}/admin/placements/${placementId}/data`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
             });
             
@@ -133,7 +136,8 @@ function PlacementDashboard() {
         
         try {
             setProcessingFiles(prev => ({...prev, [fileId]: 'approving'}));
-            const response = await fetch(`http://localhost:5000/api/admin/placements/${placementId}/files/${fileId}/approve`, {
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+            const response = await fetch(`${API_BASE_URL}/admin/placements/${placementId}/files/${fileId}/approve`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
@@ -163,7 +167,8 @@ function PlacementDashboard() {
         
         try {
             setProcessingFiles(prev => ({...prev, [fileId]: 'rejecting'}));
-            const response = await fetch(`http://localhost:5000/api/admin/placements/${placementId}/files/${fileId}/reject`, {
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+            const response = await fetch(`${API_BASE_URL}/admin/placements/${placementId}/files/${fileId}/reject`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
@@ -186,7 +191,8 @@ function PlacementDashboard() {
 
     const handleViewFile = async (fileId, fileName) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/placement/files/${fileId}/view`, {
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+            const response = await fetch(`${API_BASE_URL}/placement/files/${fileId}/view`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('placementToken')}` }
             });
             
@@ -235,7 +241,8 @@ function PlacementDashboard() {
                 formData.append('customFileName', customName.trim());
             }
 
-            const response = await fetch('http://localhost:5000/api/placement/upload-student-data', {
+            const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+            const response = await fetch(`${API_BASE_URL}/placement/upload-student-data`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('placementToken')}` },
                 body: formData
@@ -295,7 +302,8 @@ function PlacementDashboard() {
                 const base64Logo = event.target.result;
                 const token = localStorage.getItem('placementToken');
                 
-                const response = await fetch('http://localhost:5000/api/placement/upload-logo', {
+                const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+                const response = await fetch(`${API_BASE_URL}/placement/upload-logo`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,

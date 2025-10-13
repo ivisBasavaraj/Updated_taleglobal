@@ -4,6 +4,10 @@ const router = express.Router();
 const publicController = require('../controllers/publicController');
 const handleValidationErrors = require('../middlewares/validation');
 const { upload } = require('../middlewares/upload');
+const performanceMiddleware = require('../middlewares/performance');
+
+// Apply performance monitoring to all routes
+router.use(performanceMiddleware);
 
 // Job Routes
 router.get('/jobs', publicController.getJobs);

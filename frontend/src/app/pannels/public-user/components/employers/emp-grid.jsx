@@ -1,168 +1,215 @@
+import { useEffect, useState, useMemo, useCallback, memo } from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 import JobZImage from "../../../../common/jobz-img";
 import SectionJobsSidebar1 from "../../sections/jobs/sidebar/section-jobs-sidebar1";
 import SectionRecordsFilter from "../../sections/common/section-records-filter";
-import { Container, Row, Col } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
-import { publicUser } from "../../../../../globals/route-names";
 import SectionPagination from "../../sections/common/section-pagination";
-import { useEffect, useState } from "react";
 import { loadScript } from "../../../../../globals/constants";
-import api from "../../../../../utils/api";
+import { requestCache } from "../../../../../utils/requestCache";
+import "../../../../../job-grid-optimizations.css";
+import "../../../../../emp-grid-optimizations.css";
 
-function EmployersGridPage() {
+const EmployersGridPage = memo(() => {
     const [employers, setEmployers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [totalEmployers, setTotalEmployers] = useState(0);
     const [sortBy, setSortBy] = useState("Most Recent");
     const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-    const _filterConfig = {
+    const _filterConfig = useMemo(() => ({
         prefix: "Showing",
         type: "employers",
-        total: employers.length.toString(),
+        total: totalEmployers.toString(),
         showRange: false,
         showingUpto: ""
-    };
+    }), [totalEmployers]);
+
+    const handleSortChange = useCallback((value) => {
+        setSortBy(value);
+    }, []);
+
+    const handleItemsPerPageChange = useCallback((value) => {
+        setItemsPerPage(value);
+    }, []);
 
     useEffect(() => {
         loadScript("js/custom.js");
-        fetchEmployers();
-    }, [sortBy, itemsPerPage]);
+    }, []);
 
-    const handleSortChange = (value) => {
-        setSortBy(value);
-    };
-
-    const handleItemsPerPageChange = (value) => {
-        setItemsPerPage(value);
-    };
-
-    const fetchEmployers = async () => {
+    const fetchEmployers = useCallback(async () => {
+        setLoading(true);
         try {
-            const params = new URLSearchParams();
-            if (sortBy !== undefined && sortBy !== null) {
-                params.append('sortBy', sortBy);
-            }
-            if (itemsPerPage) {
-                params.append('limit', itemsPerPage.toString());
-            }
+            const params = new URLSearchParams({
+                sortBy,
+                limit: itemsPerPage.toString(),
+                page: '1'
+            });
 
             const url = `http://localhost:5000/api/public/employers?${params.toString()}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data.success) {
-                let employerList = data.employers || data.data || [];
-
-                // Frontend filtering fallback if backend doesn't support sortBy
-                if (sortBy && sortBy !== 'Most Recent') {
-                    employerList = employerList.filter(employer => {
-                        const employerType = employer.industry || employer.category || employer.companyType || '';
-                        return employerType.toLowerCase().includes(sortBy.toLowerCase());
-                    });
-                    console.log(`Filtered ${employerList.length} employers for type: ${sortBy}`);
+            const data = await requestCache.get(url, {
+                ttl: 300000,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 }
-
-                // Get profiles and job counts for each employer
-                const employersWithData = await Promise.all(
-                    employerList.map(async (employer) => {
-                        // Get employer profile
-                        const profileResponse = await fetch(`http://localhost:5000/api/public/employers/${employer._id}`);
-                        const profileData = await profileResponse.json();
-                        
-                        // Get job count
-                        const jobsResponse = await fetch(`http://localhost:5000/api/public/jobs?employerId=${employer._id}`);
-                        const jobsData = await jobsResponse.json();
-                        
-                        return {
-                            ...employer,
-                            profile: profileData.success ? profileData.profile : null,
-                            jobCount: jobsData.success ? jobsData.jobs.length : 0
-                        };
-                    })
-                );
-                setEmployers(employersWithData);
+            });
+            
+            if (data.success) {
+                setEmployers(data.employers || []);
+                setTotalEmployers(data.totalCount || data.employers?.length || 0);
+            } else {
+                setEmployers([]);
+                setTotalEmployers(0);
             }
         } catch (error) {
             console.error('Error fetching employers:', error);
+            setEmployers([]);
+            setTotalEmployers(0);
         } finally {
             setLoading(false);
+            setIsFirstLoad(false);
         }
-    };
+    }, [sortBy, itemsPerPage]);
 
-    if (loading) {
-        return <div className="text-center p-5">Loading employers...</div>;
-    }
+    useEffect(() => {
+        fetchEmployers();
+    }, [fetchEmployers]);
+
+    const EmployerCard = memo(({ employer }) => {
+        const handleViewClick = useCallback(() => {
+            window.location.href = `/emp-detail/${employer._id}`;
+        }, [employer._id]);
+
+        const companyTypeClass = useMemo(() => {
+            const typeMap = {
+                'IT': 'green',
+                'Healthcare': 'brown', 
+                'Finance': 'purple',
+                'Education': 'sky'
+            };
+            return typeMap[employer.profile?.industry] || 'golden';
+        }, [employer.profile?.industry]);
+
+        return (
+            <Col key={employer._id} lg={6} md={12} className="mb-4">
+                <div className="twm-jobs-grid-style1 hover-card job-card">
+                    <div className="twm-media">
+                        {employer.profile?.logo ? (
+                            <img 
+                                src={employer.profile.logo} 
+                                alt="Company Logo" 
+                                loading="lazy"
+                            />
+                        ) : (
+                            <JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
+                        )}
+                    </div>
+
+                    <div className="twm-jobs-category green">
+                        <span className={`twm-bg-${companyTypeClass}`}>
+                            {employer.profile?.industry || 'Company'}
+                        </span>
+                    </div>
+
+                    <div className="twm-mid-content">
+                        <NavLink to={`/emp-detail/${employer._id}`} className="twm-job-title">
+                            <h4>{employer.companyName}</h4>
+                        </NavLink>
+                        <div className="twm-job-address">
+                            <i className="feather-map-pin" />
+                            &nbsp;{employer.profile?.corporateAddress || 'Location not specified'}
+                        </div>
+                    </div>
+
+                    <div className="twm-right-content twm-job-right-group">
+                        <div className="twm-salary-and-apply mb-2">
+                            <div className="twm-jobs-amount">
+                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#1967d2', marginBottom: '4px' }}>
+                                    Active Jobs: {employer.jobCount || 0}
+                                </div>
+                            </div>
+                            {employer.profile?.website && (
+                                <span className="vacancy-text">
+                                    <a href={employer.profile.website} target="_blank" rel="noopener noreferrer" className="site-text-primary">
+                                        Visit Website
+                                    </a>
+                                </span>
+                            )}
+                        </div>
+                        <div className="d-flex align-items-center justify-content-between">
+                            <h6 className="twm-job-address posted-by-company mb-0">
+                                {employer.profile?.companySize ? `${employer.profile.companySize} employees` : 'Company'}
+                            </h6>
+                            <button 
+                                className="btn btn-sm apply-now-button"
+                                onClick={handleViewClick}
+                            >
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </Col>
+        );
+    });
+
+    const skeletonCards = useMemo(() => 
+        [...Array(4)].map((_, idx) => (
+            <Col key={`skeleton-${idx}`} lg={6} md={12} className="mb-4">
+                <div className="twm-jobs-grid-style1 job-card-skeleton">
+                    <div className="skeleton-logo" />
+                    <div className="skeleton-lines">
+                        <div className="skeleton-line short" />
+                        <div className="skeleton-line" />
+                        <div className="skeleton-line" />
+                    </div>
+                </div>
+            </Col>
+        )), []
+    );
 
     return (
-        <>
-            <div className="section-full py-5 site-bg-white" data-aos="fade-up">
-                <Container>
-                    <Row className="mb-4">
-                        <Col lg={4} md={12} className="rightSidebar" data-aos="fade-right" data-aos-delay="100">
-                            <SectionJobsSidebar1 />
-                        </Col>
+        <div className="section-full py-5 site-bg-white emp-grid-page">
+            <Container>
+                <Row className="mb-4">
+                    <Col lg={4} md={12} className="rightSidebar">
+                        <SectionJobsSidebar1 />
+                    </Col>
 
-                        <Col lg={8} md={12} data-aos="fade-left" data-aos-delay="200">
-                            <div className="mb-4">
-                                <SectionRecordsFilter
-                                    _config={_filterConfig}
-                                    onSortChange={handleSortChange}
-                                    onItemsPerPageChange={handleItemsPerPageChange}
-                                />
-                            </div>
+                    <Col lg={8} md={12}>
+                        <div className="mb-4">
+                            <SectionRecordsFilter
+                                _config={_filterConfig}
+                                onSortChange={handleSortChange}
+                                onItemsPerPageChange={handleItemsPerPageChange}
+                            />
+                        </div>
 
-                            <div className="twm-employer-list-wrap">
-                                <Row>
-                                    {employers.length > 0 ? employers.map((employer, index) => (
-                                        <Col key={employer._id} lg={6} md={6} className="mb-4" data-aos="fade-up" data-aos-delay={index * 100}>
-                                            <div className="twm-employer-grid-style1 hover-card">
-                                                <div className="twm-media">
-                                                    {employer.profile?.logo ? (
-                                                        <img src={employer.profile.logo} alt="Company Logo" />
-                                                    ) : (
-                                                        <JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
-                                                    )}
-                                                </div>
-                                                <div className="twm-mid-content">
-                                                    <NavLink
-                                                        to={`/emp-detail/${employer._id}`}
-                                                        className="twm-job-title"
-                                                    >
-                                                        <h4>{employer.companyName}</h4>
-                                                    </NavLink>
-                                                    <div className="twm-job-address">
-                                                        <i className="feather-map-pin" />
-                                                        &nbsp; {employer.profile?.corporateAddress || 'Location not specified'}
-                                                    </div>
-                                                    <NavLink
-                                                        to={`/emp-detail/${employer._id}`}
-                                                        className="twm-job-websites site-text-primary"
-                                                    >
-                                                        {employer.profile?.website || employer.email}
-                                                    </NavLink>
-                                                </div>
-                                                <div className="twm-right-content">
-                                                    <div className="twm-jobs-vacancies">
-                                                        <span>{employer.jobCount || 0}</span>Vacancies
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Col>
-                                    )) : (
-                                        <Col xs={12} className="text-center py-5" data-aos="fade-up">
+                        <div className="twm-employer-list-wrap">
+                            <Row>
+                                {loading && isFirstLoad && skeletonCards}
+
+                                {!loading && employers.length > 0 ? 
+                                    employers.map((employer, index) => (
+                                        <EmployerCard key={employer._id} employer={employer} index={index} />
+                                    )) : !loading && (
+                                        <Col xs={12} className="text-center py-5">
                                             <h5>No employers found</h5>
                                             <p>Please check back later for new companies.</p>
                                         </Col>
-                                    )}
-                                </Row>
-                            </div>
+                                    )
+                                }
+                            </Row>
+                        </div>
 
-                            <SectionPagination />
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
-        </>
+                        <SectionPagination />
+                    </Col>
+                </Row>
+            </Container>
+        </div>
     );
-}
+});
 
 export default EmployersGridPage;

@@ -1,11 +1,12 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import { loadScript } from "../../../../../globals/constants";
 import SectionRecordsFilter from "../../sections/common/section-records-filter";
 import SectionJobsGrid from "../../sections/jobs/section-jobs-grid";
 import SectionJobsSidebar1 from "../../sections/jobs/sidebar/section-jobs-sidebar1";
+import "../../../../../job-grid-optimizations.css";
 
 function JobsGridPage() {
     const [searchParams] = useSearchParams();
@@ -14,7 +15,7 @@ function JobsGridPage() {
     const [sortBy, setSortBy] = useState("Most Recent");
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
-    useEffect(() => {
+    const memoizedFilters = useMemo(() => {
         const category = searchParams.get('category');
         const location = searchParams.get('location');
         const search = searchParams.get('search');
@@ -25,83 +26,56 @@ function JobsGridPage() {
                                  jobType === 'Full Time' && 
                                  location === 'Bangalore';
         
-        const newFilters = {};
+        const newFilters = {
+            sortBy,
+            itemsPerPage
+        };
         
         if (isSpecificPattern) {
-            // Override with IT category for the specific URL pattern
             newFilters.category = 'IT';
         } else {
-            // Use original URL parameters
             if (category) newFilters.category = category;
             if (location) newFilters.location = location;
             if (search) newFilters.search = search;
             if (jobType) {
-                // Convert "Full Time" to "full-time" format
-                const normalizedJobType = jobType.toLowerCase().replace(/\s+/g, '-');
-                newFilters.jobType = normalizedJobType;
+                newFilters.jobType = jobType.toLowerCase().replace(/\s+/g, '-');
             }
         }
         
-        // Add sort and pagination parameters
-        newFilters.sortBy = sortBy;
-        newFilters.itemsPerPage = itemsPerPage;
-        
-        setFilters(newFilters);
+        return newFilters;
     }, [searchParams, sortBy, itemsPerPage]);
 
-    const _filterConfig = {
+    useEffect(() => {
+        setFilters(memoizedFilters);
+    }, [memoizedFilters]);
+
+    const _filterConfig = useMemo(() => ({
         prefix: "Showing",
         type: "jobs",
         total: totalJobs.toString(),
         showRange: false,
         showingUpto: ""
-    }
+    }), [totalJobs]);
 
-    useEffect(()=>{
+    useEffect(() => {
         loadScript("js/custom.js");
-    })
+    }, []);
 
-    const handleFilterChange = (newFilters) => {
-        const category = searchParams.get('category');
-        const location = searchParams.get('location');
-        const search = searchParams.get('search');
-        const jobType = searchParams.get('jobType');
-        
-        // Check if this is the specific URL pattern that should show IT category jobs
-        const isSpecificPattern = search === 'Software Developer' && 
-                                 jobType === 'Full Time' && 
-                                 location === 'Bangalore';
-        
-        const updatedFilters = { ...newFilters };
-        
-        if (isSpecificPattern) {
-            // Override with IT category for the specific URL pattern
-            updatedFilters.category = 'IT';
-        } else {
-            // Use original URL parameters
-            if (category) updatedFilters.category = category;
-            if (location) updatedFilters.location = location;
-            if (search) updatedFilters.search = search;
-            if (jobType) {
-                const normalizedJobType = jobType.toLowerCase().replace(/\s+/g, '-');
-                updatedFilters.jobType = normalizedJobType;
-            }
-        }
-        
-        // Add sort and pagination parameters
-        updatedFilters.sortBy = sortBy;
-        updatedFilters.itemsPerPage = itemsPerPage;
-        
-        setFilters(updatedFilters);
-    };
+    const handleFilterChange = useCallback((newFilters) => {
+        setFilters(prevFilters => ({ ...prevFilters, ...newFilters }));
+    }, []);
 
-    const handleSortChange = (value) => {
+    const handleSortChange = useCallback((value) => {
         setSortBy(value);
-    };
+    }, []);
 
-    const handleItemsPerPageChange = (value) => {
+    const handleItemsPerPageChange = useCallback((value) => {
         setItemsPerPage(value);
-    };
+    }, []);
+
+    const handleTotalChange = useCallback((total) => {
+        setTotalJobs(total);
+    }, []);
 
     return (
         <>
@@ -121,7 +95,7 @@ function JobsGridPage() {
                                     onItemsPerPageChange={handleItemsPerPageChange}
                                 />
                             </div>
-                            <SectionJobsGrid filters={filters} onTotalChange={setTotalJobs} />
+                            <SectionJobsGrid filters={filters} onTotalChange={handleTotalChange} />
                         </Col>
                     </Row>
                 </Container>

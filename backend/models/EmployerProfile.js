@@ -76,4 +76,10 @@ const employerProfileSchema = new mongoose.Schema({
   timestamps: true
 });
 
+// Optimized indexes for employer profile queries
+employerProfileSchema.index({ employerId: 1 });
+employerProfileSchema.index({ companyName: 1 });
+employerProfileSchema.index({ industry: 1 });
+employerProfileSchema.index({ location: 1 });
+
 module.exports = mongoose.model('EmployerProfile', employerProfileSchema);
