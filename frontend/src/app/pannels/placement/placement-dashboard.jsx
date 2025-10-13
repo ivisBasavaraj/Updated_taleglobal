@@ -19,15 +19,10 @@ function PlacementDashboard() {
     const [pendingFile, setPendingFile] = useState(null);
 
     useEffect(() => {
-        fetchPlacementDetails();
-        
-        // Auto-refresh every 30 seconds to check for status updates
-        const interval = setInterval(() => {
+        if (!authLoading && isAuthenticated() && userType === 'placement') {
             fetchPlacementDetails();
-        }, 30000);
-        
-        return () => clearInterval(interval);
-    }, []);
+        }
+    }, [authLoading, userType, isAuthenticated]);
 
     const fetchPlacementDetails = async () => {
         try {
@@ -320,7 +315,7 @@ function PlacementDashboard() {
         reader.readAsDataURL(file);
     };
 
-    if (loading) {
+    if (loading || authLoading) {
         return (
             <div className="container-fluid p-4" style={{background: '#f8f9fa', minHeight: '100vh'}}>
                 <div className="text-center py-5">
@@ -331,7 +326,7 @@ function PlacementDashboard() {
         );
     }
 
-    if (!placementData) {
+    if (!authLoading && (!isAuthenticated() || userType !== 'placement')) {
         return (
             <div className="container-fluid p-4" style={{background: '#f8f9fa', minHeight: '100vh'}}>
                 <div className="modern-card p-5 text-center">
