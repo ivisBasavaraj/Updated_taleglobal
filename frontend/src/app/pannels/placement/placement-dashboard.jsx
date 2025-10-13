@@ -4,7 +4,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import './placement-dashboard.css';
 
 function PlacementDashboard() {
-    const { user, userType, isAuthenticated } = useAuth();
+    const { user, userType, isAuthenticated, loading: authLoading } = useAuth();
     const [placementData, setPlacementData] = useState(null);
     const [studentData, setStudentData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -32,6 +32,10 @@ function PlacementDashboard() {
     const fetchPlacementDetails = async () => {
         try {
             setLoading(true);
+            
+            if (authLoading) {
+                return; // Wait for auth to load
+            }
             
             if (!isAuthenticated() || userType !== 'placement') {
                 console.error('Not authenticated as placement officer');
