@@ -48,28 +48,17 @@ function PlacementDashboard() {
             
             if (!userEmail) return;
             
-            const allPlacementsResponse = await api.getAllPlacements();
-            if (!allPlacementsResponse.success) return;
+            // Use profile data directly
+            setPlacementData(profileData.placement);
+            setPlacementId(profileData.placement._id);
+            fetchStudentData(profileData.placement._id);
             
-            const userPlacement = allPlacementsResponse.data.find(placement => 
-                placement.email === userEmail
-            );
-            
-            if (!userPlacement) return;
-            
-            const response = await api.getPlacementDetails(userPlacement._id);
-            if (response.success) {
-                setPlacementData(response.placement);
-                setPlacementId(userPlacement._id);
-                fetchStudentData(userPlacement._id);
-                
-                // Save dashboard data to database
-                saveDashboardData({
-                    placementData: response.placement,
-                    studentCount: studentData.length,
-                    timestamp: new Date().toISOString()
-                });
-            }
+            // Save dashboard data to database
+            saveDashboardData({
+                placementData: profileData.placement,
+                studentCount: studentData.length,
+                timestamp: new Date().toISOString()
+            });
         } catch (error) {
             console.error('Error fetching placement details:', error);
         } finally {
