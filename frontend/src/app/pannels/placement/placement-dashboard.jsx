@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../../utils/api';
+import { useAuth } from '../../../contexts/AuthContext';
 import './placement-dashboard.css';
 
 function PlacementDashboard() {
+    const { user, userType, isAuthenticated } = useAuth();
     const [placementData, setPlacementData] = useState(null);
     const [studentData, setStudentData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,8 +32,11 @@ function PlacementDashboard() {
     const fetchPlacementDetails = async () => {
         try {
             setLoading(true);
-            const token = localStorage.getItem('placementToken');
-            if (!token) return;
+            
+            if (!isAuthenticated() || userType !== 'placement') {
+                console.error('Not authenticated as placement officer');
+                return;
+            }
             
             const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
             const profileResponse = await fetch(`${API_BASE_URL}/placement/profile`, {
