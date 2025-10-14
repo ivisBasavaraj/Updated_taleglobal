@@ -218,4 +218,14 @@ router.put('/password/change', [
   body('newPassword').isLength({ min: 6 }).withMessage('New password must be at least 6 characters')
 ], handleValidationErrors, candidateController.changePassword);
 
+// Education Management Routes
+router.post('/education', upload.single('marksheet'), [
+  body('schoolName').notEmpty().withMessage('School name is required'),
+  body('location').notEmpty().withMessage('Location is required'),
+  body('passoutYear').notEmpty().withMessage('Passout year is required'),
+  body('percentage').notEmpty().withMessage('Percentage is required')
+], handleValidationErrors, candidateController.addEducation);
+
+router.delete('/education/:educationId', candidateController.deleteEducation);
+
 module.exports = router;

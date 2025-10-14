@@ -813,3 +813,61 @@ exports.getRecommendedJobs = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Education Management Controllers
+exports.addEducation = async (req, res) => {
+  try {
+    const { schoolName, location, passoutYear, percentage, cgpa, sgpa, grade } = req.body;
+    
+    if (!schoolName || !location || !passoutYear || !percentage) {
+      return res.status(400).json({ success: false, message: 'All required fields must be provided' });
+    }
+
+    let marksheetBase64 = null;
+    if (req.file) {
+      const { fileToBase64 } = require('../middlewares/upload');
+      marksheetBase64 = fileToBase64(req.file);
+    }
+
+    const educationData = {
+      degreeName: schoolName,
+      collegeName: location,
+      passYear: passoutYear,
+      percentage,
+      cgpa,
+      sgpa,
+      grade,
+      marksheet: marksheetBase64
+    };
+
+    const profile = await CandidateProfile.findOneAndUpdate(
+      { candidateId: req.user._id },
+      { $push: { education: educationData } },
+      { new: true, upsert: true }
+    );
+
+    res.json({ success: true, education: educationData, profile });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.deleteEducation = async (req, res) => {
+  try {
+    const { educationId } = req.params;
+
+    const profile = await CandidateProfile.findOneAndUpdate(
+      { candidateId: req.user._id },
+      { $pull: { education: { _id: educationId } } },
+      { new: true }
+    );
+
+    if (!profile) {
+      return res.status(404).json({ success: false, message: 'Profile not found' });
+    }
+
+    res.json({ success: true, profile });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

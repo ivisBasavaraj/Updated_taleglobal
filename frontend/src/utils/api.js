@@ -145,6 +145,25 @@ export const api = {
     }).then((res) => res.json());
   },
 
+  // Education APIs
+  addEducation: (formData) => {
+    const token = localStorage.getItem('candidateToken');
+    return fetch(`${API_BASE_URL}/candidate/education`, {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: formData,
+    }).then((res) => res.json());
+  },
+
+  deleteEducation: (educationId) => {
+    return fetch(`${API_BASE_URL}/candidate/education/${educationId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders('candidate'),
+    }).then((res) => res.json());
+  },
+
   // Employer APIs
   employerRegister: (data) => {
     return fetch(`${API_BASE_URL}/employer/register`, {

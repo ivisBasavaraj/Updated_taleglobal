@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import SectionCanAccomplishments from "../sections/resume/section-can-accomplishments";
 import SectionCanAttachment from "../sections/resume/section-can-attachment";
 import SectionCanDesiredProfile from "../sections/resume/section-can-desired-profile";
-// import SectionCanEducation from "../sections/resume/section-can-education";
+import SectionCanEducation from "../sections/resume/section-can-education";
 import SectionCanEmployment from "../sections/resume/section-can-employment";
 import SectionCanITSkills from "../sections/resume/section-can-itskills";
 import SectionCanKeySkills from "../sections/resume/section-can-keyskills";
@@ -162,6 +162,10 @@ function CanMyResumePage() {
 
 								<div className="panel panel-default mb-4">
 									<SectionCanPersonalDetail profile={profile} />
+								</div>
+
+								<div className="panel panel-default mb-4">
+									<SectionCanEducation profile={profile} />
 								</div>
 
 								<div className="panel panel-default mb-4">
