@@ -37,10 +37,13 @@ const auth = (roles = []) => {
         return res.status(401).json({ message: 'User not found or account deactivated' });
       }
 
-      // Check if placement officer is active or pending
-      if (decoded.role === 'placement' && user.status !== 'active' && user.status !== 'pending') {
+      // Check if placement officer is active
+      if (decoded.role === 'placement' && user.status !== 'active') {
         console.log('Auth failed: Placement officer account is not active:', user.status);
-        return res.status(401).json({ message: 'Account is not active. Please contact admin.' });
+        return res.status(403).json({ 
+          message: 'Account pending admin approval. Please wait for admin to approve your account.',
+          requiresApproval: true
+        });
       }
 
       if (roles.length && !roles.includes(decoded.role)) {

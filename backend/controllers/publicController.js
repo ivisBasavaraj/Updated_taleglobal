@@ -1,9 +1,11 @@
+const mongoose = require('mongoose');
 const Job = require('../models/Job');
 const Blog = require('../models/Blog');
 const Contact = require('../models/Contact');
 const Testimonial = require('../models/Testimonial');
 const Partner = require('../models/Partner');
 const FAQ = require('../models/FAQ');
+const Review = require('../models/Review');
 const { cache } = require('../utils/cache');
 
 // Job Controllers
@@ -390,7 +392,8 @@ exports.getEmployerProfile = async (req, res) => {
         companyName: employer.companyName,
         email: employer.email,
         phone: employer.phone,
-        description: 'No company description available.'
+        description: 'No company description available.',
+        gallery: []
       };
     }
 
@@ -624,6 +627,128 @@ exports.applyForJob = async (req, res) => {
     });
   } catch (error) {
     console.error('Error in applyForJob:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Review Controllers
+exports.getEmployerReviews = async (req, res) => {
+  try {
+    const { employerId } = req.params;
+    const { page = 1, limit = 10 } = req.query;
+    
+    const reviews = await Review.find({ 
+      employerId, 
+      isApproved: true 
+    })
+    .sort({ createdAt: -1 })
+    .limit(limit * 1)
+    .skip((page - 1) * limit);
+    
+    const totalReviews = await Review.countDocuments({ 
+      employerId, 
+      isApproved: true 
+    });
+    
+    // Calculate average rating
+    const avgRating = await Review.aggregate([
+      { $match: { employerId: new mongoose.Types.ObjectId(employerId), isApproved: true } },
+      { $group: { _id: null, avgRating: { $avg: '$rating' }, totalCount: { $sum: 1 } } }
+    ]);
+    
+    const averageRating = avgRating.length > 0 ? Math.round(avgRating[0].avgRating * 10) / 10 : 0;
+    const reviewCount = avgRating.length > 0 ? avgRating[0].totalCount : 0;
+    
+    res.json({ 
+      success: true, 
+      reviews,
+      totalReviews,
+      averageRating,
+      reviewCount,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalReviews / parseInt(limit))
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.submitEmployerReview = async (req, res) => {
+  try {
+    const { employerId } = req.params;
+    const { reviewerName, reviewerEmail, rating, description, image } = req.body;
+    
+    // Validate required fields
+    if (!reviewerName || !reviewerEmail || !rating || !description) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'All fields are required' 
+      });
+    }
+    
+    // Validate rating
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Please select a rating between 1 and 5 stars' 
+      });
+    }
+    
+    // Check if employer exists
+    const Employer = require('../models/Employer');
+    const employer = await Employer.findById(employerId);
+    if (!employer) {
+      return res.status(404).json({ success: false, message: 'Employer not found' });
+    }
+    
+    // Check if user already reviewed this employer
+    const existingReview = await Review.findOne({ 
+      employerId, 
+      reviewerEmail: reviewerEmail.trim().toLowerCase() 
+    });
+    if (existingReview) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'You have already submitted a review for this company' 
+      });
+    }
+    
+    // Create review
+    const review = await Review.create({
+      employerId,
+      reviewerName: reviewerName.trim(),
+      reviewerEmail: reviewerEmail.trim().toLowerCase(),
+      rating: parseInt(rating),
+      description: description.trim(),
+      image: image || null
+    });
+    
+    res.status(201).json({
+      success: true,
+      message: 'Review submitted successfully',
+      reviewId: review._id
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.getSubmittedReviews = async (req, res) => {
+  try {
+    const { employerId } = req.params;
+    const { email } = req.query;
+    
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+    
+    const reviews = await Review.find({ 
+      employerId, 
+      reviewerEmail: email.toLowerCase() 
+    }).sort({ createdAt: -1 });
+    
+    res.json({ success: true, reviews });
+  } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };

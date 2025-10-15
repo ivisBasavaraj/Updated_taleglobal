@@ -40,12 +40,12 @@ function Footer3 () {
 											</li>
 											<li>
 												<p>
-													<span>Email :</span> example@metromindz.com
+													<span>Email :</span> <a href="mailto:example@metromindz.com" style={{color: '#f97316', textDecoration: 'underline', cursor: 'pointer'}}>example@metromindz.com</a>
 												</p>
 											</li>
 											<li>
 												<p>
-													<span>Call :</span> (+91) 9876543210
+													<span>Call :</span> <a href="tel:+919876543210" style={{color: '#f97316', textDecoration: 'underline', cursor: 'pointer'}}>(+91) 9876543210</a>
 												</p>
 											</li>
 										</ul>
@@ -59,7 +59,7 @@ function Footer3 () {
 												<h3 className="widget-title">Quick Links</h3>
 												<ul>
 													<li>
-														<NavLink to={publicUser.pages.LOGIN}>Home</NavLink>
+														<NavLink to={publicUser.INITIAL}>Home</NavLink>
 													</li>
 
 													<li>

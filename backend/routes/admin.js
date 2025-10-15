@@ -74,6 +74,8 @@ router.get('/placements', checkPermission('placement_officers'), adminController
 router.get('/placements/:id', checkPermission('placement_officers'), adminController.getPlacementDetails);
 router.get('/placements/:id/candidates', checkPermission('placement_officers'), require('../controllers/placementController').getPlacementCandidates);
 router.put('/placements/:id/status', checkPermission('placement_officers'), adminController.updatePlacementStatus);
+
+
 router.post('/placements/:id/process', checkPermission('placement_officers'), require('../controllers/placementController').processPlacementApproval);
 router.get('/placements/:id/download', checkPermission('placement_officers'), adminController.downloadPlacementFile);
 router.get('/placements/:id/data', checkPermission('placement_officers'), require('../controllers/placementController').getPlacementData);

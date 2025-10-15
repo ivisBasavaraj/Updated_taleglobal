@@ -306,6 +306,61 @@ exports.updateAuthorizationCompanies = async (req, res) => {
   }
 };
 
+exports.uploadGallery = async (req, res) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ success: false, message: 'No files uploaded' });
+    }
+
+    const { fileToBase64 } = require('../middlewares/upload');
+    const profile = await EmployerProfile.findOne({ employerId: req.user._id });
+    const currentGallery = profile?.gallery || [];
+
+    if (currentGallery.length + req.files.length > 10) {
+      return res.status(400).json({ 
+        success: false, 
+        message: `Cannot upload ${req.files.length} images. Maximum 10 images allowed. Current: ${currentGallery.length}` 
+      });
+    }
+
+    const newImages = req.files.map(file => ({
+      url: fileToBase64(file),
+      fileName: file.originalname,
+      uploadedAt: new Date()
+    }));
+
+    const updatedProfile = await EmployerProfile.findOneAndUpdate(
+      { employerId: req.user._id },
+      { $push: { gallery: { $each: newImages } } },
+      { new: true, upsert: true }
+    );
+
+    res.json({ success: true, gallery: updatedProfile.gallery });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.deleteGalleryImage = async (req, res) => {
+  try {
+    const { imageId } = req.params;
+    
+    const profile = await EmployerProfile.findOneAndUpdate(
+      { employerId: req.user._id },
+      { $pull: { gallery: { _id: imageId } } },
+      { new: true }
+    );
+
+    if (!profile) {
+      return res.status(404).json({ success: false, message: 'Profile not found' });
+    }
+
+    res.json({ success: true, message: 'Gallery image deleted successfully', gallery: profile.gallery });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // Job Management Controllers
 exports.createJob = async (req, res) => {
   try {

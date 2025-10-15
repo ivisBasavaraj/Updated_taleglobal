@@ -34,48 +34,19 @@ function JobDetail1Page() {
         return { limitReached, isEnded };
     }, [job]);
 
-    useEffect(() => {
-        setIsLoggedIn(authState.isLoggedIn);
-        setCandidateId(authState.candidateId);
-        
-        if (authState.token && authState.candidateId && jobId) {
-            Promise.all([
-                checkApplicationStatus(),
-                fetchCandidateCredits()
-            ]);
-        }
-    }, [jobId, authState.token, authState.candidateId]);
-
-    const sidebarConfig = {
-        showJobInfo: true
-    }
-
-    const handleScroll = useCallback(() => {
-        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = Math.min((window.scrollY / totalHeight) * 100, 100);
-        setScrollProgress(progress);
-    }, []);
-
-    useEffect(() => {
-        loadScript("js/custom.js");
-        if (jobId) {
-            fetchJobDetails();
-        }
-        
-        let ticking = false;
-        const throttledScroll = () => {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    handleScroll();
-                    ticking = false;
-                });
-                ticking = true;
+    const fetchJobDetails = useCallback(async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/public/jobs/${jobId}`);
+            const data = await response.json();
+            if (data.success) {
+                setJob(data.job);
             }
-        };
-        
-        window.addEventListener('scroll', throttledScroll, { passive: true });
-        return () => window.removeEventListener('scroll', throttledScroll);
-    }, [jobId, handleScroll, fetchJobDetails]);
+        } catch (error) {
+            console.error('Error fetching job details:', error);
+        } finally {
+            setLoading(false);
+        }
+    }, [jobId]);
 
     const checkApplicationStatus = useCallback(async () => {
         try {
@@ -107,19 +78,48 @@ function JobDetail1Page() {
         }
     }, []);
 
-    const fetchJobDetails = useCallback(async () => {
-        try {
-            const response = await fetch(`http://localhost:5000/api/public/jobs/${jobId}`);
-            const data = await response.json();
-            if (data.success) {
-                setJob(data.job);
-            }
-        } catch (error) {
-            console.error('Error fetching job details:', error);
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        setIsLoggedIn(authState.isLoggedIn);
+        setCandidateId(authState.candidateId);
+        
+        if (authState.token && authState.candidateId && jobId) {
+            Promise.all([
+                checkApplicationStatus(),
+                fetchCandidateCredits()
+            ]);
         }
-    }, [jobId]);
+    }, [jobId, authState.token, authState.candidateId, checkApplicationStatus, fetchCandidateCredits]);
+
+    const sidebarConfig = {
+        showJobInfo: true
+    }
+
+    const handleScroll = useCallback(() => {
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = Math.min((window.scrollY / totalHeight) * 100, 100);
+        setScrollProgress(progress);
+    }, []);
+
+    useEffect(() => {
+        loadScript("js/custom.js");
+        if (jobId) {
+            fetchJobDetails();
+        }
+        
+        let ticking = false;
+        const throttledScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    handleScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+        
+        window.addEventListener('scroll', throttledScroll, { passive: true });
+        return () => window.removeEventListener('scroll', throttledScroll);
+    }, [jobId, handleScroll, fetchJobDetails]);
 
     if (loading) {
         return (

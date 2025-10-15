@@ -15,9 +15,14 @@ const LocationDropdown = ({ value, onChange, onBlur, className }) => {
         'Madurai', 'Raipur', 'Kota', 'Guwahati', 'Chandigarh', 'Solapur', 'Hubli-Dharwad'
     ];
     
-    const filteredCities = indianCities.filter(city => 
-        city.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredCities = indianCities.filter(city => {
+        const cityLower = city.toLowerCase();
+        const searchLower = searchTerm.toLowerCase();
+        
+        // Match if city starts with search term or any word in city starts with search term
+        return cityLower.startsWith(searchLower) || 
+               cityLower.split(/[\s-]/).some(word => word.startsWith(searchLower));
+    });
     
     const handleSelect = (city) => {
         onChange(city);
@@ -33,7 +38,7 @@ const LocationDropdown = ({ value, onChange, onBlur, className }) => {
     };
     
     return (
-        <div className="position-relative">
+        <div className="location-dropdown-container position-relative">
             <input
                 className={`form-control ${className}`}
                 type="text"
@@ -47,15 +52,17 @@ const LocationDropdown = ({ value, onChange, onBlur, className }) => {
                     }, 200);
                 }}
                 placeholder="Type to search or select location"
+                autoComplete="off"
             />
             {isOpen && filteredCities.length > 0 && (
-                <div className="dropdown-menu show position-absolute w-100" style={{maxHeight: '200px', overflowY: 'auto', zIndex: 1000}}>
+                <div className="dropdown-menu show w-100">
                     {filteredCities.slice(0, 10).map(city => (
                         <button
                             key={city}
                             type="button"
                             className="dropdown-item"
                             onClick={() => handleSelect(city)}
+                            onMouseDown={(e) => e.preventDefault()}
                         >
                             {city}
                         </button>
@@ -421,7 +428,7 @@ function SectionCandicateBasicInfo() {
                     {/* Personal Information */}
                     <div className="row mb-4">
                         <div className="col-md-4 mb-3">
-                            <label className="form-label"><i className="fa fa-user me-2" style={{color: '#ff6b35'}}></i>Full Name (As per 10th grade) *</label>
+                            <label className="form-label"><i className="fa fa-user me-2" style={{color: '#ff6b35'}}></i>First Name *</label>
                             <input
                                 className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                                 type="text"
@@ -492,7 +499,7 @@ function SectionCandicateBasicInfo() {
                             />
                             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                         </div>
-                        <div className="col-md-4 mb-3">
+                        <div className="col-md-4 mb-3" style={{position: 'relative', zIndex: 10}}>
                             <label className="form-label"><i className="fa fa-map-marker me-2" style={{color: '#ff6b35'}}></i>Location *</label>
                             <LocationDropdown 
                                 value={formData.location}
@@ -522,11 +529,7 @@ function SectionCandicateBasicInfo() {
                             <i className={`fa ${saving ? 'fa-spinner fa-spin' : 'fa-save'} me-2`}></i>
                             {saving ? 'Saving Profile...' : 'Save Profile'}
                         </button>
-                        {Object.keys(errors).length > 0 && (
-                            <div className="text-danger mt-2">
-                                <small><i className="fa fa-exclamation-triangle me-1" style={{color: '#ff6b35'}}></i>Please fix the validation errors above</small>
-                            </div>
-                        )}
+
                     </div>
                 </div>
             </div>

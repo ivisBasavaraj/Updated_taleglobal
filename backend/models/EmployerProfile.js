@@ -59,6 +59,13 @@ const employerProfileSchema = new mongoose.Schema({
   companyIdCardPicture: { type: String }, // Base64 encoded image
   alternateContact: { type: String },
   
+  // Gallery
+  gallery: [{
+    url: { type: String },
+    fileName: { type: String },
+    uploadedAt: { type: Date, default: Date.now }
+  }],
+  
   // Legacy fields
   companyDescription: { type: String },
   logo: { type: String }, // Base64 encoded image

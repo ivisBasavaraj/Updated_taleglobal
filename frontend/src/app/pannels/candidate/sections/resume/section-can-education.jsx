@@ -1,59 +1,52 @@
 import { useState, useEffect, useRef } from 'react';
 import { api } from '../../../../../utils/api';
 
-
-
 function SectionCanEducation({ profile, onUpdate }) {
-    const [educationList, setEducationList] = useState([]);
-    const [showForm, setShowForm] = useState(false);
-    const [formData, setFormData] = useState({
-        schoolName: '',
-        location: '',
-        passoutYear: '',
-        percentage: '',
-        cgpa: '',
-        sgpa: '',
-        grade: '',
-        marksheet: null
+    const [educationData, setEducationData] = useState({
+        tenth: { schoolName: '', location: '', joiningYear: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null },
+        diploma: { schoolName: '', location: '', joiningYear: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null },
+        degree: { schoolName: '', location: '', joiningYear: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null }
     });
+    const [additionalRows, setAdditionalRows] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    const getFormLabels = () => {
-        const count = educationList.length;
-        if (count === 0) {
-            return {
-                schoolLabel: 'School Name',
-                schoolPlaceholder: 'Enter 10th School Name'
-            };
-        } else if (count === 1) {
-            return {
-                schoolLabel: 'Diploma/PUC Name',
-                schoolPlaceholder: 'Enter diploma/puc name'
-            };
-        } else {
-            return {
-                schoolLabel: 'Degree College Name',
-                schoolPlaceholder: 'Enter degree college Name'
-            };
-        }
-    };
+    const [editMode, setEditMode] = useState({
+        tenth: true,
+        diploma: true,
+        degree: true
+    });
+    const [additionalEditMode, setAdditionalEditMode] = useState([]);
 
     useEffect(() => {
         if (profile && profile.education) {
-            setEducationList(profile.education.map(edu => ({
-                id: edu._id,
-                schoolName: edu.degreeName || '',
-                location: edu.collegeName || '',
-                passoutYear: edu.passYear || '',
-                percentage: edu.percentage || '',
-                cgpa: edu.cgpa || '',
-                sgpa: edu.sgpa || '',
-                grade: edu.grade || ''
-            })));
+            const newData = { ...educationData };
+            const newEditMode = { tenth: true, diploma: true, degree: true };
+            
+            profile.education.forEach((edu, index) => {
+                const key = index === 0 ? 'tenth' : index === 1 ? 'diploma' : 'degree';
+                if (newData[key]) {
+                    newData[key] = {
+                        schoolName: edu.degreeName || '',
+                        location: edu.collegeName || '',
+                        joiningYear: edu.joiningYear || '',
+                        passoutYear: edu.passYear || '',
+                        percentage: edu.percentage || '',
+                        cgpa: edu.cgpa || '',
+                        grade: edu.grade || '',
+                        marksheet: null,
+                        marksheetBase64: edu.marksheet || null
+                    };
+                    
+                    // If data exists, set edit mode to false (show Edit button)
+                    if (edu.degreeName || edu.collegeName || edu.joiningYear || edu.passYear || edu.percentage) {
+                        newEditMode[key] = false;
+                    }
+                }
+            });
+            
+            setEducationData(newData);
+            setEditMode(newEditMode);
         }
     }, [profile]);
-
-
 
     const convertPercentageToCGPA = (percentage) => {
         if (percentage >= 90) return 10;
@@ -75,103 +68,223 @@ function SectionCanEducation({ profile, onUpdate }) {
         return 'F';
     };
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e, level, index = null) => {
         const { name, value, files } = e.target;
-        let updatedData = { ...formData };
         
-        if (name === 'marksheet') {
-            updatedData.marksheet = files[0];
-        } else {
-            updatedData[name] = value;
-        }
-        
-        if (name === 'percentage' && value) {
-            const percentageValue = parseFloat(value);
-            if (!isNaN(percentageValue)) {
-                updatedData.cgpa = convertPercentageToCGPA(percentageValue);
-                updatedData.sgpa = convertPercentageToCGPA(percentageValue);
-                updatedData.grade = convertPercentageToGrade(percentageValue);
+        if (index !== null) {
+            const updatedRows = [...additionalRows];
+            if (name === 'marksheet') {
+                updatedRows[index].marksheet = files[0];
+                // Upload marksheet immediately
+                if (files[0]) {
+                    uploadMarksheet(files[0], 'additional', index);
+                }
+            } else {
+                updatedRows[index][name] = value;
+                if (name === 'percentage' && value) {
+                    const percentageValue = parseFloat(value);
+                    if (!isNaN(percentageValue) && percentageValue >= 0 && percentageValue <= 100) {
+                        updatedRows[index].cgpa = convertPercentageToCGPA(percentageValue);
+                        updatedRows[index].grade = convertPercentageToGrade(percentageValue);
+                    }
+                }
             }
+            setAdditionalRows(updatedRows);
+        } else {
+            const updatedData = { ...educationData };
+            if (name === 'marksheet') {
+                updatedData[level].marksheet = files[0];
+                // Upload marksheet immediately
+                if (files[0]) {
+                    uploadMarksheet(files[0], level);
+                }
+            } else {
+                updatedData[level][name] = value;
+                if (name === 'percentage' && value) {
+                    const percentageValue = parseFloat(value);
+                    if (!isNaN(percentageValue) && percentageValue >= 0 && percentageValue <= 100) {
+                        updatedData[level].cgpa = convertPercentageToCGPA(percentageValue);
+                        updatedData[level].grade = convertPercentageToGrade(percentageValue);
+                    }
+                }
+            }
+            setEducationData(updatedData);
         }
-        
-        setFormData(updatedData);
     };
 
-
-
-    const resetForm = () => {
-        setFormData({
+    const addNewRow = () => {
+        const newRow = {
+            id: Date.now(),
+            educationType: 'Degree',
             schoolName: '',
             location: '',
+            joiningYear: '',
             passoutYear: '',
             percentage: '',
             cgpa: '',
-            sgpa: '',
             grade: '',
-            marksheet: null
-        });
-        setShowForm(false);
+            marksheet: null,
+            marksheetBase64: null
+        };
+        setAdditionalRows([...additionalRows, newRow]);
+        setAdditionalEditMode([...additionalEditMode, true]);
     };
 
+    const removeRow = (index) => {
+        const updatedRows = additionalRows.filter((_, i) => i !== index);
+        const updatedEditMode = additionalEditMode.filter((_, i) => i !== index);
+        setAdditionalRows(updatedRows);
+        setAdditionalEditMode(updatedEditMode);
+    };
 
-
-    const handleDelete = async (educationId) => {
-        if (window.confirm('Are you sure you want to delete this education record?')) {
-            try {
-                setLoading(true);
-                await api.deleteEducation(educationId);
-                setEducationList(educationList.filter(e => e.id !== educationId));
-                window.dispatchEvent(new CustomEvent('profileUpdated'));
-            } catch (error) {
-                console.error('Error deleting education:', error);
-                alert('Failed to delete education record');
-            } finally {
-                setLoading(false);
+    const toggleEdit = async (level, index = null) => {
+        if (index !== null) {
+            const updatedEditMode = [...additionalEditMode];
+            if (updatedEditMode[index]) {
+                // Save individual row
+                await handleSave();
+                updatedEditMode[index] = false; // Switch to Edit mode after saving
+            } else {
+                updatedEditMode[index] = true; // Switch to Save mode for editing
             }
+            setAdditionalEditMode(updatedEditMode);
+        } else {
+            if (editMode[level]) {
+                // Save individual row
+                await handleSave();
+                setEditMode(prev => ({ ...prev, [level]: false })); // Switch to Edit mode after saving
+            } else {
+                setEditMode(prev => ({ ...prev, [level]: true })); // Switch to Save mode for editing
+            }
+        }
+    };
+
+    const uploadMarksheet = async (file, level, index = null) => {
+        try {
+            const formData = new FormData();
+            formData.append('marksheet', file);
+            
+            let educationIndex;
+            let educationDataToSend;
+            
+            if (index !== null) {
+                // Additional row
+                educationIndex = 3 + index; // After tenth, diploma, degree
+                educationDataToSend = additionalRows[index];
+            } else {
+                // Main education levels
+                if (level === 'tenth') educationIndex = 0;
+                else if (level === 'diploma') educationIndex = 1;
+                else if (level === 'degree') educationIndex = 2;
+                
+                educationDataToSend = {
+                    degreeName: educationData[level].schoolName,
+                    collegeName: educationData[level].location,
+                    joiningYear: educationData[level].joiningYear,
+                    passYear: educationData[level].passoutYear,
+                    percentage: educationData[level].percentage,
+                    cgpa: educationData[level].cgpa,
+                    grade: educationData[level].grade
+                };
+            }
+            
+            formData.append('educationIndex', educationIndex);
+            formData.append('educationData', JSON.stringify(educationDataToSend));
+            
+            const token = localStorage.getItem('candidateToken');
+            const response = await fetch('http://localhost:5000/api/candidate/education/marksheet', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Marksheet uploaded successfully:', result);
+                
+                // Update local state with the uploaded marksheet
+                if (index !== null) {
+                    const updatedRows = [...additionalRows];
+                    updatedRows[index].marksheetBase64 = result.marksheet;
+                    setAdditionalRows(updatedRows);
+                } else {
+                    const updatedData = { ...educationData };
+                    updatedData[level].marksheetBase64 = result.marksheet;
+                    setEducationData(updatedData);
+                }
+                
+                alert('Marksheet uploaded successfully!');
+            } else {
+                console.error('Failed to upload marksheet');
+                alert('Failed to upload marksheet');
+            }
+        } catch (error) {
+            console.error('Error uploading marksheet:', error);
+            alert('Error uploading marksheet');
         }
     };
 
     const handleSave = async () => {
-        if (!formData.schoolName || !formData.location || !formData.passoutYear || !formData.percentage) {
-            alert('Please fill all required fields');
-            return;
-        }
-
         try {
             setLoading(true);
-            const formDataToSend = new FormData();
-            formDataToSend.append('schoolName', formData.schoolName);
-            formDataToSend.append('location', formData.location);
-            formDataToSend.append('passoutYear', formData.passoutYear);
-            formDataToSend.append('percentage', formData.percentage);
-            formDataToSend.append('cgpa', formData.cgpa);
-            formDataToSend.append('sgpa', formData.sgpa);
-            formDataToSend.append('grade', formData.grade);
-            if (formData.marksheet) {
-                formDataToSend.append('marksheet', formData.marksheet);
-            }
+            const token = localStorage.getItem('candidateToken');
             
-            const response = await api.addEducation(formDataToSend);
+            const educationArray = [
+                {
+                    degreeName: educationData.tenth.schoolName,
+                    collegeName: educationData.tenth.location,
+                    joiningYear: educationData.tenth.joiningYear,
+                    passYear: educationData.tenth.passoutYear,
+                    percentage: educationData.tenth.percentage,
+                    cgpa: educationData.tenth.cgpa,
+                    grade: educationData.tenth.grade,
+                    marksheet: educationData.tenth.marksheetBase64
+                },
+                {
+                    degreeName: educationData.diploma.schoolName,
+                    collegeName: educationData.diploma.location,
+                    joiningYear: educationData.diploma.joiningYear,
+                    passYear: educationData.diploma.passoutYear,
+                    percentage: educationData.diploma.percentage,
+                    cgpa: educationData.diploma.cgpa,
+                    grade: educationData.diploma.grade,
+                    marksheet: educationData.diploma.marksheetBase64
+                },
+                {
+                    degreeName: educationData.degree.schoolName,
+                    collegeName: educationData.degree.location,
+                    joiningYear: educationData.degree.joiningYear,
+                    passYear: educationData.degree.passoutYear,
+                    percentage: educationData.degree.percentage,
+                    cgpa: educationData.degree.cgpa,
+                    grade: educationData.degree.grade,
+                    marksheet: educationData.degree.marksheetBase64
+                },
+                ...additionalRows.map(row => ({
+                    degreeName: row.schoolName,
+                    collegeName: row.location,
+                    joiningYear: row.joiningYear,
+                    passYear: row.passoutYear,
+                    percentage: row.percentage,
+                    cgpa: row.cgpa,
+                    grade: row.grade,
+                    marksheet: row.marksheetBase64
+                }))
+            ];
+
+            const response = await api.updateCandidateProfile({ education: educationArray });
             
             if (response.success) {
-                const newEducation = {
-                    id: response.education._id || Date.now(),
-                    schoolName: response.education.degreeName,
-                    location: response.education.collegeName,
-                    passoutYear: response.education.passYear,
-                    percentage: response.education.percentage,
-                    cgpa: response.education.cgpa,
-                    sgpa: response.education.sgpa,
-                    grade: response.education.grade
-                };
-                
-                setEducationList([...educationList, newEducation]);
-                resetForm();
                 window.dispatchEvent(new CustomEvent('profileUpdated'));
+                alert('Education details saved successfully!');
+            } else {
+                alert('Failed to save education details');
             }
         } catch (error) {
             console.error('Error saving education:', error);
-            alert('Failed to save education record');
+            alert('Failed to save education details');
         } finally {
             setLoading(false);
         }
@@ -184,168 +297,453 @@ function SectionCanEducation({ profile, onUpdate }) {
             </div>
             <div className="panel-body wt-panel-body p-a20">
                 <div className="twm-panel-inner">
-                    <div className="mb-3">
+                    <div className="table-responsive">
+                        <table className="table table-bordered">
+                            <thead className="table-light">
+                                <tr>
+                                    <th>Education Level</th>
+                                    <th>School/College Name</th>
+                                    <th>Location</th>
+                                    <th>Joining Year</th>
+                                    <th>Passout Year</th>
+                                    <th>Percentage</th>
+                                    <th>CGPA</th>
+                                    <th>Grade</th>
+                                    <th>Marksheet</th>
+                                    <th>Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>10th School</strong></td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="schoolName" 
+                                            type="text" 
+                                            placeholder="Enter 10th School Name"
+                                            value={educationData.tenth.schoolName}
+                                            onChange={(e) => handleInputChange(e, 'tenth')}
+                                            disabled={!editMode.tenth}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="location" 
+                                            type="text" 
+                                            placeholder="Enter Location" 
+                                            value={educationData.tenth.location}
+                                            onChange={(e) => handleInputChange(e, 'tenth')}
+                                            disabled={!editMode.tenth}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="joiningYear" 
+                                            type="number" 
+                                            placeholder="2020" 
+                                            value={educationData.tenth.joiningYear}
+                                            onChange={(e) => handleInputChange(e, 'tenth')}
+                                            disabled={!editMode.tenth}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="passoutYear" 
+                                            type="number" 
+                                            placeholder="2024" 
+                                            value={educationData.tenth.passoutYear}
+                                            onChange={(e) => handleInputChange(e, 'tenth')}
+                                            disabled={!editMode.tenth}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="percentage" 
+                                            type="number" 
+                                            placeholder="90"
+                                            value={educationData.tenth.percentage}
+                                            onChange={(e) => handleInputChange(e, 'tenth')}
+                                            disabled={!editMode.tenth}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control" 
+                                            value={educationData.tenth.cgpa}
+                                            readOnly
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control" 
+                                            value={educationData.tenth.grade}
+                                            readOnly
+                                        />
+                                    </td>
+                                    <td>
+                                        <div className="d-flex flex-column gap-1">
+                                            <input 
+                                                className="form-control"
+                                                name="marksheet" 
+                                                type="file" 
+                                                accept=".pdf,.jpg,.jpeg,.png"
+                                                onChange={(e) => handleInputChange(e, 'tenth')}
+                                                disabled={!editMode.tenth}
+                                            />
+                                            {educationData.tenth.marksheetBase64 && (
+                                                <small className="text-success">
+                                                    <i className="fa fa-check"></i> Uploaded
+                                                </small>
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button 
+                                            type="button" 
+                                            className={`btn btn-sm ${editMode.tenth ? 'btn-success' : 'btn-primary'}`}
+                                            onClick={() => toggleEdit('tenth')}
+                                        >
+                                            {editMode.tenth ? 'Save' : 'Edit'}
+                                        </button>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td><strong>Diploma/PUC</strong></td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="schoolName" 
+                                            type="text" 
+                                            placeholder="Enter Diploma/PUC Name"
+                                            value={educationData.diploma.schoolName}
+                                            onChange={(e) => handleInputChange(e, 'diploma')}
+                                            disabled={!editMode.diploma}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="location" 
+                                            type="text" 
+                                            placeholder="Enter Location" 
+                                            value={educationData.diploma.location}
+                                            onChange={(e) => handleInputChange(e, 'diploma')}
+                                            disabled={!editMode.diploma}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="joiningYear" 
+                                            type="number" 
+                                            placeholder="2020" 
+                                            value={educationData.diploma.joiningYear}
+                                            onChange={(e) => handleInputChange(e, 'diploma')}
+                                            disabled={!editMode.diploma}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="passoutYear" 
+                                            type="number" 
+                                            placeholder="2024" 
+                                            value={educationData.diploma.passoutYear}
+                                            onChange={(e) => handleInputChange(e, 'diploma')}
+                                            disabled={!editMode.diploma}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="percentage" 
+                                            type="number" 
+                                            placeholder="90"
+                                            value={educationData.diploma.percentage}
+                                            onChange={(e) => handleInputChange(e, 'diploma')}
+                                            disabled={!editMode.diploma}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control" 
+                                            value={educationData.diploma.cgpa}
+                                            readOnly
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control" 
+                                            value={educationData.diploma.grade}
+                                            readOnly
+                                        />
+                                    </td>
+                                    <td>
+                                        <div className="d-flex flex-column gap-1">
+                                            <input 
+                                                className="form-control"
+                                                name="marksheet" 
+                                                type="file" 
+                                                accept=".pdf,.jpg,.jpeg,.png"
+                                                onChange={(e) => handleInputChange(e, 'diploma')}
+                                                disabled={!editMode.diploma}
+                                            />
+                                            {educationData.diploma.marksheetBase64 && (
+                                                <small className="text-success">
+                                                    <i className="fa fa-check"></i> Uploaded
+                                                </small>
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button 
+                                            type="button" 
+                                            className={`btn btn-sm ${editMode.diploma ? 'btn-success' : 'btn-primary'}`}
+                                            onClick={() => toggleEdit('diploma')}
+                                        >
+                                            {editMode.diploma ? 'Save' : 'Edit'}
+                                        </button>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td><strong>Degree</strong></td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="schoolName" 
+                                            type="text" 
+                                            placeholder="Enter Degree College Name"
+                                            value={educationData.degree.schoolName}
+                                            onChange={(e) => handleInputChange(e, 'degree')}
+                                            disabled={!editMode.degree}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="location" 
+                                            type="text" 
+                                            placeholder="Enter Location" 
+                                            value={educationData.degree.location}
+                                            onChange={(e) => handleInputChange(e, 'degree')}
+                                            disabled={!editMode.degree}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="joiningYear" 
+                                            type="number" 
+                                            placeholder="2020" 
+                                            value={educationData.degree.joiningYear}
+                                            onChange={(e) => handleInputChange(e, 'degree')}
+                                            disabled={!editMode.degree}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="passoutYear" 
+                                            type="number" 
+                                            placeholder="2024" 
+                                            value={educationData.degree.passoutYear}
+                                            onChange={(e) => handleInputChange(e, 'degree')}
+                                            disabled={!editMode.degree}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="percentage" 
+                                            type="number" 
+                                            placeholder="90"
+                                            value={educationData.degree.percentage}
+                                            onChange={(e) => handleInputChange(e, 'degree')}
+                                            disabled={!editMode.degree}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control" 
+                                            value={educationData.degree.cgpa}
+                                            readOnly
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control" 
+                                            value={educationData.degree.grade}
+                                            readOnly
+                                        />
+                                    </td>
+                                    <td>
+                                        <div className="d-flex flex-column gap-1">
+                                            <input 
+                                                className="form-control"
+                                                name="marksheet" 
+                                                type="file" 
+                                                accept=".pdf,.jpg,.jpeg,.png"
+                                                onChange={(e) => handleInputChange(e, 'degree')}
+                                                disabled={!editMode.degree}
+                                            />
+                                            {educationData.degree.marksheetBase64 && (
+                                                <small className="text-success">
+                                                    <i className="fa fa-check"></i> Uploaded
+                                                </small>
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button 
+                                            type="button" 
+                                            className={`btn btn-sm ${editMode.degree ? 'btn-success' : 'btn-primary'}`}
+                                            onClick={() => toggleEdit('degree')}
+                                        >
+                                            {editMode.degree ? 'Save' : 'Edit'}
+                                        </button>
+                                    </td>
+
+                                </tr>
+                                {additionalRows.map((row, index) => (
+                                    <tr key={row.id}>
+                                        <td>
+                                            <strong>{row.educationType}</strong>
+                                            <button 
+                                                type="button" 
+                                                className="btn btn-sm btn-outline-danger ms-2"
+                                                onClick={() => removeRow(index)}
+                                                title="Remove"
+                                            >
+                                                ×
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <input 
+                                                className="form-control"
+                                                name="schoolName" 
+                                                type="text" 
+                                                placeholder="Enter Degree College Name"
+                                                value={row.schoolName}
+                                                onChange={(e) => handleInputChange(e, null, index)}
+                                                disabled={!additionalEditMode[index]}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input 
+                                                className="form-control"
+                                                name="location" 
+                                                type="text" 
+                                                placeholder="Enter Location" 
+                                                value={row.location}
+                                                onChange={(e) => handleInputChange(e, null, index)}
+                                                disabled={!additionalEditMode[index]}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input 
+                                                className="form-control"
+                                                name="joiningYear" 
+                                                type="number" 
+                                                placeholder="2020" 
+                                                value={row.joiningYear}
+                                                onChange={(e) => handleInputChange(e, null, index)}
+                                                disabled={!additionalEditMode[index]}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input 
+                                                className="form-control"
+                                                name="passoutYear" 
+                                                type="number" 
+                                                placeholder="2024" 
+                                                value={row.passoutYear}
+                                                onChange={(e) => handleInputChange(e, null, index)}
+                                                disabled={!additionalEditMode[index]}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input 
+                                                className="form-control"
+                                                name="percentage" 
+                                                type="number" 
+                                                placeholder="90"
+                                                value={row.percentage}
+                                                onChange={(e) => handleInputChange(e, null, index)}
+                                                disabled={!additionalEditMode[index]}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input 
+                                                className="form-control" 
+                                                value={row.cgpa}
+                                                readOnly
+                                            />
+                                        </td>
+                                        <td>
+                                            <input 
+                                                className="form-control" 
+                                                value={row.grade}
+                                                readOnly
+                                            />
+                                        </td>
+                                        <td>
+                                            <div className="d-flex flex-column gap-1">
+                                                <input 
+                                                    className="form-control"
+                                                    name="marksheet" 
+                                                    type="file" 
+                                                    accept=".pdf,.jpg,.jpeg,.png"
+                                                    onChange={(e) => handleInputChange(e, null, index)}
+                                                    disabled={!additionalEditMode[index]}
+                                                />
+                                                {row.marksheetBase64 && (
+                                                    <small className="text-success">
+                                                        <i className="fa fa-check"></i> Uploaded
+                                                    </small>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button 
+                                                type="button" 
+                                                className={`btn btn-sm ${additionalEditMode[index] ? 'btn-success' : 'btn-primary'}`}
+                                                onClick={() => toggleEdit(null, index)}
+                                            >
+                                                {additionalEditMode[index] ? 'Save' : 'Edit'}
+                                            </button>
+                                        </td>
+
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="mt-3">
                         <button 
                             type="button" 
-                            className="btn btn-primary"
-                            onClick={() => setShowForm(!showForm)}
+                            className="btn btn-success me-2" 
+                            onClick={addNewRow}
                         >
-                            {showForm ? 'Cancel' : 'Add New'}
+                            Add New
+                        </button>
+                        <button 
+                            type="button" 
+                            className="btn btn-primary" 
+                            onClick={handleSave} 
+                            disabled={loading}
+                        >
+                            {loading ? 'Saving...' : 'Save All Education Details'}
                         </button>
                     </div>
-                    
-                    {showForm && (
-                        <div className="education-form mb-4">
-                        <div className="row">
-                            <div className="col-md-6">
-                                <div className="form-group mb-3">
-                                    <label>{getFormLabels().schoolLabel}</label>
-                                    <input 
-                                        className="form-control" 
-                                        name="schoolName" 
-                                        type="text" 
-                                        placeholder={getFormLabels().schoolPlaceholder}
-                                        value={formData.schoolName}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="form-group mb-3">
-                                    <label>Location</label>
-                                    <input 
-                                        className="form-control" 
-                                        name="location" 
-                                        type="text" 
-                                        placeholder="Enter Location" 
-                                        value={formData.location}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="form-group mb-3">
-                                    <label>Passout Year</label>
-                                    <input 
-                                        className="form-control" 
-                                        name="passoutYear" 
-                                        type="text" 
-                                        placeholder="Enter Passout Year" 
-                                        value={formData.passoutYear}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="form-group mb-3">
-                                    <label>Percentage</label>
-                                    <input 
-                                        className="form-control" 
-                                        name="percentage" 
-                                        type="number" 
-                                        placeholder="90"
-                                        value={formData.percentage}
-                                        onChange={handleInputChange}
-                                        min="0"
-                                        max="100"
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="form-group mb-3">
-                                    <label>CGPA (Auto-calculated)</label>
-                                    <input 
-                                        className="form-control" 
-                                        name="cgpa" 
-                                        type="number" 
-                                        value={formData.cgpa}
-                                        readOnly
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="form-group mb-3">
-                                    <label>SGPA (Auto-calculated)</label>
-                                    <input 
-                                        className="form-control" 
-                                        name="sgpa" 
-                                        type="number" 
-                                        value={formData.sgpa}
-                                        readOnly
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="form-group mb-3">
-                                    <label>Grade (Auto-calculated)</label>
-                                    <input 
-                                        className="form-control" 
-                                        name="grade" 
-                                        type="text" 
-                                        value={formData.grade}
-                                        readOnly
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-md-12">
-                                <div className="form-group mb-3">
-                                    <label>Upload Marksheet</label>
-                                    <input 
-                                        className="form-control" 
-                                        name="marksheet" 
-                                        type="file" 
-                                        accept=".pdf,.jpg,.jpeg,.png"
-                                        onChange={handleInputChange}
-                                    />
-                                    <small className="text-muted">Upload your 10th standard marksheet (PDF, JPG, PNG)</small>
-                                    {!formData.marksheet && <div className="text-muted mt-1">No file chosen</div>}
-                                    {formData.marksheet && <div className="text-success mt-1">File selected: {formData.marksheet.name}</div>}
-                                </div>
-                            </div>
-                            <div className="col-md-12">
-                                <button 
-                                    type="button" 
-                                    className="btn btn-primary" 
-                                    onClick={handleSave} 
-                                    disabled={loading}
-                                >
-                                    {loading ? 'Saving...' : 'Add Education'}
-                                </button>
-                            </div>
-                        </div>
-                        </div>
-                    )}
-                    
-                    {educationList.length > 0 && <hr />}
-                    {educationList.map((education) => (
-                        <div key={education.id} className="education-item mb-3">
-                            <div className="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <p><b>{education.schoolName}</b></p>
-                                    <p><i className="fa fa-map-marker text-primary me-1"></i>{education.location}</p>
-                                    <p>Passout Year: {education.passoutYear}</p>
-                                    <div className="row">
-                                        <div className="col-md-3"><small>Percentage: {education.percentage}%</small></div>
-                                        <div className="col-md-3"><small>CGPA: {education.cgpa}</small></div>
-                                        <div className="col-md-3"><small>SGPA: {education.sgpa}</small></div>
-                                        <div className="col-md-3"><small>Grade: {education.grade}</small></div>
-                                    </div>
-                                </div>
-                                <button 
-                                    className="btn btn-sm btn-outline-danger"
-                                    onClick={() => handleDelete(education.id)}
-                                    title="Delete"
-                                    disabled={loading}
-                                >
-                                    <i className="fa fa-trash"></i>
-                                </button>
-                            </div>
-                            <hr />
-                        </div>
-                    ))}
                 </div>
             </div>
-
         </>
     )
 }

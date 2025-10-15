@@ -209,6 +209,16 @@ label {
     margin-bottom: 20px;
 }
 
+/* Form validation error messages */
+.invalid-feedback {
+    font-size: 16px !important;
+    font-weight: 500;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    color: #dc3545;
+    display: block;
+}
+
 /* Divider */
 hr {
     border: none;
@@ -254,4 +264,92 @@ input[type="file"]:hover {
 
 .mt-professional {
     margin-top: 25px;
+}
+
+/* Location Dropdown Styles */
+.position-relative {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1050 !important;
+    display: block;
+    min-width: 100%;
+    padding: 0.5rem 0;
+    margin: 0.125rem 0 0;
+    font-size: 0.875rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.375rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 1rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    color: #1e2125;
+    background-color: #e9ecef;
+    text-decoration: none;
+}
+
+.dropdown-item:active {
+    color: #fff;
+    background-color: #ff6b35;
+    text-decoration: none;
+}
+
+/* Ensure dropdown appears above other elements */
+.panel.panel-default {
+    overflow: visible !important;
+}
+
+.panel-body.wt-panel-body {
+    overflow: visible !important;
+}
+
+/* Location input specific styling */
+.location-dropdown-container {
+    position: relative;
+    z-index: 1;
+}
+
+.location-dropdown-container .form-control {
+    position: relative;
+    z-index: 2;
+}
+
+.location-dropdown-container .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1060 !important;
+    margin-top: 2px;
+    border-top: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }

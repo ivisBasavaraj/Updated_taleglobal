@@ -80,6 +80,7 @@ exports.getDashboardStats = async (req, res) => {
     const totalApplications = await Application.countDocuments();
     const activeJobs = await Job.countDocuments({ status: 'active' });
     const pendingJobs = await Job.countDocuments({ status: 'pending' });
+    const pendingPlacements = await Placement.countDocuments({ status: 'pending' });
 
     const stats = {
       totalCandidates,
@@ -87,7 +88,8 @@ exports.getDashboardStats = async (req, res) => {
       totalJobs,
       totalApplications,
       activeJobs,
-      pendingJobs
+      pendingJobs,
+      pendingPlacements
     };
 
     res.json({ success: true, stats });
@@ -795,9 +797,20 @@ exports.updatePlacementStatus = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Placement officer not found' });
     }
 
-    // If approved and has student data, automatically process candidates
-    if (updateData.status === 'active' && placement.studentData && !placement.isProcessed) {
-      console.log('Triggering background processing for placement:', placement._id);
+    // Create notification if approved
+    if (updateData.status === 'active') {
+      try {
+        await createNotification({
+          title: 'Account Approved',
+          message: 'Your placement officer account has been approved by admin. You can now sign in.',
+          type: 'placement_approved',
+          role: 'placement',
+          relatedId: placement._id,
+          createdBy: req.user.id
+        });
+      } catch (notifError) {
+        console.error('Failed to create approval notification:', notifError);
+      }
     }
 
     res.json({ success: true, placement });
@@ -1209,6 +1222,8 @@ exports.generatePlacementLoginToken = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
 
 // Authorization Letter Management
 exports.approveAuthorizationLetter = async (req, res) => {
@@ -1739,6 +1754,8 @@ exports.getStoredExcelData = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
 // Sync credits between Excel data and candidate dashboard
 exports.syncExcelCreditsWithCandidates = async (req, res) => {
   try {

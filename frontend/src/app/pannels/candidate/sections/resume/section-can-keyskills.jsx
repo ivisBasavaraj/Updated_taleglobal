@@ -92,7 +92,7 @@ function SectionCanKeySkills({ profile }) {
                 <div className="d-flex align-items-center gap-2 mb-3 flex-wrap">
                     <select 
                         className="form-select" 
-                        style={{width: '300px', height: '36px', fontSize: '13px'}}
+                        style={{width: '300px', height: '40px', fontSize: '13px', padding: '8px 12px'}}
                         value={selectedSkill}
                         onChange={(e) => setSelectedSkill(e.target.value)}
                         disabled={loading}
@@ -114,7 +114,7 @@ function SectionCanKeySkills({ profile }) {
                         }}
                         disabled={!selectedSkill || loading}
                     >
-                        <i className="fa fa-plus me-1"></i>
+                        <i className="fa fa-plus me-1" style={{color: 'white'}}></i>
                         Add
                     </button>
                     
@@ -153,7 +153,7 @@ function SectionCanKeySkills({ profile }) {
                                 onClick={handleAddCustom}
                                 disabled={!customSkill.trim() || loading}
                             >
-                                <i className="fa fa-check me-1"></i>
+                                <i className="fa fa-check me-1" style={{color: 'white'}}></i>
                                 Add
                             </button>
                             <button 

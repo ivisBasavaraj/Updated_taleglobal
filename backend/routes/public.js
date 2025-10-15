@@ -47,4 +47,14 @@ router.post('/apply-job', upload.single('resume'), [
   body('jobId').notEmpty().withMessage('Job ID is required')
 ], handleValidationErrors, publicController.applyForJob);
 
+// Review Routes
+router.get('/employers/:employerId/reviews', publicController.getEmployerReviews);
+router.post('/employers/:employerId/reviews', [
+  body('reviewerName').notEmpty().withMessage('Name is required'),
+  body('reviewerEmail').isEmail().withMessage('Valid email is required'),
+  body('rating').isInt({ min: 1, max: 5 }).withMessage('Rating must be between 1 and 5'),
+  body('description').notEmpty().withMessage('Review description is required')
+], handleValidationErrors, publicController.submitEmployerReview);
+router.get('/employers/:employerId/submitted-reviews', publicController.getSubmittedReviews);
+
 module.exports = router;

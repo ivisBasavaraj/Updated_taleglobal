@@ -28,21 +28,25 @@ function SectionProfile({ employer }) {
                         </div>
                     </li> */}
 
-                    <li>
-                        <div className="twm-s-info-inner">
-                            <i className="fas fa-mobile-alt" />
-                            <span className="twm-title">Official Mobile Number</span>
-                            <div className="twm-s-info-discription">{employer?.officialMobile || employer?.phone || 'Not specified'}</div>
-                        </div>
-                    </li>
+                    {false && (
+                        <>
+                            <li>
+                                <div className="twm-s-info-inner">
+                                    <i className="fas fa-mobile-alt" />
+                                    <span className="twm-title">Official Mobile Number</span>
+                                    <div className="twm-s-info-discription">{employer?.officialMobile || employer?.phone || 'Not specified'}</div>
+                                </div>
+                            </li>
 
-                    <li>
-                        <div className="twm-s-info-inner">
-                            <i className="fas fa-at" />
-                            <span className="twm-title">Official Email ID</span>
-                            <div className="twm-s-info-discription">{employer?.officialEmail || employer?.email || 'Not specified'}</div>
-                        </div>
-                    </li>
+                            <li>
+                                <div className="twm-s-info-inner">
+                                    <i className="fas fa-at" />
+                                    <span className="twm-title">Official Email ID</span>
+                                    <div className="twm-s-info-discription">{employer?.officialEmail || employer?.email || 'Not specified'}</div>
+                                </div>
+                            </li>
+                        </>
+                    )}
 
                     <li>
                         <div className="twm-s-info-inner">

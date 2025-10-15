@@ -8,6 +8,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import "./global-styles.css";
 import "./notification-animations.css";
+import "./logo-fix.css";
 
 function App() {
 

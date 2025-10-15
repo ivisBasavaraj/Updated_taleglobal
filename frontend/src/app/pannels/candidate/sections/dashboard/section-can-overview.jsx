@@ -374,31 +374,27 @@ function SectionCandidateOverview() {
 					</div>
 				)}
 			</div>
-			<div className="row g-3" style={{ marginBottom: '2rem' }}>
+			<div className="row" style={{ marginBottom: '2rem' }}>
 				{cards.map((card, index) => (
-					<div className={`col-xl-${hasCredits ? '3' : '4'} col-lg-${hasCredits ? '3' : '4'} col-md-6`} key={index}>
+					<div className={`col-xl-${hasCredits ? '3' : '4'} col-lg-${hasCredits ? '3' : '4'} col-md-12 mb-3`} key={index}>
 						<div className="panel panel-default">
 							<div 
 								className="panel-body wt-panel-body dashboard-card-2" 
 								style={{ 
 									backgroundColor: card.bg,
-									cursor: card.clickable ? 'pointer' : 'default',
-									minHeight: '120px',
-									display: 'flex',
-									alignItems: 'center'
+									cursor: card.clickable ? 'pointer' : 'default'
 								}}
 								onClick={card.clickable ? card.onClick : undefined}
-
 							>
-								<div className="d-flex align-items-center justify-content-between w-100">
-									<div className={`wt-card-icon-2 ${card.color}`}>
+								<div className="d-flex align-items-center" style={{ display: "flex", justifyContent: "flex-end" }}>
+									<div className={`wt-card-icon-2 me-3 fs-2 ${card.color}`} style={{ lineHeight: "1" }}>
 										<i className={card.icon} />
 									</div>
-									<div className="text-end">
-										<div className={`counter ${card.color}`}>
+									<div>
+										<div className={`counter fw-bold fs-4 ${card.color}`}>
 											<CountUp end={card.count} duration={2} />
 										</div>
-										<h5 className="mb-0">{card.label}</h5>
+										<h5 className="mb-0 mt-1">{card.label}</h5>
 										{card.label.includes('Excel') && candidate.placement?.collegeName && (
 											<small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>
 												From: {candidate.placement.collegeName}

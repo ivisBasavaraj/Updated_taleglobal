@@ -1,4 +1,4 @@
-import { Briefcase, Building, Calendar, FileText, Globe, Hash, IdCard, Image as ImageIcon, Mail, MapPin, Phone, Upload, User as UserIcon, Users as UsersIcon } from "lucide-react";
+import { Briefcase, Building, Calendar, FileText, Globe, Hash, IdCard, Image as ImageIcon, Mail, MapPin, Phone, Upload, User as UserIcon, Users as UsersIcon, Images } from "lucide-react";
 import { useEffect, useState } from "react";
 import { loadScript } from "../../../../globals/constants";
 import './emp-company-profile.css';
@@ -44,7 +44,10 @@ function EmpCompanyProfilePage() {
         coverImage: '',
         
         // Authorization Letters
-        authorizationLetters: []
+        authorizationLetters: [],
+        
+        // Gallery
+        gallery: []
     });
 
     const [loading, setLoading] = useState(false);
@@ -543,6 +546,104 @@ function EmpCompanyProfilePage() {
         }
     };
 
+    const handleGalleryUpload = async (e) => {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
+
+        const currentCount = formData.gallery?.length || 0;
+        if (currentCount + files.length > 10) {
+            alert(`You can only upload ${10 - currentCount} more images. Maximum 10 images allowed.`);
+            return;
+        }
+
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/svg+xml'];
+        const maxSize = 2 * 1024 * 1024; // 2MB
+
+        for (const file of files) {
+            if (!allowedTypes.includes(file.type)) {
+                alert(`Invalid file type: ${file.name}. Only JPG, PNG, and SVG are allowed.`);
+                return;
+            }
+            if (file.size > maxSize) {
+                alert(`File too large: ${file.name}. Maximum size is 2MB.`);
+                return;
+            }
+        }
+
+        const formDataObj = new FormData();
+        files.forEach(file => formDataObj.append('gallery', file));
+
+        try {
+            const token = localStorage.getItem('employerToken');
+            if (!token) {
+                alert('Please login again to upload files.');
+                return;
+            }
+            const response = await fetch('http://localhost:5000/api/employer/profile/gallery', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` },
+                body: formDataObj
+            });
+            const data = await response.json();
+            if (response.status === 401) {
+                alert('Session expired. Please login again.');
+                localStorage.removeItem('employerToken');
+                window.location.href = '/employer/login';
+                return;
+            }
+            if (data.success) {
+                setFormData(prev => ({
+                    ...prev,
+                    gallery: data.gallery || []
+                }));
+                alert('Gallery images uploaded successfully!');
+                e.target.value = '';
+            } else {
+                alert(data.message || 'Gallery upload failed');
+            }
+        } catch (error) {
+            console.error('Gallery upload failed:', error);
+            alert('Gallery upload failed. Please try again.');
+        }
+    };
+
+    const handleDeleteGalleryImage = async (imageId) => {
+        if (!window.confirm('Are you sure you want to delete this image?')) {
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('employerToken');
+            if (!token) {
+                alert('Please login again to delete files.');
+                return;
+            }
+            const response = await fetch(`http://localhost:5000/api/employer/profile/gallery/${imageId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await response.json();
+            if (response.status === 401) {
+                alert('Session expired. Please login again.');
+                localStorage.removeItem('employerToken');
+                window.location.href = '/employer/login';
+                return;
+            }
+            if (data.success) {
+                setFormData(prev => ({
+                    ...prev,
+                    gallery: data.gallery || []
+                }));
+                alert('Gallery image deleted successfully!');
+            } else {
+                alert(data.message || 'Failed to delete image');
+            }
+        } catch (error) {
+            console.error('Delete failed:', error);
+            alert('Failed to delete image. Please try again.');
+        }
+    };
+
     const addNewAuthSection = () => {
         const newId = Math.max(...authSections.map(s => s.id)) + 1;
         setAuthSections(prev => [...prev, { id: newId, companyName: '' }]);
@@ -612,6 +713,7 @@ function EmpCompanyProfilePage() {
             delete profileData.certificateOfIncorporation;
             delete profileData.companyIdCardPicture;
             delete profileData.authorizationLetters;
+            delete profileData.gallery;
             
             const response = await fetch('http://localhost:5000/api/employer/profile', {
                 method: 'PUT',
@@ -770,7 +872,7 @@ function EmpCompanyProfilePage() {
 
                             <div className="col-xl-4 col-lg-12 col-md-12">
                                 <div className="form-group">
-                                    <label className="required-field"><Phone size={16} className="me-2" /> Phone *</label>
+                                    <label className="required-field"><Phone size={16} className="me-2" /> Phone</label>
                                     <input
                                         className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
                                         type="text"
@@ -788,7 +890,7 @@ function EmpCompanyProfilePage() {
 
                             <div className="col-xl-4 col-lg-12 col-md-12">
                                 <div className="form-group">
-                                    <label className="required-field"><Mail size={16} className="me-2" /> Email Address *</label>
+                                    <label className="required-field"><Mail size={16} className="me-2" /> Email Address</label>
                                     <input
                                         className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                                         type="email"
@@ -1267,7 +1369,7 @@ function EmpCompanyProfilePage() {
                         <div className="row">
                             <div className="col-lg-4 col-md-6">
                                 <div className="form-group">
-                                    <label className="required-field"><UserIcon size={16} className="me-2" /> Full Name</label>
+                                    <label className="required-field"><UserIcon size={16} className="me-2" /> First Name</label>
                                     <input
                                         className={`form-control ${errors.contactFullName ? 'is-invalid' : ''}`}
                                         type="text"
@@ -1316,7 +1418,7 @@ function EmpCompanyProfilePage() {
 
                             <div className="col-lg-4 col-md-6">
                                 <div className="form-group">
-                                    <label className="required-field"><Briefcase size={16} className="me-2" /> Designation *</label>
+                                    <label className="required-field"><Briefcase size={16} className="me-2" /> Designation</label>
                                     <input
                                         className={`form-control ${errors.contactDesignation ? 'is-invalid' : ''}`}
                                         type="text"
@@ -1334,7 +1436,7 @@ function EmpCompanyProfilePage() {
 
                             <div className="col-lg-4 col-md-6">
                                 <div className="form-group">
-                                    <label className="required-field">Official Email ID *</label>
+                                    <label className="required-field"><Mail size={16} className="me-2" /> Official Email ID</label>
                                     <input
                                         className={`form-control ${errors.contactOfficialEmail ? 'is-invalid' : ''}`}
                                         type="email"
@@ -1352,7 +1454,7 @@ function EmpCompanyProfilePage() {
 
                             <div className="col-lg-4 col-md-6">
                                 <div className="form-group">
-                                    <label className="required-field">Mobile Number *</label>
+                                    <label className="required-field"><Phone size={16} className="me-2" /> Mobile Number</label>
                                     <input
                                         className={`form-control ${errors.contactMobile ? 'is-invalid' : ''}`}
                                         type="tel"
@@ -1370,7 +1472,7 @@ function EmpCompanyProfilePage() {
 
                             <div className="col-lg-4 col-md-6">
                                 <div className="form-group">
-                                    <label>Company ID Card Picture</label>
+                                    <label><IdCard size={16} className="me-2" /> Company ID Card Picture</label>
                                     <input
                                         className="form-control"
                                         type="file"
@@ -1397,7 +1499,7 @@ function EmpCompanyProfilePage() {
 
                             <div className="col-lg-4 col-md-6">
                                 <div className="form-group">
-                                    <label>Alternate Contact (Optional)</label>
+                                    <label><Phone size={16} className="me-2" /> Alternate Contact (Optional)</label>
                                     <input
                                         className={`form-control ${errors.alternateContact ? 'is-invalid' : ''}`}
                                         type="tel"
@@ -1412,7 +1514,72 @@ function EmpCompanyProfilePage() {
                                     )}
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
 
+                {/* Gallery Section */}
+                <div className="panel panel-default">
+                    <div className="panel-heading wt-panel-heading p-a20">
+                        <h4 className="panel-tittle m-a0"><Images size={18} className="me-2" /> Company Gallery</h4>
+                    </div>
+                    <div className="panel-body wt-panel-body p-a20 m-b30">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="form-group">
+                                    <label><Upload size={16} className="me-2" /> Upload Gallery Images (Max 10 images)</label>
+                                    <input
+                                        className="form-control"
+                                        type="file"
+                                        accept=".jpg,.jpeg,.png,.svg"
+                                        multiple
+                                        onChange={handleGalleryUpload}
+                                        disabled={formData.gallery?.length >= 10}
+                                    />
+                                    <p className="text-muted mt-2">
+                                        Upload up to 10 images (JPG, PNG, SVG). Max 2MB per image.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            {formData.gallery && formData.gallery.length > 0 && (
+                                <div className="col-md-12">
+                                    <div className="gallery-preview mt-3">
+                                        <h6 className="text-success mb-3">
+                                            <i className="fas fa-images me-2"></i>
+                                            Gallery Images ({formData.gallery.length}/10)
+                                        </h6>
+                                        <div className="d-flex flex-wrap gap-3">
+                                            {formData.gallery.map((image, index) => (
+                                                <div key={image._id || index} className="gallery-item position-relative" style={{width: '150px', height: '150px'}}>
+                                                    <img 
+                                                        src={image.url} 
+                                                        alt={`Gallery ${index + 1}`}
+                                                        className="img-fluid rounded"
+                                                        style={{width: '100%', height: '100%', objectFit: 'cover', border: '1px solid #ddd'}}
+                                                    />
+                                                    <button 
+                                                        type="button" 
+                                                        className="btn btn-danger btn-sm position-absolute"
+                                                        style={{top: '5px', right: '5px', width: '25px', height: '25px', padding: '0', fontSize: '12px'}}
+                                                        onClick={() => handleDeleteGalleryImage(image._id || index)}
+                                                        title="Delete image"
+                                                    >
+                                                        <i className="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="panel panel-default">
+                    <div className="panel-body wt-panel-body p-a20 m-b30">
+                        <div className="row">
                             <div className="col-lg-12 col-md-12">
                                 <div className="text-left">
                                     <button type="submit" className="site-button" disabled={loading}>

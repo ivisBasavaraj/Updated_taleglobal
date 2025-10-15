@@ -226,6 +226,8 @@ router.post('/education', upload.single('marksheet'), [
   body('percentage').notEmpty().withMessage('Percentage is required')
 ], handleValidationErrors, candidateController.addEducation);
 
+router.put('/education/marksheet', upload.single('marksheet'), candidateController.updateEducationWithMarksheet);
+
 router.delete('/education/:educationId', candidateController.deleteEducation);
 
 module.exports = router;

@@ -617,3 +617,15 @@ input[type="button"]:hover,
   color: #fff !important;
   border-color: #e8690a !important;
 }
+
+/* White icon for candidate button */
+.nav-link.active .candidate-icon-white,
+.nav-link .candidate-icon-white,
+button.nav-link .candidate-icon-white {
+  color: white !important;
+}
+
+/* Force candidate icon to be white in signin/signup popups */
+.twm-sign-up .nav-tabs .nav-link .fas.fa-user-tie {
+  color: white !important;
+}

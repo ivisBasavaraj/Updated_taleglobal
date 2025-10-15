@@ -14,6 +14,7 @@ const generateToken = (id, role) => {
 
 exports.registerPlacement = async (req, res) => {
   try {
+    console.log('Registration request body:', req.body);
     const { name, email, password, phone, collegeName } = req.body;
 
     const existingPlacement = await Placement.findOne({ email });
@@ -23,11 +24,24 @@ exports.registerPlacement = async (req, res) => {
 
     const placementData = { name, email, password, phone, collegeName };
     const placement = await Placement.create(placementData);
-    const token = generateToken(placement._id, 'placement');
+    
+    // Create notification for admin about new placement registration
+    try {
+      await createNotification({
+        title: 'New Placement Officer Registration',
+        message: `${placement.name} from ${placement.collegeName} has registered as a placement officer.`,
+        type: 'placement_registered',
+        role: 'admin',
+        relatedId: placement._id,
+        createdBy: placement._id
+      });
+    } catch (notifError) {
+      console.error('Failed to create registration notification:', notifError);
+    }
 
     res.status(201).json({
       success: true,
-      token,
+      message: 'Registration successful. Please wait for admin approval before you can sign in.',
       placement: {
         id: placement._id,
         name: placement.name,
@@ -116,8 +130,13 @@ exports.loginPlacement = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
-    if (placement.status !== 'active' && placement.status !== 'pending') {
-      return res.status(401).json({ success: false, message: 'Account is inactive' });
+    // Block login until admin approval - check status
+    if (placement.status !== 'active') {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'Account pending admin approval. Please wait for admin to approve your account.',
+        requiresApproval: true
+      });
     }
 
     const token = generateToken(placement._id, 'placement');

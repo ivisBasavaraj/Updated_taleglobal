@@ -14,6 +14,7 @@ const placementSchema = new mongoose.Schema({
   credits: { type: Number, default: 0 },
   isVerified: { type: Boolean, default: false },
   status: { type: String, enum: ['active', 'inactive', 'pending'], default: 'pending' },
+
   isProcessed: { type: Boolean, default: false },
   processedAt: { type: Date },
   candidatesCreated: { type: Number, default: 0 },

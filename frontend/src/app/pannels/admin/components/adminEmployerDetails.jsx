@@ -611,9 +611,37 @@ function EmployerDetails() {
                 </div>
             </div>
 
+            {/* Company Gallery Section */}
+            {profile.gallery && profile.gallery.length > 0 && (
+                <div className="documents-section" data-aos="fade-up" data-aos-delay="400">
+                    <h4 className="profile-section-title">
+                        <i className="fa fa-images"></i>
+                        Company Gallery
+                    </h4>
+                    <div className="gallery-preview mt-3">
+                        <div className="d-flex flex-wrap gap-3">
+                            {profile.gallery.map((image, index) => (
+                                <div key={image._id || index} className="gallery-item position-relative" style={{width: '150px', height: '150px'}}>
+                                    <img 
+                                        src={image.url} 
+                                        alt={`Gallery ${index + 1}`}
+                                        className="img-fluid rounded cursor-pointer"
+                                        style={{width: '100%', height: '100%', objectFit: 'cover', border: '1px solid #ddd'}}
+                                        onClick={() => {
+                                            setCurrentImage(image.url);
+                                            setShowImageModal(true);
+                                        }}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Multiple Authorization Letters Section */}
             {profile.authorizationLetters && profile.authorizationLetters.length > 0 && (
-                <div className="documents-section" data-aos="fade-up" data-aos-delay="400">
+                <div className="documents-section" data-aos="fade-up" data-aos-delay="450">
                     <h4 className="profile-section-title">
                         <i className="fa fa-file-signature"></i>
                         Authorization Letters
