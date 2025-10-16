@@ -200,7 +200,7 @@ export default function EmpPostedJobs() {
                                 <button type="button" className="site-button" disabled>
                                     Post Job
                                 </button>
-                                <p className="text-warning mt-2 mb-0">Account pending admin approval</p>
+                                <p className="text-warning mt-2 mb-0">Account verification in progress</p>
                             </div>
                         )}
                     </div>
@@ -262,7 +262,7 @@ export default function EmpPostedJobs() {
 									) : (
 										<div>
 											<button className="site-button" disabled>Post Your First Job</button>
-											<p className="text-warning mt-2">Your account is pending admin approval before you can post jobs.</p>
+											<p className="text-warning mt-2">Your account verification is pending. Job posting will be available after admin approval.</p>
 										</div>
 									)}
 								</div>

@@ -1274,6 +1274,7 @@ export default function EmpPostJob({ onNext }) {
 													<input
 														style={{...input, fontSize: 13}}
 														type="date"
+														min={new Date().toISOString().split('T')[0]}
 														value={formData.interviewRoundDetails[roundType].fromDate}
 														onChange={(e) => updateRoundDetails(roundType, 'fromDate', e.target.value)}
 													/>
@@ -1283,6 +1284,7 @@ export default function EmpPostJob({ onNext }) {
 													<input
 														style={{...input, fontSize: 13}}
 														type="date"
+														min={new Date().toISOString().split('T')[0]}
 														value={formData.interviewRoundDetails[roundType].toDate}
 														onChange={(e) => updateRoundDetails(roundType, 'toDate', e.target.value)}
 													/>
@@ -1321,6 +1323,7 @@ export default function EmpPostJob({ onNext }) {
 						<input
 							style={input}
 							type="date"
+							min={new Date().toISOString().split('T')[0]}
 							value={formData.offerLetterDate}
 							onChange={(e) => update({ offerLetterDate: e.target.value })}
 						/>

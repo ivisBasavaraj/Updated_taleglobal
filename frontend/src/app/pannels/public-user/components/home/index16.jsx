@@ -674,6 +674,100 @@ function Home16Page() {
 				</div>
 				{/* HOW IT WORK SECTION END */}
 
+				{/* HOW IT WORK SECTION 2 START */}
+				<div className="section-full p-t70 p-b60 site-bg-gray twm-how-it-work-area animate-on-scroll">
+					<Container className="py-5">
+						{/* title="" START*/}
+						<div className="section-head center wt-small-separator-outer mb-5">
+							<div className="wt-small-separator site-text-primary">
+								<div>Working Process</div>
+							</div>
+
+							<h2 className="wt-title">How It Works</h2>
+						</div>
+						{/* title="" END*/}
+
+						<div className="twm-how-it-work-section3">
+							<Row>
+								<Col xl={3} lg={6} col={12} className="mb-4">
+									<div className="twm-w-process-steps3 hover-card">
+										<div className="twm-w-pro-top">
+											<div className="twm-media">
+												<span>
+													<JobZImage
+														src="images/work-process/icon1.png"
+														alt="icon1"
+													/>
+												</span>
+											</div>
+										</div>
+
+										<h4 className="twm-title">Register Your Account</h4>
+										<p>You need to create an account to find the best jobs.</p>
+									</div>
+								</Col>
+
+								<Col xl={3} lg={6} col={12} className="mb-4">
+									<div className="twm-w-process-steps3 hover-card">
+										<div className="twm-w-pro-top">
+											<div className="twm-media">
+												<span>
+													<JobZImage
+														src="images/work-process/icon4.png"
+														alt="icon2"
+													/>
+												</span>
+											</div>
+										</div>
+
+										<h4 className="twm-title">Search and Apply</h4>
+										<p>Search your preferred jobs and apply the best jobs.</p>
+									</div>
+								</Col>
+
+								<Col xl={3} lg={6} col={12} className="mb-4">
+									<div className="twm-w-process-steps3 hover-card">
+										<div className="twm-w-pro-top">
+											<div className="twm-media">
+												<span>
+													<JobZImage
+														src="images/work-process/icon3.png"
+														alt="icon1"
+													/>
+												</span>
+											</div>
+										</div>
+
+										<h4 className="twm-title">Take Assessment</h4>
+										<p>Take assessment curated based on the job profile.</p>
+									</div>
+								</Col>
+
+								<Col xl={3} lg={6} col={12} className="mb-4">
+									<div className="twm-w-process-steps3 hover-card">
+										<div className="twm-w-pro-top">
+											<div className="twm-media">
+												<span>
+													<JobZImage
+														src="images/work-process/icon2.png"
+														alt="icon1"
+													/>
+												</span>
+											</div>
+										</div>
+
+										<h4 className="twm-title">Recruitment Process</h4>
+										<p>
+											Interviews and discussion rounds scheduled by company.
+										</p>
+									</div>
+								</Col>
+							</Row>
+						</div>
+					</Container>
+				</div>
+				{/* HOW IT WORK SECTION 2 END */}
+
 				{/* JOBS CATEGORIES SECTION START */}
 				<div className="section-full p-t50 p-b50 site-bg-white twm-job-categories-hpage-6-area animate-on-scroll">
 					{/* title="" START*/}

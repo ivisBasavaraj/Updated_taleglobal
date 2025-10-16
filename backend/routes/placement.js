@@ -29,29 +29,14 @@ router.get('/profile', auth(['placement']), async (req, res) => {
   try {
     const Placement = require('../models/Placement');
     const placement = await Placement.findById(req.user.id)
-      .select('-password')
+      .select('name email phone collegeName logo idCard fileHistory status')
       .lean();
     
     if (!placement) {
       return res.status(404).json({ success: false, message: 'Placement officer not found' });
     }
     
-    // Add file statistics
-    const totalFiles = placement.fileHistory?.length || 0;
-    const approvedFiles = placement.fileHistory?.filter(f => f.status === 'approved').length || 0;
-    const pendingFiles = placement.fileHistory?.filter(f => f.status === 'pending').length || 0;
-    
-    res.json({
-      success: true,
-      placement: {
-        ...placement,
-        stats: {
-          totalFiles,
-          approvedFiles,
-          pendingFiles
-        }
-      }
-    });
+    res.json({ success: true, placement });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -69,49 +54,11 @@ router.get('/files/:fileId/view', auth(['placement']), placementController.viewF
 // Get placement data (for placement officers to view their own data)
 router.get('/data', auth(['placement']), async (req, res) => {
   try {
-    const placementId = req.user.id;
-    const placement = await require('../models/Placement').findById(placementId);
-    
-    if (!placement) {
-      return res.status(404).json({ success: false, message: 'Placement officer not found' });
-    }
-
-    // Get student data from the most recent processed file
-    const processedFile = placement.fileHistory?.find(f => f.status === 'processed');
-    
-    if (!processedFile || !processedFile.fileData) {
-      return res.json({ success: true, students: [] });
-    }
-
-    // Parse the file data
-    const { base64ToBuffer } = require('../utils/base64Helper');
-    const XLSX = require('xlsx');
-    
-    const result = base64ToBuffer(processedFile.fileData);
-    const buffer = result.buffer;
-
-    let workbook;
-    if (processedFile.fileType && processedFile.fileType.includes('csv')) {
-      const csvData = buffer.toString('utf8');
-      workbook = XLSX.read(csvData, { type: 'string' });
-    } else {
-      workbook = XLSX.read(buffer, { type: 'buffer' });
-    }
-    
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-    const jsonData = XLSX.utils.sheet_to_json(worksheet);
-    
-    const students = jsonData.map(row => ({
-      id: row.ID || row.id || row.Id || '',
-      name: row['Candidate Name'] || row['candidate name'] || row['CANDIDATE NAME'] || row.Name || row.name || row.NAME || row['Full Name'] || row['Student Name'] || '',
-      collegeName: row['College Name'] || row['college name'] || row['COLLEGE NAME'] || row.College || row.college || row.COLLEGE || '',
-      email: row.Email || row.email || row.EMAIL || '',
-      phone: row.Phone || row.phone || row.PHONE || row.Mobile || row.mobile || row.MOBILE || '',
-      course: row.Course || row.course || row.COURSE || row.Branch || row.branch || row.BRANCH || 'Not Specified',
-      password: row.Password || row.password || row.PASSWORD || '',
-      credits: parseInt(row['Credits Assigned'] || row['credits assigned'] || row['CREDITS ASSIGNED'] || row.Credits || row.credits || row.CREDITS || row.Credit || row.credit || 0)
-    }));
+    const Candidate = require('../models/Candidate');
+    const students = await Candidate.find({ placementId: req.user.id })
+      .select('name email phone course credits')
+      .limit(100)
+      .lean();
     
     res.json({ success: true, students });
   } catch (error) {
@@ -125,5 +72,15 @@ router.post('/save-dashboard-state', auth(['placement']), placementController.sa
 
 // Upload logo
 router.post('/upload-logo', auth(['placement']), placementController.uploadLogo);
+
+// Upload ID card
+router.post('/upload-id-card', auth(['placement']), placementController.uploadIdCard);
+
+// Update placement profile
+router.put('/profile', auth(['placement']), [
+  body('name').optional().notEmpty().withMessage('Name cannot be empty'),
+  body('phone').optional().notEmpty().withMessage('Phone cannot be empty'),
+  body('collegeName').optional().notEmpty().withMessage('College name cannot be empty')
+], handleValidationErrors, placementController.updateProfile);
 
 module.exports = router;

@@ -1013,3 +1013,56 @@ exports.uploadLogo = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Upload ID card
+exports.uploadIdCard = async (req, res) => {
+  try {
+    const placementId = req.user.id;
+    const { idCard } = req.body;
+    
+    if (!idCard) {
+      return res.status(400).json({ success: false, message: 'ID card data is required' });
+    }
+    
+    await Placement.findByIdAndUpdate(placementId, {
+      $set: { idCard: idCard }
+    });
+    
+    res.json({ success: true, message: 'ID card uploaded successfully' });
+  } catch (error) {
+    console.error('Error uploading ID card:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Update placement profile
+exports.updateProfile = async (req, res) => {
+  try {
+    const placementId = req.user.id;
+    const { name, phone, collegeName } = req.body;
+    
+    const updateData = {};
+    if (name) updateData.name = name.trim();
+    if (phone) updateData.phone = phone.trim();
+    if (collegeName) updateData.collegeName = collegeName.trim();
+    
+    const placement = await Placement.findByIdAndUpdate(
+      placementId,
+      { $set: updateData },
+      { new: true }
+    ).select('-password');
+    
+    if (!placement) {
+      return res.status(404).json({ success: false, message: 'Placement officer not found' });
+    }
+    
+    res.json({ 
+      success: true, 
+      message: 'Profile updated successfully',
+      placement
+    });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

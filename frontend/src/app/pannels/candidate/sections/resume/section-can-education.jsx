@@ -3,9 +3,9 @@ import { api } from '../../../../../utils/api';
 
 function SectionCanEducation({ profile, onUpdate }) {
     const [educationData, setEducationData] = useState({
-        tenth: { schoolName: '', location: '', joiningYear: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null },
-        diploma: { schoolName: '', location: '', joiningYear: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null },
-        degree: { schoolName: '', location: '', joiningYear: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null }
+        tenth: { schoolName: '', location: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null },
+        diploma: { schoolName: '', location: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null },
+        degree: { schoolName: '', location: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null }
     });
     const [additionalRows, setAdditionalRows] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -27,7 +27,6 @@ function SectionCanEducation({ profile, onUpdate }) {
                     newData[key] = {
                         schoolName: edu.degreeName || '',
                         location: edu.collegeName || '',
-                        joiningYear: edu.joiningYear || '',
                         passoutYear: edu.passYear || '',
                         percentage: edu.percentage || '',
                         cgpa: edu.cgpa || '',
@@ -37,7 +36,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                     };
                     
                     // If data exists, set edit mode to false (show Edit button)
-                    if (edu.degreeName || edu.collegeName || edu.joiningYear || edu.passYear || edu.percentage) {
+                    if (edu.degreeName || edu.collegeName || edu.passYear || edu.percentage) {
                         newEditMode[key] = false;
                     }
                 }
@@ -118,7 +117,6 @@ function SectionCanEducation({ profile, onUpdate }) {
             educationType: 'Degree',
             schoolName: '',
             location: '',
-            joiningYear: '',
             passoutYear: '',
             percentage: '',
             cgpa: '',
@@ -180,7 +178,6 @@ function SectionCanEducation({ profile, onUpdate }) {
                 educationDataToSend = {
                     degreeName: educationData[level].schoolName,
                     collegeName: educationData[level].location,
-                    joiningYear: educationData[level].joiningYear,
                     passYear: educationData[level].passoutYear,
                     percentage: educationData[level].percentage,
                     cgpa: educationData[level].cgpa,
@@ -235,7 +232,6 @@ function SectionCanEducation({ profile, onUpdate }) {
                 {
                     degreeName: educationData.tenth.schoolName,
                     collegeName: educationData.tenth.location,
-                    joiningYear: educationData.tenth.joiningYear,
                     passYear: educationData.tenth.passoutYear,
                     percentage: educationData.tenth.percentage,
                     cgpa: educationData.tenth.cgpa,
@@ -245,7 +241,6 @@ function SectionCanEducation({ profile, onUpdate }) {
                 {
                     degreeName: educationData.diploma.schoolName,
                     collegeName: educationData.diploma.location,
-                    joiningYear: educationData.diploma.joiningYear,
                     passYear: educationData.diploma.passoutYear,
                     percentage: educationData.diploma.percentage,
                     cgpa: educationData.diploma.cgpa,
@@ -255,7 +250,6 @@ function SectionCanEducation({ profile, onUpdate }) {
                 {
                     degreeName: educationData.degree.schoolName,
                     collegeName: educationData.degree.location,
-                    joiningYear: educationData.degree.joiningYear,
                     passYear: educationData.degree.passoutYear,
                     percentage: educationData.degree.percentage,
                     cgpa: educationData.degree.cgpa,
@@ -265,7 +259,6 @@ function SectionCanEducation({ profile, onUpdate }) {
                 ...additionalRows.map(row => ({
                     degreeName: row.schoolName,
                     collegeName: row.location,
-                    joiningYear: row.joiningYear,
                     passYear: row.passoutYear,
                     percentage: row.percentage,
                     cgpa: row.cgpa,
@@ -299,12 +292,22 @@ function SectionCanEducation({ profile, onUpdate }) {
                 <div className="twm-panel-inner">
                     <div className="table-responsive">
                         <table className="table table-bordered">
+                            <colgroup>
+                                <col style={{width: '12%'}} />
+                                <col style={{width: '15%'}} />
+                                <col style={{width: '12%'}} />
+                                <col style={{width: '12%'}} />
+                                <col style={{width: '10%'}} />
+                                <col style={{width: '8%'}} />
+                                <col style={{width: '8%'}} />
+                                <col style={{width: '15%'}} />
+                                <col style={{width: '8%'}} />
+                            </colgroup>
                             <thead className="table-light">
                                 <tr>
                                     <th>Education Level</th>
                                     <th>School/College Name</th>
                                     <th>Location</th>
-                                    <th>Joining Year</th>
                                     <th>Passout Year</th>
                                     <th>Percentage</th>
                                     <th>CGPA</th>
@@ -338,17 +341,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                                             disabled={!editMode.tenth}
                                         />
                                     </td>
-                                    <td>
-                                        <input 
-                                            className="form-control"
-                                            name="joiningYear" 
-                                            type="number" 
-                                            placeholder="2020" 
-                                            value={educationData.tenth.joiningYear}
-                                            onChange={(e) => handleInputChange(e, 'tenth')}
-                                            disabled={!editMode.tenth}
-                                        />
-                                    </td>
+
                                     <td>
                                         <input 
                                             className="form-control"
@@ -437,17 +430,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                                             disabled={!editMode.diploma}
                                         />
                                     </td>
-                                    <td>
-                                        <input 
-                                            className="form-control"
-                                            name="joiningYear" 
-                                            type="number" 
-                                            placeholder="2020" 
-                                            value={educationData.diploma.joiningYear}
-                                            onChange={(e) => handleInputChange(e, 'diploma')}
-                                            disabled={!editMode.diploma}
-                                        />
-                                    </td>
+
                                     <td>
                                         <input 
                                             className="form-control"
@@ -536,17 +519,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                                             disabled={!editMode.degree}
                                         />
                                     </td>
-                                    <td>
-                                        <input 
-                                            className="form-control"
-                                            name="joiningYear" 
-                                            type="number" 
-                                            placeholder="2020" 
-                                            value={educationData.degree.joiningYear}
-                                            onChange={(e) => handleInputChange(e, 'degree')}
-                                            disabled={!editMode.degree}
-                                        />
-                                    </td>
+
                                     <td>
                                         <input 
                                             className="form-control"
@@ -646,17 +619,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                                                 disabled={!additionalEditMode[index]}
                                             />
                                         </td>
-                                        <td>
-                                            <input 
-                                                className="form-control"
-                                                name="joiningYear" 
-                                                type="number" 
-                                                placeholder="2020" 
-                                                value={row.joiningYear}
-                                                onChange={(e) => handleInputChange(e, null, index)}
-                                                disabled={!additionalEditMode[index]}
-                                            />
-                                        </td>
+
                                         <td>
                                             <input 
                                                 className="form-control"

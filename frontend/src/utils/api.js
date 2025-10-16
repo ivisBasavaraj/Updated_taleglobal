@@ -145,6 +145,17 @@ export const api = {
     }).then((res) => res.json());
   },
 
+  uploadIdCard: (formData) => {
+    const token = localStorage.getItem('candidateToken');
+    return fetch(`${API_BASE_URL}/candidate/upload-idcard`, {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: formData,
+    }).then((res) => res.json());
+  },
+
   // Education APIs
   addEducation: (formData) => {
     const token = localStorage.getItem('candidateToken');
@@ -247,7 +258,10 @@ export const api = {
 
   getPlacementProfile: () => {
     return fetch(`${API_BASE_URL}/placement/profile`, {
-      headers: getAuthHeaders('placement'),
+      headers: {
+        ...getAuthHeaders('placement'),
+        'Cache-Control': 'max-age=300' // 5 minutes cache
+      },
     }).then(handleApiResponse);
   },
 
@@ -405,7 +419,18 @@ export const api = {
 
   getMyPlacementData: () => {
     return fetch(`${API_BASE_URL}/placement/data`, {
+      headers: {
+        ...getAuthHeaders('placement'),
+        'Cache-Control': 'max-age=60' // 1 minute cache for student data
+      },
+    }).then(handleApiResponse);
+  },
+
+  updatePlacementProfile: (data) => {
+    return fetch(`${API_BASE_URL}/placement/profile`, {
+      method: 'PUT',
       headers: getAuthHeaders('placement'),
+      body: JSON.stringify(data),
     }).then(handleApiResponse);
   },
 };

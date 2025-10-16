@@ -1843,3 +1843,28 @@ exports.syncExcelCreditsWithCandidates = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Download placement ID card
+exports.downloadPlacementIdCard = async (req, res) => {
+  try {
+    const { id: placementId } = req.params;
+    
+    const placement = await Placement.findById(placementId);
+    if (!placement) {
+      return res.status(404).json({ success: false, message: 'Placement officer not found' });
+    }
+
+    if (!placement.idCard) {
+      return res.status(404).json({ success: false, message: 'ID card not found' });
+    }
+
+    const { buffer, mimeType, extension } = base64ToBuffer(placement.idCard);
+    const filename = `${placement.name.replace(/\s+/g, '_')}_ID_Card${extension}`;
+
+    res.setHeader('Content-Type', mimeType);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(buffer);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

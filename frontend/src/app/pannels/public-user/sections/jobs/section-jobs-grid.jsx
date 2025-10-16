@@ -1,89 +1,153 @@
-import { useEffect, useState, useMemo, useCallback, memo } from "react";
+import { useEffect, useState, useMemo, useCallback, memo, useRef } from "react";
 import { Col, Row } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
 import { publicUser } from "../../../../../globals/route-names";
 import JobZImage from "../../../../common/jobz-img";
 import SectionPagination from "../common/section-pagination";
 import { requestCache } from "../../../../../utils/requestCache";
+import { performanceMonitor } from "../../../../../utils/performanceMonitor";
 
 const SectionJobsGrid = memo(({ filters, onTotalChange }) => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [isFirstLoad, setIsFirstLoad] = useState(true);
+    const abortControllerRef = useRef(null);
+    const debounceTimerRef = useRef(null);
 
     const fetchJobs = useCallback(async () => {
         if (!filters) return;
         
-        setLoading(true);
-        try {
-            const params = new URLSearchParams();
-            
-            // Optimized parameter building
-            const paramMap = {
-                search: filters.search,
-                keyword: filters.keyword,
-                location: filters.location,
-                employmentType: filters.employmentType,
-                jobTitle: filters.jobTitle,
-                category: filters.category,
-                sortBy: filters.sortBy,
-                limit: filters.itemsPerPage?.toString()
-            };
-            
-            Object.entries(paramMap).forEach(([key, value]) => {
-                if (value) params.append(key, value);
-            });
-            
-            if (filters.jobType) {
-                if (Array.isArray(filters.jobType)) {
-                    filters.jobType.forEach(type => params.append('jobType', type));
-                } else {
-                    params.append('jobType', filters.jobType);
-                }
-            }
-            
-            if (filters.skills?.length > 0) {
-                filters.skills.forEach(skill => params.append('skills', skill));
-            }
-
-            const url = `http://localhost:5000/api/public/jobs?${params.toString()}`;
-            const data = await requestCache.get(url, {
-                ttl: 300000, // 5 minutes cache
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            if (data.success) {
-                const jobList = data.jobs || [];
-                setJobs(jobList);
-                onTotalChange?.(data.totalCount || jobList.length);
-            } else {
-                setJobs([]);
-                onTotalChange?.(0);
-            }
-        } catch (error) {
-            console.error('Error fetching jobs:', error);
-            setJobs([]);
-            onTotalChange?.(0);
-        } finally {
-            setLoading(false);
-            setIsFirstLoad(false);
+        // Cancel previous request
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
         }
+        
+        // Clear previous debounce
+        if (debounceTimerRef.current) {
+            clearTimeout(debounceTimerRef.current);
+        }
+        
+        // Debounce API calls
+        debounceTimerRef.current = setTimeout(async () => {
+            setLoading(true);
+            abortControllerRef.current = new AbortController();
+            
+            const apiStartTime = performance.now();
+            
+            try {
+                const params = new URLSearchParams();
+                
+                // Optimized parameter building
+                const paramMap = {
+                    search: filters.search,
+                    keyword: filters.keyword,
+                    location: filters.location,
+                    employmentType: filters.employmentType,
+                    jobTitle: filters.jobTitle,
+                    category: filters.category,
+                    sortBy: filters.sortBy,
+                    limit: filters.itemsPerPage?.toString()
+                };
+                
+                Object.entries(paramMap).forEach(([key, value]) => {
+                    if (value) params.append(key, value);
+                });
+                
+                if (filters.jobType) {
+                    if (Array.isArray(filters.jobType)) {
+                        filters.jobType.forEach(type => params.append('jobType', type));
+                    } else {
+                        params.append('jobType', filters.jobType);
+                    }
+                }
+                
+                if (filters.skills?.length > 0) {
+                    filters.skills.forEach(skill => params.append('skills', skill));
+                }
+
+                const url = `http://localhost:5000/api/public/jobs?${params.toString()}`;
+                const data = await requestCache.get(url, {
+                    ttl: 180000, // 3 minutes cache for faster updates
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    signal: abortControllerRef.current.signal
+                });
+                
+                // Monitor API performance
+                performanceMonitor.monitorAPICall(url, apiStartTime);
+                
+                if (data.success) {
+                    const jobList = data.jobs || [];
+                    setJobs(jobList);
+                    onTotalChange?.(data.totalCount || jobList.length);
+                } else {
+                    setJobs([]);
+                    onTotalChange?.(0);
+                }
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    console.error('Error fetching jobs:', error);
+                    setJobs([]);
+                    onTotalChange?.(0);
+                }
+            } finally {
+                setLoading(false);
+                setIsFirstLoad(false);
+            }
+        }, 300); // 300ms debounce
     }, [filters, onTotalChange]);
 
     useEffect(() => {
         fetchJobs();
+        
+        // Cleanup on unmount
+        return () => {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+            if (debounceTimerRef.current) {
+                clearTimeout(debounceTimerRef.current);
+            }
+        };
     }, [fetchJobs]);
 
 
 
     const JobCard = memo(({ job, index }) => {
-        const handleApplyClick = useCallback(() => {
-            window.location.href = `/job-detail/${job._id}`;
-        }, [job._id]);
+        const cardRef = useRef(null);
+        
+        // Intersection observer for lazy loading
+        useEffect(() => {
+            const observer = performanceMonitor.setupIntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.setAttribute('data-visible', 'true');
+                        } else {
+                            entry.target.setAttribute('data-visible', 'false');
+                        }
+                    });
+                },
+                { rootMargin: '100px' }
+            );
+            
+            if (cardRef.current) {
+                observer.observe(cardRef.current);
+            }
+            
+            return () => {
+                if (cardRef.current) {
+                    observer.unobserve(cardRef.current);
+                }
+            };
+        }, []);
+        const handleApplyClick = useCallback((e) => {
+            e.preventDefault();
+            navigate(`/job-detail/${job._id}`);
+        }, [job._id, navigate]);
 
         const jobTypeClass = useMemo(() => {
             const typeMap = {
@@ -106,7 +170,7 @@ const SectionJobsGrid = memo(({ filters, onTotalChange }) => {
 
         return (
             <Col key={job._id} lg={6} md={12} className="mb-4">
-                <div className="twm-jobs-grid-style1 hover-card job-card">
+                <div ref={cardRef} className="twm-jobs-grid-style1 hover-card job-card" data-visible="true">
                     <div className="twm-media">
                         {job.employerProfile?.logo ? (
                             <img src={job.employerProfile.logo} alt="Company Logo" loading="lazy" />

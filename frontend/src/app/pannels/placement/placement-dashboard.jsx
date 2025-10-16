@@ -8,6 +8,8 @@ function PlacementDashboard() {
     const [placementData, setPlacementData] = useState(null);
     const [studentData, setStudentData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [profileLoaded, setProfileLoaded] = useState(false);
+    const [dataLoaded, setDataLoaded] = useState(false);
     const [uploadingFile, setUploadingFile] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [processingFiles, setProcessingFiles] = useState({});
@@ -17,82 +19,54 @@ function PlacementDashboard() {
     const [customFileName, setCustomFileName] = useState('');
     const [showNameModal, setShowNameModal] = useState(false);
     const [pendingFile, setPendingFile] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editFormData, setEditFormData] = useState({
+        name: '',
+        phone: '',
+        collegeName: ''
+    });
+    const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
         if (!authLoading && isAuthenticated() && userType === 'placement') {
-            fetchPlacementDetails();
+            // Parallel loading for faster response
+            Promise.all([
+                fetchPlacementDetails(),
+                fetchStudentData()
+            ]).catch(console.error);
         }
     }, [authLoading, userType, isAuthenticated]);
 
     const fetchPlacementDetails = async () => {
         try {
-            setLoading(true);
-            
-            if (authLoading) {
-                return; // Wait for auth to load
-            }
-            
-            if (!isAuthenticated() || userType !== 'placement') {
-                console.error('Not authenticated as placement officer');
+            if (authLoading || !isAuthenticated() || userType !== 'placement') {
                 return;
             }
             
-            // Get placement profile first
             const profileData = await api.getPlacementProfile();
-            if (!profileData.success) {
-                console.error('Failed to get placement profile:', profileData.message);
-                return;
+            if (profileData.success) {
+                setPlacementData(profileData.placement);
+                setPlacementId(profileData.placement._id);
+                setProfileLoaded(true);
             }
-            const userEmail = profileData.placement?.email;
-            
-            if (!userEmail) return;
-            
-            // Use profile data directly
-            setPlacementData(profileData.placement);
-            setPlacementId(profileData.placement._id);
-            fetchStudentData(profileData.placement._id);
-            
-            // Save dashboard data to database
-            saveDashboardData({
-                placementData: profileData.placement,
-                studentCount: studentData.length,
-                timestamp: new Date().toISOString()
-            });
         } catch (error) {
             console.error('Error fetching placement details:', error);
-        } finally {
-            setLoading(false);
         }
     };
     
-    const saveDashboardData = async (dashboardData) => {
-        try {
-            const token = localStorage.getItem('placementToken');
-            const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-            await fetch(`${API_BASE_URL}/placement/save-dashboard-state`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ dashboardData })
-            });
-        } catch (error) {
-            console.error('Error saving dashboard data:', error);
-        }
-    };
 
-    const fetchStudentData = async (placementId) => {
+
+    const fetchStudentData = async () => {
         try {
-            // Use placement-specific endpoint instead of admin endpoint
             const data = await api.getMyPlacementData();
             if (data.success) {
                 setStudentData(data.students || []);
-            } else {
-                console.error('Failed to fetch student data:', data.message);
+                setDataLoaded(true);
             }
         } catch (error) {
             console.error('Error fetching student data:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -240,7 +214,7 @@ function PlacementDashboard() {
             const data = await response.json();
             
             if (data.success) {
-                alert('Student data uploaded successfully! Waiting for admin approval.\n\nMake sure your file contains these columns:\n- ID\n- Candidate Name\n- College Name\n- Email\n- Phone\n- Course\n- Password\n- Credits Assigned');
+                alert('Student data uploaded successfully! Waiting for admin approval.');
                 setSelectedFile(null);
                 setCustomFileName('');
                 setPendingFile(null);
@@ -315,7 +289,95 @@ function PlacementDashboard() {
         reader.readAsDataURL(file);
     };
 
-    if (loading || authLoading) {
+    const handleIdCardUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            return;
+        }
+        
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image size should be less than 2MB');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            try {
+                const base64IdCard = event.target.result;
+                const token = localStorage.getItem('placementToken');
+                
+                const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+                const response = await fetch(`${API_BASE_URL}/placement/upload-id-card`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ idCard: base64IdCard })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    alert('ID card uploaded successfully!');
+                    fetchPlacementDetails();
+                } else {
+                    alert('Failed to upload ID card');
+                }
+            } catch (error) {
+                alert('Error uploading ID card');
+            }
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const handleEditProfile = () => {
+        setEditFormData({
+            name: placementData.name || '',
+            phone: placementData.phone || '',
+            collegeName: placementData.collegeName || ''
+        });
+        setShowEditModal(true);
+    };
+
+    const handleUpdateProfile = async () => {
+        if (!editFormData.name.trim() || !editFormData.phone.trim() || !editFormData.collegeName.trim()) {
+            alert('All fields are required');
+            return;
+        }
+
+        setUpdating(true);
+        try {
+            const response = await api.updatePlacementProfile(editFormData);
+            if (response.success) {
+                alert('Profile updated successfully!');
+                setShowEditModal(false);
+                fetchPlacementDetails();
+            } else {
+                alert(response.message || 'Failed to update profile');
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('Error updating profile. Please try again.');
+        } finally {
+            setUpdating(false);
+        }
+    };
+
+    if (authLoading) {
+        return (
+            <div className="container-fluid p-4" style={{background: '#f8f9fa', minHeight: '100vh'}}>
+                <div className="text-center py-5">
+                    <div className="spinner-border text-primary mb-3" role="status"></div>
+                    <h4>Authenticating...</h4>
+                </div>
+            </div>
+        );
+    }
+
+    if (loading && !profileLoaded) {
         return (
             <div className="container-fluid p-4" style={{background: '#f8f9fa', minHeight: '100vh'}}>
                 <div className="text-center py-5">
@@ -341,20 +403,38 @@ function PlacementDashboard() {
     return (
         <div className="container-fluid p-4" style={{background: '#f8f9fa', minHeight: '100vh'}}>
             {/* Header */}
-            <div className="modern-card mb-4 p-4">
-                <div className="d-flex justify-content-between align-items-center">
-                    <h2 className="mb-0" style={{color: '#2c3e50', fontWeight: '600'}}>
-                        <i className="fa fa-dashboard mr-2"></i>
-                        Placement Dashboard
-                    </h2>
-                    <button 
-                        className="btn btn-outline-primary"
-                        onClick={fetchPlacementDetails}
-                        style={{borderRadius: '8px'}}
-                    >
-                        <i className="fa fa-refresh mr-2"></i>
-                        Refresh
-                    </button>
+            <div className="modern-card mb-4 p-4" style={{padding: '2.5rem', position: 'relative', overflow: 'hidden'}}>
+                <div style={{position: 'absolute', top: '-70px', right: '-70px', width: '200px', height: '200px', background: 'radial-gradient(circle, rgba(255, 140, 0, 0.25) 0%, rgba(255, 140, 0, 0) 65%)'}}></div>
+                <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between" style={{position: 'relative', zIndex: 2, gap: '1.5rem'}}>
+                    <div>
+                        <label className="text-uppercase text-muted" style={{letterSpacing: '3px', fontSize: '0.85rem'}}>Placement Portal</label>
+                        <h2 className="mb-0" style={{color: '#1f2937', fontWeight: '700', fontSize: '2.1rem'}}>
+                            <i className="fa fa-dashboard mr-2" style={{color: '#ff8c00'}}></i>
+                            Placement Dashboard
+                        </h2>
+                        <p className="text-muted mb-0 mt-2" style={{maxWidth: '520px'}}>Monitor student onboarding progress, manage uploaded data files, and keep your placement operations streamlined.</p>
+                    </div>
+                    <div className="d-flex flex-wrap align-items-center" style={{gap: '0.75rem'}}>
+                        <button 
+                            className="btn btn-outline-success"
+                            onClick={handleEditProfile}
+                            style={{borderRadius: '50px', padding: '0.65rem 1.5rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.5rem'}}
+                        >
+                            <i className="fa fa-edit"></i>
+                            Edit Profile
+                        </button>
+                        <button 
+                            className="btn btn-outline-primary"
+                            onClick={() => {
+                                fetchPlacementDetails();
+                                fetchStudentData();
+                            }}
+                            style={{borderRadius: '50px', padding: '0.65rem 1.5rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.5rem'}}
+                        >
+                            <i className="fa fa-refresh"></i>
+                            Refresh
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -404,86 +484,121 @@ function PlacementDashboard() {
                         />
                         <small className="text-muted d-block mt-2">College Logo</small>
                     </div>
-                    <div className="col-md-10">
-                        <h3 className="mb-2" style={{color: '#2c3e50'}}>{placementData.name}</h3>
-                        <p className="mb-1" style={{color: '#6c757d', fontSize: '1.1rem'}}>
-                            <i className="fa fa-university mr-2"></i>
-                            {placementData.collegeName || 'College Name Not Available'}
-                        </p>
-                        <p className="mb-0" style={{color: '#6c757d'}}>
-                            <i className="fa fa-envelope mr-2"></i>
-                            {placementData.email}
-                        </p>
+                    <div className="col-md-2 text-center">
+                        {placementData.idCard ? (
+                            <img 
+                                src={placementData.idCard} 
+                                alt="ID Card" 
+                                style={{
+                                    width: '100px',
+                                    height: '100px',
+                                    objectFit: 'contain',
+                                    borderRadius: '12px',
+                                    border: '2px solid #e9ecef',
+                                    background: '#f8f9fa',
+                                    cursor: 'pointer'
+                                }}
+                                onClick={() => document.getElementById('idCardInput').click()}
+                            />
+                        ) : (
+                            <div 
+                                style={{
+                                    width: '100px',
+                                    height: '100px',
+                                    borderRadius: '12px',
+                                    border: '2px dashed #ccc',
+                                    background: '#f8f9fa',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer'
+                                }}
+                                onClick={() => document.getElementById('idCardInput').click()}
+                            >
+                                <i className="fa fa-id-card fa-2x text-muted"></i>
+                            </div>
+                        )}
+                        <input 
+                            id="idCardInput"
+                            type="file" 
+                            accept="image/*"
+                            style={{display: 'none'}}
+                            onChange={handleIdCardUpload}
+                        />
+                        <small className="text-muted d-block mt-2">ID Card</small>
+                    </div>
+                    <div className="col-md-8">
+                        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center" style={{gap: '1rem'}}>
+                            <div>
+                                <span className="text-uppercase text-muted" style={{letterSpacing: '2px', fontSize: '0.75rem'}}>Placement Officer</span>
+                                <h3 className="mb-1" style={{color: '#1f2937', fontWeight: 700}}>{placementData.name}</h3>
+                                <div className="d-flex align-items-center flex-wrap" style={{gap: '1rem'}}>
+                                    <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
+                                        <i className="fa fa-id-card mr-2" style={{color: '#ff8c00'}}></i>
+                                        <strong style={{fontSize: '0.95rem'}}>{placementData.employeeId || 'ID Unavailable'}</strong>
+                                    </span>
+                                    <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
+                                        <i className="fa fa-graduation-cap mr-2" style={{color: '#ff8c00'}}></i>
+                                        {placementData.collegeName || 'College Name Not Available'}
+                                    </span>
+                                </div>
+                                <div className="mt-3" style={{display: 'grid', gap: '0.35rem'}}>
+                                    <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
+                                        <i className="fa fa-envelope mr-2" style={{color: '#ff8c00'}}></i>
+                                        {placementData.email}
+                                    </span>
+                                    <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
+                                        <i className="fa fa-phone mr-2" style={{color: '#ff8c00'}}></i>
+                                        {placementData.phone || 'Phone Unavailable'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="d-flex flex-column" style={{gap: '0.75rem', minWidth: '220px'}}>
+                                <div className="d-flex align-items-center" style={{background: 'rgba(255, 140, 0, 0.08)', borderRadius: '16px', padding: '0.85rem 1.1rem'}}>
+                                    <span className="badge badge-light" style={{background: '#fff3e6', color: '#dd6b20', fontWeight: 600, borderRadius: '999px', padding: '0.4rem 0.9rem', fontSize: '0.75rem'}}>Status</span>
+                                    <span className="ml-auto" style={{fontWeight: 700, color: '#1f2937', textTransform: 'capitalize'}}>{placementData.status || 'Pending'}</span>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div className="row">
-                    <div className="col-lg-3 col-md-6 mb-3">
+                    <div className="col-lg-4 col-md-6 mb-3">
                         <div className="info-card">
-                            <div className="info-icon" style={{
-                                background: '#ff8c00 !important', 
-                                color: '#fff !important',
-                                width: '50px !important',
-                                height: '50px !important',
-                                borderRadius: '12px !important',
-                                display: 'flex !important',
-                                alignItems: 'center !important',
-                                justifyContent: 'center !important',
-                                marginRight: '15px !important'
-                            }}>
-                                <i className="fa fa-users" style={{fontSize: '20px !important', color: '#ffffff !important'}}></i>
+                            <div className="info-icon">
+                                <i className="fa fa-users" style={{fontSize: '20px'}}></i>
                             </div>
                             <div>
-                                <label className="text-muted mb-1">Total Students</label>
-                                <p className="mb-0 font-weight-bold">{studentData.length}</p>
+                                <label className="text-muted mb-1" style={{fontSize: '0.75rem'}}>Total Students</label>
+                                <h4 className="mb-0" style={{fontWeight: 700, color: '#1f2937'}}>{studentData.length}</h4>
+                                <small className="text-muted">Currently registered in your placement batch</small>
                             </div>
                         </div>
                     </div>
 
-                    <div className="col-lg-3 col-md-6 mb-3">
+                    <div className="col-lg-4 col-md-6 mb-3">
                         <div className="info-card">
-                            <div className="info-icon" style={{
-                                background: '#ff8c00 !important', 
-                                color: '#fff !important',
-                                width: '50px !important',
-                                height: '50px !important',
-                                borderRadius: '12px !important',
-                                display: 'flex !important',
-                                alignItems: 'center !important',
-                                justifyContent: 'center !important',
-                                marginRight: '15px !important'
-                            }}>
-                                <i className={`fa ${placementData.status === 'approved' ? 'fa-check-circle' : 'fa-clock-o'}`} style={{fontSize: '20px !important', color: '#ffffff !important'}}></i>
+                            <div className="info-icon">
+                                <i className="fa fa-check-circle" style={{fontSize: '20px'}}></i>
                             </div>
                             <div>
-                                <label className="text-muted mb-1">Status</label>
-                                <p className="mb-0 font-weight-bold" style={{
-                                    color: placementData.status === 'approved' ? '#28a745' : 
-                                           placementData.status === 'rejected' ? '#dc3545' : '#ffc107'
-                                }}>
-                                    {placementData.status || 'Pending'}
-                                </p>
+                                <label className="text-muted mb-1" style={{fontSize: '0.75rem'}}>Status</label>
+                                <h4 className="mb-0" style={{fontWeight: 700, color: '#1f2937', textTransform: 'capitalize'}}>{placementData.status || 'Pending'}</h4>
+                                <small className="text-muted">Your placement account is currently {placementData.status || 'pending'}</small>
                             </div>
                         </div>
                     </div>
-                    <div className="col-lg-3 col-md-6 mb-3">
+                    <div className="col-lg-4 col-md-6 mb-3">
                         <div className="info-card">
-                            <div className="info-icon" style={{
-                                background: '#ff8c00 !important', 
-                                color: '#fff !important',
-                                width: '50px !important',
-                                height: '50px !important',
-                                borderRadius: '12px !important',
-                                display: 'flex !important',
-                                alignItems: 'center !important',
-                                justifyContent: 'center !important',
-                                marginRight: '15px !important'
-                            }}>
-                                <i className="fa fa-file-excel-o" style={{fontSize: '20px !important', color: '#ffffff !important'}}></i>
+                            <div className="info-icon">
+                                <i className="fa fa-file-excel-o" style={{fontSize: '20px'}}></i>
                             </div>
                             <div>
-                                <label className="text-muted mb-1">Files Uploaded</label>
-                                <p className="mb-0 font-weight-bold">{placementData.fileHistory?.length || 0}</p>
+                                <label className="text-muted mb-1" style={{fontSize: '0.75rem'}}>Files Uploaded</label>
+                                <h4 className="mb-0" style={{fontWeight: 700, color: '#1f2937'}}>{placementData.fileHistory?.length || 0}</h4>
+                                <small className="text-muted">Awaiting admin review and processing</small>
                             </div>
                         </div>
                     </div>
@@ -869,6 +984,95 @@ function PlacementDashboard() {
                                 >
                                     <i className="fa fa-upload mr-1"></i>
                                     Upload File
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Profile Modal */}
+            {showEditModal && (
+                <div className="modal fade show" style={{display: 'block', backgroundColor: 'rgba(0,0,0,0.5)'}} onClick={() => setShowEditModal(false)}>
+                    <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">
+                                    <i className="fa fa-edit mr-2"></i>
+                                    Edit Profile
+                                </h5>
+                                <button 
+                                    type="button" 
+                                    className="close" 
+                                    onClick={() => setShowEditModal(false)}
+                                >
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="form-group">
+                                    <label className="font-weight-bold">Name *</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={editFormData.name}
+                                        onChange={(e) => setEditFormData({...editFormData, name: e.target.value})}
+                                        placeholder="Enter your full name"
+                                        maxLength="100"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="font-weight-bold">Phone Number *</label>
+                                    <input
+                                        type="tel"
+                                        className="form-control"
+                                        value={editFormData.phone}
+                                        onChange={(e) => setEditFormData({...editFormData, phone: e.target.value})}
+                                        placeholder="Enter your phone number"
+                                        maxLength="15"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="font-weight-bold">College Name *</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={editFormData.collegeName}
+                                        onChange={(e) => setEditFormData({...editFormData, collegeName: e.target.value})}
+                                        placeholder="Enter your college name"
+                                        maxLength="200"
+                                    />
+                                </div>
+                                <small className="text-muted">
+                                    * All fields are required
+                                </small>
+                            </div>
+                            <div className="modal-footer">
+                                <button 
+                                    type="button" 
+                                    className="btn btn-secondary" 
+                                    onClick={() => setShowEditModal(false)}
+                                    disabled={updating}
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="button" 
+                                    className="btn btn-success" 
+                                    onClick={handleUpdateProfile}
+                                    disabled={updating}
+                                >
+                                    {updating ? (
+                                        <>
+                                            <div className="spinner-border spinner-border-sm mr-2" role="status"></div>
+                                            Updating...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <i className="fa fa-save mr-1"></i>
+                                            Update Profile
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </div>

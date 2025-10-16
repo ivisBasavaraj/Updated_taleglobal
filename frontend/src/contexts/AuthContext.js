@@ -17,31 +17,39 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    checkAuthStatus();
+    // Immediate auth check without delay
+    const timeoutId = setTimeout(checkAuthStatus, 0);
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const checkAuthStatus = () => {
-    const candidateToken = localStorage.getItem('candidateToken');
-    const employerToken = localStorage.getItem('employerToken');
-    const adminToken = localStorage.getItem('adminToken');
-    const placementToken = localStorage.getItem('placementToken');
+    try {
+      // Check tokens in priority order for faster detection
+      const tokens = {
+        placement: localStorage.getItem('placementToken'),
+        candidate: localStorage.getItem('candidateToken'),
+        employer: localStorage.getItem('employerToken'),
+        admin: localStorage.getItem('adminToken')
+      };
 
-    if (candidateToken) {
-      const candidateUser = JSON.parse(localStorage.getItem('candidateUser') || '{}');
-      setUser(candidateUser);
-      setUserType('candidate');
-    } else if (employerToken) {
-      const employerUser = JSON.parse(localStorage.getItem('employerUser') || '{}');
-      setUser(employerUser);
-      setUserType('employer');
-    } else if (adminToken) {
-      const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
-      setUser(adminUser);
-      setUserType('admin');
-    } else if (placementToken) {
-      const placementUser = JSON.parse(localStorage.getItem('placementUser') || '{}');
-      setUser(placementUser);
-      setUserType('placement');
+      // Find first valid token
+      for (const [type, token] of Object.entries(tokens)) {
+        if (token) {
+          try {
+            const userData = JSON.parse(localStorage.getItem(`${type}User`) || '{}');
+            setUser(userData);
+            setUserType(type);
+            setLoading(false);
+            return;
+          } catch (e) {
+            // Invalid user data, remove token
+            localStorage.removeItem(`${type}Token`);
+            localStorage.removeItem(`${type}User`);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Auth check error:', error);
     }
     
     setLoading(false);

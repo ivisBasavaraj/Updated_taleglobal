@@ -63,7 +63,7 @@ exports.getJobs = async (req, res) => {
     };
     const sortCriteria = sortMap[sortBy] || { createdAt: -1 };
 
-    // Single optimized aggregation pipeline
+    // Optimized aggregation pipeline with minimal data transfer
     const pipeline = [
       { $match: query },
       {
@@ -86,7 +86,7 @@ exports.getJobs = async (req, res) => {
           foreignField: 'employerId',
           as: 'employerProfile',
           pipeline: [
-            { $project: { logo: 1, description: 1, website: 1, location: 1 } }
+            { $project: { logo: 1, companyName: 1 } } // Only get essential profile data
           ]
         }
       },
@@ -112,10 +112,9 @@ exports.getJobs = async (req, res) => {
           category: 1,
           ctc: 1,
           createdAt: 1,
-          employerId: 1,
-          employerProfile: 1,
+          'employerProfile.logo': 1,
           postedBy: 1,
-          companyName: 1
+          'employerId.companyName': 1
         }
       },
       { $sort: sortCriteria },
@@ -145,8 +144,8 @@ exports.getJobs = async (req, res) => {
       hasPrevPage: parseInt(page) > 1
     };
     
-    // Cache for 5 minutes
-    cache.set(cacheKey, response, 300000);
+    // Cache for 3 minutes for faster updates
+    cache.set(cacheKey, response, 180000);
     
     res.json(response);
   } catch (error) {
@@ -201,6 +200,12 @@ exports.getJobById = async (req, res) => {
 
     const EmployerProfile = require('../models/EmployerProfile');
     const employerProfile = await EmployerProfile.findOne({ employerId: job.employerId._id }).lean();
+    
+    console.log('Found employer profile:', !!employerProfile);
+    if (employerProfile) {
+      console.log('Profile logo exists:', !!employerProfile.logo);
+      console.log('Profile cover exists:', !!employerProfile.coverImage);
+    }
     
     const jobWithProfile = {
       ...job,
@@ -434,7 +439,13 @@ exports.getEmployers = async (req, res) => {
           foreignField: 'employerId',
           as: 'profile',
           pipeline: [
-            { $project: { logo: 1, corporateAddress: 1, website: 1, description: 1, industry: 1 } }
+            { $project: { 
+              logo: 1, 
+              industry: 1, 
+              corporateAddress: 1, 
+              website: 1, 
+              companySize: 1 
+            } }
           ]
         }
       },
@@ -458,8 +469,13 @@ exports.getEmployers = async (req, res) => {
       },
       {
         $project: {
-          password: 0,
-          jobs: 0
+          companyName: 1,
+          email: 1,
+          phone: 1,
+          employerType: 1,
+          createdAt: 1,
+          profile: 1,
+          jobCount: 1
         }
       },
       { $sort: sortCriteria },
@@ -489,7 +505,7 @@ exports.getEmployers = async (req, res) => {
       hasPrevPage: parseInt(page) > 1
     };
     
-    cache.set(cacheKey, response, 300000);
+    cache.set(cacheKey, response, 180000);
     res.json(response);
   } catch (error) {
     console.error('Error in getEmployers:', error);

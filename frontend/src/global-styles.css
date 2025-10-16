@@ -261,71 +261,166 @@ html {
 }
 
 .top-recruiter-card {
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 160px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 220px;
     padding: 24px;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 20px;
+    overflow: hidden;
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    isolation: isolate; /* ensures overlay layers render correctly */
+}
+
+.top-recruiter-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(145deg, rgba(253, 126, 20, 0.45), rgba(14, 116, 144, 0.55));
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.top-recruiter-card::after {
+    content: "";
+    position: absolute;
+    top: -40px;
+    right: -60px;
+    width: 160px;
+    height: 160px;
+    background: rgba(253, 126, 20, 0.12);
+    filter: blur(0);
+    transform: rotate(25deg);
+    transition: transform 0.35s ease, opacity 0.35s ease;
+    border-radius: 32px;
+    opacity: 0.75;
+    z-index: -1;
 }
 
 .top-recruiter-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
+    transform: translateY(-10px);
+    box-shadow: 0 32px 65px rgba(15, 23, 42, 0.18);
+}
+
+.top-recruiter-card:hover::before {
+    opacity: 1;
+}
+
+.top-recruiter-card:hover::after {
+    transform: rotate(0deg) translate(16px, -10px);
+    opacity: 1;
 }
 
 .top-recruiter-link {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     text-decoration: none !important;
     color: inherit !important;
     width: 100%;
+    height: 100%;
 }
 
 .top-recruiter-logo {
-    max-height: 60px;
-    max-width: 100%;
-    object-fit: contain;
-    margin-bottom: 12px;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    object-fit: cover;
+    margin-bottom: 20px;
+    background-color: rgba(15, 23, 42, 0.08);
+    padding: 10px;
+    box-shadow: inset 0 2px 8px rgba(15, 23, 42, 0.08);
 }
 
 .top-recruiter-placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 60px;
-    background-color: #f1f5f9;
-    border-radius: 8px;
-    margin-bottom: 12px;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.12), rgba(15, 23, 42, 0.04));
+    color: #0f172a;
+    font-weight: 600;
 }
 
 .top-recruiter-name {
-    font-size: 16px;
+    font-size: 18px;
     color: #0f172a;
-    text-align: center;
+    font-weight: 600;
+    text-align: left;
+    margin-bottom: 6px;
 }
 
 .top-recruiter-jobs {
-    font-size: 13px;
+    font-size: 14px;
     color: #475569;
+    background-color: rgba(15, 23, 42, 0.06);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-weight: 500;
+}
+
+.top-recruiter-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px dashed rgba(148, 163, 184, 0.5);
+    gap: 12px;
+}
+
+.top-recruiter-meta span {
+    font-size: 14px;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.top-recruiter-meta svg {
+    width: 16px;
+    height: 16px;
+    color: #0ea5e9;
+}
+
+.top-recruiter-link .top-recruiter-meta span:last-child {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #0ea5e9;
+    font-weight: 600;
 }
 
 @media (max-width: 1199px) {
     .top-recruiters-grid {
         grid-template-columns: repeat(3, 1fr);
     }
+
+    .top-recruiter-card {
+        height: 210px;
+    }
 }
 
 @media (max-width: 991px) {
     .top-recruiters-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .top-recruiter-card {
+        height: 200px;
     }
 }
 
@@ -336,6 +431,13 @@ html {
 
     .top-recruiter-card {
         height: auto;
+        padding: 20px;
+    }
+
+    .top-recruiter-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
     }
 }
 

@@ -3,6 +3,7 @@ import { placement } from "../globals/route-names";
 import PlacementDashboard from "../app/pannels/placement/placement-dashboard";
 import '../app/pannels/common/modern-dashboard.css';
 import '../app/pannels/placement/placement-dashboard.css';
+import '../placement-performance.css';
 
 function PlacementRoutes() {
     return (

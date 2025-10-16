@@ -1,8 +1,10 @@
-// Simple request cache and deduplication utility
+// Enhanced request cache with memory management and compression
 class RequestCache {
   constructor() {
     this.cache = new Map();
     this.pendingRequests = new Map();
+    this.maxCacheSize = 100; // Maximum number of cached items
+    this.compressionThreshold = 1024; // Compress responses larger than 1KB
   }
 
   async get(url, options = {}) {
@@ -16,17 +18,24 @@ class RequestCache {
     // Check cache first
     const cached = this.cache.get(cacheKey);
     if (cached && !this.isExpired(cached)) {
-      return cached.data;
+      // Move to end (LRU)
+      this.cache.delete(cacheKey);
+      this.cache.set(cacheKey, cached);
+      return this.decompressData(cached.data);
     }
 
     // Make new request
     const requestPromise = this.makeRequest(url, options)
       .then(data => {
+        // Manage cache size
+        this.manageCacheSize();
+        
         // Cache the result
         this.cache.set(cacheKey, {
-          data,
+          data: this.compressData(data),
           timestamp: Date.now(),
-          ttl: options.ttl || 300000 // 5 minutes default
+          ttl: options.ttl || 180000, // 3 minutes default
+          size: JSON.stringify(data).length
         });
         
         // Remove from pending requests
@@ -47,14 +56,20 @@ class RequestCache {
   }
 
   async makeRequest(url, options) {
-    const response = await fetch(url, {
+    const fetchOptions = {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         ...options.headers
       },
+      signal: options.signal,
       ...options
-    });
+    };
+    
+    // Remove non-fetch options
+    delete fetchOptions.ttl;
+    
+    const response = await fetch(url, fetchOptions);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -80,6 +95,46 @@ class RequestCache {
     const cacheKey = this.getCacheKey(url, options);
     this.cache.delete(cacheKey);
     this.pendingRequests.delete(cacheKey);
+  }
+  
+  manageCacheSize() {
+    if (this.cache.size >= this.maxCacheSize) {
+      // Remove oldest entries (LRU)
+      const entriesToRemove = this.cache.size - this.maxCacheSize + 10;
+      const keys = Array.from(this.cache.keys());
+      for (let i = 0; i < entriesToRemove; i++) {
+        this.cache.delete(keys[i]);
+      }
+    }
+  }
+  
+  compressData(data) {
+    const jsonString = JSON.stringify(data);
+    if (jsonString.length > this.compressionThreshold) {
+      // Simple compression - in production, use a proper compression library
+      return {
+        compressed: true,
+        data: jsonString
+      };
+    }
+    return { compressed: false, data };
+  }
+  
+  decompressData(cachedData) {
+    if (cachedData.compressed) {
+      return JSON.parse(cachedData.data);
+    }
+    return cachedData.data;
+  }
+  
+  getCacheStats() {
+    const totalSize = Array.from(this.cache.values())
+      .reduce((sum, item) => sum + (item.size || 0), 0);
+    return {
+      entries: this.cache.size,
+      totalSize,
+      pendingRequests: this.pendingRequests.size
+    };
   }
 }
 

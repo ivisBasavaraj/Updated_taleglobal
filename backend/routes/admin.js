@@ -91,6 +91,7 @@ router.post('/placements/:id/store-excel-data', checkPermission('placement_offic
 router.get('/placements/:id/stored-excel-data', checkPermission('placement_officers'), adminController.getStoredExcelData);
 router.get('/placements/:id/stored-excel-data/:fileId', checkPermission('placement_officers'), adminController.getStoredExcelData);
 router.post('/placements/:id/sync-excel-credits', checkPermission('placement_officers'), adminController.syncExcelCreditsWithCandidates);
+router.get('/placements/:id/download-id-card', checkPermission('placement_officers'), adminController.downloadPlacementIdCard);
 
 // Sub Admin Management Routes (Only for main admins)
 router.post('/sub-admins', auth(['admin']), [

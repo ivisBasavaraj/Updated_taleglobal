@@ -17,29 +17,24 @@ function PlacementLayout() {
                             <i className="fa fa-graduation-cap fa-lg mr-2" style={{color: 'white'}}></i>
                             <span style={{fontWeight: '600', fontSize: '1.2rem'}}>Placement Portal</span>
                         </div>
-                        <div className="navbar-nav ml-auto">
-                            <div className="nav-item dropdown">
-                                <button 
-                                    className="btn btn-link nav-link dropdown-toggle" 
-                                    style={{color: 'white', textDecoration: 'none'}}
-                                    data-toggle="dropdown"
-                                >
-                                    <i className="fa fa-user-circle mr-1"></i>
+                        <div className="navbar-nav ml-auto d-flex align-items-center" style={{columnGap: '1rem'}}>
+                            <div className="nav-item">
+                                <span className="nav-link d-flex align-items-center" style={{color: 'white', fontWeight: 500}}>
+                                    <i className="fa fa-user-circle mr-2"></i>
                                     Account
-                                </button>
-                                <div className="dropdown-menu dropdown-menu-right">
-                                    <button 
-                                        className="dropdown-item"
-                                        onClick={() => {
-                                            localStorage.removeItem('placementToken');
-                                            window.location.href = '/login';
-                                        }}
-                                    >
-                                        <i className="fa fa-sign-out mr-2"></i>
-                                        Logout
-                                    </button>
-                                </div>
+                                </span>
                             </div>
+                            <button 
+                                className="btn btn-outline-light btn-sm"
+                                style={{borderRadius: '50px', padding: '0.4rem 1.1rem', fontWeight: 600, letterSpacing: '0.5px'}}
+                                onClick={() => {
+                                    localStorage.removeItem('placementToken');
+                                    window.location.href = '/login';
+                                }}
+                            >
+                                <i className="fa fa-sign-out mr-2"></i>
+                                Logout
+                            </button>
                         </div>
                     </div>
                 </nav>

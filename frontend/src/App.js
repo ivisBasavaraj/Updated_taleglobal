@@ -23,7 +23,7 @@ function App() {
     
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 100);
+    }, 50);
     
     return () => clearTimeout(timer);
   }, []);

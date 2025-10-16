@@ -82,12 +82,15 @@ function SectionCandicateBasicInfo() {
         phone: '',
         email: '',
         location: '',
-        profilePicture: null
+        profilePicture: null,
+        idCard: null
     });
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);
     const [currentProfilePicture, setCurrentProfilePicture] = useState(null);
+    const [idCardPreview, setIdCardPreview] = useState(null);
+    const [currentIdCard, setCurrentIdCard] = useState(null);
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
     const [notification, setNotification] = useState(null);
@@ -139,6 +142,7 @@ function SectionCandicateBasicInfo() {
                 setErrors({});
                 setTouched({});
                 setCurrentProfilePicture(profile.profilePicture);
+                setCurrentIdCard(profile.idCard);
             }
         } catch (error) {
             console.error('Error fetching profile:', error);
@@ -278,6 +282,41 @@ function SectionCandicateBasicInfo() {
         }
     };
 
+    const handleIdCardChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                setNotification({ type: 'error', message: 'File size must be less than 5MB' });
+                e.target.value = '';
+                return;
+            }
+            
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf'];
+            if (!allowedTypes.includes(file.type)) {
+                setNotification({ type: 'error', message: 'Please upload only JPG, PNG, GIF or PDF files' });
+                e.target.value = '';
+                return;
+            }
+            
+            setFormData(prev => ({
+                ...prev,
+                idCard: file
+            }));
+            
+            // Create preview URL for images only
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setIdCardPreview(reader.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                setIdCardPreview(null);
+            }
+        }
+    };
+
     const validateForm = () => {
         const fieldsToValidate = ['name', 'email', 'middleName', 'lastName', 'phone', 'location'];
         let isValid = true;
@@ -318,6 +357,9 @@ function SectionCandicateBasicInfo() {
             if (formData.profilePicture) {
                 submitData.append('profilePicture', formData.profilePicture);
             }
+            if (formData.idCard) {
+                submitData.append('idCard', formData.idCard);
+            }
             
             console.log('Form data being sent:', formData);
             
@@ -328,6 +370,7 @@ function SectionCandicateBasicInfo() {
                 setTimeout(() => setNotification(null), 3000);
                 fetchProfile();
                 setImagePreview(null);
+                setIdCardPreview(null);
                 window.dispatchEvent(new Event('profileUpdated'));
             } else {
                 if (response.errors && Array.isArray(response.errors)) {
@@ -419,6 +462,61 @@ function SectionCandicateBasicInfo() {
                                     style={{maxWidth: '300px'}}
                                 />
                                 <small className="text-muted mt-2 d-block">Upload JPG, PNG or GIF (Max 5MB)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ID Card Section */}
+                    <div className="row mb-4">
+                        <div className="col-md-12">
+                            <div className="id-card-section text-center">
+                                <label className="form-label fw-bold mb-3">
+                                    <i className="fa fa-id-card me-2" style={{color: '#ff6b35'}}></i>
+                                    ID Card (Optional)
+                                </label>
+                                <div className="mb-3">
+                                    {idCardPreview ? (
+                                        <img 
+                                            src={idCardPreview} 
+                                            alt="ID Card Preview" 
+                                            className="id-card-preview"
+                                            style={{maxWidth: '300px', maxHeight: '200px', objectFit: 'contain', border: '2px solid #ff6b35', borderRadius: '8px'}}
+                                        />
+                                    ) : currentIdCard ? (
+                                        currentIdCard.startsWith('data:image') ? (
+                                            <img 
+                                                src={currentIdCard} 
+                                                alt="Current ID Card" 
+                                                className="id-card-preview"
+                                                style={{maxWidth: '300px', maxHeight: '200px', objectFit: 'contain', border: '2px solid #ff6b35', borderRadius: '8px'}}
+                                            />
+                                        ) : (
+                                            <div className="id-card-placeholder d-flex align-items-center justify-content-center" 
+                                                 style={{width: '300px', height: '200px', backgroundColor: '#f8f9fa', border: '2px solid #ff6b35', borderRadius: '8px', margin: '0 auto'}}>
+                                                <div className="text-center">
+                                                    <i className="fa fa-file-pdf-o fa-3x text-muted mb-2"></i>
+                                                    <p className="text-muted mb-0">PDF ID Card Uploaded</p>
+                                                </div>
+                                            </div>
+                                        )
+                                    ) : (
+                                        <div className="id-card-placeholder d-flex align-items-center justify-content-center" 
+                                             style={{width: '300px', height: '200px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '0 auto'}}>
+                                            <div className="text-center">
+                                                <i className="fa fa-id-card fa-3x text-muted mb-2"></i>
+                                                <p className="text-muted mb-0">No ID Card Uploaded</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                <input 
+                                    className="form-control mx-auto" 
+                                    type="file" 
+                                    accept="image/*,application/pdf"
+                                    onChange={handleIdCardChange}
+                                    style={{maxWidth: '300px'}}
+                                />
+                                <small className="text-muted mt-2 d-block">Upload JPG, PNG, GIF or PDF (Max 5MB)</small>
                             </div>
                         </div>
                     </div>

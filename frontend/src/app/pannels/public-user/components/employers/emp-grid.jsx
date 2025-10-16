@@ -1,12 +1,13 @@
-import { useEffect, useState, useMemo, useCallback, memo } from "react";
+import { useEffect, useState, useMemo, useCallback, memo, useRef } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import JobZImage from "../../../../common/jobz-img";
 import SectionJobsSidebar1 from "../../sections/jobs/sidebar/section-jobs-sidebar1";
 import SectionRecordsFilter from "../../sections/common/section-records-filter";
 import SectionPagination from "../../sections/common/section-pagination";
 import { loadScript } from "../../../../../globals/constants";
 import { requestCache } from "../../../../../utils/requestCache";
+import { performanceMonitor } from "../../../../../utils/performanceMonitor";
 import "../../../../../job-grid-optimizations.css";
 import "../../../../../emp-grid-optimizations.css";
 
@@ -17,6 +18,9 @@ const EmployersGridPage = memo(() => {
     const [sortBy, setSortBy] = useState("Most Recent");
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [isFirstLoad, setIsFirstLoad] = useState(true);
+    const navigate = useNavigate();
+    const abortControllerRef = useRef(null);
+    const debounceTimerRef = useRef(null);
 
     const _filterConfig = useMemo(() => ({
         prefix: "Showing",
@@ -39,48 +43,109 @@ const EmployersGridPage = memo(() => {
     }, []);
 
     const fetchEmployers = useCallback(async () => {
-        setLoading(true);
-        try {
-            const params = new URLSearchParams({
-                sortBy,
-                limit: itemsPerPage.toString(),
-                page: '1'
-            });
-
-            const url = `http://localhost:5000/api/public/employers?${params.toString()}`;
-            const data = await requestCache.get(url, {
-                ttl: 300000,
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            if (data.success) {
-                setEmployers(data.employers || []);
-                setTotalEmployers(data.totalCount || data.employers?.length || 0);
-            } else {
-                setEmployers([]);
-                setTotalEmployers(0);
-            }
-        } catch (error) {
-            console.error('Error fetching employers:', error);
-            setEmployers([]);
-            setTotalEmployers(0);
-        } finally {
-            setLoading(false);
-            setIsFirstLoad(false);
+        // Cancel previous request
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
         }
+        
+        // Clear previous debounce
+        if (debounceTimerRef.current) {
+            clearTimeout(debounceTimerRef.current);
+        }
+        
+        // Debounce API calls
+        debounceTimerRef.current = setTimeout(async () => {
+            setLoading(true);
+            abortControllerRef.current = new AbortController();
+            
+            const apiStartTime = performance.now();
+            
+            try {
+                const params = new URLSearchParams({
+                    sortBy,
+                    limit: itemsPerPage.toString(),
+                    page: '1'
+                });
+
+                const url = `http://localhost:5000/api/public/employers?${params.toString()}`;
+                const data = await requestCache.get(url, {
+                    ttl: 180000, // 3 minutes cache
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    signal: abortControllerRef.current.signal
+                });
+                
+                // Monitor API performance
+                performanceMonitor.monitorAPICall(url, apiStartTime);
+                
+                if (data.success) {
+                    setEmployers(data.employers || []);
+                    setTotalEmployers(data.totalCount || data.employers?.length || 0);
+                } else {
+                    setEmployers([]);
+                    setTotalEmployers(0);
+                }
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    console.error('Error fetching employers:', error);
+                    setEmployers([]);
+                    setTotalEmployers(0);
+                }
+            } finally {
+                setLoading(false);
+                setIsFirstLoad(false);
+            }
+        }, 200); // 200ms debounce for employers
     }, [sortBy, itemsPerPage]);
 
     useEffect(() => {
         fetchEmployers();
+        
+        // Cleanup on unmount
+        return () => {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+            if (debounceTimerRef.current) {
+                clearTimeout(debounceTimerRef.current);
+            }
+        };
     }, [fetchEmployers]);
 
     const EmployerCard = memo(({ employer }) => {
-        const handleViewClick = useCallback(() => {
-            window.location.href = `/emp-detail/${employer._id}`;
-        }, [employer._id]);
+        const cardRef = useRef(null);
+        
+        // Intersection observer for lazy loading
+        useEffect(() => {
+            const observer = performanceMonitor.setupIntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.setAttribute('data-visible', 'true');
+                        } else {
+                            entry.target.setAttribute('data-visible', 'false');
+                        }
+                    });
+                },
+                { rootMargin: '100px' }
+            );
+            
+            if (cardRef.current) {
+                observer.observe(cardRef.current);
+            }
+            
+            return () => {
+                if (cardRef.current) {
+                    observer.unobserve(cardRef.current);
+                }
+            };
+        }, []);
+        const handleViewClick = useCallback((e) => {
+            e.preventDefault();
+            navigate(`/emp-detail/${employer._id}`);
+        }, [employer._id, navigate]);
 
         const companyTypeClass = useMemo(() => {
             const typeMap = {
@@ -94,7 +159,7 @@ const EmployersGridPage = memo(() => {
 
         return (
             <Col key={employer._id} lg={6} md={12} className="mb-4">
-                <div className="twm-jobs-grid-style1 hover-card job-card">
+                <div ref={cardRef} className="twm-jobs-grid-style1 hover-card job-card" data-visible="true">
                     <div className="twm-media">
                         {employer.profile?.logo ? (
                             <img 
