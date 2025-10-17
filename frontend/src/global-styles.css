@@ -330,22 +330,16 @@ html {
     color: inherit !important;
     width: 100%;
     height: 100%;
-    gap: 16px;
-}
-
-.top-recruiter-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
 }
 
 .top-recruiter-logo {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
     object-fit: cover;
+    margin-bottom: 20px;
     background-color: rgba(15, 23, 42, 0.08);
-    padding: 6px;
+    padding: 10px;
     box-shadow: inset 0 2px 8px rgba(15, 23, 42, 0.08);
 }
 
@@ -353,19 +347,13 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    margin-bottom: 20px;
     background: linear-gradient(135deg, rgba(15, 23, 42, 0.12), rgba(15, 23, 42, 0.04));
     color: #0f172a;
     font-weight: 600;
-    font-size: 16px;
-}
-
-.top-recruiter-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
 }
 
 .top-recruiter-name {
@@ -373,13 +361,7 @@ html {
     color: #0f172a;
     font-weight: 600;
     text-align: left;
-    margin: 0;
-}
-
-.top-recruiter-location {
-    font-size: 14px;
-    color: #475569;
-    line-height: 1.3;
+    margin-bottom: 6px;
 }
 
 .top-recruiter-jobs {
@@ -393,26 +375,33 @@ html {
 
 .top-recruiter-meta {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
     margin-top: auto;
     padding-top: 18px;
     border-top: 1px dashed rgba(148, 163, 184, 0.5);
+    gap: 12px;
 }
 
-.top-recruiter-meta .top-recruiter-view {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.top-recruiter-meta span {
     font-size: 14px;
-    color: #0ea5e9;
-    font-weight: 600;
+    color: #1e293b;
+    font-weight: 500;
 }
 
 .top-recruiter-meta svg {
     width: 16px;
     height: 16px;
     color: #0ea5e9;
+}
+
+.top-recruiter-link .top-recruiter-meta span:last-child {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #0ea5e9;
+    font-weight: 600;
 }
 
 @media (max-width: 1199px) {
