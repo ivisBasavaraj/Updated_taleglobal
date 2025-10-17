@@ -7,10 +7,16 @@ const Partner = require('../models/Partner');
 const FAQ = require('../models/FAQ');
 const Review = require('../models/Review');
 const { cache } = require('../utils/cache');
+const { isDBConnected } = require('../config/database');
 
 // Job Controllers
 exports.getJobs = async (req, res) => {
   try {
+    // Check if database is connected
+    if (!isDBConnected()) {
+      return res.json({ success: true, jobs: [], total: 0, message: 'Database offline' });
+    }
+    
     const { location, jobType, category, search, title, employerId, employmentType, skills, keyword, jobTitle, page = 1, limit = 10, sortBy } = req.query;
     
     // Create cache key for this specific query
@@ -515,6 +521,11 @@ exports.getEmployers = async (req, res) => {
 
 exports.getTopRecruiters = async (req, res) => {
   try {
+    // Check if database is connected
+    if (!isDBConnected()) {
+      return res.json({ success: true, recruiters: [], total: 0, message: 'Database offline' });
+    }
+    
     const { limit = 8 } = req.query;
     const Employer = require('../models/Employer');
     const EmployerProfile = require('../models/EmployerProfile');

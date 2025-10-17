@@ -83,7 +83,7 @@ const jobSchema = new mongoose.Schema({
     twoWay: { type: Boolean, default: false },
     noCab: { type: Boolean, default: false }
   },
-  status: { type: String, enum: ['active', 'closed', 'draft', 'pending'], default: 'active' },
+  status: { type: String, enum: ['active', 'inactive', 'draft', 'pending'], default: 'active' },
   applicationCount: { type: Number, default: 0 },
   interviewScheduled: { type: Boolean, default: false }
 }, {
