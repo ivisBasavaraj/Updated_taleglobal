@@ -62,16 +62,18 @@ function TopRecruitersSection() {
                                             </div>
                                         </div>
 
-                                        {/* Logo, Job Title and Location - Vertical */}
+                                        {/* Logo + Job Title in one line, Location below */}
                                         <div className="job-info">
-                                            {companyLogo ? (
-                                                <img className="company-logo" src={companyLogo} alt={companyName} />
-                                            ) : (
-                                                <div className="company-logo-placeholder">
-                                                    {companyInitial}
-                                                </div>
-                                            )}
-                                            <h4 className="job-title">{job.title}</h4>
+                                            <div className="logo-title-row">
+                                                {companyLogo ? (
+                                                    <img className="company-logo" src={companyLogo} alt={companyName} />
+                                                ) : (
+                                                    <div className="company-logo-placeholder">
+                                                        {companyInitial}
+                                                    </div>
+                                                )}
+                                                <h4 className="job-title">{job.title}</h4>
+                                            </div>
                                             <p className="job-location">📍{job.location}</p>
                                         </div>
 
