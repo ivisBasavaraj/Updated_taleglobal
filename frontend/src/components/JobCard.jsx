@@ -21,25 +21,14 @@ const JobCard = ({ job }) => {
     return (
         <div className="job-card">
             <div className="job-header">
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                <h3>{job.title}</h3>
+                <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px'}}>
                     {job.companyLogo && (
-                        <img
-                            src={job.companyLogo}
-                            alt="Company Logo"
-                            style={{
-                                width: '40px',
-                                height: '40px',
-                                objectFit: 'cover',
-                                borderRadius: '4px', // or '50%' for circular
-                            }}
-                        />
+                        <img src={job.companyLogo} alt="Company Logo" style={{width: '24px', height: '24px', objectFit: 'cover', borderRadius: '4px'}} />
                     )}
-                    <div>
-                        <h3 style={{ marginTop: 0, marginBottom: '5px', fontSize: '1.2em' }}>{job.title}</h3>
-                        <p style={{margin: 0, marginBottom: '4px'}}>{job.companyName || job.employerId?.companyName || job.company}</p>
-                        <span>{job.location}</span>
-                    </div>
+                    <p style={{margin: 0}}>{job.companyName || job.employerId?.companyName || job.company}</p>
                 </div>
+                <span>{job.location}</span>
                 <div className="posted-by-info" style={{fontSize: '12px', color: '#666', marginTop: '4px'}}>
                     Posted by: {job.employerId?.employerType === 'consultant' ? 'Consultancy' : 'Company'}
                 </div>
