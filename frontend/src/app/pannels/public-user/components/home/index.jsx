@@ -53,25 +53,29 @@ function TopRecruitersSection() {
                                     <div key={recruiter._id} className="top-recruiter-grid-item">
                                         <div className="top-recruiter-card">
                                             <NavLink to={`${publicUser.employer.DETAIL1}/${recruiter._id}`} className="top-recruiter-link">
-                                                {recruiter.logo ? (
-                                                    <img className="top-recruiter-logo" src={recruiter.logo} alt={recruiter.companyName} />
-                                                ) : (
-                                                    <div className="top-recruiter-placeholder" aria-label={`Initial for ${recruiter.companyName}`}>
-                                                        {initialBadge}
+                                                <div className="top-recruiter-header">
+                                                    {recruiter.logo ? (
+                                                        <img className="top-recruiter-logo" src={recruiter.logo} alt={recruiter.companyName} />
+                                                    ) : (
+                                                        <div className="top-recruiter-placeholder" aria-label={`Initial for ${recruiter.companyName}`}>
+                                                            {initialBadge}
+                                                        </div>
+                                                    )}
+                                                    <div className="top-recruiter-info">
+                                                        <div className="top-recruiter-name">{recruiter.companyName}</div>
+                                                        <div className="top-recruiter-location">{locationLabel}</div>
                                                     </div>
-                                                )}
+                                                </div>
 
-                                                <div className="top-recruiter-info">
-                                                    <div className="top-recruiter-name">{recruiter.companyName}</div>
-                                                    <div className="top-recruiter-meta">
-                                                        <span>{locationLabel}</span>
-                                                        <span>
-                                                            View profile
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                                                            </svg>
-                                                        </span>
-                                                    </div>
+                                                <div className="top-recruiter-jobs">{jobCountLabel}</div>
+
+                                                <div className="top-recruiter-meta">
+                                                    <span className="top-recruiter-view">
+                                                        View profile
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                                        </svg>
+                                                    </span>
                                                 </div>
                                             </NavLink>
                                         </div>
