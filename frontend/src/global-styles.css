@@ -275,12 +275,19 @@ html {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Header with logo and job type badge */
+/* Header with job type badge only */
 .job-card-header {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: flex-end;
     margin-bottom: 12px;
+}
+
+/* Job title section with logo */
+.job-title-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
 }
 
 .company-logo {
@@ -341,7 +348,7 @@ html {
     font-size: 16px;
     font-weight: 700;
     color: #111827;
-    margin: 0 0 6px 0;
+    margin: 0;
     line-height: 1.3;
 }
 

@@ -55,25 +55,25 @@ function TopRecruitersSection() {
 
                                 return (
                                     <div key={job._id} className="recruiter-job-card">
-                                        {/* Company Logo */}
+                                        {/* Job Type Badge */}
                                         <div className="job-card-header">
-                                            {companyLogo ? (
-                                                <img className="company-logo" src={companyLogo} alt={companyName} />
-                                            ) : (
-                                                <div className="company-logo-placeholder">
-                                                    {companyInitial}
-                                                </div>
-                                            )}
-                                            
-                                            {/* Job Type Badge */}
                                             <div className={`job-type-badge ${jobType.toLowerCase().replace(' ', '-')}`}>
                                                 {jobType}
                                             </div>
                                         </div>
 
-                                        {/* Job Title and Location */}
+                                        {/* Job Title and Location with Logo */}
                                         <div className="job-info">
-                                            <h4 className="job-title">{job.title}</h4>
+                                            <div className="job-title-section">
+                                                {companyLogo ? (
+                                                    <img className="company-logo" src={companyLogo} alt={companyName} />
+                                                ) : (
+                                                    <div className="company-logo-placeholder">
+                                                        {companyInitial}
+                                                    </div>
+                                                )}
+                                                <h4 className="job-title">{job.title}</h4>
+                                            </div>
                                             <p className="job-location">📍{job.location}</p>
                                         </div>
 
