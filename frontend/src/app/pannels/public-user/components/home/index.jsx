@@ -6,29 +6,29 @@ import { publicUser } from "../../../../../globals/route-names";
 import { NavLink } from "react-router-dom";
 
 function TopRecruitersSection() {
-    const [recruiters, setRecruiters] = useState([]);
+    const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchTopRecruiters();
+        fetchTopJobs();
     }, []);
 
-    const fetchTopRecruiters = async () => {
+    const fetchTopJobs = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/public/top-recruiters?limit=8');
+            const response = await fetch('http://localhost:5000/api/public/jobs?limit=8');
             const data = await response.json();
-            console.log('Top recruiters data:', data);
+            console.log('Top jobs data:', data);
             if (data.success) {
-                setRecruiters(data.recruiters);
+                setJobs(data.jobs);
             }
         } catch (error) {
-            console.error('Error fetching top recruiters:', error);
+            console.error('Error fetching top jobs:', error);
         } finally {
             setLoading(false);
         }
     };
 
-    const displayRecruiters = recruiters.slice(0, 8);
+    const displayJobs = jobs.slice(0, 8);
 
     return (
         <div className="section-full p-t120 site-bg-white twm-companies-wrap">
@@ -41,47 +41,70 @@ function TopRecruitersSection() {
             <div className="container">
                 <div className="section-content">
                     {loading ? (
-                        <div className="text-center p-5">Loading recruiters...</div>
-                    ) : displayRecruiters.length > 0 ? (
+                        <div className="text-center p-5">Loading jobs...</div>
+                    ) : displayJobs.length > 0 ? (
                         <div className="top-recruiters-grid">
-                            {displayRecruiters.map((recruiter) => {
-                                const initialBadge = recruiter.companyName?.charAt(0)?.toUpperCase() ?? "?";
-                                const locationLabel = recruiter.location || recruiter.city || "Multiple locations";
-                                const jobCountLabel = `${recruiter.jobCount ?? 0} active jobs`;
+                            {displayJobs.map((job) => {
+                                const companyLogo = job.employerProfile?.logo;
+                                const companyInitial = job.companyName?.charAt(0)?.toUpperCase() || job.employerProfile?.companyName?.charAt(0)?.toUpperCase() || "?";
+                                const jobType = job.jobType || 'full-time';
+                                const ctc = job.salary ? (typeof job.salary === 'string' ? job.salary : `₹${job.salary}`) : 'Not specified';
+                                const vacancies = job.vacancies || 1;
+                                const postedBy = job.employerId?.employerType === 'consultant' ? 'Consultant' : 'Company';
+                                const companyName = job.companyName || job.employerProfile?.companyName || 'Company';
 
                                 return (
-                                    <div key={recruiter._id} className="top-recruiter-grid-item">
-                                        <div className="top-recruiter-card">
-                                            <NavLink to={`${publicUser.employer.DETAIL1}/${recruiter._id}`} className="top-recruiter-link">
-                                                {recruiter.logo ? (
-                                                    <img className="top-recruiter-logo" src={recruiter.logo} alt={recruiter.companyName} />
-                                                ) : (
-                                                    <div className="top-recruiter-placeholder" aria-label={`Initial for ${recruiter.companyName}`}>
-                                                        {initialBadge}
-                                                    </div>
-                                                )}
-
-                                                <div className="top-recruiter-name">{recruiter.companyName}</div>
-                                                <div className="top-recruiter-jobs">{jobCountLabel}</div>
-
-                                                <div className="top-recruiter-meta">
-                                                    <span>{locationLabel}</span>
-                                                    <span>
-                                                        View profile
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                                                        </svg>
-                                                    </span>
+                                    <div key={job._id} className="recruiter-job-card">
+                                        {/* Company Logo */}
+                                        <div className="job-card-header">
+                                            {companyLogo ? (
+                                                <img className="company-logo" src={companyLogo} alt={companyName} />
+                                            ) : (
+                                                <div className="company-logo-placeholder">
+                                                    {companyInitial}
                                                 </div>
-                                            </NavLink>
+                                            )}
+                                            
+                                            {/* Job Type Badge */}
+                                            <div className={`job-type-badge ${jobType.toLowerCase().replace(' ', '-')}`}>
+                                                {jobType}
+                                            </div>
                                         </div>
+
+                                        {/* Job Title and Location */}
+                                        <div className="job-info">
+                                            <h4 className="job-title">{job.title}</h4>
+                                            <p className="job-location">📍{job.location}</p>
+                                        </div>
+
+                                        {/* CTC and Vacancies */}
+                                        <div className="job-details">
+                                            <div className="ctc-info">
+                                                <span className="ctc-label">Annual CTC: </span>
+                                                <span className="ctc-value">{ctc}</span>
+                                            </div>
+                                            <div className="vacancy-info">
+                                                Vacancies: {vacancies}
+                                            </div>
+                                        </div>
+
+                                        {/* Posted By */}
+                                        <div className="posted-by">
+                                            <div className="company-name">{companyName}</div>
+                                            <div className="posted-by-text">Posted by: {postedBy}</div>
+                                        </div>
+
+                                        {/* Apply Button */}
+                                        <NavLink to={`${publicUser.jobs.DETAIL1}/${job._id}`} className="apply-btn">
+                                            Apply Now
+                                        </NavLink>
                                     </div>
                                 );
                             })}
                         </div>
                     ) : (
                         <div className="text-center p-5">
-                            <p>No recruiters found</p>
+                            <p>No jobs found</p>
                         </div>
                     )}
                 </div>
