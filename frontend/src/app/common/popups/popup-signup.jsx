@@ -449,7 +449,7 @@ function SignUpPopup() {
 															name="name"
 															type="text"
 															className="form-control"
-															placeholder="Name*"
+															placeholder="Company Name*"
 															value={employerData.name}
 															autoComplete="new-password"
 															onChange={handleEmployerChange}

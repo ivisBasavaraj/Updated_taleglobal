@@ -160,7 +160,7 @@ function EmpDashboardPage() {
                                 <div className="panel-body wt-panel-body dashboard-card-2" style={{ backgroundColor: '#e8f5e9' }}>
                                     <div className="d-flex align-items-center" style={{ display: "flex", justifyContent: "flex-end" }}>
                                         <div className="wt-card-icon-2 me-3 fs-2 text-success" style={{ lineHeight: "1" }}>
-                                            <i className="flaticon-bell" />
+                                            ✓
                                         </div>
                                         <div>
                                             <div className="counter fw-bold fs-4 text-success">

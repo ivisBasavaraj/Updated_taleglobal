@@ -61,24 +61,37 @@ function LoginPage() {
         setLoading(true);
         setError('');
         
-        const result = await login({
-            email: empusername,
-            password: emppassword
-        }, 'employer');
+        // Validate inputs
+        if (!empusername.trim() || !emppassword.trim()) {
+            setError('Please enter both email and password');
+            setLoading(false);
+            return;
+        }
         
-        setLoading(false);
-        
-        if (result.success) {
-            // Check if there's a redirect URL stored
-            const redirectUrl = localStorage.getItem('redirectAfterLogin');
-            if (redirectUrl) {
-                localStorage.removeItem('redirectAfterLogin');
-                navigate(redirectUrl, { replace: true });
+        try {
+            const result = await login({
+                email: empusername.trim(),
+                password: emppassword
+            }, 'employer');
+            
+            setLoading(false);
+            
+            if (result.success) {
+                // Check if there's a redirect URL stored
+                const redirectUrl = localStorage.getItem('redirectAfterLogin');
+                if (redirectUrl) {
+                    localStorage.removeItem('redirectAfterLogin');
+                    navigate(redirectUrl, { replace: true });
+                } else {
+                    navigate('/employer/dashboard', { replace: true });
+                }
             } else {
-                navigate(from, { replace: true });
+                setError(result.message || 'Invalid email or password');
             }
-        } else {
-            setError(result.message || 'Login failed');
+        } catch (error) {
+            setLoading(false);
+            setError('Login failed. Please check your connection and try again.');
+            console.error('Employer login error:', error);
         }
     }
 
@@ -154,6 +167,7 @@ function LoginPage() {
                                                         type="email"
                                                         required
                                                         className="form-control"
+                                                        placeholder="Username"
                                                         value={canusername}
                                                         onChange={(event) => setCanUsername(event.target.value)}
                                                         autoComplete="new-password"
@@ -167,6 +181,7 @@ function LoginPage() {
                                                         name="password"
                                                         type="password"
                                                         className="form-control"
+                                                        placeholder="Password"
                                                         required
                                                         value={canpassword}
                                                         onChange={(event) => setCanPassword(event.target.value)}
@@ -191,13 +206,14 @@ function LoginPage() {
                                             <form onSubmit={handleEmployerLogin} className="tab-pane fade" id="twm-login-Employer">
                                                 <div className="mb-3">
                                                     <input
-                                                        name="username"
-                                                        type="text"
+                                                        name="email"
+                                                        type="email"
                                                         required
                                                         className="form-control"
+                                                        placeholder="Username"
                                                         value={empusername}
                                                         onChange={(event) => setEmpUsername(event.target.value)}
-                                                        autoComplete="new-password"
+                                                        autoComplete="email"
                                                         autoCorrect="off"
                                                         autoCapitalize="off"
                                                         spellCheck="false"
@@ -208,10 +224,11 @@ function LoginPage() {
                                                         name="password"
                                                         type="password"
                                                         className="form-control"
+                                                        placeholder="Password"
                                                         required
                                                         value={emppassword}
                                                         onChange={(event) => setEmpPassword(event.target.value)}
-                                                        autoComplete="new-password"
+                                                        autoComplete="current-password"
                                                         autoCorrect="off"
                                                         autoCapitalize="off"
                                                         spellCheck="false"
@@ -236,6 +253,7 @@ function LoginPage() {
                                                         type="text"
                                                         required
                                                         className="form-control"
+                                                        placeholder="Username"
                                                         value={placementusername}
                                                         onChange={(event) => setPlacementUsername(event.target.value)}
                                                         autoComplete="new-password"
@@ -249,6 +267,7 @@ function LoginPage() {
                                                         name="password"
                                                         type="password"
                                                         className="form-control"
+                                                        placeholder="Password"
                                                         required
                                                         value={placementpassword}
                                                         onChange={(event) => setPlacementPassword(event.target.value)}
@@ -269,6 +288,11 @@ function LoginPage() {
                                                     {loading ? 'Logging in...' : 'Log in'}
                                                 </button>
                                             </form>
+                                        </div>
+                                        <div className="text-center mt-3">
+                                            <NavLink to={publicUser.INITIAL} className="btn btn-outline-secondary" style={{padding: '8px 20px', borderRadius: '8px', textDecoration: 'none'}}>
+                                                <i className="fas fa-home me-2" style={{color: 'white'}}></i>Back to Home
+                                            </NavLink>
                                         </div>
                                     </div>
                                         </div>

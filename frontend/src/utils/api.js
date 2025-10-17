@@ -3,6 +3,9 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api
 // Helper function to get auth headers
 const getAuthHeaders = (userType = 'candidate') => {
   const token = localStorage.getItem(`${userType}Token`);
+  if (!token) {
+    console.warn(`No ${userType} token found in localStorage`);
+  }
   return {
     'Content-Type': 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -273,10 +276,13 @@ export const api = {
 
   uploadStudentData: (formData) => {
     const token = localStorage.getItem('placementToken');
+    if (!token) {
+      return Promise.reject(new Error('No authentication token found. Please login again.'));
+    }
     return fetch(`${API_BASE_URL}/placement/upload-student-data`, {
       method: 'POST',
       headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        Authorization: `Bearer ${token}`,
       },
       body: formData,
     }).then(handleApiResponse);

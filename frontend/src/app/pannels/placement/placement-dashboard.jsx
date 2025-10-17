@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../../utils/api';
 import { useAuth } from '../../../contexts/AuthContext';
+import { debugAuth, testAPIConnection, testPlacementAuth } from '../../../utils/authDebug';
 import './placement-dashboard.css';
 
 function PlacementDashboard() {
@@ -28,18 +29,54 @@ function PlacementDashboard() {
     const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
-        if (!authLoading && isAuthenticated() && userType === 'placement') {
-            // Parallel loading for faster response
-            Promise.all([
-                fetchPlacementDetails(),
-                fetchStudentData()
-            ]).catch(console.error);
-        }
+        const initializeDashboard = async () => {
+            // Debug authentication state
+            debugAuth();
+            
+            // Test API connection
+            const apiTest = await testAPIConnection();
+            if (!apiTest.success) {
+                console.error('API connection failed:', apiTest.error);
+                alert('Cannot connect to server. Please check if the backend is running on port 5000.');
+                return;
+            }
+            
+            if (!authLoading && isAuthenticated() && userType === 'placement') {
+                // Test placement authentication
+                const authTest = await testPlacementAuth();
+                if (!authTest.success) {
+                    console.error('Placement authentication failed:', authTest.error);
+                    if (authTest.status === 401) {
+                        alert('Your session has expired. Please login again.');
+                        localStorage.removeItem('placementToken');
+                        localStorage.removeItem('placementUser');
+                        window.location.href = '/login';
+                        return;
+                    }
+                }
+                
+                // Parallel loading for faster response
+                Promise.all([
+                    fetchPlacementDetails(),
+                    fetchStudentData()
+                ]).catch(console.error);
+            }
+        };
+        
+        initializeDashboard();
     }, [authLoading, userType, isAuthenticated]);
 
     const fetchPlacementDetails = async () => {
         try {
             if (authLoading || !isAuthenticated() || userType !== 'placement') {
+                return;
+            }
+            
+            // Check if token exists
+            const token = localStorage.getItem('placementToken');
+            if (!token) {
+                console.error('No placement token found');
+                alert('Authentication token missing. Please login again.');
                 return;
             }
             
@@ -51,6 +88,12 @@ function PlacementDashboard() {
             }
         } catch (error) {
             console.error('Error fetching placement details:', error);
+            if (error.message.includes('401')) {
+                alert('Authentication failed. Please login again.');
+                localStorage.removeItem('placementToken');
+                localStorage.removeItem('placementUser');
+                window.location.href = '/placement/login';
+            }
         }
     };
     
@@ -58,6 +101,14 @@ function PlacementDashboard() {
 
     const fetchStudentData = async () => {
         try {
+            // Check if token exists
+            const token = localStorage.getItem('placementToken');
+            if (!token) {
+                console.error('No placement token found for student data');
+                setLoading(false);
+                return;
+            }
+            
             const data = await api.getMyPlacementData();
             if (data.success) {
                 setStudentData(data.students || []);
@@ -65,6 +116,9 @@ function PlacementDashboard() {
             }
         } catch (error) {
             console.error('Error fetching student data:', error);
+            if (error.message.includes('401')) {
+                console.error('Authentication failed for student data');
+            }
         } finally {
             setLoading(false);
         }
@@ -196,6 +250,13 @@ function PlacementDashboard() {
             return;
         }
 
+        // Check authentication before upload
+        const token = localStorage.getItem('placementToken');
+        if (!token) {
+            alert('Authentication token missing. Please login again.');
+            return;
+        }
+
         setUploadingFile(true);
         try {
             const formData = new FormData();
@@ -204,14 +265,7 @@ function PlacementDashboard() {
                 formData.append('customFileName', customName.trim());
             }
 
-            const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-            const response = await fetch(`${API_BASE_URL}/placement/upload-student-data`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${localStorage.getItem('placementToken')}` },
-                body: formData
-            });
-
-            const data = await response.json();
+            const data = await api.uploadStudentData(formData);
             
             if (data.success) {
                 alert('Student data uploaded successfully! Waiting for admin approval.');
@@ -224,7 +278,15 @@ function PlacementDashboard() {
                 alert(data.message || 'Upload failed');
             }
         } catch (error) {
-            alert('Upload failed. Please try again.');
+            console.error('Upload error:', error);
+            if (error.message.includes('401') || error.message.includes('authentication')) {
+                alert('Authentication failed. Please login again.');
+                localStorage.removeItem('placementToken');
+                localStorage.removeItem('placementUser');
+                window.location.href = '/placement/login';
+            } else {
+                alert(error.message || 'Upload failed. Please try again.');
+            }
         } finally {
             setUploadingFile(false);
         }
@@ -335,9 +397,9 @@ function PlacementDashboard() {
 
     const handleEditProfile = () => {
         setEditFormData({
-            name: placementData.name || '',
-            phone: placementData.phone || '',
-            collegeName: placementData.collegeName || ''
+            name: placementData?.name || '',
+            phone: placementData?.phone || '',
+            collegeName: placementData?.collegeName || ''
         });
         setShowEditModal(true);
     };
@@ -442,7 +504,7 @@ function PlacementDashboard() {
             <div className="modern-card mb-4 p-4">
                 <div className="row align-items-center mb-4">
                     <div className="col-md-2 text-center">
-                        {placementData.logo ? (
+                        {placementData?.logo ? (
                             <img 
                                 src={placementData.logo} 
                                 alt="College Logo" 
@@ -485,7 +547,7 @@ function PlacementDashboard() {
                         <small className="text-muted d-block mt-2">College Logo</small>
                     </div>
                     <div className="col-md-2 text-center">
-                        {placementData.idCard ? (
+                        {placementData?.idCard ? (
                             <img 
                                 src={placementData.idCard} 
                                 alt="ID Card" 
@@ -531,32 +593,29 @@ function PlacementDashboard() {
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center" style={{gap: '1rem'}}>
                             <div>
                                 <span className="text-uppercase text-muted" style={{letterSpacing: '2px', fontSize: '0.75rem'}}>Placement Officer</span>
-                                <h3 className="mb-1" style={{color: '#1f2937', fontWeight: 700}}>{placementData.name}</h3>
+                                <h3 className="mb-1" style={{color: '#1f2937', fontWeight: 700}}>{placementData?.name || 'Loading...'}</h3>
                                 <div className="d-flex align-items-center flex-wrap" style={{gap: '1rem'}}>
-                                    <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
-                                        <i className="fa fa-id-card mr-2" style={{color: '#ff8c00'}}></i>
-                                        <strong style={{fontSize: '0.95rem'}}>{placementData.employeeId || 'ID Unavailable'}</strong>
-                                    </span>
+
                                     <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
                                         <i className="fa fa-graduation-cap mr-2" style={{color: '#ff8c00'}}></i>
-                                        {placementData.collegeName || 'College Name Not Available'}
+                                        {placementData?.collegeName || 'College Name Not Available'}
                                     </span>
                                 </div>
                                 <div className="mt-3" style={{display: 'grid', gap: '0.35rem'}}>
                                     <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
                                         <i className="fa fa-envelope mr-2" style={{color: '#ff8c00'}}></i>
-                                        {placementData.email}
+                                        {placementData?.email || 'Loading...'}
                                     </span>
                                     <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
                                         <i className="fa fa-phone mr-2" style={{color: '#ff8c00'}}></i>
-                                        {placementData.phone || 'Phone Unavailable'}
+                                        {placementData?.phone || 'Phone Unavailable'}
                                     </span>
                                 </div>
                             </div>
                             <div className="d-flex flex-column" style={{gap: '0.75rem', minWidth: '220px'}}>
                                 <div className="d-flex align-items-center" style={{background: 'rgba(255, 140, 0, 0.08)', borderRadius: '16px', padding: '0.85rem 1.1rem'}}>
                                     <span className="badge badge-light" style={{background: '#fff3e6', color: '#dd6b20', fontWeight: 600, borderRadius: '999px', padding: '0.4rem 0.9rem', fontSize: '0.75rem'}}>Status</span>
-                                    <span className="ml-auto" style={{fontWeight: 700, color: '#1f2937', textTransform: 'capitalize'}}>{placementData.status || 'Pending'}</span>
+                                    <span className="ml-auto" style={{fontWeight: 700, color: '#1f2937', textTransform: 'capitalize'}}>{placementData?.status || 'Pending'}</span>
                                 </div>
 
                             </div>
@@ -585,8 +644,8 @@ function PlacementDashboard() {
                             </div>
                             <div>
                                 <label className="text-muted mb-1" style={{fontSize: '0.75rem'}}>Status</label>
-                                <h4 className="mb-0" style={{fontWeight: 700, color: '#1f2937', textTransform: 'capitalize'}}>{placementData.status || 'Pending'}</h4>
-                                <small className="text-muted">Your placement account is currently {placementData.status || 'pending'}</small>
+                                <h4 className="mb-0" style={{fontWeight: 700, color: '#1f2937', textTransform: 'capitalize'}}>{placementData?.status || 'Pending'}</h4>
+                                <small className="text-muted">Your placement account is currently {placementData?.status || 'pending'}</small>
                             </div>
                         </div>
                     </div>
@@ -597,7 +656,7 @@ function PlacementDashboard() {
                             </div>
                             <div>
                                 <label className="text-muted mb-1" style={{fontSize: '0.75rem'}}>Files Uploaded</label>
-                                <h4 className="mb-0" style={{fontWeight: 700, color: '#1f2937'}}>{placementData.fileHistory?.length || 0}</h4>
+                                <h4 className="mb-0" style={{fontWeight: 700, color: '#1f2937'}}>{placementData?.fileHistory?.length || 0}</h4>
                                 <small className="text-muted">Awaiting admin review and processing</small>
                             </div>
                         </div>
@@ -723,8 +782,8 @@ function PlacementDashboard() {
                             </button>
                         </div>
                         <div style={{maxHeight: '400px', overflowY: 'auto'}}>
-                            {placementData.fileHistory && placementData.fileHistory.length > 0 ? (
-                                placementData.fileHistory.slice().reverse().map((file, index) => (
+                            {placementData?.fileHistory && placementData.fileHistory.length > 0 ? (
+                                placementData?.fileHistory?.slice().reverse().map((file, index) => (
                                     <div key={file._id || index} className="mb-3 p-3" style={{background: '#f8f9fa', borderRadius: '8px'}}>
                                         <div className="d-flex align-items-start">
                                             <div className={`timeline-dot ${

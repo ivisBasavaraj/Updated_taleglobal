@@ -285,7 +285,7 @@ function SignInPopup() {
 															type="text"
 															required
 															className="form-control"
-															placeholder="Email*"
+															placeholder="Company Email*"
 															value={empusername}
 															autoComplete="new-password"
 															onChange={(event) => {

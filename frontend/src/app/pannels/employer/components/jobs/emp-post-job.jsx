@@ -690,7 +690,6 @@ export default function EmpPostJob({ onNext }) {
 						>
 							<option value="" disabled>Select Job Type</option>
 							<option>Full-Time</option>
-							<option>Part-Time</option>
 							<option>Internship (Paid)</option>
 							<option>Internship (Unpaid)</option>
 							<option>Work From Home</option>
