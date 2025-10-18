@@ -1225,7 +1225,7 @@ function Home16Page() {
 																		{recruiter.companyName}
 																	</NavLink>
 																</h4>
-																<div className="twm-job-address">
+																<div className="twm-job-address" style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxHeight: '20px'}}>
 																	<i className="feather-map-pin" />
 																	{recruiter.location || "Multiple Locations"}
 																</div>
