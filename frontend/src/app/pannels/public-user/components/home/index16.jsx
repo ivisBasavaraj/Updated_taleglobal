@@ -1205,7 +1205,8 @@ function Home16Page() {
 																			style={{
 																				width: "60px",
 																				height: "60px",
-																				objectFit: "contain",
+																				objectFit: "cover",
+																				borderRadius: "8px"
 																			}}
 																		/>
 																	) : (
