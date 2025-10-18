@@ -171,11 +171,11 @@ const SectionJobsGrid = memo(({ filters, onTotalChange }) => {
         return (
             <Col key={job._id} lg={6} md={12} className="mb-4">
                 <div ref={cardRef} className="twm-jobs-grid-style1 hover-card job-card" data-visible="true">
-                    <div className="twm-media" style={{textAlign: 'center'}}>
+                    <div className="twm-media">
                         {job.employerProfile?.logo ? (
-                            <img src={job.employerProfile.logo} alt="Company Logo" loading="lazy" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                            <img src={job.employerProfile.logo} alt="Company Logo" loading="lazy" />
                         ) : (
-                            <JobZImage src="images/jobs-company/pic1.jpg" alt="#" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                            <JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
                         )}
                     </div>
 
@@ -201,28 +201,19 @@ const SectionJobsGrid = memo(({ filters, onTotalChange }) => {
                     <div className="twm-right-content twm-job-right-group">
                         <div className="twm-salary-and-apply mb-2">
                             <div className="twm-jobs-amount">
-                                <div className="ctc-text" style={{ fontSize: '14px', fontWeight: 'bold', color: '#1967d2', marginBottom: '4px' }}>
+                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#1967d2', marginBottom: '4px' }}>
                                     Annual CTC: {ctcDisplay}
                                 </div>
                             </div>
                             <span className="vacancy-text">Vacancies: {job.vacancies || 'N/A'}</span>
                         </div>
                         <div className="d-flex align-items-center justify-content-between">
-                            <div className="posted-by-section">
-                                <h6 className="twm-job-address posted-by-company mb-0" style={{ fontSize: '12px', color: '#666' }}>
-                                    Posted by {job.postedBy || 'Company'}
-                                </h6>
-                            </div>
+                            <h6 className="twm-job-address posted-by-company mb-0">
+                                Posted by {job.postedBy || 'Company'}
+                            </h6>
                             <button 
                                 className="btn btn-sm apply-now-button"
                                 onClick={handleApplyClick}
-                                style={{ 
-                                    backgroundColor: '#fd7e14', 
-                                    borderColor: '#fd7e14', 
-                                    color: 'white',
-                                    fontSize: '12px',
-                                    padding: '6px 12px'
-                                }}
                             >
                                 Apply Now
                             </button>
