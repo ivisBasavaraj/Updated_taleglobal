@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Card Test</title>
+    <style>
+        body {
+            font-family: 'Rubik', sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .job-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .job-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+        }
+        .job-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        .job-location {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+        .job-ctc {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1967d2;
+            margin-bottom: 8px;
+        }
+        .job-company {
+            font-size: 14px;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        .job-vacancies {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+        .apply-btn {
+            background-color: #fd7e14;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .apply-btn:hover {
+            background-color: #e8690a;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <h1>Job Card Test</h1>
+    
+    <div class="job-card">
+        <div class="job-title">Software Engineer</div>
+        <div class="job-location">📍 Bangalore</div>
+        <div class="job-company">Company: TechCorp</div>
+        <div class="job-ctc">Annual CTC: ₹9LPA</div>
+        <div class="job-vacancies">Vacancies: 4</div>
+        <div>Posted by: Company</div>
+        <br>
+        <button class="apply-btn">Apply Now</button>
+    </div>
+
+    <div class="job-card">
+        <div class="job-title">Frontend Developer</div>
+        <div class="job-location">📍 Mumbai</div>
+        <div class="job-company">Company: WebSolutions</div>
+        <div class="job-ctc">Annual CTC: ₹6 - 8 LPA</div>
+        <div class="job-vacancies">Vacancies: 2</div>
+        <div>Posted by: Consultant</div>
+        <br>
+        <button class="apply-btn">Apply Now</button>
+    </div>
+
+    <script>
+        console.log('Job card test page loaded');
+        
+        // Test data structure
+        const testJob = {
+            _id: "test123",
+            title: "Test Job",
+            location: "Test City",
+            jobType: "full-time",
+            vacancies: 5,
+            ctc: {
+                min: 600000,
+                max: 800000
+            },
+            employerId: {
+                companyName: "Test Company"
+            },
+            postedBy: "Company"
+        };
+        
+        console.log('Test job data:', testJob);
+        
+        // Test CTC calculation
+        function calculateCTC(ctc) {
+            if (ctc?.min && ctc?.max) {
+                const minLPA = Math.floor(ctc.min / 100000);
+                const maxLPA = Math.floor(ctc.max / 100000);
+                return ctc.min === ctc.max ? `₹${minLPA}LPA` : `₹${minLPA} - ${maxLPA} LPA`;
+            }
+            return 'Not specified';
+        }
+        
+        console.log('CTC Display:', calculateCTC(testJob.ctc));
+    </script>
+</body>
+</html>

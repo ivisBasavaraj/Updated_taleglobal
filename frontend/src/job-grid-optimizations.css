@@ -57,9 +57,9 @@
 
 /* Image Loading Optimization */
 .twm-media img {
-  object-fit: contain;
-  width: 60px;
-  height: 60px;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
   border-radius: 8px;
 }
 
@@ -99,11 +99,23 @@
 /* Optimize image loading */
 .twm-media {
   contain: layout;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 auto;
 }
 
 .twm-media img {
   content-visibility: auto;
   contain-intrinsic-size: 60px 60px;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 /* Reduce layout thrashing */

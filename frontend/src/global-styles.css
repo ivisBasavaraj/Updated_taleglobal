@@ -284,9 +284,14 @@ html {
 
 .logo-title-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start !important;
     gap: 8px;
     margin-bottom: 6px;
+}
+
+.logo-title-row .company-logo,
+.logo-title-row .company-logo-placeholder {
+    margin-top: 2px !important;
 }
 
 .company-logo {

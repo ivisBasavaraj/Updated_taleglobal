@@ -117,10 +117,12 @@ exports.getJobs = async (req, res) => {
           vacancies: 1,
           category: 1,
           ctc: 1,
+          description: 1,
+          requiredSkills: 1,
           createdAt: 1,
-          'employerProfile.logo': 1,
+          employerProfile: 1,
           postedBy: 1,
-          'employerId.companyName': 1
+          employerId: 1
         }
       },
       { $sort: sortCriteria },
