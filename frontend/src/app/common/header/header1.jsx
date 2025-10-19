@@ -119,15 +119,7 @@ const Header1 = memo(function Header1({ _config }) {
                                             Contact Us
                                         </NavLink>
                                     </li>
-                                    <li className="nav-item">
-                                        <NavLink
-                                            to="/support"
-                                            style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}
-                                            onClick={closeMenu}
-                                        >
-                                            Support
-                                        </NavLink>
-                                    </li>
+
                                 </ul>
                             </div>
 
