@@ -40,6 +40,10 @@ function EmpSidebarSection(props) {
                         <li className={setMenuActive(currentpath, empRoute(employer.CANDIDATES))}>
                             <NavLink to={empRoute(employer.CANDIDATES)} style={{display: 'flex', alignItems: 'center'}}><i className="fa fa-user-friends" style={{minWidth: '30px', textAlign: 'center'}} /><span className="admin-nav-text" style={{paddingLeft: '15px'}}>Applicants</span></NavLink>
                         </li>
+
+                        <li className={setMenuActive(currentpath, empRoute(employer.SUPPORT))}>
+                            <NavLink to={empRoute(employer.SUPPORT)} style={{display: 'flex', alignItems: 'center'}}><i className="fa fa-headset" style={{minWidth: '30px', textAlign: 'center'}} /><span className="admin-nav-text" style={{paddingLeft: '10px'}}>Support</span></NavLink>
+                        </li>
                         
                         <li>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#logout-dash-profile" style={{display: 'flex', alignItems: 'center'}}>

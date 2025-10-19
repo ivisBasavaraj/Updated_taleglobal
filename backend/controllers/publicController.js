@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Job = require('../models/Job');
 const Blog = require('../models/Blog');
 const Contact = require('../models/Contact');
+const Support = require('../models/Support');
 const Testimonial = require('../models/Testimonial');
 const Partner = require('../models/Partner');
 const FAQ = require('../models/FAQ');
@@ -778,6 +779,59 @@ exports.getSubmittedReviews = async (req, res) => {
     
     res.json({ success: true, reviews });
   } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Support Controller
+exports.submitSupportTicket = async (req, res) => {
+  try {
+    const { name, email, phone, userType, userId, subject, category, priority, message } = req.body;
+    
+    // Handle file attachments
+    let attachments = [];
+    if (req.files && req.files.length > 0) {
+      const { fileToBase64 } = require('../middlewares/upload');
+      attachments = req.files.map(file => ({
+        filename: file.originalname,
+        originalName: file.originalname,
+        data: fileToBase64(file),
+        size: file.size,
+        mimetype: file.mimetype
+      }));
+    }
+
+    // Create support ticket
+    const supportData = {
+      name,
+      email,
+      phone,
+      userType,
+      subject,
+      category: category || 'general',
+      priority: priority || 'medium',
+      message,
+      attachments
+    };
+
+    // Add user reference if provided
+    if (userId && userType !== 'guest') {
+      supportData.userId = userId;
+      supportData.userModel = userType === 'employer' ? 'Employer' : 'Candidate';
+    }
+
+    const support = await Support.create(supportData);
+
+    // Skip notification creation for now to avoid validation errors
+    console.log('Support ticket created successfully, skipping notification');
+
+    res.status(201).json({ 
+      success: true, 
+      message: 'Support ticket submitted successfully. We will get back to you soon.',
+      ticketId: support._id
+    });
+  } catch (error) {
+    console.error('Error in submitSupportTicket:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

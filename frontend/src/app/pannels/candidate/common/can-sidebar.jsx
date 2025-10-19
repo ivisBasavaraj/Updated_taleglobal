@@ -48,6 +48,12 @@ function CanSidebarSection(props) {
                 <span className="admin-nav-text">My Resume</span>
               </NavLink>
             </li>
+            <li className={setMenuActive(currentpath, canRoute(candidate.SUPPORT))}>
+              <NavLink to={canRoute(candidate.SUPPORT)}>
+                <i className="fa fa-headset" />
+                <span className="admin-nav-text">Support</span>
+              </NavLink>
+            </li>
             <li>
               <a href="#" data-bs-toggle="modal" data-bs-target="#logout-dash-profile">
                 <i className="fa fa-share-square" />

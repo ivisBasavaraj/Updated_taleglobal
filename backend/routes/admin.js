@@ -66,6 +66,13 @@ router.delete('/content/:type/:contentId', adminController.deleteContent);
 router.get('/contacts', adminController.getContactForms);
 router.delete('/contacts/:contactId', adminController.deleteContactForm);
 
+// Support Ticket Management Routes
+router.get('/support-tickets', adminController.getSupportTickets);
+router.get('/support-tickets/:id', adminController.getSupportTicketById);
+router.put('/support-tickets/:id/status', adminController.updateSupportTicketStatus);
+router.delete('/support-tickets/:id', adminController.deleteSupportTicket);
+router.get('/support-tickets/:ticketId/attachments/:attachmentIndex', adminController.downloadSupportAttachment);
+
 // Applications Routes
 router.get('/applications', adminController.getApplications);
 

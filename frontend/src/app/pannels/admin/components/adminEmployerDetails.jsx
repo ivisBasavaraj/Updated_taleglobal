@@ -536,42 +536,7 @@ function EmployerDetails() {
                                     )}
                                 </td>
                             </tr>
-                            <tr data-aos="fade-left" data-aos-delay="600">
-                                <td><i className="fa fa-file-signature me-2 text-muted"></i>Authorization Letter (Legacy)</td>
-                                <td>
-                                    {profile.authorizationLetter ? 
-                                        <span className="status-badge badge-uploaded"><i className="fa fa-check"></i>Uploaded</span> : 
-                                        <span className="status-badge badge-not-uploaded"><i className="fa fa-times"></i>Not Uploaded</span>
-                                    }
-                                </td>
-                                <td>
-                                    <span className={`status-badge ${
-                                        profile.authorizationVerified === 'approved' ? 'badge-approved' : 
-                                        profile.authorizationVerified === 'rejected' ? 'badge-rejected' : 'badge-pending'
-                                    }`}>
-                                        <i className={`fa ${
-                                            profile.authorizationVerified === 'approved' ? 'fa-check' :
-                                            profile.authorizationVerified === 'rejected' ? 'fa-times' : 'fa-clock'
-                                        }`}></i>
-                                        {profile.authorizationVerified === 'approved' ? 'Approved' : profile.authorizationVerified === 'rejected' ? 'Rejected' : 'Pending'}
-                                    </span>
-                                </td>
-                                <td>
-                                    {profile.authorizationLetter && (
-                                        <div className="action-buttons-container">
-                                            <button className="action-btn btn-download" onClick={() => downloadDocument(id, 'authorizationLetter')}>
-                                                <i className="fa fa-download"></i>Download
-                                            </button>
-                                            <button className="action-btn btn-approve" onClick={() => updateDocumentStatus(id, 'authorizationVerified', 'approved')}>
-                                                <i className="fa fa-check"></i>Approve
-                                            </button>
-                                            <button className="action-btn btn-reject" onClick={() => updateDocumentStatus(id, 'authorizationVerified', 'rejected')}>
-                                                <i className="fa fa-times"></i>Reject
-                                            </button>
-                                        </div>
-                                    )}
-                                </td>
-                            </tr>
+
                         </tbody>
                     </table>
                 </div>

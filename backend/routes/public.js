@@ -26,6 +26,17 @@ router.post('/contact', [
   body('message').notEmpty().withMessage('Message is required')
 ], handleValidationErrors, publicController.submitContactForm);
 
+// Support Route
+router.post('/support', upload.array('attachments', 3), [
+  body('name').notEmpty().withMessage('Name is required'),
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('subject').notEmpty().withMessage('Subject is required'),
+  body('message').notEmpty().withMessage('Message is required'),
+  body('userType').isIn(['employer', 'candidate', 'guest']).withMessage('Valid user type is required'),
+  body('category').optional().isIn(['technical', 'billing', 'account', 'job-posting', 'application', 'general']),
+  body('priority').optional().isIn(['low', 'medium', 'high', 'urgent'])
+], handleValidationErrors, publicController.submitSupportTicket);
+
 // Content Routes
 router.get('/testimonials', publicController.getTestimonials);
 router.get('/partners', publicController.getPartners);

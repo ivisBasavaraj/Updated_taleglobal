@@ -9,6 +9,7 @@ const Job = require('../models/Job');
 const Application = require('../models/Application');
 const Blog = require('../models/Blog');
 const Contact = require('../models/Contact');
+const Support = require('../models/Support');
 const Testimonial = require('../models/Testimonial');
 const FAQ = require('../models/FAQ');
 const Partner = require('../models/Partner');
@@ -1863,6 +1864,142 @@ exports.downloadPlacementIdCard = async (req, res) => {
 
     res.setHeader('Content-Type', mimeType);
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(buffer);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Support Ticket Management Controllers
+exports.getSupportTickets = async (req, res) => {
+  try {
+    const { status, userType, priority, page = 1, limit = 20 } = req.query;
+    
+    let query = {};
+    if (status) query.status = status;
+    if (userType) query.userType = userType;
+    if (priority) query.priority = priority;
+
+    const tickets = await Support.find(query)
+      .populate('userId', 'name email companyName')
+      .populate('respondedBy', 'name email')
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+
+    const totalTickets = await Support.countDocuments(query);
+    const unreadCount = await Support.countDocuments({ ...query, isRead: false });
+
+    res.json({ 
+      success: true, 
+      tickets,
+      totalTickets,
+      unreadCount,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalTickets / parseInt(limit))
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.getSupportTicketById = async (req, res) => {
+  try {
+    const ticket = await Support.findById(req.params.id)
+      .populate('userId', 'name email companyName')
+      .populate('respondedBy', 'name email');
+    
+    if (!ticket) {
+      return res.status(404).json({ success: false, message: 'Support ticket not found' });
+    }
+
+    // Mark as read
+    if (!ticket.isRead) {
+      ticket.isRead = true;
+      await ticket.save();
+    }
+
+    res.json({ success: true, ticket });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.updateSupportTicketStatus = async (req, res) => {
+  try {
+    const { status, response } = req.body;
+    
+    const updateData = { status };
+    if (response) {
+      updateData.response = response;
+      updateData.respondedAt = new Date();
+      updateData.respondedBy = req.user.id;
+    }
+
+    const ticket = await Support.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    ).populate('userId', 'name email companyName');
+
+    if (!ticket) {
+      return res.status(404).json({ success: false, message: 'Support ticket not found' });
+    }
+
+    // Create notification for user if responded
+    if (response && ticket.userId) {
+      try {
+        await createNotification({
+          title: 'Support Ticket Response',
+          message: `Your support ticket "${ticket.subject}" has been responded to by admin.`,
+          type: 'support_response',
+          role: ticket.userType,
+          relatedId: ticket.userId,
+          createdBy: req.user.id
+        });
+      } catch (notifError) {
+        console.error('Error creating support response notification:', notifError);
+      }
+    }
+
+    res.json({ success: true, ticket });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.deleteSupportTicket = async (req, res) => {
+  try {
+    const ticket = await Support.findByIdAndDelete(req.params.id);
+    
+    if (!ticket) {
+      return res.status(404).json({ success: false, message: 'Support ticket not found' });
+    }
+
+    res.json({ success: true, message: 'Support ticket deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.downloadSupportAttachment = async (req, res) => {
+  try {
+    const { ticketId, attachmentIndex } = req.params;
+    
+    const ticket = await Support.findById(ticketId);
+    if (!ticket) {
+      return res.status(404).json({ success: false, message: 'Support ticket not found' });
+    }
+
+    const attachment = ticket.attachments[parseInt(attachmentIndex)];
+    if (!attachment) {
+      return res.status(404).json({ success: false, message: 'Attachment not found' });
+    }
+
+    const { buffer, mimeType } = base64ToBuffer(attachment.data);
+    
+    res.setHeader('Content-Type', mimeType);
+    res.setHeader('Content-Disposition', `attachment; filename="${attachment.originalName}"`);
     res.send(buffer);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
