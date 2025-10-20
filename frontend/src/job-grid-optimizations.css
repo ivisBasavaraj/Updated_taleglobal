@@ -44,8 +44,10 @@
 
 /* Job Card Optimizations */
 .job-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
   will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .job-card:hover {
@@ -55,9 +57,9 @@
 
 /* Image Loading Optimization */
 .twm-media img {
-  object-fit: contain;
-  width: 60px;
-  height: 60px;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
   border-radius: 8px;
 }
 
@@ -70,8 +72,10 @@
   border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.15s ease;
   cursor: pointer;
+  transform: translateZ(0);
+  will-change: background-color;
 }
 
 .apply-now-button:hover {
@@ -82,10 +86,36 @@
 /* Performance optimizations */
 .job-grid-page {
   contain: layout style paint;
+  transform: translateZ(0); /* Force GPU acceleration */
 }
 
 .twm-jobs-grid-style1 {
   contain: layout style;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize image loading */
+.twm-media {
+  contain: layout;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.twm-media img {
+  content-visibility: auto;
+  contain-intrinsic-size: 60px 60px;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 /* Reduce layout thrashing */
@@ -125,6 +155,18 @@
   z-index: 10;
 }
 
+/* Virtual scrolling optimization */
+.job-grid-container {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+/* Intersection observer optimization */
+.job-card[data-visible="false"] {
+  content-visibility: hidden;
+}
+
 /* Responsive optimizations */
 @media (max-width: 768px) {
   .job-card {
@@ -134,5 +176,9 @@
   .skeleton-logo {
     width: 50px;
     height: 50px;
+  }
+  
+  .twm-jobs-grid-style1 {
+    transform: none; /* Disable transforms on mobile for better performance */
   }
 }

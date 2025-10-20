@@ -11,6 +11,7 @@ import AssessmentDashboard from "../app/pannels/employer/components/pages/Assess
 import EmpPostedJobs from "../app/pannels/employer/components/jobs/emp-posted-jobs";
 import EmpPostJob from "../app/pannels/employer/components/jobs/emp-post-job";
 import EmpJobReviewPage from "../app/pannels/employer/components/emp-job-review";
+import EmpSupport from "../app/pannels/employer/components/emp-support";
 
 function EmployerRoutes() {
     return (
@@ -38,6 +39,7 @@ function EmployerRoutes() {
 					path={employer.RESUME_ALERTS}
 					element={<EmpResumeAlertsPage />}
 				/>
+				<Route path={employer.SUPPORT} element={<EmpSupport />} />
 				<Route path="*" element={<Error404Page />} />
 			</Routes>
 		);

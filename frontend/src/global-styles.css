@@ -281,74 +281,200 @@ html {
     }
 }
 
-/* Top Recruiters responsive grid */
+/* Top Recruiters Job Cards Grid */
 .top-recruiters-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 24px;
+    gap: 20px;
 }
 
-.top-recruiter-grid-item {
-    display: flex;
-}
-
-.top-recruiter-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 160px;
-    padding: 24px;
+.recruiter-job-card {
+    position: relative;
+    background: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.top-recruiter-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
-}
-
-.top-recruiter-link {
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    height: auto;
+    min-height: 280px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-decoration: none !important;
-    color: inherit !important;
-    width: 100%;
 }
 
-.top-recruiter-logo {
-    max-height: 60px;
-    max-width: 100%;
-    object-fit: contain;
+.recruiter-job-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Header with job type badge only */
+.job-card-header {
+    display: flex;
+    justify-content: flex-end;
     margin-bottom: 12px;
 }
 
-.top-recruiter-placeholder {
+.logo-title-row {
+    display: flex;
+    align-items: flex-start !important;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.logo-title-row .company-logo,
+.logo-title-row .company-logo-placeholder {
+    margin-top: 2px !important;
+}
+
+.company-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #e5e7eb;
+}
+
+.company-logo-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 60px;
-    background-color: #f1f5f9;
-    border-radius: 8px;
-    margin-bottom: 12px;
-}
-
-.top-recruiter-name {
+    font-weight: 600;
+    color: #374151;
     font-size: 16px;
-    color: #0f172a;
+    border: 1px solid #e5e7eb;
+}
+
+/* Job Type Badge */
+.job-type-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    text-transform: capitalize;
+}
+
+.job-type-badge.full-time {
+    background-color: #16a34a;
+}
+
+.job-type-badge.internship,
+.job-type-badge.internship-paid {
+    background-color: #22c55e;
+}
+
+.job-type-badge.part-time {
+    background-color: #3b82f6;
+}
+
+.job-type-badge.contract {
+    background-color: #8b5cf6;
+}
+
+/* Job Info Section */
+.job-info {
+    margin-bottom: 16px;
+}
+
+.job-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 6px 0;
+    line-height: 1.3;
+}
+
+.job-location {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* CTC and Vacancies Section */
+.job-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 12px 0;
+    border-top: 1px solid #f3f4f6;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.ctc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ctc-label {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.ctc-value {
+    font-size: 14px;
+    color: #1967d2;
+    font-weight: 600;
+}
+
+.vacancy-info {
+    font-size: 12px;
+    color: #6b7280;
+    text-align: right;
+}
+
+/* Posted By Section */
+.posted-by {
+    margin-bottom: 16px;
+    flex-grow: 1;
+}
+
+.company-name {
+    font-size: 14px;
+    color: #111827;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.posted-by-text {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Apply Button */
+.apply-btn {
+    background-color: #fd7e14 !important;
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none !important;
     text-align: center;
+    transition: all 0.3s ease;
+    margin-top: auto;
+    display: inline-block;
+    width: 100px;
+    align-self: flex-end;
 }
 
-.top-recruiter-jobs {
-    font-size: 13px;
-    color: #475569;
+.apply-btn:hover {
+    background-color: #e8690a !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(253, 126, 20, 0.3);
 }
 
+/* Responsive Design */
 @media (max-width: 1199px) {
     .top-recruiters-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -359,15 +485,36 @@ html {
     .top-recruiters-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+    
+    .recruiter-job-card {
+        min-height: 260px;
+    }
 }
 
-@media (max-width: 575px) {
+@media (max-width: 767px) {
     .top-recruiters-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
     }
-
-    .top-recruiter-card {
-        height: auto;
+    
+    .recruiter-job-card {
+        min-height: auto;
+        padding: 14px;
+    }
+    
+    .job-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .vacancy-info {
+        text-align: left;
+    }
+    
+    .apply-btn {
+        width: 100%;
+        align-self: stretch;
     }
 }
 
@@ -648,4 +795,16 @@ input[type="button"]:hover,
   background-color: #e8690a !important;
   color: #fff !important;
   border-color: #e8690a !important;
+}
+
+/* White icon for candidate button */
+.nav-link.active .candidate-icon-white,
+.nav-link .candidate-icon-white,
+button.nav-link .candidate-icon-white {
+  color: white !important;
+}
+
+/* Force candidate icon to be white in signin/signup popups */
+.twm-sign-up .nav-tabs .nav-link .fas.fa-user-tie {
+  color: white !important;
 }

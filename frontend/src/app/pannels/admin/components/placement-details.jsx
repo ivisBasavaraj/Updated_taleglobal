@@ -500,7 +500,63 @@ function PlacementDetails() {
                         )}
                         <small className="text-muted d-block mt-2">College Logo</small>
                     </div>
-                    <div className="col-md-10">
+                    <div className="col-md-2 text-center">
+                        {placement.idCard ? (
+                            <div>
+                                <img 
+                                    src={placement.idCard} 
+                                    alt="ID Card" 
+                                    style={{
+                                        width: '100px',
+                                        height: '100px',
+                                        objectFit: 'contain',
+                                        borderRadius: '12px',
+                                        border: '2px solid #e9ecef',
+                                        background: '#f8f9fa'
+                                    }}
+                                />
+                                <div className="mt-2">
+                                    <i 
+                                        className="fa fa-download" 
+                                        onClick={() => {
+                                            fetch(`http://localhost:5000/api/admin/placements/${id}/download-id-card`, {
+                                                headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
+                                            }).then(response => response.blob())
+                                            .then(blob => {
+                                                const url = window.URL.createObjectURL(blob);
+                                                const a = document.createElement('a');
+                                                a.href = url;
+                                                a.download = `${placement.name.replace(/\s+/g, '_')}_ID_Card`;
+                                                document.body.appendChild(a);
+                                                a.click();
+                                                window.URL.revokeObjectURL(url);
+                                                document.body.removeChild(a);
+                                            }).catch(() => alert('Failed to download ID card'));
+                                        }}
+                                        style={{cursor: 'pointer', color: '#007bff', fontSize: '16px'}}
+                                        title="Download ID Card"
+                                    ></i>
+                                </div>
+                            </div>
+                        ) : (
+                            <div 
+                                style={{
+                                    width: '100px',
+                                    height: '100px',
+                                    borderRadius: '12px',
+                                    border: '2px dashed #ccc',
+                                    background: '#f8f9fa',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <i className="fa fa-id-card fa-2x text-muted"></i>
+                            </div>
+                        )}
+                        <small className="text-muted d-block mt-2">ID Card</small>
+                    </div>
+                    <div className="col-md-8">
                         <h3 className="mb-2" style={{color: '#2c3e50'}}>{placement.name}</h3>
                         <p className="mb-1" style={{color: '#6c757d', fontSize: '1.1rem'}}>
                             <i className="fa fa-university mr-2"></i>

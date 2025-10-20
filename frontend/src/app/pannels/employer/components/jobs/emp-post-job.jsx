@@ -690,7 +690,6 @@ export default function EmpPostJob({ onNext }) {
 						>
 							<option value="" disabled>Select Job Type</option>
 							<option>Full-Time</option>
-							<option>Part-Time</option>
 							<option>Internship (Paid)</option>
 							<option>Internship (Unpaid)</option>
 							<option>Work From Home</option>
@@ -910,47 +909,62 @@ export default function EmpPostJob({ onNext }) {
 					</div>
 
 					{/* Experience & Rounds */}
-					<div>
-						<label style={label}>
+					<div style={{
+						padding: 20,
+						background: '#fff',
+						border: '2px solid #e5e7eb',
+						borderRadius: 12,
+						boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
+					}}>
+						<label style={{
+							...label,
+							fontSize: 16,
+							fontWeight: 600,
+							marginBottom: 16,
+							color: '#1f2937'
+						}}>
 							<i className="fa fa-chart-line" style={{marginRight: '8px', color: '#ff6b35'}}></i>
 							Experience Level
 						</label>
-						<div style={{ 
-							display: "flex", 
-							gap: 16, 
-							alignItems: "center",
-							flexWrap: "wrap",
-							padding: 12,
-							background: '#f9fafb',
-							borderRadius: 8,
+						<div style={{
+							display: 'grid',
+							gridTemplateColumns: 'repeat(3, 1fr)',
+							gap: 12,
+							marginBottom: 16
 						}}>
-							<label style={{ 
-								fontSize: 14, 
-								color: "#374151",
+							<label style={{
 								display: 'flex',
 								alignItems: 'center',
-								gap: 6,
+								gap: 8,
+								padding: 12,
+								border: formData.experienceLevel === "freshers" ? '2px solid #ff6b35' : '2px solid #e5e7eb',
+								borderRadius: 8,
+								background: formData.experienceLevel === "freshers" ? '#fff5f2' : '#f9fafb',
 								cursor: 'pointer',
+								transition: 'all 0.2s ease',
+								fontWeight: 500
 							}}>
 								<input
 									type="radio"
 									name="experience"
 									checked={formData.experienceLevel === "freshers"}
-									onChange={() =>
-										update({ experienceLevel: "freshers", minExperience: "" })
-									}
+									onChange={() => update({ experienceLevel: "freshers", minExperience: "" })}
 									style={{cursor: 'pointer'}}
 								/>
 								Fresher
 							</label>
 
-							<label style={{ 
-								fontSize: 14, 
-								color: "#374151",
+							<label style={{
 								display: 'flex',
 								alignItems: 'center',
-								gap: 6,
+								gap: 8,
+								padding: 12,
+								border: formData.experienceLevel === "minimum" ? '2px solid #ff6b35' : '2px solid #e5e7eb',
+								borderRadius: 8,
+								background: formData.experienceLevel === "minimum" ? '#fff5f2' : '#f9fafb',
 								cursor: 'pointer',
+								transition: 'all 0.2s ease',
+								fontWeight: 500
 							}}>
 								<input
 									type="radio"
@@ -962,40 +976,61 @@ export default function EmpPostJob({ onNext }) {
 								Experienced
 							</label>
 
-							<label style={{ 
-								fontSize: 14, 
-								color: "#374151",
+							<label style={{
 								display: 'flex',
 								alignItems: 'center',
-								gap: 6,
+								gap: 8,
+								padding: 12,
+								border: formData.experienceLevel === "both" ? '2px solid #ff6b35' : '2px solid #e5e7eb',
+								borderRadius: 8,
+								background: formData.experienceLevel === "both" ? '#fff5f2' : '#f9fafb',
 								cursor: 'pointer',
+								transition: 'all 0.2s ease',
+								fontWeight: 500
 							}}>
 								<input
 									type="radio"
 									name="both"
 									checked={formData.experienceLevel === "both"}
-									onChange={() =>
-										update({ experienceLevel: "both", minExperience: "" })
-									}
+									onChange={() => update({ experienceLevel: "both", minExperience: "" })}
 									style={{cursor: 'pointer'}}
 								/>
 								Both
 							</label>
-
-							{formData.experienceLevel === "minimum" && (
-								<div style={{display: 'flex', alignItems: 'center', gap: 8}}>
-									<span style={{fontSize: 13, color: '#6b7280'}}>Min. Years:</span>
-									<input
-										style={{ ...input, width: 100, marginBottom: 0 }}
-										type="number"
-										min="0"
-										placeholder="Years"
-										value={formData.minExperience}
-										onChange={(e) => update({ minExperience: e.target.value })}
-									/>
-								</div>
-							)}
 						</div>
+
+						{formData.experienceLevel === "minimum" && (
+							<div style={{
+								padding: 16,
+								background: '#f0f9ff',
+								border: '1px solid #0ea5e9',
+								borderRadius: 8,
+								display: 'flex',
+								alignItems: 'center',
+								gap: 12
+							}}>
+								<span style={{
+									fontSize: 18,
+									color: '#0f172a',
+									fontWeight: 600
+								}}>Min. Years:</span>
+								<input
+									style={{
+										...input,
+										width: 120,
+										marginBottom: 0,
+										border: '2px solid #0ea5e9',
+										fontWeight: 600,
+										fontSize: 16
+									}}
+									type="number"
+									min="0"
+									placeholder="Years"
+									value={formData.minExperience}
+									onChange={(e) => update({ minExperience: e.target.value })}
+								/>
+							</div>
+						)}
 					</div>
 
 					<div>
@@ -1274,6 +1309,7 @@ export default function EmpPostJob({ onNext }) {
 													<input
 														style={{...input, fontSize: 13}}
 														type="date"
+														min={new Date().toISOString().split('T')[0]}
 														value={formData.interviewRoundDetails[roundType].fromDate}
 														onChange={(e) => updateRoundDetails(roundType, 'fromDate', e.target.value)}
 													/>
@@ -1283,6 +1319,7 @@ export default function EmpPostJob({ onNext }) {
 													<input
 														style={{...input, fontSize: 13}}
 														type="date"
+														min={new Date().toISOString().split('T')[0]}
 														value={formData.interviewRoundDetails[roundType].toDate}
 														onChange={(e) => updateRoundDetails(roundType, 'toDate', e.target.value)}
 													/>
@@ -1321,6 +1358,7 @@ export default function EmpPostJob({ onNext }) {
 						<input
 							style={input}
 							type="date"
+							min={new Date().toISOString().split('T')[0]}
 							value={formData.offerLetterDate}
 							onChange={(e) => update({ offerLetterDate: e.target.value })}
 						/>

@@ -8,6 +8,7 @@ export default function SubAdminLogin() {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -99,16 +100,31 @@ export default function SubAdminLogin() {
                                                 />
                                             </div>
 
-                                            <div className="form-group mb-3">
+                                            <div className="form-group mb-3" style={{ position: 'relative' }}>
                                                 <input
                                                     name="password"
-                                                    type="password"
+                                                    type={showPassword ? "text" : "password"}
                                                     required
                                                     className="form-control"
                                                     placeholder="Password"
                                                     value={formData.password}
                                                     onChange={handleChange}
+                                                    style={{ paddingRight: '40px' }}
                                                 />
+                                                <span
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        right: '12px',
+                                                        top: '50%',
+                                                        transform: 'translateY(-50%)',
+                                                        cursor: 'pointer',
+                                                        fontSize: '18px',
+                                                        color: '#666'
+                                                    }}
+                                                >
+                                                    {showPassword ? '👁️' : '👁️‍🗨️'}
+                                                </span>
                                             </div>
 
                                             <div className="form-group">

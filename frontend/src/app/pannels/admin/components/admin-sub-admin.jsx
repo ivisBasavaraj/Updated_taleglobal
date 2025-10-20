@@ -20,6 +20,8 @@ function AdminSubAdmin() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [isMainAdmin, setIsMainAdmin] = useState(true);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -487,38 +489,70 @@ function AdminSubAdmin() {
                                         </div>
 
                                         <div className="col-md-6">
-                                            <div className="form-floating">
+                                            <div className="form-floating" style={{ position: 'relative' }}>
                                                 <input
                                                     className="form-control rounded-3"
                                                     name="password"
-                                                    type="password"
+                                                    type={showPassword ? "text" : "password"}
                                                     placeholder="Password"
                                                     value={formData.password}
                                                     onChange={handleInputChange}
                                                     required={showAddForm}
                                                     id="password"
+                                                    style={{ paddingRight: '50px' }}
                                                 />
                                                 <label htmlFor="password">
                                                     Password {showAddForm ? '*' : '(Leave blank to keep current)'}
                                                 </label>
+                                                <span
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        right: '15px',
+                                                        top: '50%',
+                                                        transform: 'translateY(-50%)',
+                                                        cursor: 'pointer',
+                                                        fontSize: '18px',
+                                                        color: '#666',
+                                                        zIndex: 10
+                                                    }}
+                                                >
+                                                    {showPassword ? '👁️' : '👁️🗨️'}
+                                                </span>
                                             </div>
                                         </div>
 
                                         <div className="col-md-6">
-                                            <div className="form-floating">
+                                            <div className="form-floating" style={{ position: 'relative' }}>
                                                 <input
                                                     className="form-control rounded-3"
                                                     name="confirmPassword"
-                                                    type="password"
+                                                    type={showConfirmPassword ? "text" : "password"}
                                                     placeholder="Confirm Password"
                                                     value={formData.confirmPassword}
                                                     onChange={handleInputChange}
                                                     required={showAddForm}
                                                     id="confirmPassword"
+                                                    style={{ paddingRight: '50px' }}
                                                 />
                                                 <label htmlFor="confirmPassword">
                                                     Confirm Password {showAddForm ? '*' : ''}
                                                 </label>
+                                                <span
+                                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        right: '15px',
+                                                        top: '50%',
+                                                        transform: 'translateY(-50%)',
+                                                        cursor: 'pointer',
+                                                        fontSize: '18px',
+                                                        color: '#666',
+                                                        zIndex: 10
+                                                    }}
+                                                >
+                                                    {showConfirmPassword ? '👁️' : '👁️🗨️'}
+                                                </span>
                                             </div>
                                         </div>
 

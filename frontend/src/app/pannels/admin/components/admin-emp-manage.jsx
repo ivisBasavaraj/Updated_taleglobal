@@ -115,6 +115,7 @@ function AdminEmployersAllRequest() {
                             <thead>
                                 <tr>
                                     <th>Company Name</th>
+                                    <th>Type</th>
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Join Date</th>
@@ -126,7 +127,7 @@ function AdminEmployersAllRequest() {
                             <tbody>
                                 {employers.length === 0 ? (
                                     <tr>
-                                        <td colSpan="6" className="text-center">No employers found</td>
+                                        <td colSpan="7" className="text-center">No employers found</td>
                                     </tr>
                                 ) : (
                                     employers.map((employer) => (
@@ -136,6 +137,7 @@ function AdminEmployersAllRequest() {
                                                     {employer.companyName || employer.email}
                                                 </span>
                                             </td>
+                                            <td>{employer.employerType === 'consultant' ? 'Consultant' : 'Company'}</td>
                                             <td>{employer.email}</td>
                                             <td>{employer.phone || 'N/A'}</td>
                                             <td>{formatDate(employer.createdAt)}</td>

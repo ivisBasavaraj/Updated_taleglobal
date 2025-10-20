@@ -45,7 +45,7 @@ const HeroBody = ({ onSearch }) => {
           error = 'Job title must be at least 2 characters';
         } else if (value && value.length > 100) {
           error = 'Job title must not exceed 100 characters';
-        } else if (value && !/^[a-zA-Z0-9\s/\-()]+$/.test(value)) {
+        } else if (value && !/^[a-zA-Z0-9\s/\-().&+,]+$/.test(value)) {
           error = 'Job title contains invalid characters';
         }
         break;
@@ -139,14 +139,7 @@ const HeroBody = ({ onSearch }) => {
     
     // Validate all fields
     if (!validateAllFields()) {
-      // Show error message
       alert('Please fix the validation errors before searching');
-      return;
-    }
-    
-    // Check if at least one search criteria is provided
-    if (!searchData.what && !searchData.type && !searchData.location) {
-      alert('Please enter at least one search criteria (Job Title, Type, or Location)');
       return;
     }
     
@@ -155,14 +148,17 @@ const HeroBody = ({ onSearch }) => {
     if (searchData.type && searchData.type !== '') filters.jobType = searchData.type;
     if (searchData.location && searchData.location !== '') filters.location = searchData.location.trim();
     
-    console.log('Search filters:', filters);
-    
-    // Navigate to job grid page with filters
-    const queryString = Object.keys(filters)
-      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(filters[key])}`)
-      .join('&');
-    
-    navigate(`/job-grid${queryString ? '?' + queryString : ''}`);
+    // If onSearch prop exists, use it for home page filtering
+    if (onSearch && typeof onSearch === 'function') {
+      onSearch(filters);
+    } else {
+      // Navigate to job grid page with filters
+      const queryString = Object.keys(filters)
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(filters[key])}`)
+        .join('&');
+      
+      navigate(`/job-grid${queryString ? '?' + queryString : ''}`);
+    }
   };
 
   return (

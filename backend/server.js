@@ -5,7 +5,7 @@ const rateLimit = require('express-rate-limit');
 const http = require('http');
 require('dotenv').config();
 
-const connectDB = require('./config/database');
+const { connectDB } = require('./config/database');
 const errorHandler = require('./middlewares/errorHandler');
 const { initializeWebSocket } = require('./utils/websocket');
 
@@ -18,6 +18,9 @@ const placementRoutes = require('./routes/placement');
 
 const app = express();
 
+// Trust proxy for rate limiting
+app.set('trust proxy', 1);
+
 // Connect to Database
 connectDB();
 
@@ -26,16 +29,16 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://taleglobal.cloud', 'https://www.taleglobal.cloud']
-    : 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'https://taleglobal.cloud', 'https://www.taleglobal.cloud'],
   credentials: true
 }));
 
 // Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10000 // limit each IP to 10000 requests per windowMs
+  max: 10000, // limit each IP to 10000 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false
 });
 app.use(limiter);
 

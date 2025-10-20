@@ -3,6 +3,9 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api
 // Helper function to get auth headers
 const getAuthHeaders = (userType = 'candidate') => {
   const token = localStorage.getItem(`${userType}Token`);
+  if (!token) {
+    console.warn(`No ${userType} token found in localStorage`);
+  }
   return {
     'Content-Type': 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -145,6 +148,36 @@ export const api = {
     }).then((res) => res.json());
   },
 
+  uploadIdCard: (formData) => {
+    const token = localStorage.getItem('candidateToken');
+    return fetch(`${API_BASE_URL}/candidate/upload-idcard`, {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: formData,
+    }).then((res) => res.json());
+  },
+
+  // Education APIs
+  addEducation: (formData) => {
+    const token = localStorage.getItem('candidateToken');
+    return fetch(`${API_BASE_URL}/candidate/education`, {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: formData,
+    }).then((res) => res.json());
+  },
+
+  deleteEducation: (educationId) => {
+    return fetch(`${API_BASE_URL}/candidate/education/${educationId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders('candidate'),
+    }).then((res) => res.json());
+  },
+
   // Employer APIs
   employerRegister: (data) => {
     return fetch(`${API_BASE_URL}/employer/register`, {
@@ -228,7 +261,10 @@ export const api = {
 
   getPlacementProfile: () => {
     return fetch(`${API_BASE_URL}/placement/profile`, {
-      headers: getAuthHeaders('placement'),
+      headers: {
+        ...getAuthHeaders('placement'),
+        'Cache-Control': 'max-age=300' // 5 minutes cache
+      },
     }).then(handleApiResponse);
   },
 
@@ -240,10 +276,13 @@ export const api = {
 
   uploadStudentData: (formData) => {
     const token = localStorage.getItem('placementToken');
+    if (!token) {
+      return Promise.reject(new Error('No authentication token found. Please login again.'));
+    }
     return fetch(`${API_BASE_URL}/placement/upload-student-data`, {
       method: 'POST',
       headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        Authorization: `Bearer ${token}`,
       },
       body: formData,
     }).then(handleApiResponse);
@@ -386,7 +425,18 @@ export const api = {
 
   getMyPlacementData: () => {
     return fetch(`${API_BASE_URL}/placement/data`, {
+      headers: {
+        ...getAuthHeaders('placement'),
+        'Cache-Control': 'max-age=60' // 1 minute cache for student data
+      },
+    }).then(handleApiResponse);
+  },
+
+  updatePlacementProfile: (data) => {
+    return fetch(`${API_BASE_URL}/placement/profile`, {
+      method: 'PUT',
       headers: getAuthHeaders('placement'),
+      body: JSON.stringify(data),
     }).then(handleApiResponse);
   },
 };

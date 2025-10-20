@@ -1,14 +1,23 @@
+const mongoose = require('mongoose');
 const Job = require('../models/Job');
 const Blog = require('../models/Blog');
 const Contact = require('../models/Contact');
+const Support = require('../models/Support');
 const Testimonial = require('../models/Testimonial');
 const Partner = require('../models/Partner');
 const FAQ = require('../models/FAQ');
+const Review = require('../models/Review');
 const { cache } = require('../utils/cache');
+const { isDBConnected } = require('../config/database');
 
 // Job Controllers
 exports.getJobs = async (req, res) => {
   try {
+    // Check if database is connected
+    if (!isDBConnected()) {
+      return res.json({ success: true, jobs: [], total: 0, message: 'Database offline' });
+    }
+    
     const { location, jobType, category, search, title, employerId, employmentType, skills, keyword, jobTitle, page = 1, limit = 10, sortBy } = req.query;
     
     // Create cache key for this specific query
@@ -61,7 +70,7 @@ exports.getJobs = async (req, res) => {
     };
     const sortCriteria = sortMap[sortBy] || { createdAt: -1 };
 
-    // Single optimized aggregation pipeline
+    // Optimized aggregation pipeline with minimal data transfer
     const pipeline = [
       { $match: query },
       {
@@ -84,7 +93,7 @@ exports.getJobs = async (req, res) => {
           foreignField: 'employerId',
           as: 'employerProfile',
           pipeline: [
-            { $project: { logo: 1, description: 1, website: 1, location: 1 } }
+            { $project: { logo: 1, companyName: 1 } } // Only get essential profile data
           ]
         }
       },
@@ -109,11 +118,12 @@ exports.getJobs = async (req, res) => {
           vacancies: 1,
           category: 1,
           ctc: 1,
+          description: 1,
+          requiredSkills: 1,
           createdAt: 1,
-          employerId: 1,
           employerProfile: 1,
           postedBy: 1,
-          companyName: 1
+          employerId: 1
         }
       },
       { $sort: sortCriteria },
@@ -143,8 +153,8 @@ exports.getJobs = async (req, res) => {
       hasPrevPage: parseInt(page) > 1
     };
     
-    // Cache for 5 minutes
-    cache.set(cacheKey, response, 300000);
+    // Cache for 3 minutes for faster updates
+    cache.set(cacheKey, response, 180000);
     
     res.json(response);
   } catch (error) {
@@ -199,6 +209,12 @@ exports.getJobById = async (req, res) => {
 
     const EmployerProfile = require('../models/EmployerProfile');
     const employerProfile = await EmployerProfile.findOne({ employerId: job.employerId._id }).lean();
+    
+    console.log('Found employer profile:', !!employerProfile);
+    if (employerProfile) {
+      console.log('Profile logo exists:', !!employerProfile.logo);
+      console.log('Profile cover exists:', !!employerProfile.coverImage);
+    }
     
     const jobWithProfile = {
       ...job,
@@ -390,7 +406,8 @@ exports.getEmployerProfile = async (req, res) => {
         companyName: employer.companyName,
         email: employer.email,
         phone: employer.phone,
-        description: 'No company description available.'
+        description: 'No company description available.',
+        gallery: []
       };
     }
 
@@ -431,7 +448,13 @@ exports.getEmployers = async (req, res) => {
           foreignField: 'employerId',
           as: 'profile',
           pipeline: [
-            { $project: { logo: 1, corporateAddress: 1, website: 1, description: 1, industry: 1 } }
+            { $project: { 
+              logo: 1, 
+              industry: 1, 
+              corporateAddress: 1, 
+              website: 1, 
+              companySize: 1 
+            } }
           ]
         }
       },
@@ -455,8 +478,13 @@ exports.getEmployers = async (req, res) => {
       },
       {
         $project: {
-          password: 0,
-          jobs: 0
+          companyName: 1,
+          email: 1,
+          phone: 1,
+          employerType: 1,
+          createdAt: 1,
+          profile: 1,
+          jobCount: 1
         }
       },
       { $sort: sortCriteria },
@@ -486,7 +514,7 @@ exports.getEmployers = async (req, res) => {
       hasPrevPage: parseInt(page) > 1
     };
     
-    cache.set(cacheKey, response, 300000);
+    cache.set(cacheKey, response, 180000);
     res.json(response);
   } catch (error) {
     console.error('Error in getEmployers:', error);
@@ -496,6 +524,11 @@ exports.getEmployers = async (req, res) => {
 
 exports.getTopRecruiters = async (req, res) => {
   try {
+    // Check if database is connected
+    if (!isDBConnected()) {
+      return res.json({ success: true, recruiters: [], total: 0, message: 'Database offline' });
+    }
+    
     const { limit = 8 } = req.query;
     const Employer = require('../models/Employer');
     const EmployerProfile = require('../models/EmployerProfile');
@@ -624,6 +657,181 @@ exports.applyForJob = async (req, res) => {
     });
   } catch (error) {
     console.error('Error in applyForJob:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Review Controllers
+exports.getEmployerReviews = async (req, res) => {
+  try {
+    const { employerId } = req.params;
+    const { page = 1, limit = 10 } = req.query;
+    
+    const reviews = await Review.find({ 
+      employerId, 
+      isApproved: true 
+    })
+    .sort({ createdAt: -1 })
+    .limit(limit * 1)
+    .skip((page - 1) * limit);
+    
+    const totalReviews = await Review.countDocuments({ 
+      employerId, 
+      isApproved: true 
+    });
+    
+    // Calculate average rating
+    const avgRating = await Review.aggregate([
+      { $match: { employerId: new mongoose.Types.ObjectId(employerId), isApproved: true } },
+      { $group: { _id: null, avgRating: { $avg: '$rating' }, totalCount: { $sum: 1 } } }
+    ]);
+    
+    const averageRating = avgRating.length > 0 ? Math.round(avgRating[0].avgRating * 10) / 10 : 0;
+    const reviewCount = avgRating.length > 0 ? avgRating[0].totalCount : 0;
+    
+    res.json({ 
+      success: true, 
+      reviews,
+      totalReviews,
+      averageRating,
+      reviewCount,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalReviews / parseInt(limit))
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.submitEmployerReview = async (req, res) => {
+  try {
+    const { employerId } = req.params;
+    const { reviewerName, reviewerEmail, rating, description, image } = req.body;
+    
+    // Validate required fields
+    if (!reviewerName || !reviewerEmail || !rating || !description) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'All fields are required' 
+      });
+    }
+    
+    // Validate rating
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Please select a rating between 1 and 5 stars' 
+      });
+    }
+    
+    // Check if employer exists
+    const Employer = require('../models/Employer');
+    const employer = await Employer.findById(employerId);
+    if (!employer) {
+      return res.status(404).json({ success: false, message: 'Employer not found' });
+    }
+    
+    // Check if user already reviewed this employer
+    const existingReview = await Review.findOne({ 
+      employerId, 
+      reviewerEmail: reviewerEmail.trim().toLowerCase() 
+    });
+    if (existingReview) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'You have already submitted a review for this company' 
+      });
+    }
+    
+    // Create review
+    const review = await Review.create({
+      employerId,
+      reviewerName: reviewerName.trim(),
+      reviewerEmail: reviewerEmail.trim().toLowerCase(),
+      rating: parseInt(rating),
+      description: description.trim(),
+      image: image || null
+    });
+    
+    res.status(201).json({
+      success: true,
+      message: 'Review submitted successfully',
+      reviewId: review._id
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.getSubmittedReviews = async (req, res) => {
+  try {
+    const { employerId } = req.params;
+    const { email } = req.query;
+    
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+    
+    const reviews = await Review.find({ 
+      employerId, 
+      reviewerEmail: email.toLowerCase() 
+    }).sort({ createdAt: -1 });
+    
+    res.json({ success: true, reviews });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Support Controller
+exports.submitSupportTicket = async (req, res) => {
+  try {
+    const { name, email, phone, userType, userId, subject, category, priority, message } = req.body;
+    
+    // Handle file attachments
+    let attachments = [];
+    if (req.files && req.files.length > 0) {
+      const { fileToBase64 } = require('../middlewares/upload');
+      attachments = req.files.map(file => ({
+        filename: file.originalname,
+        originalName: file.originalname,
+        data: fileToBase64(file),
+        size: file.size,
+        mimetype: file.mimetype
+      }));
+    }
+
+    // Create support ticket
+    const supportData = {
+      name,
+      email,
+      phone,
+      userType,
+      subject,
+      category: category || 'general',
+      priority: priority || 'medium',
+      message,
+      attachments
+    };
+
+    // Add user reference if provided
+    if (userId && userType !== 'guest') {
+      supportData.userId = userId;
+      supportData.userModel = userType === 'employer' ? 'Employer' : 'Candidate';
+    }
+
+    const support = await Support.create(supportData);
+
+    // Skip notification creation for now to avoid validation errors
+    console.log('Support ticket created successfully, skipping notification');
+
+    res.status(201).json({ 
+      success: true, 
+      message: 'Support ticket submitted successfully. We will get back to you soon.',
+      ticketId: support._id
+    });
+  } catch (error) {
+    console.error('Error in submitSupportTicket:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

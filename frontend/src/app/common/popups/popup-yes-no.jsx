@@ -18,7 +18,7 @@ function YesNoPopup(props) {
     }
 
     const navigateToAfterLogin = () => {
-        navigate(publicUser.pages.AFTER_LOGIN);
+        navigate(publicUser.INITIAL);
     }
 
     return (

@@ -3,33 +3,38 @@ import { loadScript, publicUrlFor } from "../../../../../globals/constants";
 import JobZImage from "../../../../common/jobz-img";
 import CountUp from "react-countup";
 import { publicUser } from "../../../../../globals/route-names";
+<<<<<<< HEAD
 import { NavLink } from "react-router-dom";
 import MobileTestIndicator from "../../../../../components/MobileTestIndicator";
+=======
+import HomeJobCard from "../../../../../components/HomeJobCard";
+// CSS is now in public/assets/css/home-job-cards.css
+>>>>>>> 92872e199fdfa4aeeb9461804178829410fcb83d
 
 function TopRecruitersSection() {
-    const [recruiters, setRecruiters] = useState([]);
+    const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchTopRecruiters();
+        fetchTopJobs();
     }, []);
 
-    const fetchTopRecruiters = async () => {
+    const fetchTopJobs = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/public/top-recruiters?limit=8');
+            const response = await fetch('http://localhost:5000/api/public/jobs?limit=8');
             const data = await response.json();
-            console.log('Top recruiters data:', data);
+            console.log('Top jobs data:', data);
             if (data.success) {
-                setRecruiters(data.recruiters);
+                setJobs(data.jobs);
             }
         } catch (error) {
-            console.error('Error fetching top recruiters:', error);
+            console.error('Error fetching top jobs:', error);
         } finally {
             setLoading(false);
         }
     };
 
-    const displayRecruiters = recruiters.slice(0, 8);
+    const displayJobs = jobs.slice(0, 8);
 
     return (
         <div className="section-full p-t120 site-bg-white twm-companies-wrap">
@@ -42,29 +47,16 @@ function TopRecruitersSection() {
             <div className="container">
                 <div className="section-content">
                     {loading ? (
-                        <div className="text-center p-5">Loading recruiters...</div>
-                    ) : displayRecruiters.length > 0 ? (
-                        <div className="top-recruiters-grid">
-                            {displayRecruiters.map((recruiter) => (
-                                <div key={recruiter._id} className="top-recruiter-grid-item">
-                                    <div className="top-recruiter-card">
-                                        <NavLink to={`${publicUser.employer.DETAIL1}/${recruiter._id}`} className="top-recruiter-link">
-                                            {recruiter.logo ? (
-                                                <img className="top-recruiter-logo" src={recruiter.logo} alt={recruiter.companyName} />
-                                            ) : (
-                                                <div className="top-recruiter-placeholder">
-                                                    <strong className="top-recruiter-name">{recruiter.companyName}</strong>
-                                                </div>
-                                            )}
-                                            <div className="top-recruiter-jobs">{recruiter.jobCount ?? 0} active jobs</div>
-                                        </NavLink>
-                                    </div>
-                                </div>
+                        <div className="text-center p-5">Loading jobs...</div>
+                    ) : displayJobs.length > 0 ? (
+                        <div className="home-jobs-grid">
+                            {displayJobs.map((job) => (
+                                <HomeJobCard key={job._id} job={job} />
                             ))}
                         </div>
                     ) : (
                         <div className="text-center p-5">
-                            <p>No recruiters found</p>
+                            <p>No jobs found</p>
                         </div>
                     )}
                 </div>
@@ -380,17 +372,95 @@ function Home1Page() {
             </div>
             {/*Banner End*/}
             {/* HOW IT WORK SECTION START */}
-            <div className="section-full p-t120 p-b90 site-bg-white twm-how-it-work-area">
+            <div className="section-full p-t120 p-b90 site-bg-white twm-how-it-work-area2">
                 <div className="container">
-                    {/* title="" START*/}
-                    <div className="section-head center wt-small-separator-outer">
-                        <div className="wt-small-separator site-text-primary">
-                            <div>Working Process</div>
+                    <div className="row">
+                        <div className="col-lg-4 col-md-12">
+                            {/* title="" START*/}
+                            <div className="section-head left wt-small-separator-outer">
+                                <div className="wt-small-separator site-text-primary">
+                                    <div>Working Process</div>
+                                </div>
+                                <h2 className="wt-title">How It Works</h2>
+                            </div>
+                            <ul className="description-list">
+                                <li>
+                                    <i className="feather-check" />
+                                    Trusted &amp; Quality Job
+                                </li>
+                                <li>
+                                    <i className="feather-check" />
+                                    International Job
+                                </li>
+                                <li>
+                                    <i className="feather-check" />
+                                    No Extra Charge
+                                </li>
+                                <li>
+                                    <i className="feather-check" />
+                                    Top Companies
+                                </li>
+                            </ul>
+                            {/* title="" END*/}
                         </div>
-                        <h2 className="wt-title">How It Works</h2>
+                        <div className="col-lg-8 col-md-12">
+                            <div className="twm-w-process-steps-2-wrap">
+                                <div className="row">
+                                    <div className="col-xl-6 col-lg-6 col-md-6">
+                                        <div className="twm-w-process-steps-2">
+                                            <div className="twm-w-pro-top bg-clr-sky-light bg-sky-light-shadow">
+                                                <span className="twm-large-number text-clr-sky">01</span>
+                                                <div className="twm-media">
+                                                    <span><JobZImage src="images/work-process/icon1.png" alt="icon1" /></span>
+                                                </div>
+                                                <h4 className="twm-title">Register<br />Your Account</h4>
+                                                <p>You need to create an account to find the best and preferred job.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-xl-6 col-lg-6 col-md-6">
+                                        <div className="twm-w-process-steps-2">
+                                            <div className="twm-w-pro-top bg-clr-yellow-light bg-yellow-light-shadow">
+                                                <span className="twm-large-number text-clr-yellow">02</span>
+                                                <div className="twm-media">
+                                                    <span><JobZImage src="images/work-process/icon4.png" alt="icon1" /></span>
+                                                </div>
+                                                <h4 className="twm-title">Search <br />
+                                                    Your Job</h4>
+                                                <p>You need to create an account to find the best and preferred job.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-xl-6 col-lg-6 col-md-6">
+                                        <div className="twm-w-process-steps-2">
+                                            <div className="twm-w-pro-top bg-clr-pink-light bg-pink-light-shadow">
+                                                <span className="twm-large-number text-clr-pink">03</span>
+                                                <div className="twm-media">
+                                                    <span><JobZImage src="images/work-process/icon3.png" alt="icon1" /></span>
+                                                </div>
+                                                <h4 className="twm-title">Apply <br />For Dream Job</h4>
+                                                <p>You need to create an account to find the best and preferred job.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-xl-6 col-lg-6 col-md-6">
+                                        <div className="twm-w-process-steps-2">
+                                            <div className="twm-w-pro-top bg-clr-green-light bg-clr-light-shadow">
+                                                <span className="twm-large-number text-clr-green">04</span>
+                                                <div className="twm-media">
+                                                    <span><JobZImage src="images/work-process/icon3.png" alt="icon1" /></span>
+                                                </div>
+                                                <h4 className="twm-title">Upload <br />Your Resume</h4>
+                                                <p>You need to create an account to find the best and preferred job.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    {/* title="" END*/}
                     <div className="twm-how-it-work-section">
+<<<<<<< HEAD
                         <div className="row">
                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                 <div className="twm-w-process-steps">
@@ -430,6 +500,8 @@ function Home1Page() {
                                 </div>
                             </div>
                         </div>
+=======
+>>>>>>> 92872e199fdfa4aeeb9461804178829410fcb83d
                     </div>
                 </div>
             </div>

@@ -15,6 +15,7 @@ function EmpCandidatesPage() {
   const [currentJob, setCurrentJob] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [genderFilter, setGenderFilter] = useState("");
 
   useEffect(() => {
     loadScript("js/custom.js");
@@ -144,9 +145,12 @@ function EmpCandidatesPage() {
       const matchesStatus = statusFilter
         ? application.status === statusFilter
         : true;
-      return matchesSearch && matchesStatus;
+      const matchesGender = genderFilter
+        ? application.candidateId?.gender?.toLowerCase() === genderFilter.toLowerCase()
+        : true;
+      return matchesSearch && matchesStatus && matchesGender;
     });
-  }, [applications, searchText, statusFilter]);
+  }, [applications, searchText, statusFilter, genderFilter]);
 
   return (
     <>
@@ -212,6 +216,16 @@ function EmpCandidatesPage() {
                 <option value="interviewed">Interviewed</option>
                 <option value="hired">Hired</option>
                 <option value="rejected">Rejected</option>
+              </select>
+              <select
+                className="form-select"
+                value={genderFilter}
+                onChange={(e) => setGenderFilter(e.target.value)}
+                style={{ width: "150px" }}
+              >
+                <option value="">All Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
               </select>
             </div>
           </div>

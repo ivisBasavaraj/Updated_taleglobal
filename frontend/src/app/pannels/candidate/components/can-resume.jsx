@@ -2,14 +2,14 @@ import { useEffect, useState, useCallback } from "react";
 import SectionCanAccomplishments from "../sections/resume/section-can-accomplishments";
 import SectionCanAttachment from "../sections/resume/section-can-attachment";
 import SectionCanDesiredProfile from "../sections/resume/section-can-desired-profile";
-// import SectionCanEducation from "../sections/resume/section-can-education";
+import SectionCanEducation from "../sections/resume/section-can-education";
 import SectionCanEmployment from "../sections/resume/section-can-employment";
 import SectionCanITSkills from "../sections/resume/section-can-itskills";
 import SectionCanKeySkills from "../sections/resume/section-can-keyskills";
 import SectionCanPersonalDetail from "../sections/resume/section-can-personal";
 import SectionCanProfileSummary from "../sections/resume/section-can-profile-summary";
 import SectionCanProjects from "../sections/resume/section-can-projects";
-import SectionCanResumeHeadline from "../sections/resume/section-can-resume-headline";
+
 import { loadScript } from "../../../../globals/constants";
 import { api } from "../../../../utils/api";
 import { initializeAllModals } from "../../../../utils/modalUtils";
@@ -149,10 +149,6 @@ function CanMyResumePage() {
 						<div className="row">
 							<div className="col-12">
 								<div className="panel panel-default mb-4">
-									<SectionCanResumeHeadline profile={profile} />
-								</div>
-
-								<div className="panel panel-default mb-4">
 									<SectionCanProfileSummary profile={profile} />
 								</div>
 
@@ -162,6 +158,10 @@ function CanMyResumePage() {
 
 								<div className="panel panel-default mb-4">
 									<SectionCanPersonalDetail profile={profile} />
+								</div>
+
+								<div className="panel panel-default mb-4">
+									<SectionCanEducation profile={profile} />
 								</div>
 
 								<div className="panel panel-default mb-4">

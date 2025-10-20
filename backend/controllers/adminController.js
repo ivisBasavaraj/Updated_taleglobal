@@ -9,6 +9,7 @@ const Job = require('../models/Job');
 const Application = require('../models/Application');
 const Blog = require('../models/Blog');
 const Contact = require('../models/Contact');
+const Support = require('../models/Support');
 const Testimonial = require('../models/Testimonial');
 const FAQ = require('../models/FAQ');
 const Partner = require('../models/Partner');
@@ -80,6 +81,7 @@ exports.getDashboardStats = async (req, res) => {
     const totalApplications = await Application.countDocuments();
     const activeJobs = await Job.countDocuments({ status: 'active' });
     const pendingJobs = await Job.countDocuments({ status: 'pending' });
+    const pendingPlacements = await Placement.countDocuments({ status: 'pending' });
 
     const stats = {
       totalCandidates,
@@ -87,7 +89,8 @@ exports.getDashboardStats = async (req, res) => {
       totalJobs,
       totalApplications,
       activeJobs,
-      pendingJobs
+      pendingJobs,
+      pendingPlacements
     };
 
     res.json({ success: true, stats });
@@ -795,9 +798,20 @@ exports.updatePlacementStatus = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Placement officer not found' });
     }
 
-    // If approved and has student data, automatically process candidates
-    if (updateData.status === 'active' && placement.studentData && !placement.isProcessed) {
-      console.log('Triggering background processing for placement:', placement._id);
+    // Create notification if approved
+    if (updateData.status === 'active') {
+      try {
+        await createNotification({
+          title: 'Account Approved',
+          message: 'Your placement officer account has been approved by admin. You can now sign in.',
+          type: 'placement_approved',
+          role: 'placement',
+          relatedId: placement._id,
+          createdBy: req.user.id
+        });
+      } catch (notifError) {
+        console.error('Failed to create approval notification:', notifError);
+      }
     }
 
     res.json({ success: true, placement });
@@ -1209,6 +1223,8 @@ exports.generatePlacementLoginToken = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
 
 // Authorization Letter Management
 exports.approveAuthorizationLetter = async (req, res) => {
@@ -1739,6 +1755,8 @@ exports.getStoredExcelData = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
 // Sync credits between Excel data and candidate dashboard
 exports.syncExcelCreditsWithCandidates = async (req, res) => {
   try {
@@ -1823,6 +1841,167 @@ exports.syncExcelCreditsWithCandidates = async (req, res) => {
     });
   } catch (error) {
     console.error('Error syncing Excel credits with candidates:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Download placement ID card
+exports.downloadPlacementIdCard = async (req, res) => {
+  try {
+    const { id: placementId } = req.params;
+    
+    const placement = await Placement.findById(placementId);
+    if (!placement) {
+      return res.status(404).json({ success: false, message: 'Placement officer not found' });
+    }
+
+    if (!placement.idCard) {
+      return res.status(404).json({ success: false, message: 'ID card not found' });
+    }
+
+    const { buffer, mimeType, extension } = base64ToBuffer(placement.idCard);
+    const filename = `${placement.name.replace(/\s+/g, '_')}_ID_Card${extension}`;
+
+    res.setHeader('Content-Type', mimeType);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(buffer);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Support Ticket Management Controllers
+exports.getSupportTickets = async (req, res) => {
+  try {
+    const { status, userType, priority, page = 1, limit = 20 } = req.query;
+    
+    let query = {};
+    if (status) query.status = status;
+    if (userType) query.userType = userType;
+    if (priority) query.priority = priority;
+
+    const tickets = await Support.find(query)
+      .populate('userId', 'name email companyName')
+      .populate('respondedBy', 'name email')
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+
+    const totalTickets = await Support.countDocuments(query);
+    const unreadCount = await Support.countDocuments({ ...query, isRead: false });
+
+    res.json({ 
+      success: true, 
+      tickets,
+      totalTickets,
+      unreadCount,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalTickets / parseInt(limit))
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.getSupportTicketById = async (req, res) => {
+  try {
+    const ticket = await Support.findById(req.params.id)
+      .populate('userId', 'name email companyName')
+      .populate('respondedBy', 'name email');
+    
+    if (!ticket) {
+      return res.status(404).json({ success: false, message: 'Support ticket not found' });
+    }
+
+    // Mark as read
+    if (!ticket.isRead) {
+      ticket.isRead = true;
+      await ticket.save();
+    }
+
+    res.json({ success: true, ticket });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.updateSupportTicketStatus = async (req, res) => {
+  try {
+    const { status, response } = req.body;
+    
+    const updateData = { status };
+    if (response) {
+      updateData.response = response;
+      updateData.respondedAt = new Date();
+      updateData.respondedBy = req.user.id;
+    }
+
+    const ticket = await Support.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    ).populate('userId', 'name email companyName');
+
+    if (!ticket) {
+      return res.status(404).json({ success: false, message: 'Support ticket not found' });
+    }
+
+    // Create notification for user if responded
+    if (response && ticket.userId) {
+      try {
+        await createNotification({
+          title: 'Support Ticket Response',
+          message: `Your support ticket "${ticket.subject}" has been responded to by admin.`,
+          type: 'support_response',
+          role: ticket.userType,
+          relatedId: ticket.userId,
+          createdBy: req.user.id
+        });
+      } catch (notifError) {
+        console.error('Error creating support response notification:', notifError);
+      }
+    }
+
+    res.json({ success: true, ticket });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.deleteSupportTicket = async (req, res) => {
+  try {
+    const ticket = await Support.findByIdAndDelete(req.params.id);
+    
+    if (!ticket) {
+      return res.status(404).json({ success: false, message: 'Support ticket not found' });
+    }
+
+    res.json({ success: true, message: 'Support ticket deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.downloadSupportAttachment = async (req, res) => {
+  try {
+    const { ticketId, attachmentIndex } = req.params;
+    
+    const ticket = await Support.findById(ticketId);
+    if (!ticket) {
+      return res.status(404).json({ success: false, message: 'Support ticket not found' });
+    }
+
+    const attachment = ticket.attachments[parseInt(attachmentIndex)];
+    if (!attachment) {
+      return res.status(404).json({ success: false, message: 'Attachment not found' });
+    }
+
+    const { buffer, mimeType } = base64ToBuffer(attachment.data);
+    
+    res.setHeader('Content-Type', mimeType);
+    res.setHeader('Content-Disposition', `attachment; filename="${attachment.originalName}"`);
+    res.send(buffer);
+  } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };

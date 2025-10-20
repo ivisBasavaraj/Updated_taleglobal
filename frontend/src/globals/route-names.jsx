@@ -40,7 +40,8 @@ export const publicUser = {
         FORGOT:         "/forgot-password",
         RESET_PASSWORD: "/reset-password/:token",
         TERMS:          "/terms-conditions",
-        PRIVACY:        "/privacy-policy"
+        PRIVACY:        "/privacy-policy",
+        SUPPORT:        "/support"
     },
     candidate: {
         GRID: "/can-grid",
@@ -70,6 +71,7 @@ export const candidate = {
 	START_ASSESSMENT: "/start-tech-assessment",
 	STEP: "/step",
 	RESULT: "/assessment-result",
+	SUPPORT: "/support",
 };
 
 export const employer = {
@@ -87,7 +89,8 @@ export const employer = {
 	MESSAGES1: "/messages-style-1",
 	RESUME_ALERTS: "/resume-alerts",
 	CAN_REVIEW:   "/emp-candidate-review",
-    JOB_REVIEW:   "/emp-job-review"
+    JOB_REVIEW:   "/emp-job-review",
+    SUPPORT:      "/support"
 };
 
 export const admin = {
@@ -111,7 +114,8 @@ export const admin = {
     PLACEMENT_REJECT: "/admin-placement-rejected",
     PLACEMENT_DETAILS: "/placement-details/:id",
     SUB_ADMIN: "/sub-admin",
-    SUB_ADMIN_ADD: "/sub-admin/add"
+    SUB_ADMIN_ADD: "/sub-admin/add",
+    SUPPORT_TICKETS: "/support-tickets"
 }
 
 export function pubRoute(_route) {

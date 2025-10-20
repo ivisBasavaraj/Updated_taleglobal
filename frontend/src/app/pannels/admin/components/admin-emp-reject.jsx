@@ -69,6 +69,7 @@ function AdminEmployersRejected() {
                             <thead>
                                 <tr>
                                     <th>Company Name</th>
+                                    <th>Type</th>
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Rejected Date</th>
@@ -79,7 +80,7 @@ function AdminEmployersRejected() {
                             <tbody>
                                 {employers.length === 0 ? (
                                     <tr>
-                                        <td colSpan="5" className="text-center">No rejected employers found</td>
+                                        <td colSpan="6" className="text-center">No rejected employers found</td>
                                     </tr>
                                 ) : (
                                     employers.map((employer) => (
@@ -89,6 +90,7 @@ function AdminEmployersRejected() {
                                                     {employer.companyName || employer.email}
                                                 </span>
                                             </td>
+                                            <td>{employer.employerType === 'consultant' ? 'Consultant' : 'Company'}</td>
                                             <td>{employer.email}</td>
                                             <td>{employer.phone || 'N/A'}</td>
                                             <td>{formatDate(employer.updatedAt || employer.createdAt)}</td>

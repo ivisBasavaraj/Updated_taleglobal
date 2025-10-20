@@ -14,6 +14,7 @@ const generateToken = (id, role) => {
 
 exports.registerPlacement = async (req, res) => {
   try {
+    console.log('Registration request body:', req.body);
     const { name, email, password, phone, collegeName } = req.body;
 
     const existingPlacement = await Placement.findOne({ email });
@@ -23,11 +24,24 @@ exports.registerPlacement = async (req, res) => {
 
     const placementData = { name, email, password, phone, collegeName };
     const placement = await Placement.create(placementData);
-    const token = generateToken(placement._id, 'placement');
+    
+    // Create notification for admin about new placement registration
+    try {
+      await createNotification({
+        title: 'New Placement Officer Registration',
+        message: `${placement.name} from ${placement.collegeName} has registered as a placement officer.`,
+        type: 'placement_registered',
+        role: 'admin',
+        relatedId: placement._id,
+        createdBy: placement._id
+      });
+    } catch (notifError) {
+      console.error('Failed to create registration notification:', notifError);
+    }
 
     res.status(201).json({
       success: true,
-      token,
+      message: 'Registration successful. Please wait for admin approval before you can sign in.',
       placement: {
         id: placement._id,
         name: placement.name,
@@ -116,8 +130,13 @@ exports.loginPlacement = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
-    if (placement.status !== 'active' && placement.status !== 'pending') {
-      return res.status(401).json({ success: false, message: 'Account is inactive' });
+    // Block login until admin approval - check status
+    if (placement.status !== 'active') {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'Account pending admin approval. Please wait for admin to approve your account.',
+        requiresApproval: true
+      });
     }
 
     const token = generateToken(placement._id, 'placement');
@@ -991,6 +1010,59 @@ exports.uploadLogo = async (req, res) => {
     res.json({ success: true, message: 'Logo uploaded successfully' });
   } catch (error) {
     console.error('Error uploading logo:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Upload ID card
+exports.uploadIdCard = async (req, res) => {
+  try {
+    const placementId = req.user.id;
+    const { idCard } = req.body;
+    
+    if (!idCard) {
+      return res.status(400).json({ success: false, message: 'ID card data is required' });
+    }
+    
+    await Placement.findByIdAndUpdate(placementId, {
+      $set: { idCard: idCard }
+    });
+    
+    res.json({ success: true, message: 'ID card uploaded successfully' });
+  } catch (error) {
+    console.error('Error uploading ID card:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Update placement profile
+exports.updateProfile = async (req, res) => {
+  try {
+    const placementId = req.user.id;
+    const { name, phone, collegeName } = req.body;
+    
+    const updateData = {};
+    if (name) updateData.name = name.trim();
+    if (phone) updateData.phone = phone.trim();
+    if (collegeName) updateData.collegeName = collegeName.trim();
+    
+    const placement = await Placement.findByIdAndUpdate(
+      placementId,
+      { $set: updateData },
+      { new: true }
+    ).select('-password');
+    
+    if (!placement) {
+      return res.status(404).json({ success: false, message: 'Placement officer not found' });
+    }
+    
+    res.json({ 
+      success: true, 
+      message: 'Profile updated successfully',
+      placement
+    });
+  } catch (error) {
+    console.error('Error updating profile:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

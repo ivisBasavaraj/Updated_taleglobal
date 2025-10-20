@@ -147,7 +147,7 @@ export default function EmpPostedJobs() {
     };
 
     const handleStatusToggle = async (jobId, currentStatus) => {
-        const newStatus = currentStatus === 'active' ? 'closed' : 'active';
+        const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
         
         try {
             const token = localStorage.getItem('employerToken');
@@ -161,7 +161,7 @@ export default function EmpPostedJobs() {
             });
             
             if (response.ok) {
-                alert(`Job ${newStatus === 'active' ? 'activated' : 'closed'} successfully!`);
+                alert(`Job ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully!`);
                 fetchJobs();
             } else {
                 alert('Failed to update job status');
@@ -200,7 +200,7 @@ export default function EmpPostedJobs() {
                                 <button type="button" className="site-button" disabled>
                                     Post Job
                                 </button>
-                                <p className="text-warning mt-2 mb-0">Account pending admin approval</p>
+                                <p className="text-warning mt-2 mb-0">Account verification in progress</p>
                             </div>
                         )}
                     </div>
@@ -262,7 +262,7 @@ export default function EmpPostedJobs() {
 									) : (
 										<div>
 											<button className="site-button" disabled>Post Your First Job</button>
-											<p className="text-warning mt-2">Your account is pending admin approval before you can post jobs.</p>
+											<p className="text-warning mt-2">Your account verification is pending. Job posting will be available after admin approval.</p>
 										</div>
 									)}
 								</div>
@@ -312,7 +312,7 @@ export default function EmpPostedJobs() {
 													<button
 														className={`btn btn-outline-${job.status === 'active' ? 'warning' : 'info'} btn-sm`}
 														onClick={() => handleStatusToggle(job._id, job.status)}
-														title={job.status === 'active' ? 'Close Job' : 'Activate Job'}
+														title={job.status === 'active' ? 'Deactivate Job' : 'Activate Job'}
 													>
 														{job.status === 'active' ? <Pause size={16} /> : <Play size={16} /> }
 													</button>

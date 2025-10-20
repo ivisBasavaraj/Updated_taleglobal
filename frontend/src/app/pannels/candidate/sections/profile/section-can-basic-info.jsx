@@ -15,9 +15,14 @@ const LocationDropdown = ({ value, onChange, onBlur, className }) => {
         'Madurai', 'Raipur', 'Kota', 'Guwahati', 'Chandigarh', 'Solapur', 'Hubli-Dharwad'
     ];
     
-    const filteredCities = indianCities.filter(city => 
-        city.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredCities = indianCities.filter(city => {
+        const cityLower = city.toLowerCase();
+        const searchLower = searchTerm.toLowerCase();
+        
+        // Match if city starts with search term or any word in city starts with search term
+        return cityLower.startsWith(searchLower) || 
+               cityLower.split(/[\s-]/).some(word => word.startsWith(searchLower));
+    });
     
     const handleSelect = (city) => {
         onChange(city);
@@ -33,7 +38,7 @@ const LocationDropdown = ({ value, onChange, onBlur, className }) => {
     };
     
     return (
-        <div className="position-relative">
+        <div className="location-dropdown-container position-relative">
             <input
                 className={`form-control ${className}`}
                 type="text"
@@ -47,15 +52,17 @@ const LocationDropdown = ({ value, onChange, onBlur, className }) => {
                     }, 200);
                 }}
                 placeholder="Type to search or select location"
+                autoComplete="off"
             />
             {isOpen && filteredCities.length > 0 && (
-                <div className="dropdown-menu show position-absolute w-100" style={{maxHeight: '200px', overflowY: 'auto', zIndex: 1000}}>
+                <div className="dropdown-menu show w-100">
                     {filteredCities.slice(0, 10).map(city => (
                         <button
                             key={city}
                             type="button"
                             className="dropdown-item"
                             onClick={() => handleSelect(city)}
+                            onMouseDown={(e) => e.preventDefault()}
                         >
                             {city}
                         </button>
@@ -75,12 +82,15 @@ function SectionCandicateBasicInfo() {
         phone: '',
         email: '',
         location: '',
-        profilePicture: null
+        profilePicture: null,
+        idCard: null
     });
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);
     const [currentProfilePicture, setCurrentProfilePicture] = useState(null);
+    const [idCardPreview, setIdCardPreview] = useState(null);
+    const [currentIdCard, setCurrentIdCard] = useState(null);
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
     const [notification, setNotification] = useState(null);
@@ -132,6 +142,7 @@ function SectionCandicateBasicInfo() {
                 setErrors({});
                 setTouched({});
                 setCurrentProfilePicture(profile.profilePicture);
+                setCurrentIdCard(profile.idCard);
             }
         } catch (error) {
             console.error('Error fetching profile:', error);
@@ -271,6 +282,41 @@ function SectionCandicateBasicInfo() {
         }
     };
 
+    const handleIdCardChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                setNotification({ type: 'error', message: 'File size must be less than 5MB' });
+                e.target.value = '';
+                return;
+            }
+            
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf'];
+            if (!allowedTypes.includes(file.type)) {
+                setNotification({ type: 'error', message: 'Please upload only JPG, PNG, GIF or PDF files' });
+                e.target.value = '';
+                return;
+            }
+            
+            setFormData(prev => ({
+                ...prev,
+                idCard: file
+            }));
+            
+            // Create preview URL for images only
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setIdCardPreview(reader.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                setIdCardPreview(null);
+            }
+        }
+    };
+
     const validateForm = () => {
         const fieldsToValidate = ['name', 'email', 'middleName', 'lastName', 'phone', 'location'];
         let isValid = true;
@@ -311,6 +357,9 @@ function SectionCandicateBasicInfo() {
             if (formData.profilePicture) {
                 submitData.append('profilePicture', formData.profilePicture);
             }
+            if (formData.idCard) {
+                submitData.append('idCard', formData.idCard);
+            }
             
             console.log('Form data being sent:', formData);
             
@@ -321,6 +370,7 @@ function SectionCandicateBasicInfo() {
                 setTimeout(() => setNotification(null), 3000);
                 fetchProfile();
                 setImagePreview(null);
+                setIdCardPreview(null);
                 window.dispatchEvent(new Event('profileUpdated'));
             } else {
                 if (response.errors && Array.isArray(response.errors)) {
@@ -416,12 +466,67 @@ function SectionCandicateBasicInfo() {
                         </div>
                     </div>
 
+                    {/* ID Card Section */}
+                    <div className="row mb-4">
+                        <div className="col-md-12">
+                            <div className="id-card-section text-center">
+                                <label className="form-label fw-bold mb-3">
+                                    <i className="fa fa-id-card me-2" style={{color: '#ff6b35'}}></i>
+                                    ID Card (Optional)
+                                </label>
+                                <div className="mb-3">
+                                    {idCardPreview ? (
+                                        <img 
+                                            src={idCardPreview} 
+                                            alt="ID Card Preview" 
+                                            className="id-card-preview"
+                                            style={{maxWidth: '300px', maxHeight: '200px', objectFit: 'contain', border: '2px solid #ff6b35', borderRadius: '8px'}}
+                                        />
+                                    ) : currentIdCard ? (
+                                        currentIdCard.startsWith('data:image') ? (
+                                            <img 
+                                                src={currentIdCard} 
+                                                alt="Current ID Card" 
+                                                className="id-card-preview"
+                                                style={{maxWidth: '300px', maxHeight: '200px', objectFit: 'contain', border: '2px solid #ff6b35', borderRadius: '8px'}}
+                                            />
+                                        ) : (
+                                            <div className="id-card-placeholder d-flex align-items-center justify-content-center" 
+                                                 style={{width: '300px', height: '200px', backgroundColor: '#f8f9fa', border: '2px solid #ff6b35', borderRadius: '8px', margin: '0 auto'}}>
+                                                <div className="text-center">
+                                                    <i className="fa fa-file-pdf-o fa-3x text-muted mb-2"></i>
+                                                    <p className="text-muted mb-0">PDF ID Card Uploaded</p>
+                                                </div>
+                                            </div>
+                                        )
+                                    ) : (
+                                        <div className="id-card-placeholder d-flex align-items-center justify-content-center" 
+                                             style={{width: '300px', height: '200px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '0 auto'}}>
+                                            <div className="text-center">
+                                                <i className="fa fa-id-card fa-3x text-muted mb-2"></i>
+                                                <p className="text-muted mb-0">No ID Card Uploaded</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                <input 
+                                    className="form-control mx-auto" 
+                                    type="file" 
+                                    accept="image/*,application/pdf"
+                                    onChange={handleIdCardChange}
+                                    style={{maxWidth: '300px'}}
+                                />
+                                <small className="text-muted mt-2 d-block">Upload JPG, PNG, GIF or PDF (Max 5MB)</small>
+                            </div>
+                        </div>
+                    </div>
+
                     <hr className="my-4" />
 
                     {/* Personal Information */}
                     <div className="row mb-4">
                         <div className="col-md-4 mb-3">
-                            <label className="form-label"><i className="fa fa-user me-2" style={{color: '#ff6b35'}}></i>Full Name (As per 10th grade) *</label>
+                            <label className="form-label"><i className="fa fa-user me-2" style={{color: '#ff6b35'}}></i>First Name *</label>
                             <input
                                 className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                                 type="text"
@@ -492,7 +597,7 @@ function SectionCandicateBasicInfo() {
                             />
                             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                         </div>
-                        <div className="col-md-4 mb-3">
+                        <div className="col-md-4 mb-3" style={{position: 'relative', zIndex: 10}}>
                             <label className="form-label"><i className="fa fa-map-marker me-2" style={{color: '#ff6b35'}}></i>Location *</label>
                             <LocationDropdown 
                                 value={formData.location}
@@ -522,11 +627,7 @@ function SectionCandicateBasicInfo() {
                             <i className={`fa ${saving ? 'fa-spinner fa-spin' : 'fa-save'} me-2`}></i>
                             {saving ? 'Saving Profile...' : 'Save Profile'}
                         </button>
-                        {Object.keys(errors).length > 0 && (
-                            <div className="text-danger mt-2">
-                                <small><i className="fa fa-exclamation-triangle me-1" style={{color: '#ff6b35'}}></i>Please fix the validation errors above</small>
-                            </div>
-                        )}
+
                     </div>
                 </div>
             </div>

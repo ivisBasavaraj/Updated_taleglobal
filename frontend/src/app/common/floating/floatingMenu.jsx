@@ -3,6 +3,7 @@ import { useState } from "react";
 import AllDemoFloatingMenu from "./all-demo";
 import AllDemoFloatingOptions from "./all-demo-options";
 import BuyNowFloatingMenu from "./buy-now";
+import SupportFloatingButton from "./support-button";
 
 function FloatingMenus () {
     const [demosActive, setDemosActive] = useState(false);
@@ -20,6 +21,7 @@ function FloatingMenus () {
                     <BuyNowFloatingMenu />
                 </div>
             </div>
+            <SupportFloatingButton />
         </>
     )
 }

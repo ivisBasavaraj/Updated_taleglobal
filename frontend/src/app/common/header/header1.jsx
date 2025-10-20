@@ -2,11 +2,22 @@
 import JobZImage from "../jobz-img";
 import { NavLink } from "react-router-dom";
 import { publicUser } from "../../../globals/route-names";
-import { useState, useCallback, memo } from "react";
+import { useState, useCallback, memo, useEffect } from "react";
 
 const Header1 = memo(function Header1({ _config }) {
 
     const [menuActive, setMenuActive] = useState(false);
+    const [isEmployerLoggedIn, setIsEmployerLoggedIn] = useState(false);
+    const [employerData, setEmployerData] = useState(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem('employerToken');
+        const employer = localStorage.getItem('employerData');
+        if (token && employer) {
+            setIsEmployerLoggedIn(true);
+            setEmployerData(JSON.parse(employer));
+        }
+    }, []);
 
     const handleNavigationClick = useCallback(() => {
         setMenuActive(prev => !prev);
@@ -14,6 +25,14 @@ const Header1 = memo(function Header1({ _config }) {
 
     const closeMenu = useCallback(() => {
         setMenuActive(false);
+    }, []);
+
+    const handleLogout = useCallback(() => {
+        localStorage.removeItem('employerToken');
+        localStorage.removeItem('employerData');
+        setIsEmployerLoggedIn(false);
+        setEmployerData(null);
+        window.location.href = '/';
     }, []);
 
     return (
@@ -100,25 +119,44 @@ const Header1 = memo(function Header1({ _config }) {
                                             Contact Us
                                         </NavLink>
                                     </li>
+
                                 </ul>
                             </div>
 
                             {/* Header Right Section*/}
                             <div className="extra-nav header-2-nav">
                                 <div className="extra-cell">
-                                    <div className="header-nav-btn-section">
-                                        <div className="twm-nav-btn-left">
-                                            <a className="twm-nav-sign-up" data-bs-toggle="modal" href="#sign_up_popup" role="button">
-                                                <i className="feather-log-in" /> Sign Up
-                                            </a>
+                                    {isEmployerLoggedIn ? (
+                                        <div className="employer-nav-menu">
+                                            <div className="dropdown">
+                                                <button className="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                    <i className="feather-user" /> {employerData?.companyName || 'Dashboard'}
+                                                </button>
+                                                <ul className="dropdown-menu">
+                                                    <li><NavLink className="dropdown-item" to="/employer/dashboard" onClick={closeMenu}><i className="feather-home" /> Dashboard</NavLink></li>
+                                                    <li><NavLink className="dropdown-item" to="/employer/profile" onClick={closeMenu}><i className="feather-user" /> Company Profile</NavLink></li>
+                                                    <li><NavLink className="dropdown-item" to="/employer/manage-jobs" onClick={closeMenu}><i className="feather-briefcase" /> Openings</NavLink></li>
+                                                    <li><NavLink className="dropdown-item" to="/employer/candidates-list" onClick={closeMenu}><i className="feather-users" /> Applicants</NavLink></li>
+                                                    <li><NavLink className="dropdown-item" to="/employer/support" onClick={closeMenu}><i className="feather-headphones" /> Support</NavLink></li>
+                                                    <li><hr className="dropdown-divider" /></li>
+                                                    <li><button className="dropdown-item" onClick={handleLogout}><i className="feather-log-out" /> Logout</button></li>
+                                                </ul>
+                                            </div>
                                         </div>
-
-                                        <div className="twm-nav-btn-right">
-                                            <a className="twm-nav-post-a-job" data-bs-toggle="modal" href="#sign_up_popup2" role="button">
-                                                <i className="feather-log-in" /> Sign In
-                                            </a>
+                                    ) : (
+                                        <div className="header-nav-btn-section">
+                                            <div className="twm-nav-btn-left">
+                                                <a className="twm-nav-sign-up" data-bs-toggle="modal" href="#sign_up_popup" role="button">
+                                                    <i className="feather-log-in" /> Sign Up
+                                                </a>
+                                            </div>
+                                            <div className="twm-nav-btn-right">
+                                                <a className="twm-nav-post-a-job" data-bs-toggle="modal" href="#sign_up_popup2" role="button">
+                                                    <i className="feather-log-in" /> Sign In
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

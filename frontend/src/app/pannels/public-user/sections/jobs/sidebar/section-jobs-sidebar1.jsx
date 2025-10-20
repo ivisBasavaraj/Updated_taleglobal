@@ -11,6 +11,7 @@ function SectionJobsSidebar1 ({ onFilterChange }) {
     const [locations, setLocations] = useState([]);
     const [categories, setCategories] = useState([]);
     const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
+    const [showJobTitleSuggestions, setShowJobTitleSuggestions] = useState(false);
     const [filters, setFilters] = useState({
         keyword: '',
         location: '',
@@ -151,18 +152,46 @@ function SectionJobsSidebar1 ({ onFilterChange }) {
             <div className="side-bar">
                 <div className="sidebar-elements search-bx">
                     <form>
-                        <div className="form-group mb-4">
-                            <h4 className="section-head-small mb-4">Keyword</h4>
+                        <div className="form-group mb-4 position-relative">
+                            <h4 className="section-head-small mb-4">Job Title ({jobTitles.length} available)</h4>
                             <div className="input-group">
                                 <input 
                                     type="text" 
                                     className="form-control" 
-                                    placeholder="Job title or Keyword" 
+                                    placeholder="Search job title" 
                                     value={filters.keyword}
-                                    onChange={(e) => setFilters({...filters, keyword: e.target.value})}
+                                    onChange={(e) => {
+                                        setFilters({...filters, keyword: e.target.value});
+                                        setShowJobTitleSuggestions(e.target.value.length > 0);
+                                    }}
+                                    onFocus={() => setShowJobTitleSuggestions(filters.keyword.length > 0)}
+                                    onBlur={() => setTimeout(() => setShowJobTitleSuggestions(false), 200)}
                                 />
                                 <button className="btn" type="button"><i className="feather-search" /></button>
                             </div>
+                            {showJobTitleSuggestions && jobTitles.length > 0 && (
+                                <div className="position-absolute w-100 bg-white border rounded shadow-sm" style={{zIndex: 1000, maxHeight: '200px', overflowY: 'auto'}}>
+                                    {jobTitles
+                                        .filter(title => title && title.toLowerCase().includes(filters.keyword.toLowerCase()))
+                                        .slice(0, 10)
+                                        .map((title) => (
+                                            <div 
+                                                key={title} 
+                                                className="p-2 border-bottom cursor-pointer hover-bg-light"
+                                                onClick={() => {
+                                                    setFilters({...filters, keyword: title});
+                                                    setShowJobTitleSuggestions(false);
+                                                }}
+                                                style={{cursor: 'pointer'}}
+                                                onMouseEnter={(e) => e.target.style.backgroundColor = '#f8f9fa'}
+                                                onMouseLeave={(e) => e.target.style.backgroundColor = 'white'}
+                                            >
+                                                <i className="feather-briefcase me-2"></i>{title}
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            )}
                         </div>
 
                         <div className="form-group mb-4 position-relative">
@@ -318,20 +347,7 @@ function SectionJobsSidebar1 ({ onFilterChange }) {
                                     </div>
                                 </li>
 
-                                <li>
-                                    <div className="form-check">
-                                        <input 
-                                            type="radio" 
-                                            className="form-check-input" 
-                                            id="Part-Time1" 
-                                            name="employmentType"
-                                            value="part-time"
-                                            checked={filters.employmentType === 'part-time'}
-                                            onChange={(e) => setFilters({...filters, employmentType: e.target.value})}
-                                        />
-                                        <label className="form-check-label" htmlFor="Part-Time1">Part Time</label>
-                                    </div>
-                                </li>
+
                             </ul>
                         </div>
                         
@@ -376,19 +392,7 @@ function SectionJobsSidebar1 ({ onFilterChange }) {
                             </ul>
                         </div>
 
-                        <div className="form-group mb-4">
-                            <h4 className="section-head-small mb-4">Job Title ({jobTitles.length} available)</h4>
-                            <select 
-                                className="form-control" 
-                                value={filters.jobTitle}
-                                onChange={(e) => setFilters({...filters, jobTitle: e.target.value})}
-                            >
-                                <option value="">All Job Titles</option>
-                                {jobTitles.map((title, index) => (
-                                    <option key={index} value={title}>{title}</option>
-                                ))}
-                            </select>
-                        </div>
+
 
                         <div className="form-group mt-4">
                             <button 

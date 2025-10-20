@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { canRoute, candidate, empRoute, employer, placementRoute, placement, pubRoute, publicUser } from "../../../globals/route-names";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 
 function SignInPopup() {
@@ -15,6 +15,18 @@ function SignInPopup() {
     const [placementpassword, setPlacementPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showCanPassword, setShowCanPassword] = useState(false);
+    const [showEmpPassword, setShowEmpPassword] = useState(false);
+    const [showPlacementPassword, setShowPlacementPassword] = useState(false);
+
+    useEffect(() => {
+        setCanUsername('');
+        setCanPassword('');
+        setEmpUsername('');
+        setEmpPassword('');
+        setPlacementUsername('');
+        setPlacementPassword('');
+    }, []);
 
     const handleCandidateLogin = async (event) => {
         event.preventDefault();
@@ -127,7 +139,7 @@ function SignInPopup() {
 												data-bs-target="#login-candidate"
 												type="button"
 											>
-												<i className="fas fa-user-tie" />
+												<i className="fas fa-user-tie" style={{color: 'white !important'}} />
 												Candidate
 											</button>
 										</li>
@@ -140,7 +152,7 @@ function SignInPopup() {
 												data-bs-target="#login-Employer"
 												type="button"
 											>
-												<i className="fas fa-building" />
+												<i className="fas fa-building" style={{color: 'white'}} />
 												Employer
 											</button>
 										</li>
@@ -152,7 +164,7 @@ function SignInPopup() {
 												data-bs-target="#login-Placement"
 												type="button"
 											>
-												<i className="fas fa-graduation-cap" />
+												<i className="fas fa-graduation-cap" style={{color: 'white'}} />
 												Placement
 											</button>
 										</li>
@@ -180,6 +192,7 @@ function SignInPopup() {
 															className="form-control"
 															placeholder="Email*"
 															value={canusername}
+															autoComplete="new-password"
 															onChange={(event) => {
 																setCanUsername(event.target.value);
 															}}
@@ -188,18 +201,27 @@ function SignInPopup() {
 												</div>
 
 												<div className="col-lg-12">
-													<div className="form-group mb-3">
+													<div className="form-group mb-3 position-relative">
 														<input
 															name="password"
-															type="password"
+															type={showCanPassword ? "text" : "password"}
 															className="form-control"
 															required
 															placeholder="Password*"
 															value={canpassword}
+															autoComplete="new-password"
 															onChange={(event) => {
 																setCanPassword(event.target.value);
 															}}
 														/>
+														<button
+															type="button"
+															className="btn position-absolute"
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
+															onClick={() => setShowCanPassword(!showCanPassword)}
+														>
+															<i className={showCanPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+														</button>
 													</div>
 												</div>
 
@@ -263,8 +285,9 @@ function SignInPopup() {
 															type="text"
 															required
 															className="form-control"
-															placeholder="Email*"
+															placeholder="Company Email*"
 															value={empusername}
+															autoComplete="new-password"
 															onChange={(event) => {
 																setEmpUsername(event.target.value);
 															}}
@@ -273,18 +296,27 @@ function SignInPopup() {
 												</div>
 
 												<div className="col-lg-12">
-													<div className="form-group mb-3">
+													<div className="form-group mb-3 position-relative">
 														<input
 															name="password"
-															type="password"
+															type={showEmpPassword ? "text" : "password"}
 															className="form-control"
 															required
 															placeholder="Password*"
 															value={emppassword}
+															autoComplete="new-password"
 															onChange={(event) => {
 																setEmpPassword(event.target.value);
 															}}
 														/>
+														<button
+															type="button"
+															className="btn position-absolute"
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
+															onClick={() => setShowEmpPassword(!showEmpPassword)}
+														>
+															<i className={showEmpPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+														</button>
 													</div>
 												</div>
 
@@ -350,6 +382,7 @@ function SignInPopup() {
 															className="form-control"
 															placeholder="Email*"
 															value={placementusername}
+															autoComplete="new-password"
 															onChange={(event) => {
 																setPlacementUsername(event.target.value);
 															}}
@@ -358,18 +391,45 @@ function SignInPopup() {
 												</div>
 
 												<div className="col-lg-12">
-													<div className="form-group mb-3">
+													<div className="form-group mb-3 position-relative">
 														<input
 															name="password"
-															type="password"
+															type={showPlacementPassword ? "text" : "password"}
 															className="form-control"
 															required
 															placeholder="Password*"
 															value={placementpassword}
+															autoComplete="new-password"
 															onChange={(event) => {
 																setPlacementPassword(event.target.value);
 															}}
 														/>
+														<button
+															type="button"
+															className="btn position-absolute"
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
+															onClick={() => setShowPlacementPassword(!showPlacementPassword)}
+														>
+															<i className={showPlacementPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+														</button>
+													</div>
+												</div>
+
+												<div className="col-lg-12">
+													<div className="form-group mb-3">
+														<div className=" form-check">
+															<input
+																type="checkbox"
+																className="form-check-input"
+																id="Password5"
+															/>
+															<label
+																className="form-check-label rem-forgot"
+																htmlFor="Password5"
+															>
+																<NavLink to={pubRoute(publicUser.pages.FORGOT)} onClick={() => navigate(pubRoute(publicUser.pages.FORGOT))}>Forgot Password</NavLink>
+															</label>
+														</div>
 													</div>
 												</div>
 

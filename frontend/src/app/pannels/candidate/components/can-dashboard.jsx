@@ -8,7 +8,7 @@ import SectionRecommendedJobs from "../sections/dashboard/section-recommended-jo
 import './can-dashboard.css';
 
 function CanDashboardPage() {
-  const [candidate, setCandidate] = useState({ name: 'Loading...', location: 'Bangalore' });
+  const [candidate, setCandidate] = useState({ name: 'Loading...', location: 'Bangalore', profilePicture: null });
 
   useEffect(() => {
     loadScript("js/custom.js");
@@ -29,7 +29,8 @@ function CanDashboardPage() {
         if (data.success && data.profile) {
           setCandidate({
             name: data.profile.candidateId?.name || data.profile.name || 'Candidate',
-            location: data.profile.location || 'Bangalore'
+            location: data.profile.location || 'Bangalore',
+            profilePicture: data.profile.profilePicture
           });
         }
       }
@@ -44,13 +45,41 @@ function CanDashboardPage() {
         {/* Header */}
         <div className="wt-admin-right-page-header clearfix" style={{ background: 'white', borderBottom: '1px solid #e5e7eb', padding: '2rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div>
-              <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Welcome back, {candidate.name}</h2>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                <MapPin size={16} style={{ color: '#f97316' }} />
-                <span style={{ color: '#f97316', fontSize: '0.875rem', fontWeight: '500' }}>{candidate.location}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              {candidate.profilePicture ? (
+                <img 
+                  src={candidate.profilePicture} 
+                  alt="Profile" 
+                  style={{
+                    width: '60px', 
+                    height: '60px', 
+                    borderRadius: '50%', 
+                    objectFit: 'cover', 
+                    border: '3px solid #ff6b35'
+                  }}
+                />
+              ) : (
+                <div style={{
+                  width: '60px', 
+                  height: '60px', 
+                  borderRadius: '50%', 
+                  backgroundColor: '#f8f9fa', 
+                  border: '3px solid #dee2e6',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <i className="fa fa-user" style={{ color: '#6c757d', fontSize: '24px' }}></i>
+                </div>
+              )}
+              <div>
+                <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Welcome back, {candidate.name}</h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                  <MapPin size={16} style={{ color: '#f97316' }} />
+                  <span style={{ color: '#f97316', fontSize: '0.875rem', fontWeight: '500' }}>{candidate.location}</span>
+                </div>
+                <p style={{ color: '#6b7280', margin: 0 }}>Here's an overview of your job applications and profile</p>
               </div>
-              <p style={{ color: '#6b7280', margin: 0 }}>Here's an overview of your job applications and profile</p>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function SignUpPopup() {
     const [candidateData, setCandidateData] = useState({
@@ -30,6 +30,18 @@ function SignUpPopup() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [showCandidatePassword, setShowCandidatePassword] = useState(false);
+    const [showCandidateConfirmPassword, setShowCandidateConfirmPassword] = useState(false);
+    const [showEmployerPassword, setShowEmployerPassword] = useState(false);
+    const [showEmployerConfirmPassword, setShowEmployerConfirmPassword] = useState(false);
+    const [showPlacementPassword, setShowPlacementPassword] = useState(false);
+    const [showPlacementConfirmPassword, setShowPlacementConfirmPassword] = useState(false);
+
+    useEffect(() => {
+        setCandidateData({ username: '', email: '', mobile: '', password: '', confirmPassword: '' });
+        setEmployerData({ name: '', email: '', mobile: '', password: '', confirmPassword: '', employerCategory: '' });
+        setPlacementData({ name: '', email: '', phone: '', password: '', confirmPassword: '', collegeName: '' });
+    }, []);
 
     const handleCandidateChange = (e) => {
         const { name, value } = e.target;
@@ -236,7 +248,7 @@ function SignUpPopup() {
 												data-bs-target="#sign-candidate"
 												type="button"
 											>
-												<i className="fas fa-user-tie" />
+												<i className="fas fa-user-tie" style={{color: 'white !important'}} />
 												Candidate
 											</button>
 										</li>
@@ -248,7 +260,7 @@ function SignUpPopup() {
 												data-bs-target="#sign-Employer"
 												type="button"
 											>
-												<i className="fas fa-building" />
+												<i className="fas fa-building" style={{color: 'white'}} />
 												Employer
 											</button>
 										</li>
@@ -286,6 +298,7 @@ function SignUpPopup() {
 															className="form-control"
 															placeholder="Name*"
 															value={candidateData.username}
+															autoComplete="new-password"
 															onChange={handleCandidateChange}
 															required
 														/>
@@ -299,6 +312,7 @@ function SignUpPopup() {
 															className="form-control"
 															placeholder="Email*"
 															value={candidateData.email}
+															autoComplete="new-password"
 															onChange={handleCandidateChange}
 															required
 														/>
@@ -320,30 +334,48 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-lg-12">
-													<div className="form-group mb-3">
+													<div className="form-group mb-3 position-relative">
 														<input
 															name="password"
-															type="password"
+															type={showCandidatePassword ? "text" : "password"}
 															className="form-control"
 															placeholder="Password*"
 															value={candidateData.password}
+															autoComplete="new-password"
 															onChange={handleCandidateChange}
 															required
 														/>
+														<button
+															type="button"
+															className="btn position-absolute"
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
+															onClick={() => setShowCandidatePassword(!showCandidatePassword)}
+														>
+															<i className={showCandidatePassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+														</button>
 													</div>
 												</div>
 
 												<div className="col-lg-12">
-													<div className="form-group mb-3">
+													<div className="form-group mb-3 position-relative">
 														<input
 															name="confirmPassword"
-															type="password"
+															type={showCandidateConfirmPassword ? "text" : "password"}
 															className="form-control"
 															placeholder="Confirm Password*"
 															value={candidateData.confirmPassword}
+															autoComplete="new-password"
 															onChange={handleCandidateChange}
 															required
 														/>
+														<button
+															type="button"
+															className="btn position-absolute"
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
+															onClick={() => setShowCandidateConfirmPassword(!showCandidateConfirmPassword)}
+														>
+															<i className={showCandidateConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+														</button>
 														{passwordError && <small className="text-danger">{passwordError}</small>}
 													</div>
 												</div>
@@ -417,8 +449,9 @@ function SignUpPopup() {
 															name="name"
 															type="text"
 															className="form-control"
-															placeholder="Name*"
+															placeholder="Company Name*"
 															value={employerData.name}
+															autoComplete="new-password"
 															onChange={handleEmployerChange}
 															required
 														/>
@@ -432,6 +465,7 @@ function SignUpPopup() {
 															className="form-control"
 															placeholder="Email*"
 															value={employerData.email}
+															autoComplete="new-password"
 															onChange={handleEmployerChange}
 															required
 														/>
@@ -453,30 +487,48 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-lg-12">
-													<div className="form-group mb-3">
+													<div className="form-group mb-3 position-relative">
 														<input
 															name="password"
-															type="password"
+															type={showEmployerPassword ? "text" : "password"}
 															className="form-control"
 															placeholder="Password*"
 															value={employerData.password}
+															autoComplete="new-password"
 															onChange={handleEmployerChange}
 															required
 														/>
+														<button
+															type="button"
+															className="btn position-absolute"
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
+															onClick={() => setShowEmployerPassword(!showEmployerPassword)}
+														>
+															<i className={showEmployerPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+														</button>
 													</div>
 												</div>
 
 												<div className="col-lg-12">
-													<div className="form-group mb-3">
+													<div className="form-group mb-3 position-relative">
 														<input
 															name="confirmPassword"
-															type="password"
+															type={showEmployerConfirmPassword ? "text" : "password"}
 															className="form-control"
 															placeholder="Confirm Password*"
 															value={employerData.confirmPassword}
+															autoComplete="new-password"
 															onChange={handleEmployerChange}
 															required
 														/>
+														<button
+															type="button"
+															className="btn position-absolute"
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
+															onClick={() => setShowEmployerConfirmPassword(!showEmployerConfirmPassword)}
+														>
+															<i className={showEmployerConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+														</button>
 														{passwordError && <small className="text-danger">{passwordError}</small>}
 													</div>
 												</div>
@@ -538,6 +590,7 @@ function SignUpPopup() {
 															className="form-control"
 															placeholder="Name*"
 															value={placementData.name}
+															autoComplete="new-password"
 															onChange={handlePlacementChange}
 															required
 														/>
@@ -551,6 +604,7 @@ function SignUpPopup() {
 															className="form-control"
 															placeholder="Email*"
 															value={placementData.email}
+															autoComplete="new-password"
 															onChange={handlePlacementChange}
 															required
 														/>
@@ -586,30 +640,48 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-lg-12">
-													<div className="form-group mb-3">
+													<div className="form-group mb-3 position-relative">
 														<input
 															name="password"
-															type="password"
+															type={showPlacementPassword ? "text" : "password"}
 															className="form-control"
 															placeholder="Password*"
 															value={placementData.password}
+															autoComplete="new-password"
 															onChange={handlePlacementChange}
 															required
 														/>
+														<button
+															type="button"
+															className="btn position-absolute"
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
+															onClick={() => setShowPlacementPassword(!showPlacementPassword)}
+														>
+															<i className={showPlacementPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+														</button>
 													</div>
 												</div>
 
 												<div className="col-lg-12">
-													<div className="form-group mb-3">
+													<div className="form-group mb-3 position-relative">
 														<input
 															name="confirmPassword"
-															type="password"
+															type={showPlacementConfirmPassword ? "text" : "password"}
 															className="form-control"
 															placeholder="Confirm Password*"
 															value={placementData.confirmPassword}
+															autoComplete="new-password"
 															onChange={handlePlacementChange}
 															required
 														/>
+														<button
+															type="button"
+															className="btn position-absolute"
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
+															onClick={() => setShowPlacementConfirmPassword(!showPlacementConfirmPassword)}
+														>
+															<i className={showPlacementConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+														</button>
 														{passwordError && <small className="text-danger">{passwordError}</small>}
 													</div>
 												</div>

@@ -34,48 +34,25 @@ function JobDetail1Page() {
         return { limitReached, isEnded };
     }, [job]);
 
-    useEffect(() => {
-        setIsLoggedIn(authState.isLoggedIn);
-        setCandidateId(authState.candidateId);
-        
-        if (authState.token && authState.candidateId && jobId) {
-            Promise.all([
-                checkApplicationStatus(),
-                fetchCandidateCredits()
-            ]);
-        }
-    }, [jobId, authState.token, authState.candidateId]);
-
-    const sidebarConfig = {
-        showJobInfo: true
-    }
-
-    const handleScroll = useCallback(() => {
-        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = Math.min((window.scrollY / totalHeight) * 100, 100);
-        setScrollProgress(progress);
-    }, []);
-
-    useEffect(() => {
-        loadScript("js/custom.js");
-        if (jobId) {
-            fetchJobDetails();
-        }
-        
-        let ticking = false;
-        const throttledScroll = () => {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    handleScroll();
-                    ticking = false;
-                });
-                ticking = true;
+    const fetchJobDetails = useCallback(async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/public/jobs/${jobId}`);
+            const data = await response.json();
+            if (data.success) {
+                console.log('Job data received:', data.job);
+                console.log('Employer profile:', data.job.employerProfile);
+                if (data.job.employerProfile) {
+                    console.log('Logo exists:', !!data.job.employerProfile.logo);
+                    console.log('Cover exists:', !!data.job.employerProfile.coverImage);
+                }
+                setJob(data.job);
             }
-        };
-        
-        window.addEventListener('scroll', throttledScroll, { passive: true });
-        return () => window.removeEventListener('scroll', throttledScroll);
-    }, [jobId, handleScroll, fetchJobDetails]);
+        } catch (error) {
+            console.error('Error fetching job details:', error);
+        } finally {
+            setLoading(false);
+        }
+    }, [jobId]);
 
     const checkApplicationStatus = useCallback(async () => {
         try {
@@ -107,19 +84,48 @@ function JobDetail1Page() {
         }
     }, []);
 
-    const fetchJobDetails = useCallback(async () => {
-        try {
-            const response = await fetch(`http://localhost:5000/api/public/jobs/${jobId}`);
-            const data = await response.json();
-            if (data.success) {
-                setJob(data.job);
-            }
-        } catch (error) {
-            console.error('Error fetching job details:', error);
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        setIsLoggedIn(authState.isLoggedIn);
+        setCandidateId(authState.candidateId);
+        
+        if (authState.token && authState.candidateId && jobId) {
+            Promise.all([
+                checkApplicationStatus(),
+                fetchCandidateCredits()
+            ]);
         }
-    }, [jobId]);
+    }, [jobId, authState.token, authState.candidateId, checkApplicationStatus, fetchCandidateCredits]);
+
+    const sidebarConfig = {
+        showJobInfo: true
+    }
+
+    const handleScroll = useCallback(() => {
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = Math.min((window.scrollY / totalHeight) * 100, 100);
+        setScrollProgress(progress);
+    }, []);
+
+    useEffect(() => {
+        loadScript("js/custom.js");
+        if (jobId) {
+            fetchJobDetails();
+        }
+        
+        let ticking = false;
+        const throttledScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    handleScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+        
+        window.addEventListener('scroll', throttledScroll, { passive: true });
+        return () => window.removeEventListener('scroll', throttledScroll);
+    }, [jobId, handleScroll, fetchJobDetails]);
 
     if (loading) {
         return (
@@ -224,14 +230,9 @@ function JobDetail1Page() {
 												<div className="twm-job-self-top">
 													<div className="twm-media-bg">
 														{job.employerProfile?.coverImage ? (
-															<img 
-																src={job.employerProfile.coverImage.startsWith('data:') ? job.employerProfile.coverImage : `data:image/jpeg;base64,${job.employerProfile.coverImage}`} 
-																alt="Company Cover"
-																loading="lazy"
-																style={{objectFit: 'cover', width: '100%', height: 'auto'}}
-															/>
+															<img src={job.employerProfile.coverImage} alt="Company Cover" />
 														) : (
-															<JobZImage src="images/job-detail-bg.jpg" alt="#" />
+															<JobZImage src="images/employer-bg.jpg" alt="#" />
 														)}
 														<div className="twm-jobs-category green">
 															<span className="twm-bg-green">New</span>
@@ -240,14 +241,8 @@ function JobDetail1Page() {
 
 													<div className="twm-mid-content">
 														<div className="twm-media">
-															{job.companyLogo ? (
-																<img src={job.companyLogo} alt="Company Logo" loading="lazy" />
-															) : job.employerProfile?.logo ? (
-																<img 
-																	src={job.employerProfile.logo.startsWith('data:') ? job.employerProfile.logo : `data:image/jpeg;base64,${job.employerProfile.logo}`} 
-																	alt="Company Logo" 
-																	loading="lazy"
-																/>
+															{job.employerProfile?.logo ? (
+																<img src={job.employerProfile.logo} alt="Company Logo" />
 															) : (
 																<JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
 															)}
@@ -304,7 +299,7 @@ function JobDetail1Page() {
 														<div className="col-md-3">
 															{job.employerProfile.logo && (
 																<img 
-																	src={job.employerProfile.logo.startsWith('data:') ? job.employerProfile.logo : `data:image/jpeg;base64,${job.employerProfile.logo}`} 
+																	src={job.employerProfile.logo} 
 																	alt="Consultant Logo" 
 																	style={{width: '80px', height: '80px', objectFit: 'contain', borderRadius: '8px'}}
 																	loading="lazy"

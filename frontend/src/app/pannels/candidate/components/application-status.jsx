@@ -271,12 +271,12 @@ function CanStatusPage() {
 												Position
 											</th>
 											<th className="border-0 px-4 py-3 fw-semibold" style={{color: '#232323'}}>
-												<i className="fa fa-flag me-2" style={{color: '#ff6b35'}}></i>
-												Status
-											</th>
-											<th className="border-0 px-4 py-3 fw-semibold" style={{color: '#232323'}}>
 												<i className="fa fa-tasks me-2" style={{color: '#ff6b35'}}></i>
 												Interview Progress
+											</th>
+											<th className="border-0 px-4 py-3 fw-semibold" style={{color: '#232323'}}>
+												<i className="fa fa-flag me-2" style={{color: '#ff6b35'}}></i>
+												Status
 											</th>
 											<th className="border-0 px-4 py-3 fw-semibold" style={{color: '#232323'}}>
 												<i className="fa fa-eye me-2" style={{color: '#ff6b35'}}></i>
@@ -359,17 +359,6 @@ function CanStatusPage() {
 															</span>
 														</td>
 														<td className="px-4 py-3">
-															<span className={
-																app.status === 'pending' ? 'badge bg-warning bg-opacity-10 text-warning border border-warning' :
-																app.status === 'shortlisted' ? 'badge bg-info bg-opacity-10 text-info border border-info' :
-																app.status === 'interviewed' ? 'badge bg-primary bg-opacity-10 text-primary border border-primary' :
-																app.status === 'hired' ? 'badge bg-success bg-opacity-10 text-success border border-success' :
-																app.status === 'rejected' ? 'badge bg-danger bg-opacity-10 text-danger border border-danger' : 'badge bg-secondary bg-opacity-10 text-secondary border border-secondary'
-															} style={{fontSize: '12px', padding: '6px 12px'}}>
-																{app.status?.charAt(0).toUpperCase() + app.status?.slice(1) || 'Pending'}
-															</span>
-														</td>
-														<td className="px-4 py-3">
 															<div className="d-flex flex-wrap gap-2">
 																{interviewRounds.length > 0 ? (
 																	interviewRounds.map((round, roundIndex) => {
@@ -426,6 +415,17 @@ function CanStatusPage() {
 																	<span className="text-muted fst-italic">No rounds specified</span>
 																)}
 															</div>
+														</td>
+														<td className="px-4 py-3">
+															<span className={
+																app.status === 'pending' ? 'badge bg-warning bg-opacity-10 text-warning border border-warning' :
+																app.status === 'shortlisted' ? 'badge bg-info bg-opacity-10 text-info border border-info' :
+																app.status === 'interviewed' ? 'badge bg-primary bg-opacity-10 text-primary border border-primary' :
+																app.status === 'hired' ? 'badge bg-success bg-opacity-10 text-success border border-success' :
+																app.status === 'rejected' ? 'badge bg-danger bg-opacity-10 text-danger border border-danger' : 'badge bg-secondary bg-opacity-10 text-secondary border border-secondary'
+															} style={{fontSize: '12px', padding: '6px 12px'}}>
+																{app.status?.charAt(0).toUpperCase() + app.status?.slice(1) || 'Pending'}
+															</span>
 														</td>
 														<td className="px-4 py-3">
 															<div className="d-flex flex-wrap gap-1">

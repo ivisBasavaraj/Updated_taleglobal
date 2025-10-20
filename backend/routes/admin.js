@@ -66,6 +66,13 @@ router.delete('/content/:type/:contentId', adminController.deleteContent);
 router.get('/contacts', adminController.getContactForms);
 router.delete('/contacts/:contactId', adminController.deleteContactForm);
 
+// Support Ticket Management Routes
+router.get('/support-tickets', adminController.getSupportTickets);
+router.get('/support-tickets/:id', adminController.getSupportTicketById);
+router.put('/support-tickets/:id/status', adminController.updateSupportTicketStatus);
+router.delete('/support-tickets/:id', adminController.deleteSupportTicket);
+router.get('/support-tickets/:ticketId/attachments/:attachmentIndex', adminController.downloadSupportAttachment);
+
 // Applications Routes
 router.get('/applications', adminController.getApplications);
 
@@ -74,6 +81,8 @@ router.get('/placements', checkPermission('placement_officers'), adminController
 router.get('/placements/:id', checkPermission('placement_officers'), adminController.getPlacementDetails);
 router.get('/placements/:id/candidates', checkPermission('placement_officers'), require('../controllers/placementController').getPlacementCandidates);
 router.put('/placements/:id/status', checkPermission('placement_officers'), adminController.updatePlacementStatus);
+
+
 router.post('/placements/:id/process', checkPermission('placement_officers'), require('../controllers/placementController').processPlacementApproval);
 router.get('/placements/:id/download', checkPermission('placement_officers'), adminController.downloadPlacementFile);
 router.get('/placements/:id/data', checkPermission('placement_officers'), require('../controllers/placementController').getPlacementData);
@@ -89,6 +98,7 @@ router.post('/placements/:id/store-excel-data', checkPermission('placement_offic
 router.get('/placements/:id/stored-excel-data', checkPermission('placement_officers'), adminController.getStoredExcelData);
 router.get('/placements/:id/stored-excel-data/:fileId', checkPermission('placement_officers'), adminController.getStoredExcelData);
 router.post('/placements/:id/sync-excel-credits', checkPermission('placement_officers'), adminController.syncExcelCreditsWithCandidates);
+router.get('/placements/:id/download-id-card', checkPermission('placement_officers'), adminController.downloadPlacementIdCard);
 
 // Sub Admin Management Routes (Only for main admins)
 router.post('/sub-admins', auth(['admin']), [

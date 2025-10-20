@@ -172,6 +172,21 @@ exports.updateProfile = async (req, res) => {
       updateData.profilePicture = fileToBase64(req.file);
     }
     
+    // Handle education array updates with marksheet preservation
+    if (updateData.education && Array.isArray(updateData.education)) {
+      const currentProfile = await CandidateProfile.findOne({ candidateId: req.user._id });
+      if (currentProfile && currentProfile.education) {
+        // Preserve existing marksheets when updating education
+        updateData.education = updateData.education.map((newEdu, index) => {
+          const existingEdu = currentProfile.education[index];
+          return {
+            ...newEdu,
+            marksheet: existingEdu?.marksheet || newEdu.marksheet || null
+          };
+        });
+      }
+    }
+    
     // Update profile data
     const profile = await CandidateProfile.findOneAndUpdate(
       { candidateId: req.user._id },
@@ -248,6 +263,66 @@ exports.uploadMarksheet = async (req, res) => {
 
     res.json({ success: true, filePath: marksheetBase64 });
   } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// New endpoint to handle education with marksheet uploads
+exports.updateEducationWithMarksheet = async (req, res) => {
+  try {
+    const { educationIndex, educationData } = req.body;
+    let marksheetBase64 = null;
+
+    if (req.file) {
+      const { fileToBase64 } = require('../middlewares/upload');
+      marksheetBase64 = fileToBase64(req.file);
+    }
+
+    // Get current profile
+    const profile = await CandidateProfile.findOne({ candidateId: req.user._id });
+    if (!profile) {
+      return res.status(404).json({ success: false, message: 'Profile not found' });
+    }
+
+    // Parse education data if it's a string
+    let parsedEducationData;
+    if (typeof educationData === 'string') {
+      try {
+        parsedEducationData = JSON.parse(educationData);
+      } catch (e) {
+        return res.status(400).json({ success: false, message: 'Invalid education data format' });
+      }
+    } else {
+      parsedEducationData = educationData;
+    }
+
+    // Add marksheet to education data if uploaded
+    if (marksheetBase64) {
+      parsedEducationData.marksheet = marksheetBase64;
+    }
+
+    // Update the specific education entry
+    const educationArray = profile.education || [];
+    const index = parseInt(educationIndex);
+    
+    if (index >= 0 && index < educationArray.length) {
+      // Update existing education entry
+      educationArray[index] = { ...educationArray[index].toObject(), ...parsedEducationData };
+    } else {
+      // Add new education entry
+      educationArray.push(parsedEducationData);
+    }
+
+    // Update profile with new education array
+    const updatedProfile = await CandidateProfile.findOneAndUpdate(
+      { candidateId: req.user._id },
+      { education: educationArray },
+      { new: true, upsert: true }
+    );
+
+    res.json({ success: true, profile: updatedProfile, marksheet: marksheetBase64 });
+  } catch (error) {
+    console.error('Error updating education with marksheet:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -809,6 +884,64 @@ exports.getRecommendedJobs = async (req, res) => {
     jobsWithScore.sort((a, b) => b.matchScore - a.matchScore);
 
     res.json({ success: true, jobs: jobsWithScore });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Education Management Controllers
+exports.addEducation = async (req, res) => {
+  try {
+    const { schoolName, location, passoutYear, percentage, cgpa, sgpa, grade } = req.body;
+    
+    if (!schoolName || !location || !passoutYear || !percentage) {
+      return res.status(400).json({ success: false, message: 'All required fields must be provided' });
+    }
+
+    let marksheetBase64 = null;
+    if (req.file) {
+      const { fileToBase64 } = require('../middlewares/upload');
+      marksheetBase64 = fileToBase64(req.file);
+    }
+
+    const educationData = {
+      degreeName: schoolName,
+      collegeName: location,
+      passYear: passoutYear,
+      percentage,
+      cgpa,
+      sgpa,
+      grade,
+      marksheet: marksheetBase64
+    };
+
+    const profile = await CandidateProfile.findOneAndUpdate(
+      { candidateId: req.user._id },
+      { $push: { education: educationData } },
+      { new: true, upsert: true }
+    );
+
+    res.json({ success: true, education: educationData, profile });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.deleteEducation = async (req, res) => {
+  try {
+    const { educationId } = req.params;
+
+    const profile = await CandidateProfile.findOneAndUpdate(
+      { candidateId: req.user._id },
+      { $pull: { education: { _id: educationId } } },
+      { new: true }
+    );
+
+    if (!profile) {
+      return res.status(404).json({ success: false, message: 'Profile not found' });
+    }
+
+    res.json({ success: true, profile });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

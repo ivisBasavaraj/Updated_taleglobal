@@ -11,11 +11,11 @@ function LoginPage() {
     const navigate = useNavigate();
     const location = useLocation();
     const { login } = useAuth();
-    const [canusername, setCanUsername] = useState('guest');
-    const [empusername, setEmpUsername] = useState('admin');
+    const [canusername, setCanUsername] = useState('');
+    const [empusername, setEmpUsername] = useState('');
     const [placementusername, setPlacementUsername] = useState('');
-    const [canpassword, setCanPassword] = useState('12345');
-    const [emppassword, setEmpPassword] = useState('12345');
+    const [canpassword, setCanPassword] = useState('');
+    const [emppassword, setEmpPassword] = useState('');
     const [placementpassword, setPlacementPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -61,24 +61,37 @@ function LoginPage() {
         setLoading(true);
         setError('');
         
-        const result = await login({
-            email: empusername,
-            password: emppassword
-        }, 'employer');
+        // Validate inputs
+        if (!empusername.trim() || !emppassword.trim()) {
+            setError('Please enter both email and password');
+            setLoading(false);
+            return;
+        }
         
-        setLoading(false);
-        
-        if (result.success) {
-            // Check if there's a redirect URL stored
-            const redirectUrl = localStorage.getItem('redirectAfterLogin');
-            if (redirectUrl) {
-                localStorage.removeItem('redirectAfterLogin');
-                navigate(redirectUrl, { replace: true });
+        try {
+            const result = await login({
+                email: empusername.trim(),
+                password: emppassword
+            }, 'employer');
+            
+            setLoading(false);
+            
+            if (result.success) {
+                // Check if there's a redirect URL stored
+                const redirectUrl = localStorage.getItem('redirectAfterLogin');
+                if (redirectUrl) {
+                    localStorage.removeItem('redirectAfterLogin');
+                    navigate(redirectUrl, { replace: true });
+                } else {
+                    navigate('/employer/dashboard', { replace: true });
+                }
             } else {
-                navigate(from, { replace: true });
+                setError(result.message || 'Invalid email or password');
             }
-        } else {
-            setError(result.message || 'Login failed');
+        } catch (error) {
+            setLoading(false);
+            setError('Login failed. Please check your connection and try again.');
+            console.error('Employer login error:', error);
         }
     }
 
@@ -135,15 +148,15 @@ function LoginPage() {
                                         </div>
                                     )}
                                             <div className="mb-4">
-                                                <ul className="nav nav-pills nav-fill" id="myTab2" role="tablist" style={{background: '#f8f9fa', borderRadius: '12px', padding: '6px', marginBottom: '24px'}}>
+                                                <ul className="nav nav-pills nav-fill" id="myTab2" role="tablist" style={{background: '#f8f9fa', borderRadius: '12px', padding: '6px', marginBottom: '24px', gap: '8px'}}>
                                                     <li className="nav-item">
-                                                        <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#twm-login-candidate" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-user-tie me-2" />Candidate</button>
+                                                        <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#twm-login-candidate" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-user-tie me-2" style={{color: '#ffffff'}} />Candidate</button>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Employer" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-building me-2" />Employer</button>
+                                                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Employer" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-building me-2" style={{color: 'white'}} />Employer</button>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Placement" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-graduation-cap me-2" />Placement</button>
+                                                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Placement" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-graduation-cap me-2" style={{color: 'white'}} />Placement</button>
                                                     </li>
                                                 </ul>
                                                 <div className="tab-content" id="myTab2Content">
@@ -154,9 +167,13 @@ function LoginPage() {
                                                         type="email"
                                                         required
                                                         className="form-control"
-                                                        placeholder="Email*"
+                                                        placeholder="Username"
                                                         value={canusername}
                                                         onChange={(event) => setCanUsername(event.target.value)}
+                                                        autoComplete="new-password"
+                                                        autoCorrect="off"
+                                                        autoCapitalize="off"
+                                                        spellCheck="false"
                                                         style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #e0e0e0'}} />
                                                 </div>
                                                 <div className="mb-3">
@@ -164,10 +181,14 @@ function LoginPage() {
                                                         name="password"
                                                         type="password"
                                                         className="form-control"
+                                                        placeholder="Password"
                                                         required
-                                                        placeholder="Password*"
                                                         value={canpassword}
                                                         onChange={(event) => setCanPassword(event.target.value)}
+                                                        autoComplete="new-password"
+                                                        autoCorrect="off"
+                                                        autoCapitalize="off"
+                                                        spellCheck="false"
                                                         style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #e0e0e0'}} />
                                                 </div>
                                                 <div className="d-flex justify-content-between align-items-center mb-4">
@@ -180,28 +201,22 @@ function LoginPage() {
                                                 <button type="submit" className="btn btn-primary w-100 mb-3" disabled={loading} style={{padding: '12px', borderRadius: '8px', fontWeight: '500'}}>
                                                     {loading ? 'Logging in...' : 'Log in'}
                                                 </button>
-                                                <div className="text-center mb-3">
-                                                    <span className="text-muted" style={{fontSize: '14px'}}>Or</span>
-                                                </div>
-                                                <button type="button" className="btn btn-outline-primary w-100 mb-2" style={{padding: '10px', borderRadius: '8px', fontSize: '14px'}} onClick={handleFacebookLogin}>
-                                                    <i className="fab fa-facebook me-2" />Continue with Facebook
-                                                </button>
-                                                <button type="button" className="btn btn-outline-secondary w-100" style={{padding: '10px', borderRadius: '8px', fontSize: '14px'}} onClick={handleGoogleLogin}>
-                                                    <JobZImage src="images/google-icon.png" alt="" style={{width: '16px', marginRight: '8px'}} />
-                                                    Continue with Google
-                                                </button>
                                             </form>
                                             {/*Login Employer Content*/}
                                             <form onSubmit={handleEmployerLogin} className="tab-pane fade" id="twm-login-Employer">
                                                 <div className="mb-3">
                                                     <input
-                                                        name="username"
-                                                        type="text"
+                                                        name="email"
+                                                        type="email"
                                                         required
                                                         className="form-control"
-                                                        placeholder="Username*"
+                                                        placeholder="Username"
                                                         value={empusername}
                                                         onChange={(event) => setEmpUsername(event.target.value)}
+                                                        autoComplete="email"
+                                                        autoCorrect="off"
+                                                        autoCapitalize="off"
+                                                        spellCheck="false"
                                                         style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #e0e0e0'}} />
                                                 </div>
                                                 <div className="mb-3">
@@ -209,10 +224,14 @@ function LoginPage() {
                                                         name="password"
                                                         type="password"
                                                         className="form-control"
+                                                        placeholder="Password"
                                                         required
-                                                        placeholder="Password*"
                                                         value={emppassword}
                                                         onChange={(event) => setEmpPassword(event.target.value)}
+                                                        autoComplete="current-password"
+                                                        autoCorrect="off"
+                                                        autoCapitalize="off"
+                                                        spellCheck="false"
                                                         style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #e0e0e0'}} />
                                                 </div>
                                                 <div className="d-flex justify-content-between align-items-center mb-4">
@@ -225,16 +244,6 @@ function LoginPage() {
                                                 <button type="submit" className="btn btn-primary w-100 mb-3" disabled={loading} style={{padding: '12px', borderRadius: '8px', fontWeight: '500'}}>
                                                     {loading ? 'Logging in...' : 'Log in'}
                                                 </button>
-                                                <div className="text-center mb-3">
-                                                    <span className="text-muted" style={{fontSize: '14px'}}>Or</span>
-                                                </div>
-                                                <button type="button" className="btn btn-outline-primary w-100 mb-2" style={{padding: '10px', borderRadius: '8px', fontSize: '14px'}} onClick={handleFacebookLogin}>
-                                                    <i className="fab fa-facebook me-2" />Continue with Facebook
-                                                </button>
-                                                <button type="button" className="btn btn-outline-secondary w-100" style={{padding: '10px', borderRadius: '8px', fontSize: '14px'}} onClick={handleGoogleLogin}>
-                                                    <JobZImage src="images/google-icon.png" alt="" style={{width: '16px', marginRight: '8px'}} />
-                                                    Continue with Google
-                                                </button>
                                             </form>
                                             {/*Login Placement Content*/}
                                             <form onSubmit={handlePlacementLogin} className="tab-pane fade" id="twm-login-Placement">
@@ -244,36 +253,46 @@ function LoginPage() {
                                                         type="text"
                                                         required
                                                         className="form-control"
-                                                        placeholder="Email*"
+                                                        placeholder="Username"
                                                         value={placementusername}
                                                         onChange={(event) => setPlacementUsername(event.target.value)}
+                                                        autoComplete="new-password"
+                                                        autoCorrect="off"
+                                                        autoCapitalize="off"
+                                                        spellCheck="false"
                                                         style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #e0e0e0'}} />
                                                 </div>
-                                                <div className="mb-4">
+                                                <div className="mb-3">
                                                     <input
                                                         name="password"
                                                         type="password"
                                                         className="form-control"
+                                                        placeholder="Password"
                                                         required
-                                                        placeholder="Password*"
                                                         value={placementpassword}
                                                         onChange={(event) => setPlacementPassword(event.target.value)}
+                                                        autoComplete="new-password"
+                                                        autoCorrect="off"
+                                                        autoCapitalize="off"
+                                                        spellCheck="false"
                                                         style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #e0e0e0'}} />
+                                                </div>
+                                                <div className="d-flex justify-content-between align-items-center mb-4">
+                                                    <div className="form-check">
+                                                        <input type="checkbox" className="form-check-input" id="rememberPlacement" />
+                                                        <label className="form-check-label text-muted" htmlFor="rememberPlacement" style={{fontSize: '14px'}}>Remember me</label>
+                                                    </div>
+                                                    <NavLink to={publicUser.pages.FORGOT} className="site-text-primary" style={{fontSize: '14px', textDecoration: 'none'}}>Forgot Password</NavLink>
                                                 </div>
                                                 <button type="submit" className="btn btn-primary w-100 mb-3" disabled={loading} style={{padding: '12px', borderRadius: '8px', fontWeight: '500'}}>
                                                     {loading ? 'Logging in...' : 'Log in'}
                                                 </button>
-                                                <div className="text-center mb-3">
-                                                    <span className="text-muted" style={{fontSize: '14px'}}>Or</span>
-                                                </div>
-                                                <button type="button" className="btn btn-outline-primary w-100 mb-2" style={{padding: '10px', borderRadius: '8px', fontSize: '14px'}} onClick={handleFacebookLogin}>
-                                                    <i className="fab fa-facebook me-2" />Continue with Facebook
-                                                </button>
-                                                <button type="button" className="btn btn-outline-secondary w-100" style={{padding: '10px', borderRadius: '8px', fontSize: '14px'}} onClick={handleGoogleLogin}>
-                                                    <JobZImage src="images/google-icon.png" alt="" style={{width: '16px', marginRight: '8px'}} />
-                                                    Continue with Google
-                                                </button>
                                             </form>
+                                        </div>
+                                        <div className="text-center mt-3">
+                                            <NavLink to={publicUser.INITIAL} className="btn btn-outline-secondary" style={{padding: '8px 20px', borderRadius: '8px', textDecoration: 'none'}}>
+                                                <i className="fas fa-home me-2" style={{color: 'white'}}></i>Back to Home
+                                            </NavLink>
                                         </div>
                                     </div>
                                         </div>

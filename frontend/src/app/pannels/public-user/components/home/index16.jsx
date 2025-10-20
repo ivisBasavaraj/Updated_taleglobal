@@ -7,7 +7,12 @@ import { loadScript, updateSkinStyle } from "../../../../../globals/constants";
 import api from "../../../../../utils/api";
 import HeroBody from "../../../../../components/HeroBody";
 import { Container, Row, Col } from "react-bootstrap";
+<<<<<<< HEAD
 import MobileTestIndicator from "../../../../../components/MobileTestIndicator";
+=======
+import HomeJobCard from "../../../../../components/HomeJobCard";
+import "../../../../../new-job-card.css";
+>>>>>>> 92872e199fdfa4aeeb9461804178829410fcb83d
 
 function Home16Page() {
     const [jobs, setJobs] = useState([]);
@@ -72,13 +77,9 @@ function Home16Page() {
                         throw new Error('Invalid jobs data format');
                     }
                     
-                    // Sanitize and validate each job
-                    const validJobs = jobsData.jobs.filter(job => {
-                        return job && 
-                               typeof job === 'object' && 
-                               job._id && 
-                               job.title;
-                    });
+                    // Show all jobs without filtering
+                    const validJobs = jobsData.jobs || [];
+                    console.log('Total jobs from API:', validJobs.length);
                     
                     setAllJobs(validJobs);
                     setJobs(validJobs.slice(0, 6));
@@ -251,10 +252,8 @@ function Home16Page() {
                 console.log('Filtering by job type:', jobType);
                 filtered = filtered.filter(job => {
                     try {
-                        return job.jobType?.toLowerCase() === jobType ||
-                               job.type?.toLowerCase() === jobType ||
-                               job.jobType?.toLowerCase().includes(jobType) ||
-                               job.type?.toLowerCase().includes(jobType);
+                        const jobTypeField = job.jobType || job.type || '';
+                        return jobTypeField.toLowerCase().includes(jobType);
                     } catch (err) {
                         console.error('Error filtering job by type:', err);
                         return false;
@@ -676,6 +675,100 @@ function Home16Page() {
 				</div>
 				{/* HOW IT WORK SECTION END */}
 
+				{/* HOW IT WORK SECTION 2 START */}
+				<div className="section-full p-t70 p-b60 site-bg-gray twm-how-it-work-area animate-on-scroll">
+					<Container className="py-5">
+						{/* title="" START*/}
+						<div className="section-head center wt-small-separator-outer mb-5">
+							<div className="wt-small-separator site-text-primary">
+								<div>Working Process</div>
+							</div>
+
+							<h2 className="wt-title">How It Works</h2>
+						</div>
+						{/* title="" END*/}
+
+						<div className="twm-how-it-work-section3">
+							<Row>
+								<Col xl={3} lg={6} col={12} className="mb-4">
+									<div className="twm-w-process-steps3 hover-card">
+										<div className="twm-w-pro-top">
+											<div className="twm-media">
+												<span>
+													<JobZImage
+														src="images/work-process/icon1.png"
+														alt="icon1"
+													/>
+												</span>
+											</div>
+										</div>
+
+										<h4 className="twm-title">Register Your Account</h4>
+										<p>You need to create an account to find the best jobs.</p>
+									</div>
+								</Col>
+
+								<Col xl={3} lg={6} col={12} className="mb-4">
+									<div className="twm-w-process-steps3 hover-card">
+										<div className="twm-w-pro-top">
+											<div className="twm-media">
+												<span>
+													<JobZImage
+														src="images/work-process/icon4.png"
+														alt="icon2"
+													/>
+												</span>
+											</div>
+										</div>
+
+										<h4 className="twm-title">Search and Apply</h4>
+										<p>Search your preferred jobs and apply the best jobs.</p>
+									</div>
+								</Col>
+
+								<Col xl={3} lg={6} col={12} className="mb-4">
+									<div className="twm-w-process-steps3 hover-card">
+										<div className="twm-w-pro-top">
+											<div className="twm-media">
+												<span>
+													<JobZImage
+														src="images/work-process/icon3.png"
+														alt="icon1"
+													/>
+												</span>
+											</div>
+										</div>
+
+										<h4 className="twm-title">Take Assessment</h4>
+										<p>Take assessment curated based on the job profile.</p>
+									</div>
+								</Col>
+
+								<Col xl={3} lg={6} col={12} className="mb-4">
+									<div className="twm-w-process-steps3 hover-card">
+										<div className="twm-w-pro-top">
+											<div className="twm-media">
+												<span>
+													<JobZImage
+														src="images/work-process/icon2.png"
+														alt="icon1"
+													/>
+												</span>
+											</div>
+										</div>
+
+										<h4 className="twm-title">Recruitment Process</h4>
+										<p>
+											Interviews and discussion rounds scheduled by company.
+										</p>
+									</div>
+								</Col>
+							</Row>
+						</div>
+					</Container>
+				</div>
+				{/* HOW IT WORK SECTION 2 END */}
+
 				{/* JOBS CATEGORIES SECTION START */}
 				<div className="section-full p-t50 p-b50 site-bg-white twm-job-categories-hpage-6-area animate-on-scroll">
 					{/* title="" START*/}
@@ -905,142 +998,96 @@ function Home16Page() {
 									{jobs.length > 0 ? (
 										jobs.map((job) => (
 											<Col lg={4} md={6} key={job._id} className="mb-4">
-												<div className="twm-jobs-grid-style1 m-b30 hover-card">
-													<div className="twm-media">
-														{job.employerProfile?.logo ? (
-															<img
-																src={
-																	job.companyLogo ||
-																	(job.employerProfile.logo?.startsWith("data:")
-																		? job.employerProfile.logo
-																		: `data:image/jpeg;base64,${job.employerProfile.logo}`)
-																}
-																alt="Company Logo"
-															/>
-														) : (
-															<JobZImage
-																src="images/jobs-company/pic1.jpg"
-																alt="#"
-															/>
-														)}
-													</div>
-
-													<div className="twm-jobs-category green">
-														<span
-															className={`twm-bg-${
-																job.jobType === "Full-Time"
-																	? "green"
-																	: job.jobType === "Part-Time"
-																	? "brown"
-																	: job.jobType === "Contract"
-																	? "purple"
-																	: job.jobType === "Internship (Paid)" ||
-																	  job.jobType === "Internship (Unpaid)"
-																	? "sky"
-																	: job.jobType === "Work From Home"
-																	? "golden"
-																	: "green"
-															}`}
-														>
-															{job.jobType || job.employmentType || "Full-Time"}
-														</span>
-													</div>
-													<div className="twm-mid-content">
-														<NavLink
-															to={`/job-detail/${job._id}`}
-															className="twm-job-title"
-														>
-															<h4>{job.title}</h4>
-														</NavLink>
-														<div className="twm-job-address">
-															<i className="feather-map-pin" />
-															&nbsp; {job.location}
-														</div>
-													</div>
-
-													<div className="twm-right-content twm-job-right-group">
-														<div className="twm-salary-and-apply mb-2">
-															<div className="twm-jobs-amount">
-																{job.ctc &&
-																typeof job.ctc === "object" &&
-																job.ctc.min > 0 &&
-																job.ctc.max > 0 ? (
-																	<div
-																		style={{
-																			fontSize: "14px",
-																			fontWeight: "bold",
-																			color: "#1967d2",
-																			marginBottom: "4px",
-																		}}
-																	>
-																		Annual CTC:{" "}
-																		{job.ctc.min === job.ctc.max
-																			? `₹${Math.floor(
-																					job.ctc.min / 100000
-																			  )}LPA`
-																			: `₹${Math.floor(
-																					job.ctc.min / 100000
-																			  )} - ${Math.floor(
-																					job.ctc.max / 100000
-																			  )} LPA`}
-																	</div>
+												<div className="new-job-card">
+													{/* Top Row */}
+													<div className="job-card-header">
+														<div className="job-card-left">
+															<div className="company-logo">
+																{job.employerProfile?.logo ? (
+																	<img
+																		src={
+																			job.companyLogo ||
+																			(job.employerProfile.logo?.startsWith("data:")
+																				? job.employerProfile.logo
+																				: `data:image/jpeg;base64,${job.employerProfile.logo}`)
+																		}
+																		alt="Company Logo"
+																	/>
 																) : (
-																	<div
-																		style={{
-																			fontSize: "14px",
-																			fontWeight: "bold",
-																			color: "#1967d2",
-																			marginBottom: "4px",
-																		}}
-																	>
-																		CTC: Not specified
+																	<div className="logo-placeholder">
+																		{(job.employerId?.companyName || "C").charAt(0)}
 																	</div>
 																)}
 															</div>
+															<div className="job-info">
+																<h4 className="job-title">{job.title}</h4>
+																<div className="job-location">
+																	<i className="feather-map-pin" />
+																	{job.location}
+																</div>
+															</div>
+														</div>
+														<div className="job-type-badge">
+															<span className={`job-type-pill ${
+																job.jobType === "Full-Time" ? "full-time" :
+																job.jobType === "Part-Time" ? "part-time" :
+																job.jobType === "Contract" ? "contract" :
+																job.jobType?.includes("Internship") ? "internship" :
+																job.jobType === "Work From Home" ? "wfh" : "full-time"
+															}`}>
+																{job.jobType || "Full-Time"}
+															</span>
+														</div>
+													</div>
+
+													{/* Middle Row */}
+													<div className="job-card-middle">
+														<div className="ctc-info">
+															{job.ctc && typeof job.ctc === "object" && job.ctc.min > 0 && job.ctc.max > 0 ? (
+																<span className="ctc-text">
+																	Annual CTC: {job.ctc.min === job.ctc.max
+																		? `₹${Math.floor(job.ctc.min / 100000)}LPA`
+																		: `₹${Math.floor(job.ctc.min / 100000)} - ${Math.floor(job.ctc.max / 100000)} LPA`}
+																</span>
+															) : (
+																<span className="ctc-text">CTC: Not specified</span>
+															)}
+														</div>
+														<div className="vacancy-info">
 															<span className="vacancy-text">
 																Vacancies: {job.vacancies || "Not specified"}
 															</span>
 														</div>
+													</div>
 
-														<div className="d-flex align-items-center justify-content-between">
-															<div>
-																<h6 className="twm-job-address posted-by-company mb-0">
-																	{job.employerId?.companyName || "Company"}
-																</h6>
-																<div
-																	className="twm-posted-by"
-																	style={{ fontSize: "12px", color: "#666" }}
-																>
-																	Posted by:{" "}
-																	<strong>
-																		{job.postedBy ||
-																			(job.employerId?.employerType ===
-																			"consultant"
-																				? "Consultancy"
-																				: "Company")}
-																	</strong>
-																</div>
+													{/* Bottom Row */}
+													<div className="job-card-footer">
+														<div className="company-info">
+															<div className="posted-by-label">Posted by:</div>
+															<div className="company-name">
+																{job.employerId?.companyName || "Company"}
 															</div>
-
-															<button
-																className="btn btn-sm apply-now-button"
-																onClick={() => {
-																	// Validate job ID before navigation
-																	if (job._id && String(job._id).trim()) {
-																		const sanitizedJobId = String(job._id).replace(/[^a-zA-Z0-9]/g, '');
-																		if (sanitizedJobId) {
-																			window.location.href = `/job-detail/${sanitizedJobId}`;
-																		} else {
-																			alert('Invalid job ID. Cannot navigate to job details.');
-																		}
-																	} else {
-																		alert('Job ID is missing. Cannot navigate to job details.');
-																	}
-																}}
-															>
-																Apply Now
-															</button>
+															<div className="poster-type">
+																{job.postedBy || (job.employerId?.employerType === "consultant" ? "Consultancy" : "Company")}
+															</div>
 														</div>
+														<button
+															className="apply-now-btn"
+															onClick={() => {
+																if (job._id && String(job._id).trim()) {
+																	const sanitizedJobId = String(job._id).replace(/[^a-zA-Z0-9]/g, '');
+																	if (sanitizedJobId) {
+																		window.location.href = `/job-detail/${sanitizedJobId}`;
+																	} else {
+																		alert('Invalid job ID. Cannot navigate to job details.');
+																	}
+																} else {
+																	alert('Job ID is missing. Cannot navigate to job details.');
+																}
+															}}
+														>
+															Apply Now
+														</button>
 													</div>
 												</div>
 											</Col>
@@ -1163,7 +1210,8 @@ function Home16Page() {
 																			style={{
 																				width: "60px",
 																				height: "60px",
-																				objectFit: "contain",
+																				objectFit: "cover",
+																				borderRadius: "8px"
 																			}}
 																		/>
 																	) : (
@@ -1182,7 +1230,7 @@ function Home16Page() {
 																		{recruiter.companyName}
 																	</NavLink>
 																</h4>
-																<div className="twm-job-address">
+																<div className="twm-job-address" style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxHeight: '20px'}}>
 																	<i className="feather-map-pin" />
 																	{recruiter.location || "Multiple Locations"}
 																</div>
