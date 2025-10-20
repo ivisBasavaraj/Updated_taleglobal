@@ -8,9 +8,9 @@ import {
   Card,
   Button,
   Form,
-  InputGroup,
 } from "react-bootstrap";
 import { FaBriefcase, FaCalculator, FaCode, FaUsers } from "react-icons/fa";
+import "./HeroSection.css";
 
 const ORANGE = "#ff5a1f";
 const DARK_GREY = "#333333";
@@ -25,14 +25,16 @@ const categories = [
 
 const HeroSection = () => {
   return (
-    <div style={{ 
-      backgroundColor: "#f8f9fa", 
-      minHeight: "100vh",
-      backgroundImage: "url('/assets/images/photo_2025-10-09_11-01-43.png')",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat"
-    }}>
+    <div
+      className="hero-section"
+      style={{
+        backgroundColor: "#f8f9fa",
+        backgroundImage: "url('/assets/images/photo_2025-10-09_11-01-43.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       {/* Top Navbar */}
       <Navbar bg="white" expand="lg" className="shadow-sm" sticky="top" style={{ backgroundColor: "#ffffff" }}>
         <Container>
@@ -80,28 +82,27 @@ const HeroSection = () => {
       </Navbar>
 
       {/* Hero Section */}
-      <Container className="py-5">
+      <Container className="hero-section__container">
         <Row className="align-items-center">
           <Col lg={6}>
-            <h1 className="fw-bold display-5" style={{ color: DARK_GREY, lineHeight: 1.2 }}>
-              Find the <span style={{ color: "#e68900" }}>job</span> that fits your life
+            <h1 className="hero-section__title">
+              Find the <span className="hero-section__highlight">job</span> that fits your life
             </h1>
-            <p className="mt-3 mb-4" style={{ color: LIGHT_GREY_TEXT, fontSize: "1.05rem" }}>
+            <p className="hero-section__paragraph">
               Type your keyword, then click search to find your perfect job.
             </p>
           </Col>
-          <Col lg={6} className="text-center">
-            <img 
-              src="/assets/images/Resume-amico.png" 
-              alt="Find Job" 
-              className="img-fluid" 
-              style={{ maxHeight: "400px" }}
+          <Col lg={6} className="text-center hero-section__image-wrapper">
+            <img
+              src="/assets/images/Resume-amico.png"
+              alt="Find Job"
+              className="img-fluid hero-section__image"
             />
           </Col>
         </Row>
 
         {/* Search Card */}
-        <Row className="justify-content-center mt-4">
+        <Row className="justify-content-center hero-section__search-card">
           <Col lg={10} xl={8}>
             <Card className="shadow-sm rounded-4 border-0">
               <Card.Body className="p-3 p-md-4">
@@ -170,14 +171,13 @@ const HeroSection = () => {
         </Row>
 
         {/* Job Categories */}
-        <Row className="justify-content-center mt-4">
+        <Row className="justify-content-center hero-section__categories">
           <Col lg={10} xl={8}>
-            <div className="d-flex gap-3 pb-2" style={{ overflow: "hidden" }}>
+            <div className="hero-section__categories-row">
               {categories.map((cat) => (
                 <Card
                   key={cat.name}
-                  className="border-0 shadow-sm rounded-4 flex-shrink-1 flex-grow-1"
-                  style={{ minWidth: 140, flex: "1 1 140px" }}
+                  className="border-0 shadow-sm rounded-4 flex-shrink-1 flex-grow-1 hero-section__category-card"
                 >
                   <Card.Body className="text-center">
                     {/* Small orange icon */}

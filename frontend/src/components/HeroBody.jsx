@@ -174,7 +174,7 @@ const HeroBody = ({ onSearch }) => {
     }}>
       {/* Hero Section */}
       <div className="hero-content">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '0.5rem' }}>
+        <div className="hero-layout">
           <div className="hero-text" style={{ flex: 1, textAlign: 'left' }}>
             <h1 className="hero-title">
               Find the <span className="highlight">job</span> that fits<br />
@@ -185,34 +185,20 @@ const HeroBody = ({ onSearch }) => {
             </p>
             <button 
               onClick={() => navigate('/job-grid')}
-              style={{
-                background: '#ff9c00',
-                color: 'white',
-                border: 'none',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '6px',
-                fontSize: '1rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                marginTop: '1rem',
-                marginBottom: '1rem'
-              }}
+              className="hero-cta"
             >
               Explore Jobs
             </button>
             
             {/* Search Bar */}
-            <div className="search-container" style={{ marginLeft: '0', maxWidth: '600px', marginTop: '1rem' }}>
+            <div className="search-container">
               <div className="search-field">
                 <label className="search-label">WHAT</label>
                 <select 
-                  className="search-select"
+                  className={`search-select${touched.what && errors.what ? ' has-error' : ''}`}
                   value={searchData.what}
                   onChange={(e) => handleFieldChange('what', e.target.value)}
                   onBlur={() => handleFieldBlur('what')}
-                  style={{
-                    borderColor: touched.what && errors.what ? '#dc3545' : undefined
-                  }}
                 >
                   <option value="">Job Title</option>
                   <option value="Software Developer">Software Developer</option>
@@ -233,12 +219,7 @@ const HeroBody = ({ onSearch }) => {
                   <option value="Consultant">Consultant</option>
                 </select>
                 {touched.what && errors.what && (
-                  <div style={{
-                    color: '#dc3545',
-                    fontSize: '12px',
-                    marginTop: '4px',
-                    position: 'absolute'
-                  }}>
+                  <div className="search-error">
                     {errors.what}
                   </div>
                 )}
@@ -247,14 +228,10 @@ const HeroBody = ({ onSearch }) => {
               <div className="search-field">
                 <label className="search-label">TYPE</label>
                 <select 
-                  className="search-select"
+                  className={`search-select${touched.type && errors.type ? ' has-error' : ''}`}
                   value={searchData.type}
                   onChange={(e) => handleFieldChange('type', e.target.value)}
                   onBlur={() => handleFieldBlur('type')}
-                  style={{ 
-                    minWidth: '140px',
-                    borderColor: touched.type && errors.type ? '#dc3545' : undefined
-                  }}
                 >
                   <option value="">All Category</option>
                   <option value="Full Time">Full Time</option>
@@ -266,12 +243,7 @@ const HeroBody = ({ onSearch }) => {
                   <option value="Work From Home">Work From Home</option>
                 </select>
                 {touched.type && errors.type && (
-                  <div style={{
-                    color: '#dc3545',
-                    fontSize: '12px',
-                    marginTop: '4px',
-                    position: 'absolute'
-                  }}>
+                  <div className="search-error">
                     {errors.type}
                   </div>
                 )}
@@ -286,7 +258,7 @@ const HeroBody = ({ onSearch }) => {
                   </svg>
                   <input
                     type="text"
-                    className="search-select location-select"
+                    className={`search-select location-select${touched.location && errors.location ? ' has-error' : ''}`}
                     value={searchData.location}
                     onChange={(e) => handleLocationChange(e.target.value)}
                     onFocus={() => searchData.location && setShowSuggestions(true)}
@@ -295,9 +267,6 @@ const HeroBody = ({ onSearch }) => {
                       setTimeout(() => setShowSuggestions(false), 200);
                     }}
                     placeholder="Search location..."
-                    style={{
-                      borderColor: touched.location && errors.location ? '#dc3545' : undefined
-                    }}
                   />
                   {showSuggestions && locationSuggestions.length > 0 && (
                     <div className="location-suggestions">
@@ -314,12 +283,7 @@ const HeroBody = ({ onSearch }) => {
                   )}
                 </div>
                 {touched.location && errors.location && (
-                  <div style={{
-                    color: '#dc3545',
-                    fontSize: '12px',
-                    marginTop: '4px',
-                    position: 'absolute'
-                  }}>
+                  <div className="search-error">
                     {errors.location}
                   </div>
                 )}
@@ -330,11 +294,11 @@ const HeroBody = ({ onSearch }) => {
               </button>
             </div>
           </div>
-          <div style={{ flex: 1, textAlign: 'center' }}>
+          <div className="hero-illustration">
             <img 
               src="/assets/images/Resume-amico.svg" 
               alt="Find Job" 
-              style={{ maxWidth: '100%', height: 'auto', maxHeight: '500px', marginLeft: '2rem' }}
+              className="hero-image"
             />
           </div>
         </div>

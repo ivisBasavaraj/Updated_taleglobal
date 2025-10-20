@@ -1,0 +1,85 @@
+/* Mobile fixes for index16.jsx */
+
+/* Hero section mobile */
+@media (max-width: 767px) {
+    .hero-body {
+        padding: 20px 10px !important;
+        color: #333 !important;
+    }
+    
+    .hero-body h1,
+    .hero-body h2,
+    .hero-body p,
+    .hero-body .lead {
+        color: #333 !important;
+        text-shadow: none !important;
+    }
+    
+    .hero-body .text-white {
+        color: #333 !important;
+    }
+}
+
+/* How It Works section mobile */
+@media (max-width: 767px) {
+    .twm-how-it-work-area {
+        padding: 40px 0 !important;
+    }
+    
+    .twm-w-process-steps3 {
+        text-align: center !important;
+        margin-bottom: 30px !important;
+    }
+    
+    .twm-w-process-steps3 h4 {
+        font-size: 18px !important;
+    }
+}
+
+/* Job Categories mobile */
+@media (max-width: 767px) {
+    .twm-job-categories-hpage-6-area {
+        padding: 40px 0 !important;
+    }
+    
+    .job-cat-block-hpage-6 {
+        text-align: center !important;
+        padding: 20px !important;
+    }
+}
+
+/* Jobs grid mobile */
+@media (max-width: 767px) {
+    .twm-jobs-grid-style1 {
+        margin-bottom: 20px !important;
+    }
+    
+    .twm-jobs-grid-style1 .twm-media img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+}
+
+/* Recruiters section mobile */
+@media (max-width: 767px) {
+    .twm-recruiters5-wrap {
+        padding: 0 10px !important;
+    }
+    
+    .twm-recruiters5-box {
+        margin-bottom: 15px !important;
+        padding: 15px !important;
+    }
+}
+
+/* Container padding mobile */
+@media (max-width: 575px) {
+    .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+    
+    .section-full {
+        padding: 30px 0 !important;
+    }
+}

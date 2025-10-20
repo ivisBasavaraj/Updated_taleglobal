@@ -7,6 +7,7 @@ import { loadScript, updateSkinStyle } from "../../../../../globals/constants";
 import api from "../../../../../utils/api";
 import HeroBody from "../../../../../components/HeroBody";
 import { Container, Row, Col } from "react-bootstrap";
+import MobileTestIndicator from "../../../../../components/MobileTestIndicator";
 
 function Home16Page() {
     const [jobs, setJobs] = useState([]);
@@ -340,6 +341,7 @@ function Home16Page() {
 
     return (
 			<>
+				<MobileTestIndicator />
 				{/* Error Alert */}
 				{error && (
 					<div style={{
@@ -595,7 +597,7 @@ function Home16Page() {
 
 						<div className="twm-how-it-work-section3">
 							<Row>
-								<Col xl={3} lg={6} col={12} className="mb-4">
+								<Col xl={3} lg={6} md={6} sm={12} className="mb-4">
 									<div className="twm-w-process-steps3 hover-card">
 										<div className="twm-w-pro-top">
 											<div className="twm-media">
@@ -613,7 +615,7 @@ function Home16Page() {
 									</div>
 								</Col>
 
-								<Col xl={3} lg={6} col={12} className="mb-4">
+								<Col xl={3} lg={6} md={6} sm={12} className="mb-4">
 									<div className="twm-w-process-steps3 hover-card">
 										<div className="twm-w-pro-top">
 											<div className="twm-media">
@@ -631,7 +633,7 @@ function Home16Page() {
 									</div>
 								</Col>
 
-								<Col xl={3} lg={6} col={12} className="mb-4">
+								<Col xl={3} lg={6} md={6} sm={12} className="mb-4">
 									<div className="twm-w-process-steps3 hover-card">
 										<div className="twm-w-pro-top">
 											<div className="twm-media">
@@ -649,7 +651,7 @@ function Home16Page() {
 									</div>
 								</Col>
 
-								<Col xl={3} lg={6} col={12} className="mb-4">
+								<Col xl={3} lg={6} md={6} sm={12} className="mb-4">
 									<div className="twm-w-process-steps3 hover-card">
 										<div className="twm-w-pro-top">
 											<div className="twm-media">
@@ -690,7 +692,7 @@ function Home16Page() {
 							<div className="job-cat-block-hpage-6-section m-b30">
 								<Row>
 									{/* COLUMNS 1 */}
-									<Col className="mb-4">
+									<Col lg={4} md={6} sm={12} className="mb-4">
 										<div className="job-cat-block-hpage-6 m-b30 hover-card">
 											<div className="twm-media">
 												<div className="flaticon-dashboard" />
@@ -716,7 +718,7 @@ function Home16Page() {
 									</Col>
 
 									{/* COLUMNS 2 */}
-									<Col className="mb-4">
+									<Col lg={4} md={6} sm={12} className="mb-4">
 										<div className="job-cat-block-hpage-6 m-b30 hover-card">
 											<div className="twm-media">
 												<div className="flaticon-project-management" />
@@ -742,7 +744,7 @@ function Home16Page() {
 									</Col>
 
 									{/* COLUMNS 3 */}
-									<Col className="mb-4">
+									<Col lg={4} md={6} sm={12} className="mb-4">
 										<div className="job-cat-block-hpage-6 m-b30 hover-card">
 											<div className="twm-media">
 												<div className="flaticon-note" />
@@ -768,7 +770,7 @@ function Home16Page() {
 									</Col>
 
 									{/* COLUMNS 4 */}
-									<Col className="mb-4">
+									<Col lg={4} md={6} sm={12} className="mb-4">
 										<div className="job-cat-block-hpage-6 m-b30 hover-card">
 											<div className="twm-media">
 												<div className="flaticon-customer-support" />
@@ -794,7 +796,7 @@ function Home16Page() {
 									</Col>
 
 									{/* COLUMNS 5 */}
-									<Col className="mb-4">
+									<Col lg={4} md={6} sm={12} className="mb-4">
 										<div className="job-cat-block-hpage-6 m-b30 hover-card">
 											<div className="twm-media">
 												<div className="flaticon-bars" />
