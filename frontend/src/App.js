@@ -8,12 +8,9 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import "./global-styles.css";
 import "./notification-animations.css";
-<<<<<<< HEAD
 import "./mobile-responsive.css";
 import "./index16-mobile-fix.css";
-=======
 import "./logo-fix.css";
->>>>>>> 92872e199fdfa4aeeb9461804178829410fcb83d
 
 function App() {
 
