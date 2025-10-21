@@ -22,6 +22,7 @@ function AdminSubAdmin() {
     const [isMainAdmin, setIsMainAdmin] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [authChecked, setAuthChecked] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -199,10 +200,11 @@ function AdminSubAdmin() {
         const adminData = localStorage.getItem('adminData');
         
         if (!adminToken || !adminData) {
-            window.location.href = '/admin-login';
+            window.location.href = '/';
             return;
         }
         
+        setAuthChecked(true);
         fetchSubAdmins();
     }, []);
 
