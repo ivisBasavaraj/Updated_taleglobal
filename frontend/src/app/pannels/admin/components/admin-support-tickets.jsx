@@ -331,7 +331,6 @@ function AdminSupportTickets() {
                     </Col>
                 </Row>
             </Container>
-        </div>
 
             {/* Ticket Detail Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
@@ -441,7 +440,7 @@ function AdminSupportTickets() {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </Container>
+        </div>
     );
 }
 
