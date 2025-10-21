@@ -142,8 +142,6 @@ function AdminSubAdmin() {
     const fetchSubAdmins = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            console.log('Token:', token);
-            console.log('Fetching from:', `${API_BASE_URL}/admin/sub-admins`);
             
             const response = await fetch(`${API_BASE_URL}/admin/sub-admins`, {
                 headers: {
@@ -151,15 +149,12 @@ function AdminSubAdmin() {
                 }
             });
             
-            console.log('Response status:', response.status);
-            
             if (response.status === 401) {
-                setError('Authentication failed. Please login again.');
+                setError('Authentication failed. Please refresh the page or login again.');
                 return;
             }
             
             const data = await response.json();
-            console.log('Response data:', data);
             
             if (data.success) {
                 setSubAdmins(data.subAdmins);
@@ -169,6 +164,7 @@ function AdminSubAdmin() {
             }
         } catch (error) {
             console.error('Error fetching sub admins:', error);
+            setError('Failed to connect to server');
         }
     };
 
