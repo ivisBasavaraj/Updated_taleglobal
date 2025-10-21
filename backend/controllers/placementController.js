@@ -14,7 +14,7 @@ const generateToken = (id, role) => {
 
 exports.registerPlacement = async (req, res) => {
   try {
-    console.log('Registration request body:', req.body);
+    // Removed console debug line for security;
     const { name, email, password, phone, collegeName } = req.body;
 
     const existingPlacement = await Placement.findOne({ email });
@@ -74,7 +74,7 @@ exports.uploadStudentData = async (req, res) => {
     const { fileToBase64 } = require('../middlewares/upload');
     const studentData = fileToBase64(req.file);
     
-    console.log('File converted to base64, length:', studentData.length);
+    // Removed console debug line for security;
     
     // Add to file history with file data and custom name
     const placement = await Placement.findByIdAndUpdate(placementId, {
@@ -263,7 +263,7 @@ exports.processPlacementApproval = async (req, res) => {
     // Process each row from Excel
     for (const row of jsonData) {
       try {
-        console.log('Processing row:', row);
+        // Removed console debug line for security;
         // Extract data from Excel with new field structure (case-insensitive)
         const email = row.Email || row.email || row.EMAIL;
         const password = row.Password || row.password || row.PASSWORD;
@@ -272,7 +272,7 @@ exports.processPlacementApproval = async (req, res) => {
         const course = row.Course || row.course || row.COURSE || row.Branch || row.branch || row.BRANCH;
         const credits = parseInt(row['Credits Assigned'] || row['credits assigned'] || row['CREDITS ASSIGNED'] || row.Credits || row.credits || row.CREDITS || row.Credit || row.credit || 0);
         
-        console.log('Extracted data:', { name, email, password: password ? '***' : 'MISSING', phone, credits });
+        // Removed console debug line for security;
         
         // Auto-generate missing fields
         if (!email) email = `student${createdCount + 1}@college.edu`;
@@ -290,7 +290,7 @@ exports.processPlacementApproval = async (req, res) => {
         const finalCredits = credits || placement.credits || 0;
         const collegeName = row['College Name'] || row['college name'] || row['COLLEGE NAME'] || row.College || row.college || row.COLLEGE || placement.collegeName;
         
-        console.log('Creating candidate:', { name, email, password: '***', phone, course, credits: finalCredits });
+        // Removed console debug line for security;
         const candidate = await Candidate.create({
           name: name ? name.trim() : '',
           email: email ? email.trim().toLowerCase() : '',
@@ -303,7 +303,7 @@ exports.processPlacementApproval = async (req, res) => {
           isVerified: true,
           status: 'active'
         });
-        console.log('Candidate created:', candidate.email, 'with credits:', candidate.credits);
+        // Removed console debug line for security;
         
         // Create candidate profile with Excel data
         await CandidateProfile.create({ 
@@ -540,13 +540,13 @@ exports.updateFileCredits = async (req, res) => {
       { $set: { credits: credits } }
     );
     
-    console.log(`File credits update: Updated ${updateResult.modifiedCount} candidates with ${credits} credits for file ${fileId}`);
+    // Removed console debug line for security
     
     // Emit real-time credit updates to affected candidates
     if (candidatesToUpdate.length > 0) {
       const candidateIds = candidatesToUpdate.map(c => c._id.toString());
       emitBulkCreditUpdate(candidateIds, credits);
-      console.log(`Real-time credit updates sent to ${candidateIds.length} candidates`);
+      // Removed console debug line for security
     }
     
     // Also update candidates who don't have fileId but belong to this placement
@@ -565,7 +565,7 @@ exports.updateFileCredits = async (req, res) => {
       
       const legacyCandidateIds = legacyCandidatesToUpdate.map(c => c._id.toString());
       emitBulkCreditUpdate(legacyCandidateIds, credits);
-      console.log(`Real-time credit updates sent to ${legacyCandidateIds.length} legacy candidates`);
+      // Removed console debug line for security
     }
     
     res.json({
@@ -710,7 +710,7 @@ exports.processFileApproval = async (req, res) => {
         });
         
         createdCount++;
-        console.log(`Created candidate: ${candidate.email} with ${finalCredits} credits and password: ${password.trim()}`);
+        // Removed console debug line for security}`);
       } catch (rowError) {
         console.error('Row processing error:', rowError);
         errors.push(`Row ${index + 1}: ${rowError.message}`);

@@ -993,16 +993,16 @@ exports.assignPlacementCredits = async (req, res) => {
     if (candidatesToUpdate.length > 0) {
       const candidateIds = candidatesToUpdate.map(c => c._id.toString());
       emitBulkCreditUpdate(candidateIds, creditsNum);
-      console.log(`Real-time bulk credit updates sent to ${candidateIds.length} candidates`);
+      // Removed console debug line for security
       
       // Add a small delay to ensure WebSocket messages are processed
       setTimeout(() => {
-        console.log(`Credit update confirmation: ${candidateIds.length} candidates should now see ${creditsNum} credits`);
+        // Removed console debug line for security
       }, 1000);
     }
 
-    console.log(`Updated credits to ${creditsNum} for ${updateResult.modifiedCount} candidates linked to placement ${req.params.id}`);
-    console.log('Update result:', updateResult);
+    // Removed console debug line for security
+    // Removed console debug line for security;
 
     res.json({ 
       success: true, 

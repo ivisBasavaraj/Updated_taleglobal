@@ -11,14 +11,14 @@ const auth = (roles = []) => {
       const token = req.header('Authorization')?.replace('Bearer ', '');
       
       if (!token) {
-        console.log('Auth failed: No token provided');
+        // Removed auth debug line for security
         return res.status(401).json({ message: 'No token, authorization denied' });
       }
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       let user;
 
-      console.log('Token decoded successfully, role:', decoded.role, 'id:', decoded.id);
+      // Removed auth debug line for security
 
       if (decoded.role === 'candidate') {
         user = await Candidate.findById(decoded.id).select('-password');
@@ -33,13 +33,13 @@ const auth = (roles = []) => {
       }
       
       if (!user) {
-        console.log('Auth failed: User not found for role:', decoded.role, 'id:', decoded.id);
+        // Removed auth debug line for security
         return res.status(401).json({ message: 'User not found or account deactivated' });
       }
 
       // Check if placement officer is active
       if (decoded.role === 'placement' && user.status !== 'active') {
-        console.log('Auth failed: Placement officer account is not active:', user.status);
+        // Removed auth debug line for security
         return res.status(403).json({ 
           message: 'Account pending admin approval. Please wait for admin to approve your account.',
           requiresApproval: true
@@ -51,7 +51,7 @@ const auth = (roles = []) => {
         if (decoded.role === 'sub-admin' && roles.includes('admin')) {
           // Sub-admin can access admin routes
         } else {
-          console.log('Auth failed: Role access denied. Required:', roles, 'Got:', decoded.role);
+          // Removed auth debug line for security
           return res.status(403).json({ message: 'Access denied - insufficient permissions' });
         }
       }
@@ -60,7 +60,7 @@ const auth = (roles = []) => {
       req.userRole = decoded.role;
       next();
     } catch (error) {
-      console.log('Auth failed: Token verification error:', error.message);
+      // Removed auth debug line for security
       if (error.name === 'TokenExpiredError') {
         return res.status(401).json({ message: 'Token expired, please login again' });
       }

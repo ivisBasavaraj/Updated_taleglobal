@@ -66,27 +66,27 @@ exports.loginEmployer = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email and password are required' });
     }
     
-    console.log('Employer login attempt:', { email });
+    // Removed console debug line for security
 
     const employer = await Employer.findOne({ email });
     if (!employer) {
-      console.log('Employer not found:', email);
+      // Removed console debug line for security
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
     const isPasswordValid = await employer.comparePassword(password);
     if (!isPasswordValid) {
-      console.log('Invalid password for employer:', email);
+      // Removed console debug line for security;
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
     if (employer.status !== 'active') {
-      console.log('Inactive employer account:', email, 'Status:', employer.status);
+      // Removed console debug line for security;
       return res.status(401).json({ success: false, message: 'Account is inactive' });
     }
 
     const token = generateToken(employer._id, 'employer');
-    console.log('Employer login successful:', email);
+    // Removed console debug line for security;
 
     res.json({
       success: true,
@@ -125,7 +125,7 @@ exports.updateProfile = async (req, res) => {
   try {
     // Log request size for debugging
     const requestSize = JSON.stringify(req.body).length;
-    console.log(`Profile update request size: ${requestSize} bytes`);
+    // Removed console debug line for security;
     
     // Remove employerCategory from update data to prevent modification
     const updateData = { ...req.body };

@@ -49,30 +49,30 @@ exports.registerCandidate = async (req, res) => {
 exports.loginCandidate = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log('Login attempt for:', email);
+    // Removed console debug line for security;
 
     const candidate = await Candidate.findOne({ email: email.toLowerCase().trim() });
     if (!candidate) {
-      console.log('Candidate not found:', email);
+      // Removed console debug line for security;
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
-    console.log('Candidate found:', candidate.name, 'Status:', candidate.status);
-    console.log('Password hash exists:', !!candidate.password);
+    // Removed console debug line for security;
+    // Removed console debug line for security;
     
-    console.log('Candidate registration method:', candidate.registrationMethod);
-    console.log('Stored password length:', candidate.password ? candidate.password.length : 0);
-    console.log('Login password length:', password ? password.length : 0);
-    console.log('Password comparison type:', candidate.registrationMethod === 'placement' ? 'plain text' : 'bcrypt');
+    // Removed console debug line for security;
+    // Removed console debug line for security;
+    // Removed console debug line for security;
+    // Removed console debug line for security;
     const passwordMatch = await candidate.comparePassword(password);
-    console.log('Password match result:', passwordMatch);
+    // Removed console debug line for security;
     
     if (!passwordMatch) {
-      console.log('Password mismatch for:', email);
+      // Removed console debug line for security;
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
     
-    console.log('Login successful for:', email);
+    // Removed console debug line for security;
 
     if (candidate.status !== 'active') {
       return res.status(401).json({ success: false, message: 'Account is inactive' });
@@ -123,9 +123,9 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    console.log('Request body:', req.body);
-    console.log('Request file:', req.file);
-    console.log('User ID:', req.user._id);
+    // Removed console debug line for security;
+    // Removed console debug line for security;
+    // Removed console debug line for security;
     
     const { name, phone, email, middleName, lastName, ...profileData } = req.body;
     
@@ -159,7 +159,7 @@ exports.updateProfile = async (req, res) => {
         ...(phone && { phone }),
         ...(email && { email })
       }, { new: true });
-      console.log('Updated candidate:', updatedCandidate);
+      // Removed console debug line for security;
     }
     
     // Prepare profile update data
@@ -207,7 +207,7 @@ exports.updateProfile = async (req, res) => {
       console.error('Profile completion notification error:', notifError);
     }
     
-    console.log('Updated profile:', profile);
+    // Removed console debug line for security;
     res.json({ success: true, profile });
   } catch (error) {
     console.error('Profile update error:', error);
@@ -361,7 +361,7 @@ exports.applyForJob = async (req, res) => {
 
     // Get full candidate data to check credits
     const candidate = await Candidate.findById(req.user._id);
-    console.log('Candidate applying for job:', candidate.email, 'Credits:', candidate.credits);
+    // Removed console debug line for security;
     
     if (!candidate) {
       return res.status(404).json({ success: false, message: 'Candidate not found' });
@@ -369,7 +369,7 @@ exports.applyForJob = async (req, res) => {
 
     // Check if candidate has credits (only for placement candidates)
     if (candidate.registrationMethod === 'placement' && candidate.credits <= 0) {
-      console.log('Application blocked - insufficient credits for placement candidate');
+      // Removed console debug line for security;
       return res.status(400).json({ success: false, message: 'Insufficient credits to apply for jobs' });
     }
     
@@ -390,18 +390,18 @@ exports.applyForJob = async (req, res) => {
 
     // Deduct credit only for placement candidates
     if (candidate.registrationMethod === 'placement') {
-      console.log('About to deduct credit. Current credits:', candidate.credits);
+      // Removed console debug line for security;
       if (candidate.credits > 0) {
         const updateResult = await Candidate.findByIdAndUpdate(req.user._id, {
           $inc: { credits: -1 }
         });
-        console.log(`Successfully deducted 1 credit from candidate ${candidate.email}. Previous: ${candidate.credits}, New: ${candidate.credits - 1}`);
-        console.log('Update result:', updateResult ? 'Success' : 'Failed');
+        // Removed console debug line for security;
+        // Removed console debug line for security;
       } else {
-        console.log('No credits to deduct');
+        // Removed console debug line for security
       }
     } else {
-      console.log('Signup candidate - no credit deduction needed');
+      // Removed console debug line for security
     }
 
     // Update job application count
@@ -503,11 +503,11 @@ exports.getAppliedJobs = async (req, res) => {
       .populate('employerId', 'companyName')
       .sort({ createdAt: -1 });
 
-    console.log('Applications found:', applications.length);
+    // Removed console debug line for security;
     if (applications.length > 0) {
-      console.log('First application jobId:', applications[0].jobId);
-      console.log('Job interviewRoundTypes:', applications[0].jobId?.interviewRoundTypes);
-      console.log('Interview rounds data:', applications[0].interviewRounds);
+      // Removed console debug line for security;
+      // Removed console debug line for security;
+      // Removed console debug line for security;
     }
 
     res.json({ success: true, applications });
@@ -632,7 +632,7 @@ exports.changePassword = async (req, res) => {
 
     // For placement candidates, change registration method to 'signup' so password gets hashed
     if (candidate.registrationMethod === 'placement') {
-      console.log('🔄 Converting placement candidate to signup method for password hashing');
+      // Removed console debug line for security;
       candidate.registrationMethod = 'signup';
     }
     
@@ -648,28 +648,28 @@ exports.changePassword = async (req, res) => {
 exports.updatePasswordReset = async (req, res) => {
   try {
     const { email, newPassword } = req.body;
-    console.log('🔄 Password reset request for:', email);
-    console.log('🔑 New password provided:', !!newPassword, 'Length:', newPassword?.length);
+    // Removed console debug line for security;
+    // Removed console debug line for security;
     
     if (!email || !newPassword) {
-      console.log('❌ Missing required fields');
+      // Removed console debug line for security;
       return res.status(400).json({ success: false, message: 'Email and new password are required' });
     }
 
     const candidate = await Candidate.findOne({ email });
     if (!candidate) {
-      console.log('❌ Candidate not found for email:', email);
+      // Removed console debug line for security;
       return res.status(404).json({ success: false, message: 'Candidate not found' });
     }
 
-    console.log('✅ Found candidate:', candidate.email);
-    console.log('📝 Registration method:', candidate.registrationMethod);
-    console.log('🔐 Old password length:', candidate.password ? candidate.password.length : 0);
-    console.log('🔐 Old password is hashed:', candidate.password ? candidate.password.startsWith('$2') : false);
+    // Removed console debug line for security;
+    // Removed console debug line for security;
+    // Removed console debug line for security;
+    // Removed console debug line for security;
     
     // For placement candidates, change to signup method so password gets hashed
     if (candidate.registrationMethod === 'placement') {
-      console.log('🔄 Converting placement candidate to signup method for password hashing');
+      // Removed console debug line for security;
       candidate.registrationMethod = 'signup';
     }
     
@@ -677,10 +677,10 @@ exports.updatePasswordReset = async (req, res) => {
     candidate.markModified('password');
     await candidate.save();
     
-    console.log('✅ Password updated successfully');
-    console.log('🔑 New password length:', candidate.password ? candidate.password.length : 0);
-    console.log('🔑 New password is hashed:', candidate.password ? candidate.password.startsWith('$2') : false);
-    console.log('💾 Database save completed');
+    // Removed console debug line for security;
+    // Removed console debug line for security;
+    // Removed console debug line for security;
+    // Removed console debug line for security;
 
     res.json({ success: true, message: 'Password updated successfully' });
   } catch (error) {

@@ -48,7 +48,7 @@ app.use(express.json({
   verify: (req, res, buf, encoding) => {
     // Log request size for debugging
     if (buf && buf.length > 10 * 1024 * 1024) { // 10MB
-      console.log(`Large request detected: ${buf.length} bytes to ${req.path}`);
+      // Removed console debug line for security;
     }
   }
 }));
