@@ -31,7 +31,7 @@ function AdminSupportTickets() {
             const token = localStorage.getItem('adminToken');
             const queryParams = new URLSearchParams(filters).toString();
             
-            const response = await fetch(`/api/admin/support-tickets?${queryParams}`, {
+            const response = await fetch(`http://localhost:5000/api/admin/support-tickets?${queryParams}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ function AdminSupportTickets() {
         if (!ticket.isRead) {
             try {
                 const token = localStorage.getItem('adminToken');
-                await fetch(`/api/admin/support-tickets/${ticket._id}`, {
+                await fetch(`http://localhost:5000/api/admin/support-tickets/${ticket._id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ function AdminSupportTickets() {
     const handleUpdateTicket = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`/api/admin/support-tickets/${selectedTicket._id}/status`, {
+            const response = await fetch(`http://localhost:5000/api/admin/support-tickets/${selectedTicket._id}/status`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -282,8 +282,8 @@ function AdminSupportTickets() {
                                                     </td>
                                                     <td onClick={() => handleTicketClick(ticket)}>
                                                         <div>
-                                                            <strong>{ticket.name}</strong><br/>
-                                                            <small className="text-muted">{ticket.email}</small>
+                                                            <strong>{ticket.name || 'N/A'}</strong><br/>
+                                                            <small className="text-muted">{ticket.email || ticket.userEmail || ticket.contactEmail || 'No email provided'}</small>
                                                         </div>
                                                     </td>
                                                     <td onClick={() => handleTicketClick(ticket)}>
@@ -339,7 +339,7 @@ function AdminSupportTickets() {
                             </Row>
                             <Row className="mb-3">
                                 <Col md={6}>
-                                    <strong>User:</strong> {selectedTicket.name} ({selectedTicket.email})
+                                    <strong>User:</strong> {selectedTicket.name || 'N/A'} ({selectedTicket.email || selectedTicket.userEmail || selectedTicket.contactEmail || 'No email provided'})
                                 </Col>
                                 <Col md={6}>
                                     <strong>User Type:</strong> {getUserTypeBadge(selectedTicket.userType)}
@@ -369,7 +369,7 @@ function AdminSupportTickets() {
                                             {selectedTicket.attachments.map((attachment, index) => (
                                                 <li key={index}>
                                                     <a 
-                                                        href={`/api/admin/support-tickets/${selectedTicket._id}/attachments/${index}`}
+                                                        href={`http://localhost:5000/api/admin/support-tickets/${selectedTicket._id}/attachments/${index}`}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                     >
