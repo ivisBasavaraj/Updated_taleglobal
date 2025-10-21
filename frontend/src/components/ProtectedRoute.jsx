@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     const subAdminData = localStorage.getItem('subAdminData');
 
     // Check if user is authenticated
-    const isAuthenticated = adminToken || subAdminToken;
+    const isAuthenticated = (adminToken && adminData) || (subAdminToken && subAdminData);
     
     if (!isAuthenticated) {
         return <Navigate to="/admin-login" replace />;
