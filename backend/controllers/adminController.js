@@ -1887,12 +1887,42 @@ exports.getSupportTickets = async (req, res) => {
       .limit(limit * 1)
       .skip((page - 1) * limit);
 
+    // Enhance tickets with actual user data if userId exists
+    const enhancedTickets = await Promise.all(tickets.map(async (ticket) => {
+      const ticketObj = ticket.toObject();
+      
+      // If userId exists and is populated, use the actual user data
+      if (ticket.userId && ticket.userId.email) {
+        ticketObj.actualUserEmail = ticket.userId.email;
+        ticketObj.actualUserName = ticket.userId.name || ticket.userId.companyName;
+      } else if (ticket.userType !== 'guest') {
+        // Try to find user by email if userId is missing
+        try {
+          let user = null;
+          if (ticket.userType === 'employer') {
+            user = await require('../models/Employer').findOne({ email: ticket.email }).select('name email companyName');
+          } else if (ticket.userType === 'candidate') {
+            user = await require('../models/Candidate').findOne({ email: ticket.email }).select('name email');
+          }
+          
+          if (user) {
+            ticketObj.actualUserEmail = user.email;
+            ticketObj.actualUserName = user.name || user.companyName;
+          }
+        } catch (lookupError) {
+          console.error('Error looking up user:', lookupError);
+        }
+      }
+      
+      return ticketObj;
+    }));
+
     const totalTickets = await Support.countDocuments(query);
     const unreadCount = await Support.countDocuments({ ...query, isRead: false });
 
     res.json({ 
       success: true, 
-      tickets,
+      tickets: enhancedTickets,
       totalTickets,
       unreadCount,
       currentPage: parseInt(page),

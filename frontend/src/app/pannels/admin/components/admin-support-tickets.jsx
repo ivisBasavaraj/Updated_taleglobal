@@ -282,8 +282,8 @@ function AdminSupportTickets() {
                                                     </td>
                                                     <td onClick={() => handleTicketClick(ticket)}>
                                                         <div>
-                                                            <strong>{ticket.name || 'N/A'}</strong><br/>
-                                                            <small className="text-muted">{ticket.email || ticket.userEmail || ticket.contactEmail || 'No email provided'}</small>
+                                                            <strong>{ticket.actualUserName || ticket.name || 'N/A'}</strong><br/>
+                                                            <small className="text-muted">{ticket.actualUserEmail || ticket.email || 'No email provided'}</small>
                                                         </div>
                                                     </td>
                                                     <td onClick={() => handleTicketClick(ticket)}>
@@ -339,7 +339,7 @@ function AdminSupportTickets() {
                             </Row>
                             <Row className="mb-3">
                                 <Col md={6}>
-                                    <strong>User:</strong> {selectedTicket.name || 'N/A'} ({selectedTicket.email || selectedTicket.userEmail || selectedTicket.contactEmail || 'No email provided'})
+                                    <strong>User:</strong> {selectedTicket.actualUserName || selectedTicket.name || 'N/A'} ({selectedTicket.actualUserEmail || selectedTicket.email || 'No email provided'})
                                 </Col>
                                 <Col md={6}>
                                     <strong>User Type:</strong> {getUserTypeBadge(selectedTicket.userType)}
