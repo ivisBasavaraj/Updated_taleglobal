@@ -51,7 +51,11 @@ function AdminRoutes() {
 				<Route path={admin.PLACEMENT_REJECT} element={<AdminPlacementOfficersRejected />} />
 				<Route path={admin.PLACEMENT_DETAILS} element={<PlacementDetails />} />
 				<Route path={admin.SUPPORT_TICKETS} element={<AdminSupportTickets />} />
-				<Route path={admin.SUB_ADMIN} element={<AdminSubAdmin />} />
+				<Route path={admin.SUB_ADMIN} element={
+					<ProtectedRoute allowedRoles={['admin']}>
+						<AdminSubAdmin />
+					</ProtectedRoute>
+				} />
 			</Routes>
 		);
 }

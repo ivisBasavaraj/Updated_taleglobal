@@ -199,35 +199,10 @@ function AdminSubAdmin() {
     };
 
     useEffect(() => {
-        // Check if user is main admin
-        const adminToken = localStorage.getItem('adminToken');
-        const subAdminToken = localStorage.getItem('subAdminToken');
-        const adminData = localStorage.getItem('adminData');
-        const subAdminData = localStorage.getItem('subAdminData');
-        
-        if (subAdminToken && subAdminData) {
-            setIsMainAdmin(false);
-            setError('Only main administrators can manage sub-admins.');
-        } else if (adminToken && adminData) {
-            setIsMainAdmin(true);
-            fetchSubAdmins();
-        } else {
-            setError('Please login as an administrator.');
-        }
+        fetchSubAdmins();
     }, []);
 
-    if (!isMainAdmin) {
-        return (
-            <div className="content-admin-main">
-                <div className="wt-admin-right-page-header">
-                    <h2>Sub Admin Management</h2>
-                </div>
-                <div className="alert alert-warning">
-                    {error}
-                </div>
-            </div>
-        );
-    }
+
 
     return (
         <div className="content-admin-main" style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', padding: '20px' }}>
