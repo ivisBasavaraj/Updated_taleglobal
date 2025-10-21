@@ -268,7 +268,8 @@
 }
 
 .location-select {
-  padding-left: 2.5rem;
+  padding-left: 3rem;
+  box-sizing: border-box;
 }
 
 .location-suggestions {
@@ -327,8 +328,9 @@
 
 .categories-scroll {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1.5rem;
-  overflow-x: auto;
   padding: 1rem 0;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -355,6 +357,8 @@
   transition: all 0.3s ease;
   cursor: pointer;
   min-width: 140px; /* smaller */
+  max-width: 220px;
+  flex: 1 1 140px;
   text-align: center;
 }
 

@@ -301,14 +301,10 @@ const HeroBody = ({ onSearch }) => {
 
 
         {/* Job Categories */}
-        <div className="categories-container" style={{overflow: 'hidden', width: '100%'}}>
-          <div className="categories-scroll" style={{
-            display: 'flex',
-            animation: 'scroll 15s linear infinite',
-            width: 'calc(200% + 20px)'
-          }}>
-            {[...jobCategories, ...jobCategories].map((category, index) => (
-              <div key={index} className="category-card" style={{minWidth: '140px', flex: 'none'}}>
+        <div className="categories-container">
+          <div className="categories-scroll">
+            {jobCategories.map((category, index) => (
+              <div key={index} className="category-card">
                 <div className="category-icon small" style={{
                   backgroundColor: 'rgba(255, 156, 0, 0.1)',
                   border: '1px solid rgba(255, 156, 0, 0.3)',
