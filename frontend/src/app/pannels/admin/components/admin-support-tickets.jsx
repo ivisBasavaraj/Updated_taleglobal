@@ -157,40 +157,40 @@ function AdminSupportTickets() {
 
                 {/* Stats Cards */}
                 <Row className="mb-4">
-                    <Col md={2} className="mb-3">
-                        <Card className="stats-card">
+                    <Col xl={2} lg={4} md={6} className="mb-3">
+                        <Card className="stats-card h-100">
                             <Card.Body>
                                 <span className="stats-number text-primary">{stats.total}</span>
                                 <div className="stats-label">Total Tickets</div>
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col md={2} className="mb-3">
-                        <Card className="stats-card">
+                    <Col xl={2} lg={4} md={6} className="mb-3">
+                        <Card className="stats-card h-100">
                             <Card.Body>
                                 <span className="stats-number text-danger">{stats.unread}</span>
                                 <div className="stats-label">Unread</div>
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col md={2} className="mb-3">
-                        <Card className="stats-card">
+                    <Col xl={2} lg={4} md={6} className="mb-3">
+                        <Card className="stats-card h-100">
                             <Card.Body>
                                 <span className="stats-number text-success">{stats.new}</span>
                                 <div className="stats-label">New</div>
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col md={2} className="mb-3">
-                        <Card className="stats-card">
+                    <Col xl={2} lg={4} md={6} className="mb-3">
+                        <Card className="stats-card h-100">
                             <Card.Body>
                                 <span className="stats-number text-warning">{stats.inProgress}</span>
                                 <div className="stats-label">In Progress</div>
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col md={2} className="mb-3">
-                        <Card className="stats-card">
+                    <Col xl={2} lg={4} md={6} className="mb-3">
+                        <Card className="stats-card h-100">
                             <Card.Body>
                                 <span className="stats-number text-info">{stats.resolved}</span>
                                 <div className="stats-label">Resolved</div>
