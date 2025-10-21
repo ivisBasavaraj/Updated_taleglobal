@@ -538,9 +538,21 @@
   }
 }
 
-<<<<<<< HEAD
+
 @media (max-width: 576px) {
-=======
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .search-container {
+    padding: 1rem;
+  }
+}
+
 /* Small Mobile Portrait (576px - 767px) */
 @media (max-width: 767px) {
   :root { --navbar-height: 64px; }
@@ -804,7 +816,7 @@
 
 /* Old 480px breakpoint - kept for compatibility */
 @media (max-width: 480px) {
->>>>>>> 27f07d3 (Mobile Responsive)
+
   .hero-content {
     padding: 2rem 1rem;
   }
