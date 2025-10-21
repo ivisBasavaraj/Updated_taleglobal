@@ -121,8 +121,16 @@ function EmpCompanyProfilePage() {
             case 'officialMobile':
             case 'contactMobile':
             case 'alternateContact':
-                if (value && !/^[+]?[0-9\s\-\(\)]{10,15}$/.test(value.replace(/\s/g, ''))) {
-                    newErrors[field] = 'Please enter a valid phone number';
+                if (value) {
+                    const cleanNumber = value.replace(/[\s\-\(\)]/g, '');
+                    const isValidWithCountryCode = cleanNumber.startsWith('+91') && /^\+91[6-9]\d{9}$/.test(cleanNumber);
+                    const isValidWithoutCountryCode = /^[6-9]\d{9}$/.test(cleanNumber);
+                    
+                    if (!isValidWithCountryCode && !isValidWithoutCountryCode) {
+                        newErrors[field] = 'Please enter a valid phone number with +91 or 10-digit Indian mobile number';
+                    } else {
+                        delete newErrors[field];
+                    }
                 } else {
                     delete newErrors[field];
                 }
@@ -179,8 +187,14 @@ function EmpCompanyProfilePage() {
         
         if (!formData.phone?.trim()) {
             newErrors.phone = 'Phone number is required';
-        } else if (!/^[6-9]\d{9}$/.test(formData.phone.replace(/\s/g, ''))) {
-            newErrors.phone = 'Phone number must be 10 digits starting with 6-9';
+        } else {
+            const cleanNumber = formData.phone.replace(/[\s\-\(\)]/g, '');
+            const isValidWithCountryCode = cleanNumber.startsWith('+91') && /^\+91[6-9]\d{9}$/.test(cleanNumber);
+            const isValidWithoutCountryCode = /^[6-9]\d{9}$/.test(cleanNumber);
+            
+            if (!isValidWithCountryCode && !isValidWithoutCountryCode) {
+                newErrors.phone = 'Phone number must be valid Indian mobile number with +91 or 10 digits starting with 6-9';
+            }
         }
         
         if (!formData.email?.trim()) {
@@ -249,8 +263,14 @@ function EmpCompanyProfilePage() {
         
         if (!formData.contactMobile?.trim()) {
             newErrors.contactMobile = 'Mobile number is required';
-        } else if (!/^[6-9]\d{9}$/.test(formData.contactMobile.replace(/\s/g, ''))) {
-            newErrors.contactMobile = 'Mobile number must be 10 digits starting with 6-9';
+        } else {
+            const cleanNumber = formData.contactMobile.replace(/[\s\-\(\)]/g, '');
+            const isValidWithCountryCode = cleanNumber.startsWith('+91') && /^\+91[6-9]\d{9}$/.test(cleanNumber);
+            const isValidWithoutCountryCode = /^[6-9]\d{9}$/.test(cleanNumber);
+            
+            if (!isValidWithCountryCode && !isValidWithoutCountryCode) {
+                newErrors.contactMobile = 'Mobile number must be valid Indian mobile number with +91 or 10 digits starting with 6-9';
+            }
         }
         
         if (formData.alternateContact && !/^[+]?[0-9\s\-\(\)]{10,15}$/.test(formData.alternateContact.replace(/\s/g, ''))) {
@@ -873,13 +893,16 @@ function EmpCompanyProfilePage() {
                             <div className="col-xl-4 col-lg-12 col-md-12">
                                 <div className="form-group">
                                     <label className="required-field"><Phone size={16} className="me-2" /> Phone</label>
-                                    <input
-                                        className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-                                        type="text"
-                                        value={formData.phone}
-                                        onChange={(e) => handleInputChange('phone', e.target.value)}
-                                        placeholder="(+91) 9087654321"
-                                    />
+                                    <div className="input-group">
+                                        <span className="input-group-text" style={{backgroundColor: '#fd7e14', color: 'white', border: '1px solid #fd7e14'}}>+91</span>
+                                        <input
+                                            className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+                                            type="text"
+                                            value={formData.phone}
+                                            onChange={(e) => handleInputChange('phone', e.target.value)}
+                                            placeholder="9087654321"
+                                        />
+                                    </div>
                                     {errors.phone && (
                                         <div className="text-danger mt-1" style={{fontSize: '12px'}}>
                                             {errors.phone}
@@ -1055,13 +1078,16 @@ function EmpCompanyProfilePage() {
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label><Phone size={16} className="me-2" /> Official Mobile Number</label>
-                                    <input
-                                        className={`form-control ${errors.officialMobile ? 'is-invalid' : ''}`}
-                                        type="text"
-                                        value={formData.officialMobile}
-                                        onChange={(e) => handleInputChange('officialMobile', e.target.value)}
-                                        placeholder="Enter mobile number"
-                                    />
+                                    <div className="input-group">
+                                        <span className="input-group-text" style={{backgroundColor: '#fd7e14', color: 'white', border: '1px solid #fd7e14'}}>+91</span>
+                                        <input
+                                            className={`form-control ${errors.officialMobile ? 'is-invalid' : ''}`}
+                                            type="text"
+                                            value={formData.officialMobile}
+                                            onChange={(e) => handleInputChange('officialMobile', e.target.value)}
+                                            placeholder="9876543210"
+                                        />
+                                    </div>
                                     {errors.officialMobile && (
                                         <div className="text-danger mt-1" style={{fontSize: '12px'}}>
                                             {errors.officialMobile}
@@ -1455,13 +1481,16 @@ function EmpCompanyProfilePage() {
                             <div className="col-lg-4 col-md-6">
                                 <div className="form-group">
                                     <label className="required-field"><Phone size={16} className="me-2" /> Mobile Number</label>
-                                    <input
-                                        className={`form-control ${errors.contactMobile ? 'is-invalid' : ''}`}
-                                        type="tel"
-                                        value={formData.contactMobile}
-                                        onChange={(e) => handleInputChange('contactMobile', e.target.value)}
-                                        placeholder="Enter mobile number"
-                                    />
+                                    <div className="input-group">
+                                        <span className="input-group-text" style={{backgroundColor: '#fd7e14', color: 'white', border: '1px solid #fd7e14'}}>+91</span>
+                                        <input
+                                            className={`form-control ${errors.contactMobile ? 'is-invalid' : ''}`}
+                                            type="tel"
+                                            value={formData.contactMobile}
+                                            onChange={(e) => handleInputChange('contactMobile', e.target.value)}
+                                            placeholder="9876543210"
+                                        />
+                                    </div>
                                     {errors.contactMobile && (
                                         <div className="text-danger mt-1" style={{fontSize: '12px'}}>
                                             {errors.contactMobile}
@@ -1500,13 +1529,16 @@ function EmpCompanyProfilePage() {
                             <div className="col-lg-4 col-md-6">
                                 <div className="form-group">
                                     <label><Phone size={16} className="me-2" /> Alternate Contact (Optional)</label>
-                                    <input
-                                        className={`form-control ${errors.alternateContact ? 'is-invalid' : ''}`}
-                                        type="tel"
-                                        value={formData.alternateContact}
-                                        onChange={(e) => handleInputChange('alternateContact', e.target.value)}
-                                        placeholder="Enter alternate contact"
-                                    />
+                                    <div className="input-group">
+                                        <span className="input-group-text" style={{backgroundColor: '#fd7e14', color: 'white', border: '1px solid #fd7e14'}}>+91</span>
+                                        <input
+                                            className={`form-control ${errors.alternateContact ? 'is-invalid' : ''}`}
+                                            type="tel"
+                                            value={formData.alternateContact}
+                                            onChange={(e) => handleInputChange('alternateContact', e.target.value)}
+                                            placeholder="9876543210"
+                                        />
+                                    </div>
                                     {errors.alternateContact && (
                                         <div className="text-danger mt-1" style={{fontSize: '12px'}}>
                                             {errors.alternateContact}

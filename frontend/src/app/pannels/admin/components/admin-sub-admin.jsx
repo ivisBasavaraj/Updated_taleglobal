@@ -200,13 +200,15 @@ function AdminSubAdmin() {
 
     useEffect(() => {
         // Check if user is main admin
+        const adminToken = localStorage.getItem('adminToken');
+        const subAdminToken = localStorage.getItem('subAdminToken');
         const adminData = localStorage.getItem('adminData');
         const subAdminData = localStorage.getItem('subAdminData');
         
-        if (subAdminData) {
+        if (subAdminToken && subAdminData) {
             setIsMainAdmin(false);
             setError('Only main administrators can manage sub-admins.');
-        } else if (adminData) {
+        } else if (adminToken && adminData) {
             setIsMainAdmin(true);
             fetchSubAdmins();
         } else {

@@ -19,58 +19,12 @@ function CanMyResumePage() {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [modalsInitialized, setModalsInitialized] = useState(false);
     
     useEffect(()=>{
         fetchProfile();
     }, [])
+    
 
-    // Initialize modals when component is ready
-    const initializeModals = useCallback(() => {
-        if (!modalsInitialized && !loading) {
-            const timer = setTimeout(() => {
-                try {
-                    initializeAllModals();
-                    setModalsInitialized(true);
-                    console.log('Modals initialized successfully');
-                } catch (error) {
-                    console.error('Failed to initialize modals:', error);
-                }
-            }, 200);
-            
-            return () => clearTimeout(timer);
-        }
-    }, [loading, modalsInitialized]);
-    
-    useEffect(() => {
-        initializeModals();
-    }, [initializeModals]);
-    
-    // Clean up modals on unmount
-    useEffect(() => {
-        return () => {
-            try {
-                // Clean up any open modals when component unmounts
-                const openModals = document.querySelectorAll('.modal.show');
-                openModals.forEach(modal => {
-                    if (window.bootstrap && window.bootstrap.Modal) {
-                        const modalInstance = window.bootstrap.Modal.getInstance(modal);
-                        if (modalInstance) modalInstance.hide();
-                    }
-                });
-                
-                // Clean up backdrops
-                const backdrops = document.querySelectorAll('.modal-backdrop');
-                backdrops.forEach(backdrop => backdrop.remove());
-                
-                // Remove modal-open class from body
-                document.body.classList.remove('modal-open');
-                document.body.style.paddingRight = '';
-            } catch (error) {
-                console.error('Error during modal cleanup:', error);
-            }
-        };
-    }, []);
 
     const fetchProfile = useCallback(async () => {
         try {
@@ -94,12 +48,7 @@ function CanMyResumePage() {
 
     const handleProfileUpdate = useCallback(() => {
         fetchProfile();
-        // Re-initialize modals after profile update
-        setModalsInitialized(false);
-        setTimeout(() => {
-            initializeModals();
-        }, 100);
-    }, [fetchProfile, initializeModals]);
+    }, [fetchProfile]);
 
     return (
 			<>
@@ -162,6 +111,10 @@ function CanMyResumePage() {
 
 								<div className="panel panel-default mb-4">
 									<SectionCanEducation profile={profile} />
+								</div>
+
+								<div className="panel panel-default mb-4">
+									<SectionCanEmployment profile={profile} onUpdate={handleProfileUpdate} />
 								</div>
 
 								<div className="panel panel-default mb-4">

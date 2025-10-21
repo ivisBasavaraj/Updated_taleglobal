@@ -86,7 +86,7 @@ const Header1 = memo(function Header1({ _config }) {
                                     <li className="nav-item">
                                         <NavLink
                                             to="/"
-                                            style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}
+                                            className="nav-link-custom"
                                             onClick={closeMenu}
                                         >
                                             Home
@@ -95,7 +95,7 @@ const Header1 = memo(function Header1({ _config }) {
                                     <li className="nav-item">
                                         <NavLink
                                             to="/job-grid"
-                                            style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}
+                                            className="nav-link-custom"
                                             onClick={closeMenu}
                                         >
                                             Jobs
@@ -104,7 +104,7 @@ const Header1 = memo(function Header1({ _config }) {
                                     <li className="nav-item">
                                         <NavLink
                                             to="/emp-grid"
-                                            style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}
+                                            className="nav-link-custom"
                                             onClick={closeMenu}
                                         >
                                             Employers
@@ -113,7 +113,7 @@ const Header1 = memo(function Header1({ _config }) {
                                     <li className="nav-item">
                                         <NavLink
                                             to="/contact-us"
-                                            style={{color: '#333', textDecoration: 'none', padding: '10px 15px'}}
+                                            className="nav-link-custom"
                                             onClick={closeMenu}
                                         >
                                             Contact Us

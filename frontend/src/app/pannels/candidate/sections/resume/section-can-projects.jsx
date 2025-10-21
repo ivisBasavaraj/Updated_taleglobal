@@ -13,8 +13,8 @@ function SectionCanProjects() {
         <>
             <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
                 <h4 className="panel-tittle m-a0">Project</h4>
-                <a data-bs-toggle="modal" href="#Pro_ject" role="button" title="Edit" className="site-text-primary">
-                    <span className="fa fa-edit" />
+                <a data-bs-toggle="modal" href="#Pro_ject" role="button" title="Edit" className="site-text-primary btn-link" style={{textDecoration: 'none', cursor: 'pointer', transition: 'none', outline: 'none'}}>
+                    <span className="fa fa-edit" style={{transition: 'none'}} />
                 </a>
             </div>
             <div className="panel-body wt-panel-body p-a20 ">

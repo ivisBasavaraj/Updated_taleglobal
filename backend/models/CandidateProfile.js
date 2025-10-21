@@ -23,6 +23,7 @@ const candidateProfileSchema = new mongoose.Schema({
   collegeName: { type: String }, // College name from Excel data
   education: [{
     degreeName: String,
+    specialization: String,
     collegeName: String,
     passYear: String,
     scoreType: { type: String, enum: ['percentage', 'cgpa', 'sgpa', 'grade'], default: 'percentage' },
@@ -41,6 +42,7 @@ const candidateProfileSchema = new mongoose.Schema({
     description: String,
     current: { type: Boolean, default: false }
   }],
+  totalExperience: { type: String }, // Total years of experience
   skills: [String],
   expectedSalary: { type: Number },
   jobPreferences: {

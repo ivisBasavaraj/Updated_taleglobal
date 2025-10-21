@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { api } from "../../../../../utils/api";
 
 function SectionCanEmployment({ profile }) {
-    const modalRef = useRef(null);
+    const modalId = 'EmploymentModal';
     const [formData, setFormData] = useState({
         designation: '',
         organization: '',
@@ -11,17 +11,20 @@ function SectionCanEmployment({ profile }) {
         endDate: '',
         description: ''
     });
+    const [totalExperience, setTotalExperience] = useState('');
     const [loading, setLoading] = useState(false);
     const [employment, setEmployment] = useState([]);
 
     useEffect(() => {
-        if (window.bootstrap && modalRef.current) {
-            new window.bootstrap.Modal(modalRef.current);
-        }
         if (profile?.employment) {
             setEmployment(profile.employment);
         }
+        if (profile?.totalExperience) {
+            setTotalExperience(profile.totalExperience);
+        }
     }, [profile]);
+
+
 
     const handleInputChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
@@ -36,14 +39,16 @@ function SectionCanEmployment({ profile }) {
         setLoading(true);
         try {
             const newEmployment = [...employment, formData];
-            const response = await api.updateCandidateProfile({ employment: newEmployment });
+            const updateData = { employment: newEmployment };
+            if (totalExperience) {
+                updateData.totalExperience = totalExperience;
+            }
+            const response = await api.updateCandidateProfile(updateData);
             if (response.success) {
                 setEmployment(newEmployment);
                 setFormData({ designation: '', organization: '', isCurrent: false, startDate: '', endDate: '', description: '' });
                 alert('Employment added successfully!');
-                window.dispatchEvent(new CustomEvent('profileUpdated'));
-                const modal = window.bootstrap.Modal.getInstance(modalRef.current);
-                if (modal) modal.hide();
+                document.querySelector('[data-bs-dismiss="modal"]').click();
             }
         } catch (error) {
             alert('Failed to save employment');
@@ -53,14 +58,51 @@ function SectionCanEmployment({ profile }) {
     };
     return (
         <>
-            <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+            <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn">
                 <h4 className="panel-tittle m-a0">Employment</h4>
-                <a data-bs-toggle="modal" href="#Employment" role="button" title="Edit" className="site-text-primary">
-                    <span className="fa fa-edit" />
-                </a>
+                <button 
+                    type="button" 
+                    data-bs-toggle="modal" 
+                    data-bs-target={`#${modalId}`}
+                    title="Edit" 
+                    className="btn btn-link site-text-primary p-0 border-0"
+                    style={{
+                        background: 'none', 
+                        textDecoration: 'none', 
+                        cursor: 'pointer', 
+                        outline: 'none', 
+                        transition: 'none',
+                        transform: 'none',
+                        animation: 'none',
+                        willChange: 'auto',
+                        backfaceVisibility: 'hidden',
+                        WebkitBackfaceVisibility: 'hidden'
+                    }}
+                >
+                    <span className="fa fa-edit" style={{
+                        transition: 'none',
+                        transform: 'none',
+                        animation: 'none'
+                    }} />
+                </button>
             </div>
-            <div className="panel-body wt-panel-body p-a20 ">
-                <div className="twm-panel-inner">
+            <div className="panel-body wt-panel-body p-a20" style={{
+                transition: 'none', 
+                animation: 'none',
+                transform: 'none',
+                willChange: 'auto'
+            }}>
+                <div className="twm-panel-inner" style={{
+                    transition: 'none', 
+                    transform: 'none',
+                    animation: 'none',
+                    willChange: 'auto'
+                }}>
+                    {totalExperience && (
+                        <div className="mb-3" style={{background: '#f8f9fa', padding: '12px', borderRadius: '6px', border: '1px solid #e9ecef'}}>
+                            <p><b>Total Experience: {totalExperience}</b></p>
+                        </div>
+                    )}
                     {employment.length > 0 ? (
                         employment.map((emp, index) => (
                             <div key={index} className="mb-3">
@@ -76,16 +118,32 @@ function SectionCanEmployment({ profile }) {
                 </div>
             </div>
             {/*Employment */}
-            <div className="modal fade twm-saved-jobs-view" id="Employment" tabIndex={-1} ref={modalRef}>
+            <div className="modal fade twm-saved-jobs-view" id={modalId} tabIndex={-1} style={{display: 'none'}}>
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
-                        <form>
+                        <form onSubmit={(e) => e.preventDefault()}>
                             <div className="modal-header">
                                 <h2 className="modal-title">Add Employment</h2>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                             </div>
                             <div className="modal-body">
                                 <div className="row">
+                                    <div className="col-xl-12 col-lg-12">
+                                        <div className="form-group">
+                                            <label>Total Experience</label>
+                                            <div className="ls-inputicon-box">
+                                                <input 
+                                                    className="form-control" 
+                                                    type="text" 
+                                                    placeholder="e.g., 2 years, 6 months" 
+                                                    value={totalExperience}
+                                                    onChange={(e) => setTotalExperience(e.target.value)}
+                                                    style={{paddingLeft: '40px'}}
+                                                />
+                                                <i className="fs-input-icon fa fa-clock" />
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="col-xl-12 col-lg-12">
                                         <div className="form-group">
                                             <label>Your Designation</label>
@@ -96,6 +154,7 @@ function SectionCanEmployment({ profile }) {
                                                     placeholder="Enter Your Designation" 
                                                     value={formData.designation}
                                                     onChange={(e) => handleInputChange('designation', e.target.value)}
+                                                    style={{paddingLeft: '40px'}}
                                                 />
                                                 <i className="fs-input-icon fa fa-address-card" />
                                             </div>
@@ -111,6 +170,7 @@ function SectionCanEmployment({ profile }) {
                                                     placeholder="Enter Your Organization" 
                                                     value={formData.organization}
                                                     onChange={(e) => handleInputChange('organization', e.target.value)}
+                                                    style={{paddingLeft: '40px'}}
                                                 />
                                                 <i className="fs-input-icon fa fa-building" />
                                             </div>
@@ -159,6 +219,7 @@ function SectionCanEmployment({ profile }) {
                                                     type="date" 
                                                     value={formData.startDate}
                                                     onChange={(e) => handleInputChange('startDate', e.target.value)}
+                                                    style={{paddingLeft: '40px'}}
                                                 />
                                                 <i className="fs-input-icon far fa-calendar" />
                                             </div>
@@ -175,6 +236,7 @@ function SectionCanEmployment({ profile }) {
                                                     value={formData.endDate}
                                                     onChange={(e) => handleInputChange('endDate', e.target.value)}
                                                     disabled={formData.isCurrent}
+                                                    style={{paddingLeft: '40px'}}
                                                 />
                                                 <i className="fs-input-icon far fa-calendar" />
                                             </div>
@@ -199,7 +261,11 @@ function SectionCanEmployment({ profile }) {
                                 <button 
                                     type="button" 
                                     className="site-button" 
-                                    onClick={handleSave}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        handleSave();
+                                    }}
                                     disabled={loading}
                                 >
                                     {loading ? 'Saving...' : 'Save'}
@@ -212,4 +278,4 @@ function SectionCanEmployment({ profile }) {
         </>
     )
 }
-export default SectionCanEmployment;
+export default memo(SectionCanEmployment);

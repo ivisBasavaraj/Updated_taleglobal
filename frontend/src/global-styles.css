@@ -71,16 +71,16 @@ button.site-button:hover,
     transform: translateY(0);
 }
 
-/* Hover effects for cards */
+/* Hover effects for cards - DISABLED TO PREVENT SHAKING */
 .hover-card {
-    transition: all 0.3s ease;
+    transition: none !important;
     cursor: pointer;
-    will-change: transform, box-shadow;
+    will-change: auto;
 }
 
 .hover-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Utility spacing helpers for page sections */
@@ -807,4 +807,60 @@ button.nav-link .candidate-icon-white {
 /* Force candidate icon to be white in signin/signup popups */
 .twm-sign-up .nav-tabs .nav-link .fas.fa-user-tie {
   color: white !important;
+}
+
+
+
+/* FIX ICON OVERLAP IN FORM FIELDS */
+.ls-inputicon-box input.form-control {
+  padding-left: 40px !important;
+}
+
+.ls-inputicon-box .fs-input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  color: #6c757d;
+}
+
+/* NAVIGATION HOVER EFFECTS - Override anti-shaking for navbar */
+.nav-link-custom {
+  color: #333 !important;
+  text-decoration: none !important;
+  padding: 10px 15px !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  display: inline-block !important;
+}
+
+.nav-link-custom:hover {
+  color: #fd7e14 !important;
+  transform: translateY(-2px) !important;
+  text-decoration: none !important;
+}
+
+.nav-link-custom::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: 5px !important;
+  left: 50% !important;
+  width: 0 !important;
+  height: 2px !important;
+  background-color: #fd7e14 !important;
+  transition: all 0.3s ease !important;
+  transform: translateX(-50%) !important;
+}
+
+.nav-link-custom:hover::after {
+  width: 80% !important;
+}
+
+.nav-link-custom.active {
+  color: #fd7e14 !important;
+}
+
+.nav-link-custom.active::after {
+  width: 80% !important;
 }

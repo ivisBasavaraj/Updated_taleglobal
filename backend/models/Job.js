@@ -78,6 +78,7 @@ const jobSchema = new mongoose.Schema({
     }
   },
   offerLetterDate: { type: Date },
+  lastDateOfApplication: { type: Date },
   transportation: {
     oneWay: { type: Boolean, default: false },
     twoWay: { type: Boolean, default: false },

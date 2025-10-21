@@ -7,12 +7,9 @@ import { loadScript, updateSkinStyle } from "../../../../../globals/constants";
 import api from "../../../../../utils/api";
 import HeroBody from "../../../../../components/HeroBody";
 import { Container, Row, Col } from "react-bootstrap";
-<<<<<<< HEAD
-import MobileTestIndicator from "../../../../../components/MobileTestIndicator";
-=======
 import HomeJobCard from "../../../../../components/HomeJobCard";
 import "../../../../../new-job-card.css";
->>>>>>> 92872e199fdfa4aeeb9461804178829410fcb83d
+import "../../../../../home-responsive.css";
 
 function Home16Page() {
     const [jobs, setJobs] = useState([]);
@@ -143,13 +140,7 @@ function Home16Page() {
 
             // Fetch recruiters with error handling
             try {
-                const response = await fetch('http://localhost:5000/api/public/top-recruiters?limit=12');
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const recruitersData = await response.json();
+                const recruitersData = await api.getTopRecruiters({ limit: 12 });
                 
                 if (recruitersData && recruitersData.success) {
                     // Validate recruiters data
@@ -340,48 +331,22 @@ function Home16Page() {
 
     return (
 			<>
-				<MobileTestIndicator />
 				{/* Error Alert */}
 				{error && (
-					<div style={{
-						position: 'fixed',
-						top: '80px',
-						left: '50%',
-						transform: 'translateX(-50%)',
-						zIndex: 9999,
-						maxWidth: '600px',
-						width: '90%'
-					}}>
-						<div style={{
-							backgroundColor: '#f8d7da',
-							color: '#721c24',
-							padding: '15px 20px',
-							borderRadius: '8px',
-							border: '1px solid #f5c6cb',
-							boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'space-between'
-						}}>
-							<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+					<div className="error-alert-container">
+						<div className="error-alert-content">
+							<div className="error-alert-message">
+								<svg className="error-alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
 									<circle cx="12" cy="12" r="10"/>
 									<line x1="12" y1="8" x2="12" y2="12"/>
 									<line x1="12" y1="16" x2="12.01" y2="16"/>
 								</svg>
-								<span style={{ fontWeight: '500' }}>{error}</span>
+								<span>{error}</span>
 							</div>
 							<button
 								onClick={() => setError(null)}
-								style={{
-									background: 'none',
-									border: 'none',
-									color: '#721c24',
-									fontSize: '20px',
-									cursor: 'pointer',
-									padding: '0 5px',
-									lineHeight: '1'
-								}}
+								className="error-alert-close"
+								aria-label="Close alert"
 							>
 								×
 							</button>
@@ -399,7 +364,7 @@ function Home16Page() {
 					<Container className="py-5">
 						<Row>
 							{/*Left Section*/}
-							<Col xl={6} lg={6} md={12}>
+							<Col xl={6} lg={6} md={12} sm={12} xs={12}>
 								<div className="twm-bnr-left-section">
 									<div className="twm-bnr-title-small mb-4">
 										We Have{" "}
@@ -423,7 +388,7 @@ function Home16Page() {
 										<form>
 											<Row>
 												{/*Title*/}
-												<Col xl={3} lg={6} md={6} className="mb-3">
+												<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-3">
 													<label>What</label>
 													<select
 														className="wt-search-bar-select selectpicker"
@@ -444,7 +409,7 @@ function Home16Page() {
 												</Col>
 
 												{/*All Category*/}
-												<Col xl={3} lg={6} md={6} className="mb-3">
+												<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-3">
 													<label>Type</label>
 													<select
 														className="wt-search-bar-select selectpicker"
@@ -466,7 +431,7 @@ function Home16Page() {
 												</Col>
 
 												{/*Location*/}
-												<Col xl={3} lg={6} md={6} className="mb-3">
+												<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-3">
 													<label>Location</label>
 													<div className="twm-inputicon-box">
 														<input
@@ -481,7 +446,7 @@ function Home16Page() {
 												</Col>
 
 												{/*Find job btn*/}
-												<Col xl={3} lg={6} md={6} className="mb-3">
+												<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-3">
 													<NavLink to="/job-grid" className="site-button">
 														Find Job
 													</NavLink>
@@ -501,7 +466,7 @@ function Home16Page() {
 							</Col>
 
 							{/*right Section*/}
-							<Col xl={6} lg={6} md={12}>
+							<Col xl={6} lg={6} md={12} sm={12} xs={12}>
 								<div className="twm-h-page-16-bnr-right-section">
 									<div className="twm-h-page16-bnr-pic">
 										<JobZImage
@@ -596,7 +561,7 @@ function Home16Page() {
 
 						<div className="twm-how-it-work-section3">
 							<Row>
-								<Col xl={3} lg={6} md={6} sm={12} className="mb-4">
+								<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-4">
 									<div className="twm-w-process-steps3 hover-card">
 										<div className="twm-w-pro-top">
 											<div className="twm-media">
@@ -614,7 +579,7 @@ function Home16Page() {
 									</div>
 								</Col>
 
-								<Col xl={3} lg={6} md={6} sm={12} className="mb-4">
+								<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-4">
 									<div className="twm-w-process-steps3 hover-card">
 										<div className="twm-w-pro-top">
 											<div className="twm-media">
@@ -632,7 +597,7 @@ function Home16Page() {
 									</div>
 								</Col>
 
-								<Col xl={3} lg={6} md={6} sm={12} className="mb-4">
+								<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-4">
 									<div className="twm-w-process-steps3 hover-card">
 										<div className="twm-w-pro-top">
 											<div className="twm-media">
@@ -650,7 +615,7 @@ function Home16Page() {
 									</div>
 								</Col>
 
-								<Col xl={3} lg={6} md={6} sm={12} className="mb-4">
+								<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-4">
 									<div className="twm-w-process-steps3 hover-card">
 										<div className="twm-w-pro-top">
 											<div className="twm-media">
@@ -690,7 +655,7 @@ function Home16Page() {
 
 						<div className="twm-how-it-work-section3">
 							<Row>
-								<Col xl={3} lg={6} col={12} className="mb-4">
+								<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-4">
 									<div className="twm-w-process-steps3 hover-card">
 										<div className="twm-w-pro-top">
 											<div className="twm-media">
@@ -708,7 +673,7 @@ function Home16Page() {
 									</div>
 								</Col>
 
-								<Col xl={3} lg={6} col={12} className="mb-4">
+								<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-4">
 									<div className="twm-w-process-steps3 hover-card">
 										<div className="twm-w-pro-top">
 											<div className="twm-media">
@@ -726,7 +691,7 @@ function Home16Page() {
 									</div>
 								</Col>
 
-								<Col xl={3} lg={6} col={12} className="mb-4">
+								<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-4">
 									<div className="twm-w-process-steps3 hover-card">
 										<div className="twm-w-pro-top">
 											<div className="twm-media">
@@ -744,7 +709,7 @@ function Home16Page() {
 									</div>
 								</Col>
 
-								<Col xl={3} lg={6} col={12} className="mb-4">
+								<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-4">
 									<div className="twm-w-process-steps3 hover-card">
 										<div className="twm-w-pro-top">
 											<div className="twm-media">
@@ -785,7 +750,7 @@ function Home16Page() {
 							<div className="job-cat-block-hpage-6-section m-b30">
 								<Row>
 									{/* COLUMNS 1 */}
-									<Col lg={4} md={6} sm={12} className="mb-4">
+									<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
 										<div className="job-cat-block-hpage-6 m-b30 hover-card">
 											<div className="twm-media">
 												<div className="flaticon-dashboard" />
@@ -811,7 +776,7 @@ function Home16Page() {
 									</Col>
 
 									{/* COLUMNS 2 */}
-									<Col lg={4} md={6} sm={12} className="mb-4">
+									<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
 										<div className="job-cat-block-hpage-6 m-b30 hover-card">
 											<div className="twm-media">
 												<div className="flaticon-project-management" />
@@ -837,7 +802,7 @@ function Home16Page() {
 									</Col>
 
 									{/* COLUMNS 3 */}
-									<Col lg={4} md={6} sm={12} className="mb-4">
+									<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
 										<div className="job-cat-block-hpage-6 m-b30 hover-card">
 											<div className="twm-media">
 												<div className="flaticon-note" />
@@ -863,7 +828,7 @@ function Home16Page() {
 									</Col>
 
 									{/* COLUMNS 4 */}
-									<Col lg={4} md={6} sm={12} className="mb-4">
+									<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
 										<div className="job-cat-block-hpage-6 m-b30 hover-card">
 											<div className="twm-media">
 												<div className="flaticon-customer-support" />
@@ -889,7 +854,7 @@ function Home16Page() {
 									</Col>
 
 									{/* COLUMNS 5 */}
-									<Col lg={4} md={6} sm={12} className="mb-4">
+									<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
 										<div className="job-cat-block-hpage-6 m-b30 hover-card">
 											<div className="twm-media">
 												<div className="flaticon-bars" />
@@ -997,7 +962,7 @@ function Home16Page() {
 								<Row>
 									{jobs.length > 0 ? (
 										jobs.map((job) => (
-											<Col lg={4} md={6} key={job._id} className="mb-4">
+											<Col lg={4} md={6} sm={12} xs={12} key={job._id} className="mb-4">
 												<div className="new-job-card">
 													{/* Top Row */}
 													<div className="job-card-header">
@@ -1378,7 +1343,7 @@ function Home16Page() {
 								<div className="twm-company-approch2">
 									<Row className="mb-4">
 										{/*block 1*/}
-										<Col lg={4} md={4} className="mb-4">
+										<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
 											<div className="counter-outer-two">
 												<div className="icon-content">
 													<div className="tw-count-number site-text-primary">
@@ -1395,7 +1360,7 @@ function Home16Page() {
 										</Col>
 
 										{/*block 2*/}
-										<Col lg={4} md={4} className="mb-4">
+										<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
 											<div className="counter-outer-two">
 												<div className="icon-content">
 													<div className="tw-count-number site-text-primary">
@@ -1412,7 +1377,7 @@ function Home16Page() {
 										</Col>
 
 										{/*block 3*/}
-										<Col lg={4} md={4} className="mb-4">
+										<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
 											<div className="counter-outer-two">
 												<div className="icon-content">
 													<div className="tw-count-number site-text-primary">

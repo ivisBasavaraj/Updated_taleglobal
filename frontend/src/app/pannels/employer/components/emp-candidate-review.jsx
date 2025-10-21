@@ -375,6 +375,7 @@ function EmpCandidateReviewPage () {
 													{index === 0 ? '10th Grade' : index === 1 ? '12th Grade' : 'Degree'}
 												</h6>
 												<p className="mb-1"><strong>Institution:</strong> {edu.collegeName || 'Not provided'}</p>
+												{edu.specialization && <p className="mb-1"><strong>Specialization:</strong> {edu.specialization}</p>}
 												<p className="mb-1"><strong>Year:</strong> {edu.passYear || 'Not provided'}</p>
 												<p className="mb-2"><strong>Score:</strong> {edu.scoreValue || edu.percentage || 'Not provided'}{edu.scoreType === 'percentage' ? '%' : ''}</p>
 												{edu.marksheet && (

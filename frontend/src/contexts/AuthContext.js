@@ -29,22 +29,26 @@ export const AuthProvider = ({ children }) => {
         placement: localStorage.getItem('placementToken'),
         candidate: localStorage.getItem('candidateToken'),
         employer: localStorage.getItem('employerToken'),
-        admin: localStorage.getItem('adminToken')
+        admin: localStorage.getItem('adminToken'),
+        'sub-admin': localStorage.getItem('subAdminToken')
       };
 
       // Find first valid token
       for (const [type, token] of Object.entries(tokens)) {
         if (token) {
           try {
-            const userData = JSON.parse(localStorage.getItem(`${type}User`) || '{}');
+            const userDataKey = type === 'sub-admin' ? 'subAdminData' : `${type}User`;
+            const userData = JSON.parse(localStorage.getItem(userDataKey) || '{}');
             setUser(userData);
             setUserType(type);
             setLoading(false);
             return;
           } catch (e) {
             // Invalid user data, remove token
-            localStorage.removeItem(`${type}Token`);
-            localStorage.removeItem(`${type}User`);
+            const tokenKey = type === 'sub-admin' ? 'subAdminToken' : `${type}Token`;
+            const userKey = type === 'sub-admin' ? 'subAdminData' : `${type}User`;
+            localStorage.removeItem(tokenKey);
+            localStorage.removeItem(userKey);
           }
         }
       }
@@ -69,6 +73,9 @@ export const AuthProvider = ({ children }) => {
         case 'admin':
           response = await api.adminLogin(credentials);
           break;
+        case 'sub-admin':
+          response = await api.subAdminLogin(credentials);
+          break;
         case 'placement':
           response = await api.placementLogin(credentials);
           break;
@@ -77,11 +84,14 @@ export const AuthProvider = ({ children }) => {
       }
 
       if (response.success) {
-        const userData = response[type];
+        const userData = response[type] || response.subAdmin;
         const token = response.token;
         
-        localStorage.setItem(`${type}Token`, token);
-        localStorage.setItem(`${type}User`, JSON.stringify(userData));
+        const tokenKey = type === 'sub-admin' ? 'subAdminToken' : `${type}Token`;
+        const userKey = type === 'sub-admin' ? 'subAdminData' : `${type}User`;
+        
+        localStorage.setItem(tokenKey, token);
+        localStorage.setItem(userKey, JSON.stringify(userData));
         
         setUser(userData);
         setUserType(type);
@@ -100,10 +110,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('candidateToken');
     localStorage.removeItem('employerToken');
     localStorage.removeItem('adminToken');
+    localStorage.removeItem('subAdminToken');
     localStorage.removeItem('placementToken');
     localStorage.removeItem('candidateUser');
     localStorage.removeItem('employerUser');
     localStorage.removeItem('adminUser');
+    localStorage.removeItem('subAdminData');
     localStorage.removeItem('placementUser');
     
     setUser(null);

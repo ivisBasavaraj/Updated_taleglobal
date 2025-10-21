@@ -54,14 +54,14 @@ h5 {
     border-radius: 20px;
     text-decoration: none;
     font-size: 13px;
-    transition: all 0.3s ease;
+    transition: none !important;
 }
 
 .skill-tag:hover {
     background: none !important;
     color: #333 !important;
     border-color: #999 !important;
-    transform: translateY(-1px);
+    transform: none !important;
 }
 
 .skill-tag i {
@@ -194,17 +194,44 @@ h5 {
 }
 
 /* Edit button styling improvements */
+.panel-heading-with-btn button,
+.panel-heading-with-btn a {
+    transition: none !important;
+}
+
 .panel-heading-with-btn button:hover,
 .panel-heading-with-btn a:hover {
-    transform: scale(1.1);
-    transition: transform 0.2s ease;
     color: #e8690a !important;
+    transition: none !important;
 }
 
 /* Edit button focus states */
 .btn-link:focus {
     box-shadow: 0 0 0 2px rgba(253, 126, 20, 0.25) !important;
     outline: none;
+}
+
+/* Enhanced prevention of blinking on Add Employment button */
+.panel-heading-with-btn .btn-link {
+    will-change: auto !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+    -webkit-transform: none !important;
+    transform: none !important;
+    pointer-events: auto;
+    transition: none !important;
+    animation: none !important;
+}
+
+.panel-heading-with-btn .btn-link:active,
+.panel-heading-with-btn .btn-link:focus,
+.panel-heading-with-btn .btn-link:hover {
+    transform: none !important;
+    -webkit-transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
 }
 
 /* Form improvements in modals */
@@ -237,17 +264,19 @@ h5 {
     border-radius: 6px;
     padding: 0.5rem 1rem;
     font-weight: 500;
-    transition: all 0.2s ease;
+    transition: none !important;
 }
 
 .modal .btn-secondary {
     background-color: #6c757d;
     border-color: #6c757d;
+    transition: none !important;
 }
 
 .modal .btn-secondary:hover {
     background-color: #5a6268;
     border-color: #545b62;
+    transition: none !important;
 }
 
 /* Character counter styling */
@@ -297,12 +326,11 @@ body.modal-open {
     animation: none !important;
 }
 
-/* Stop all animations in modal */
-.modal * {
-    animation-duration: 0s !important;
-    animation-delay: 0s !important;
-    transition-duration: 0s !important;
-    transition-delay: 0s !important;
+/* Stop excessive animations in modal - keep necessary ones */
+.modal .modal-header,
+.modal .modal-body,
+.modal .modal-footer {
+    animation: none !important;
 }
 
 /* Prevent modal content from shifting */
@@ -334,12 +362,12 @@ body.modal-open {
     text-decoration: none !important;
     padding: 4px 8px;
     border-radius: 4px;
-    transition: all 0.2s ease;
+    transition: none !important;
 }
 
 .panel-heading .btn-link:hover {
-    background-color: rgba(253, 126, 20, 0.1);
-    transform: scale(1.05);
+    background-color: transparent !important;
+    transition: none !important;
 }
 
 /* Loading state improvements */
@@ -380,6 +408,31 @@ body.modal-open {
     color: #dc3545;
 }
 
+/* Panel stability - prevent blinking and flickering */
+.panel {
+    transition: none !important;
+    animation: none !important;
+}
+
+.panel-heading {
+    transition: none !important;
+    animation: none !important;
+    will-change: auto;
+}
+
+.panel-body {
+    transition: none !important;
+    animation: none !important;
+    will-change: auto;
+}
+
+.panel-heading-with-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
 /* Responsive modal improvements */
 @media (max-width: 768px) {
     .modal-dialog {
@@ -405,11 +458,11 @@ body.modal-open {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 20px;
     background: white;
-    transition: box-shadow 0.2s ease;
+    transition: none !important;
 }
 
 .panel:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
 }
 
 .panel-heading {
@@ -454,6 +507,94 @@ body.modal-open {
 
 .card-body {
     padding: 15px;
+}
+
+/* COMPREHENSIVE ANTI-BLINKING FIX - All transitions disabled */
+* {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Exception: Allow fa-spinner animation for loading indicator */
+.fa-spinner {
+    animation: fa-spin 1s infinite linear !important;
+}
+
+/* Exception: Allow modal fade animations */
+.modal.fade {
+    transition: opacity 0.15s linear !important;
+}
+
+.modal.fade.show {
+    opacity: 1 !important;
+}
+
+.modal-backdrop.fade {
+    transition: opacity 0.15s linear !important;
+}
+
+/* SPECIFIC FIX FOR EMPLOYMENT SECTION SHAKING */
+.panel-heading-with-btn .btn-link,
+.panel-heading-with-btn .btn-link:hover,
+.panel-heading-with-btn .btn-link:focus,
+.panel-heading-with-btn .btn-link:active {
+    transform: none !important;
+    -webkit-transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    will-change: auto !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+}
+
+/* Prevent any hover effects that might cause shaking */
+.panel-heading-with-btn .btn-link .fa-edit,
+.panel-heading-with-btn .btn-link .fa-edit:hover {
+    transform: none !important;
+    -webkit-transform: none !important;
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Ensure panel content is stable */
+.panel-body .twm-panel-inner,
+.panel-body .twm-panel-inner * {
+    transform: none !important;
+    -webkit-transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    will-change: auto !important;
+}
+
+/* SPECIFIC FIX FOR ADD EMPLOYMENT CARD SHAKING */
+.panel,
+.card,
+.hover-card,
+.employment-card,
+.add-employment-card,
+.twm-panel-inner,
+.panel-default {
+    transform: none !important;
+    -webkit-transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    will-change: auto !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+}
+
+.panel:hover,
+.card:hover,
+.hover-card:hover,
+.employment-card:hover,
+.add-employment-card:hover,
+.twm-panel-inner:hover,
+.panel-default:hover {
+    transform: none !important;
+    -webkit-transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    box-shadow: none !important;
 }
 
 /* Responsive adjustments */

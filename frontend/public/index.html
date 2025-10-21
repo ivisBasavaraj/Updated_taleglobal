@@ -35,8 +35,26 @@
     -->
   <title>TaleGlobal</title>
 
-  <!-- MOBILE SPECIFIC -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- MOBILE SPECIFIC - COMPREHENSIVE RESPONSIVE SETUP -->
+  <!-- Viewport: Allow pinch zoom, proper scaling on all devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  
+  <!-- Format Detection: Prevent auto-detection that might interfere -->
+  <meta name="format-detection" content="telephone=no, email=no, address=no">
+  
+  <!-- iOS/Apple Settings -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Jobzz">
+  
+  <!-- Android/Google Settings -->
+  <meta name="theme-color" content="#fd7e14">
+  
+  <!-- Color Scheme: Support dark/light mode awareness -->
+  <meta name="color-scheme" content="light dark">
+  
+  <!-- Disable pinch-zoom on content scales (accessibility friendly) -->
+  <meta name="minimum-scale" content="1.0">
 
   <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/assets/css/bootstrap.min.css"><!-- BOOTSTRAP STYLE SHEET -->
   <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/assets/css/font-awesome.min.css">

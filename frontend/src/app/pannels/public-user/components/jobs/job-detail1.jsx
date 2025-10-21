@@ -339,6 +339,14 @@ function JobDetail1Page() {
 														<p><span className={`badge ${job.backlogsAllowed ? 'badge-success' : 'badge-danger'}`}>{job.backlogsAllowed ? 'Yes' : 'No'}</span></p>
 													</div>
 												</div>
+												{job.lastDateOfApplication && (
+													<div className="col-md-6">
+														<div className="detail-item">
+															<h5><i className="feather-calendar" style={{marginRight: '8px'}}></i>Last Date to Apply:</h5>
+															<p style={{color: '#dc3545', fontWeight: '600'}}>{new Date(job.lastDateOfApplication).toLocaleDateString()}</p>
+														</div>
+													</div>
+												)}
 												{job.employerProfile?.website && (
 													<div className="col-md-6">
 														<div className="detail-item">

@@ -39,6 +39,7 @@ export default function EmpPostJob({ onNext }) {
 		},
 		offerLetterDate: "",
 		joiningDate: "",
+		lastDateOfApplication: "",
 		transportation: {
 			oneWay: false,
 			twoWay: false,
@@ -167,6 +168,7 @@ export default function EmpPostJob({ onNext }) {
 							hr: { description: '', fromDate: '', toDate: '', time: '' }
 						},
 						offerLetterDate: job.offerLetterDate ? job.offerLetterDate.split('T')[0] : '',
+						lastDateOfApplication: job.lastDateOfApplication ? job.lastDateOfApplication.split('T')[0] : '',
 						transportation: job.transportation || {
 							oneWay: false,
 							twoWay: false,
@@ -311,6 +313,10 @@ export default function EmpPostJob({ onNext }) {
 				alert('Please select Offer Letter Release Date');
 				return;
 			}
+			if (!formData.lastDateOfApplication.trim()) {
+				alert('Please select Last Date of Application');
+				return;
+			}
 			if (!formData.jobDescription.trim()) {
 				alert('Please enter Job Description');
 				return;
@@ -350,6 +356,7 @@ export default function EmpPostJob({ onNext }) {
 				interviewRoundTypes: formData.interviewRoundTypes,
 				interviewRoundDetails: formData.interviewRoundDetails,
 				offerLetterDate: formData.offerLetterDate || null,
+				lastDateOfApplication: formData.lastDateOfApplication || null,
 				transportation: formData.transportation,
 				category: formData.category,
 				companyLogo: formData.companyLogo,
@@ -1361,6 +1368,20 @@ export default function EmpPostJob({ onNext }) {
 							min={new Date().toISOString().split('T')[0]}
 							value={formData.offerLetterDate}
 							onChange={(e) => update({ offerLetterDate: e.target.value })}
+						/>
+					</div>
+
+					<div>
+						<label style={label}>
+							<i className="fa fa-calendar-times" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+							Last Date of Application *
+						</label>
+						<input
+							style={input}
+							type="date"
+							min={new Date().toISOString().split('T')[0]}
+							value={formData.lastDateOfApplication}
+							onChange={(e) => update({ lastDateOfApplication: e.target.value })}
 						/>
 					</div>
 

@@ -13,6 +13,11 @@ router.post('/login', [
   body('password').notEmpty().withMessage('Password is required')
 ], handleValidationErrors, adminController.loginAdmin);
 
+router.post('/sub-admin-login', [
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('password').notEmpty().withMessage('Password is required')
+], handleValidationErrors, adminController.loginAdmin);
+
 // Protected Routes
 router.use(auth(['admin', 'sub-admin']));
 

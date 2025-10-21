@@ -3,9 +3,9 @@ import { api } from '../../../../../utils/api';
 
 function SectionCanEducation({ profile, onUpdate }) {
     const [educationData, setEducationData] = useState({
-        tenth: { schoolName: '', location: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null },
-        diploma: { schoolName: '', location: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null },
-        degree: { schoolName: '', location: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null }
+        tenth: { schoolName: '', specialization: '', location: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null },
+        diploma: { schoolName: '', specialization: '', location: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null },
+        degree: { schoolName: '', specialization: '', location: '', passoutYear: '', percentage: '', cgpa: '', grade: '', marksheet: null, marksheetBase64: null }
     });
     const [additionalRows, setAdditionalRows] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -26,6 +26,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                 if (newData[key]) {
                     newData[key] = {
                         schoolName: edu.degreeName || '',
+                        specialization: edu.specialization || '',
                         location: edu.collegeName || '',
                         passoutYear: edu.passYear || '',
                         percentage: edu.percentage || '',
@@ -116,6 +117,7 @@ function SectionCanEducation({ profile, onUpdate }) {
             id: Date.now(),
             educationType: 'Degree',
             schoolName: '',
+            specialization: '',
             location: '',
             passoutYear: '',
             percentage: '',
@@ -177,6 +179,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                 
                 educationDataToSend = {
                     degreeName: educationData[level].schoolName,
+                    specialization: educationData[level].specialization,
                     collegeName: educationData[level].location,
                     passYear: educationData[level].passoutYear,
                     percentage: educationData[level].percentage,
@@ -231,6 +234,7 @@ function SectionCanEducation({ profile, onUpdate }) {
             const educationArray = [
                 {
                     degreeName: educationData.tenth.schoolName,
+                    specialization: educationData.tenth.specialization,
                     collegeName: educationData.tenth.location,
                     passYear: educationData.tenth.passoutYear,
                     percentage: educationData.tenth.percentage,
@@ -240,6 +244,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                 },
                 {
                     degreeName: educationData.diploma.schoolName,
+                    specialization: educationData.diploma.specialization,
                     collegeName: educationData.diploma.location,
                     passYear: educationData.diploma.passoutYear,
                     percentage: educationData.diploma.percentage,
@@ -249,6 +254,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                 },
                 {
                     degreeName: educationData.degree.schoolName,
+                    specialization: educationData.degree.specialization,
                     collegeName: educationData.degree.location,
                     passYear: educationData.degree.passoutYear,
                     percentage: educationData.degree.percentage,
@@ -258,6 +264,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                 },
                 ...additionalRows.map(row => ({
                     degreeName: row.schoolName,
+                    specialization: row.specialization,
                     collegeName: row.location,
                     passYear: row.passoutYear,
                     percentage: row.percentage,
@@ -293,20 +300,22 @@ function SectionCanEducation({ profile, onUpdate }) {
                     <div className="table-responsive">
                         <table className="table table-bordered">
                             <colgroup>
-                                <col style={{width: '12%'}} />
-                                <col style={{width: '15%'}} />
-                                <col style={{width: '12%'}} />
+                                <col style={{width: '10%'}} />
+                                <col style={{width: '13%'}} />
                                 <col style={{width: '12%'}} />
                                 <col style={{width: '10%'}} />
-                                <col style={{width: '8%'}} />
-                                <col style={{width: '8%'}} />
-                                <col style={{width: '15%'}} />
+                                <col style={{width: '10%'}} />
+                                <col style={{width: '9%'}} />
+                                <col style={{width: '7%'}} />
+                                <col style={{width: '7%'}} />
+                                <col style={{width: '14%'}} />
                                 <col style={{width: '8%'}} />
                             </colgroup>
                             <thead className="table-light">
                                 <tr>
                                     <th>Education Level</th>
                                     <th>School/College Name</th>
+                                    <th>Specialization</th>
                                     <th>Location</th>
                                     <th>Passout Year</th>
                                     <th>Percentage</th>
@@ -326,6 +335,17 @@ function SectionCanEducation({ profile, onUpdate }) {
                                             type="text" 
                                             placeholder="Enter 10th School Name"
                                             value={educationData.tenth.schoolName}
+                                            onChange={(e) => handleInputChange(e, 'tenth')}
+                                            disabled={!editMode.tenth}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="specialization" 
+                                            type="text" 
+                                            placeholder="Enter Specialization" 
+                                            value={educationData.tenth.specialization}
                                             onChange={(e) => handleInputChange(e, 'tenth')}
                                             disabled={!editMode.tenth}
                                         />
@@ -422,6 +442,17 @@ function SectionCanEducation({ profile, onUpdate }) {
                                     <td>
                                         <input 
                                             className="form-control"
+                                            name="specialization" 
+                                            type="text" 
+                                            placeholder="Enter Specialization" 
+                                            value={educationData.diploma.specialization}
+                                            onChange={(e) => handleInputChange(e, 'diploma')}
+                                            disabled={!editMode.diploma}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
                                             name="location" 
                                             type="text" 
                                             placeholder="Enter Location" 
@@ -504,6 +535,17 @@ function SectionCanEducation({ profile, onUpdate }) {
                                             type="text" 
                                             placeholder="Enter Degree College Name"
                                             value={educationData.degree.schoolName}
+                                            onChange={(e) => handleInputChange(e, 'degree')}
+                                            disabled={!editMode.degree}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input 
+                                            className="form-control"
+                                            name="specialization" 
+                                            type="text" 
+                                            placeholder="Enter Specialization" 
+                                            value={educationData.degree.specialization}
                                             onChange={(e) => handleInputChange(e, 'degree')}
                                             disabled={!editMode.degree}
                                         />
@@ -604,6 +646,17 @@ function SectionCanEducation({ profile, onUpdate }) {
                                                 type="text" 
                                                 placeholder="Enter Degree College Name"
                                                 value={row.schoolName}
+                                                onChange={(e) => handleInputChange(e, null, index)}
+                                                disabled={!additionalEditMode[index]}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input 
+                                                className="form-control"
+                                                name="specialization" 
+                                                type="text" 
+                                                placeholder="Enter Specialization" 
+                                                value={row.specialization}
                                                 onChange={(e) => handleInputChange(e, null, index)}
                                                 disabled={!additionalEditMode[index]}
                                             />

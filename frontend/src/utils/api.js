@@ -62,6 +62,11 @@ export const api = {
     return fetch(`${API_BASE_URL}/public/stats`).then((res) => res.json());
   },
 
+  getTopRecruiters: (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    return fetch(`${API_BASE_URL}/public/top-recruiters?${queryString}`).then((res) => res.json());
+  },
+
   // Candidate APIs
   candidateRegister: (data) => {
     return fetch(`${API_BASE_URL}/candidate/register`, {
@@ -297,6 +302,14 @@ export const api = {
   // Admin APIs
   adminLogin: (data) => {
     return fetch(`${API_BASE_URL}/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).then((res) => res.json());
+  },
+
+  subAdminLogin: (data) => {
+    return fetch(`${API_BASE_URL}/admin/sub-admin-login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),

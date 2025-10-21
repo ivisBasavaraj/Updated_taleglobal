@@ -569,17 +569,20 @@ function SectionCandicateBasicInfo() {
                         </div>
                         <div className="col-md-4 mb-3">
                             <label className="form-label"><i className="fa fa-phone me-2" style={{color: '#ff6b35'}}></i>Mobile Number *</label>
-                            <input
-                                className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-                                type="tel"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleInputChange}
-                                onBlur={handleBlur}
-                                placeholder="Enter 10-digit mobile number"
-                                maxLength="10"
-                                required
-                            />
+                            <div className="input-group">
+                                <span className="input-group-text" style={{backgroundColor: '#ff6b35', color: 'white', border: '1px solid #ff6b35'}}>+91</span>
+                                <input
+                                    className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                    onBlur={handleBlur}
+                                    placeholder="Enter 10-digit mobile number"
+                                    maxLength="10"
+                                    required
+                                />
+                            </div>
                             {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
                             <small className="text-muted">Enter 10-digit Indian mobile number (starting with 6-9)</small>
                         </div>
