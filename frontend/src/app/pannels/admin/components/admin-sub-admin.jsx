@@ -199,6 +199,14 @@ function AdminSubAdmin() {
     };
 
     useEffect(() => {
+        const adminToken = localStorage.getItem('adminToken');
+        const adminData = localStorage.getItem('adminData');
+        
+        if (!adminToken || !adminData) {
+            window.location.href = '/admin-login';
+            return;
+        }
+        
         fetchSubAdmins();
     }, []);
 
