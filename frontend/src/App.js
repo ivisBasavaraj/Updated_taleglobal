@@ -12,6 +12,7 @@ import "./mobile-responsive.css";
 import "./index16-mobile-fix.css";
 import "./logo-fix.css";
 import "./mobile-responsive.css";
+import "./mobile-card-scrolling.css";
 
 function App() {
 

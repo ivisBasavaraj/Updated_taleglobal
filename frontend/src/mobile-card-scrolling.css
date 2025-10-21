@@ -1,0 +1,261 @@
+/* Mobile Card Scrolling & Padding Fixes */
+
+/* General Card Improvements */
+.card, .admin-card, .management-card {
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Lengthy Cards with Horizontal Scroll */
+.lengthy-card {
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #ff9c00 #f1f1f1;
+}
+
+.lengthy-card::-webkit-scrollbar {
+  height: 6px;
+}
+
+.lengthy-card::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.lengthy-card::-webkit-scrollbar-thumb {
+  background: #ff9c00;
+  border-radius: 3px;
+}
+
+/* SubAdmin Management Cards */
+.subadmin-card, .support-ticket-card {
+  min-width: 320px;
+  padding: 1rem;
+  margin: 0.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+  /* Container Padding */
+  .admin-container, .dashboard-container {
+    padding: 0.75rem !important;
+  }
+  
+  /* Card Grid for Mobile */
+  .cards-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1rem 0.75rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .cards-grid::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .cards-grid::-webkit-scrollbar-thumb {
+    background: #ff9c00;
+    border-radius: 3px;
+  }
+  
+  /* Individual Cards */
+  .card-item {
+    flex: 0 0 280px;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  /* SubAdmin Management Mobile */
+  .subadmin-management {
+    padding: 0.75rem;
+  }
+  
+  .subadmin-list {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+  
+  .subadmin-card {
+    flex: 0 0 300px;
+    padding: 1rem;
+  }
+  
+  /* Support Tickets Mobile */
+  .support-tickets {
+    padding: 0.75rem;
+  }
+  
+  .tickets-list {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+  
+  .support-ticket-card {
+    flex: 0 0 320px;
+    padding: 1rem;
+  }
+  
+  /* Table Scrolling */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -0.75rem;
+    padding: 0 0.75rem;
+    scrollbar-width: thin;
+    scrollbar-color: #ff9c00 #f1f1f1;
+  }
+  
+  .table-container::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  .table-container::-webkit-scrollbar-thumb {
+    background: #ff9c00;
+    border-radius: 4px;
+  }
+  
+  .table-container table {
+    min-width: 800px;
+  }
+  
+  /* Form Elements Mobile */
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-control {
+    padding: 0.75rem;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Button Groups */
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  
+  .btn-group .btn {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Extra Small Mobile */
+  .admin-container, .dashboard-container {
+    padding: 0.5rem !important;
+  }
+  
+  .card-item {
+    flex: 0 0 260px;
+    padding: 0.75rem;
+  }
+  
+  .subadmin-card, .support-ticket-card {
+    flex: 0 0 280px;
+    padding: 0.75rem;
+  }
+  
+  /* Compact Headers */
+  .card-header {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  /* Smaller Text */
+  .card-text {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  
+  /* Action Buttons */
+  .action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.75rem;
+  }
+  
+  .action-buttons .btn {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Scroll Indicators */
+.scroll-indicator {
+  position: relative;
+}
+
+.scroll-indicator::after {
+  content: '→';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(to right, transparent, white);
+  padding-left: 2rem;
+  color: #ff9c00;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+@media (min-width: 769px) {
+  .scroll-indicator::after {
+    display: none;
+  }
+}
+
+/* Touch-friendly Improvements */
+.touch-friendly {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.75rem;
+}
+
+/* Loading States */
+.card-loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.card-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ff9c00;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}

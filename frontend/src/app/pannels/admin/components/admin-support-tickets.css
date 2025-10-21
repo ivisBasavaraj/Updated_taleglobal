@@ -24,46 +24,85 @@
   opacity: 0.9;
 }
 
-.stats-card {
-  background: white;
+/* Dashboard Stats Cards */
+.dashboard-stats-card {
   border: none;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 16px;
   overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   height: 100%;
-  min-height: 120px;
-  min-width: 140px;
 }
 
-.stats-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+.dashboard-stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
 }
 
-.stats-card .card-body {
-  padding: 1.5rem;
-  text-align: center;
+/* Card gradients */
+.gradi-1 {
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+  color: white;
+}
+
+.gradi-2 {
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  color: white;
+}
+
+.gradi-3 {
+  background: linear-gradient(135deg, #45b7d1 0%, #96c93d 100%);
+  color: white;
+}
+
+.gradi-4 {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+/* Card content */
+.wt-card-wrap {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  height: 100%;
+  align-items: center;
+  text-align: center;
+  padding: 30px 20px;
+  position: relative;
 }
 
-.stats-number {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
+.wt-card-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+.wt-card-icon i {
   display: block;
+  transition: all 0.3s ease;
 }
 
-.stats-label {
-  color: #6c757d;
-  font-size: 0.8rem;
-  font-weight: 500;
+.dashboard-stats-card:hover .wt-card-icon i {
+  transform: scale(1.1);
+}
+
+.wt-card-right {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.wt-card-bottom h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  opacity: 0.95;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  white-space: nowrap;
+}
+
+.m-b0 {
+  margin-bottom: 0;
 }
 
 .filters-section {
@@ -371,7 +410,7 @@
 
 @media (max-width: 768px) {
   .support-tickets-container {
-    padding: 1rem 0;
+    padding: 0.75rem !important;
   }
   
   .support-header {
@@ -381,35 +420,92 @@
   
   .filters-section {
     padding: 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
+  
+  /* Dashboard Stats Cards Mobile */
+  .wt-card-wrap {
+    padding: 25px 15px;
+  }
+  
+  .wt-card-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+  }
+  
+  .wt-card-right {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  
+  .wt-card-bottom h4 {
+    font-size: 14px;
+  }
+  
+  /* Table Mobile Scrolling */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -0.75rem;
+    padding: 0 0.75rem;
+    position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: #667eea #f1f1f1;
+  }
+  
+  .table-container::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  .table-container::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 4px;
+  }
+  
+  .table-container::-webkit-scrollbar-thumb:hover {
+    background: #5a67d8;
+  }
+  
+
   
   .tickets-table {
     font-size: 0.8rem;
-    min-width: 900px;
+    min-width: 1200px;
+    width: 1200px;
   }
   
   .tickets-table thead th,
   .tickets-table tbody td {
     padding: 0.75rem 0.5rem;
-    min-width: 100px;
-  }
-  
-  .tickets-table-container {
-    max-height: 60vh;
+    min-width: 120px;
+    white-space: nowrap;
   }
   
   .user-info .user-name,
   .user-info .user-email {
-    max-width: 150px;
+    max-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   
   .ticket-subject {
-    max-width: 200px;
+    max-width: 250px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+  
+  /* Touch-friendly buttons */
+  .view-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem;
   }
 }

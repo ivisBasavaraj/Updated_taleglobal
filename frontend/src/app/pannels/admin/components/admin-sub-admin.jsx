@@ -211,7 +211,7 @@ function AdminSubAdmin() {
 
 
     return (
-        <div className="content-admin-main" style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', padding: '20px' }}>
+        <div className="content-admin-main admin-container" style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', padding: '20px' }}>
             <div className="container-fluid">
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h2 className="fw-bold text-dark mb-0">Sub Admin Management</h2>
@@ -243,7 +243,7 @@ function AdminSubAdmin() {
                                     </button>
                                 </div>
                                 
-                                <div className="table-responsive">
+                                <div className="table-container">
                                     <table className="table table-hover align-middle">
                                         <thead className="table-light">
                                             <tr>
@@ -279,9 +279,9 @@ function AdminSubAdmin() {
                                                             </div>
                                                         </td>
                                                         <td className="py-3 text-center">
-                                                            <div className="btn-group" role="group">
+                                                            <div className="action-buttons">
                                                                 <button 
-                                                                    className="btn btn-outline-primary btn-sm rounded-pill me-2"
+                                                                    className="btn btn-outline-primary btn-sm rounded-pill touch-friendly"
                                                                     onClick={() => handleEdit(admin)}
                                                                     title="Edit Sub Admin"
                                                                 >
@@ -289,7 +289,7 @@ function AdminSubAdmin() {
                                                                     Edit
                                                                 </button>
                                                                 <button 
-                                                                    className="btn btn-outline-danger btn-sm rounded-pill"
+                                                                    className="btn btn-outline-danger btn-sm rounded-pill touch-friendly"
                                                                     onClick={() => handleDelete(admin._id)}
                                                                     title="Delete Sub Admin"
                                                                 >

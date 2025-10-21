@@ -148,7 +148,7 @@ function AdminSupportTickets() {
     }
 
     return (
-        <div className="support-tickets-container">
+        <div className="support-tickets-container admin-container">
             <Container fluid>
                 <div className="support-header">
                     <h2>🎫 Support Tickets Management</h2>
@@ -156,48 +156,93 @@ function AdminSupportTickets() {
                 </div>
 
                 {/* Stats Cards */}
-                <Row className="mb-4">
-                    <Col xl={2} lg={3} md={4} sm={6} className="mb-3">
-                        <Card className="stats-card h-100">
-                            <Card.Body>
-                                <span className="stats-number text-primary">{stats.total}</span>
-                                <div className="stats-label">Total</div>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col xl={2} lg={3} md={4} sm={6} className="mb-3">
-                        <Card className="stats-card h-100">
-                            <Card.Body>
-                                <span className="stats-number text-danger">{stats.unread}</span>
-                                <div className="stats-label">Unread</div>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col xl={2} lg={3} md={4} sm={6} className="mb-3">
-                        <Card className="stats-card h-100">
-                            <Card.Body>
-                                <span className="stats-number text-success">{stats.new}</span>
-                                <div className="stats-label">New</div>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col xl={2} lg={3} md={4} sm={6} className="mb-3">
-                        <Card className="stats-card h-100">
-                            <Card.Body>
-                                <span className="stats-number text-warning">{stats.inProgress}</span>
-                                <div className="stats-label">Progress</div>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col xl={2} lg={3} md={4} sm={6} className="mb-3">
-                        <Card className="stats-card h-100">
-                            <Card.Body>
-                                <span className="stats-number text-info">{stats.resolved}</span>
-                                <div className="stats-label">Resolved</div>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
+                <div className="row mb-4">
+                    <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
+                        <div className="panel panel-default dashboard-stats-card">
+                            <div className="panel-body wt-panel-body gradi-1">
+                                <div className="wt-card-wrap">
+                                    <div className="wt-card-icon">
+                                        <i className="fa fa-ticket-alt" />
+                                    </div>
+                                    <div className="wt-card-right counter">
+                                        {stats.total}
+                                    </div>
+                                    <div className="wt-card-bottom">
+                                        <h4 className="m-b0">Total</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
+                        <div className="panel panel-default dashboard-stats-card">
+                            <div className="panel-body wt-panel-body gradi-2">
+                                <div className="wt-card-wrap">
+                                    <div className="wt-card-icon">
+                                        <i className="fa fa-envelope" />
+                                    </div>
+                                    <div className="wt-card-right counter">
+                                        {stats.unread}
+                                    </div>
+                                    <div className="wt-card-bottom">
+                                        <h4 className="m-b0">Unread</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
+                        <div className="panel panel-default dashboard-stats-card">
+                            <div className="panel-body wt-panel-body gradi-3">
+                                <div className="wt-card-wrap">
+                                    <div className="wt-card-icon">
+                                        <i className="fa fa-plus-circle" />
+                                    </div>
+                                    <div className="wt-card-right counter">
+                                        {stats.new}
+                                    </div>
+                                    <div className="wt-card-bottom">
+                                        <h4 className="m-b0">New</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
+                        <div className="panel panel-default dashboard-stats-card">
+                            <div className="panel-body wt-panel-body gradi-4">
+                                <div className="wt-card-wrap">
+                                    <div className="wt-card-icon">
+                                        <i className="fa fa-clock" />
+                                    </div>
+                                    <div className="wt-card-right counter">
+                                        {stats.inProgress}
+                                    </div>
+                                    <div className="wt-card-bottom">
+                                        <h4 className="m-b0">Progress</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
+                        <div className="panel panel-default dashboard-stats-card">
+                            <div className="panel-body wt-panel-body gradi-1">
+                                <div className="wt-card-wrap">
+                                    <div className="wt-card-icon">
+                                        <i className="fa fa-check-circle" />
+                                    </div>
+                                    <div className="wt-card-right counter">
+                                        {stats.resolved}
+                                    </div>
+                                    <div className="wt-card-bottom">
+                                        <h4 className="m-b0">Resolved</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 {/* Filters */}
                 <div className="filters-section">
@@ -265,67 +310,65 @@ function AdminSupportTickets() {
                                         <p>No support tickets found.</p>
                                     </div>
                                 ) : (
-                                    <div className="tickets-table-container">
-                                        <div className="table-responsive">
-                                            <table className="table tickets-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>📝 Subject</th>
-                                                        <th>👤 User</th>
-                                                        <th>🏷️ Type</th>
-                                                        <th>📂 Category</th>
-                                                        <th>⚡ Priority</th>
-                                                        <th>📊 Status</th>
-                                                        <th>📅 Created</th>
-                                                        <th>⚙️ Action</th>
+                                    <div className="table-container">
+                                        <table className="table tickets-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>📝 Subject</th>
+                                                    <th>👤 User</th>
+                                                    <th>🏷️ Type</th>
+                                                    <th>📂 Category</th>
+                                                    <th>⚡ Priority</th>
+                                                    <th>📊 Status</th>
+                                                    <th>📅 Created</th>
+                                                    <th>⚙️ Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {tickets.map((ticket) => (
+                                                    <tr 
+                                                        key={ticket._id} 
+                                                        className={!ticket.isRead ? 'unread-ticket' : ''}
+                                                        style={{ cursor: 'pointer' }}
+                                                    >
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            <div className="ticket-subject">{ticket.subject}</div>
+                                                            {!ticket.isRead && <span className="new-badge">New</span>}
+                                                        </td>
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            <div className="user-info">
+                                                                <div className="user-name">{ticket.actualUserName || ticket.name || 'N/A'}</div>
+                                                                <div className="user-email">{ticket.actualUserEmail || ticket.email || 'No email provided'}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            {getUserTypeBadge(ticket.userType)}
+                                                        </td>
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            <span className="category-badge">{ticket.category}</span>
+                                                        </td>
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            {getPriorityBadge(ticket.priority)}
+                                                        </td>
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            {getStatusBadge(ticket.status)}
+                                                        </td>
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            <div className="ticket-date">{new Date(ticket.createdAt).toLocaleDateString()}</div>
+                                                        </td>
+                                                        <td>
+                                                            <Button 
+                                                                className="view-btn"
+                                                                size="sm" 
+                                                                onClick={() => handleTicketClick(ticket)}
+                                                            >
+                                                                👁️ View
+                                                            </Button>
+                                                        </td>
                                                     </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {tickets.map((ticket) => (
-                                                        <tr 
-                                                            key={ticket._id} 
-                                                            className={!ticket.isRead ? 'unread-ticket' : ''}
-                                                            style={{ cursor: 'pointer' }}
-                                                        >
-                                                            <td onClick={() => handleTicketClick(ticket)}>
-                                                                <div className="ticket-subject">{ticket.subject}</div>
-                                                                {!ticket.isRead && <span className="new-badge">New</span>}
-                                                            </td>
-                                                            <td onClick={() => handleTicketClick(ticket)}>
-                                                                <div className="user-info">
-                                                                    <div className="user-name">{ticket.actualUserName || ticket.name || 'N/A'}</div>
-                                                                    <div className="user-email">{ticket.actualUserEmail || ticket.email || 'No email provided'}</div>
-                                                                </div>
-                                                            </td>
-                                                            <td onClick={() => handleTicketClick(ticket)}>
-                                                                {getUserTypeBadge(ticket.userType)}
-                                                            </td>
-                                                            <td onClick={() => handleTicketClick(ticket)}>
-                                                                <span className="category-badge">{ticket.category}</span>
-                                                            </td>
-                                                            <td onClick={() => handleTicketClick(ticket)}>
-                                                                {getPriorityBadge(ticket.priority)}
-                                                            </td>
-                                                            <td onClick={() => handleTicketClick(ticket)}>
-                                                                {getStatusBadge(ticket.status)}
-                                                            </td>
-                                                            <td onClick={() => handleTicketClick(ticket)}>
-                                                                <div className="ticket-date">{new Date(ticket.createdAt).toLocaleDateString()}</div>
-                                                            </td>
-                                                            <td>
-                                                                <Button 
-                                                                    className="view-btn"
-                                                                    size="sm" 
-                                                                    onClick={() => handleTicketClick(ticket)}
-                                                                >
-                                                                    👁️ View
-                                                                </Button>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                ))}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 )}
                             </Card.Body>
