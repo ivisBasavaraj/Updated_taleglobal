@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { api } from '../../../../utils/api';
+import '../../../../mobile-card-scrolling.css';
 
 function AdminPlacementOfficersAllRequest() {
     const navigate = useNavigate();
@@ -15,24 +16,17 @@ function AdminPlacementOfficersAllRequest() {
     const fetchPlacements = async () => {
         try {
             setLoading(true);
-            console.log('Fetching placements...');
             const response = await api.getAllPlacements();
-            console.log('API Response:', response);
             if (response.success) {
-                // Show all placements for debugging, filter later
                 const allPlacements = response.data || [];
-                console.log('All placements:', allPlacements);
                 const pendingPlacements = allPlacements.filter(placement => 
                     placement.status === 'pending' || (!placement.status && !placement.isApproved)
                 );
-                console.log('Pending placements:', pendingPlacements);
                 setPlacements(pendingPlacements);
             } else {
-                console.error('API Error:', response);
                 setError(response.message || 'Failed to fetch placement officers');
             }
         } catch (error) {
-            console.error('Fetch Error:', error);
             setError('Error fetching placement officers: ' + error.message);
         } finally {
             setLoading(false);
@@ -50,7 +44,6 @@ function AdminPlacementOfficersAllRequest() {
             }
         } catch (error) {
             alert('Error approving placement officer');
-            console.error('Error:', error);
         }
     };
 
@@ -65,7 +58,6 @@ function AdminPlacementOfficersAllRequest() {
             }
         } catch (error) {
             alert('Error rejecting placement officer');
-            console.error('Error:', error);
         }
     };
 
@@ -96,7 +88,7 @@ function AdminPlacementOfficersAllRequest() {
                     {error && (
                         <div className="alert alert-danger m-b20">{error}</div>
                     )}
-                    <div className="p-a20 table-responsive">
+                    <div className="p-a20 table-responsive table-container">
                         <table className="table twm-table table-striped table-borderless">
                             <thead>
                                 <tr>

@@ -32,7 +32,6 @@ export default function AdminLogin() {
             });
 
             const data = await response.json();
-            console.log('Login response:', data);
 
             if (response.ok && data.success) {
                 localStorage.setItem("adminToken", data.token);
@@ -48,11 +47,9 @@ export default function AdminLogin() {
                 
                 navigate("/admin/dashboard");
             } else {
-                console.error('Login failed:', data);
                 setError(data.message || `Login failed (${response.status})`);
             }
         } catch (error) {
-            console.error('Network error:', error);
             setError(`Network error: ${error.message}. Please ensure backend server is running on port 5000.`);
         } finally {
             setLoading(false);

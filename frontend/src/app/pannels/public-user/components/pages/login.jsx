@@ -91,7 +91,6 @@ function LoginPage() {
         } catch (error) {
             setLoading(false);
             setError('Login failed. Please check your connection and try again.');
-            console.error('Employer login error:', error);
         }
     }
 

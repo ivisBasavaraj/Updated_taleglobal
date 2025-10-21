@@ -22,7 +22,6 @@ const NotificationBell = ({ userRole }) => {
   }, [unreadCount]);
 
   useEffect(() => {
-    console.log('NotificationBell useEffect triggered, userRole:', userRole);
     if (userRole) {
       fetchNotifications();
       // Poll for new notifications every 30 seconds
@@ -35,12 +34,8 @@ const NotificationBell = ({ userRole }) => {
     try {
       const token = localStorage.getItem(`${userRole}Token`);
       if (!token) {
-        console.log('No token found for role:', userRole);
         return;
       }
-      
-      console.log('Fetching notifications for role:', userRole);
-      console.log('Token exists:', !!token);
       
       const response = await fetch(`http://localhost:5000/api/notifications/${userRole}`, {
         headers: {
@@ -48,20 +43,14 @@ const NotificationBell = ({ userRole }) => {
         }
       });
       
-      console.log('Response status:', response.status);
       const data = await response.json();
-      console.log('Notifications response:', data);
       
       if (data.success) {
         setNotifications(data.notifications);
         setUnreadCount(data.unreadCount);
-        console.log('Set notifications count:', data.notifications.length);
-        console.log('Set unread count:', data.unreadCount);
-      } else {
-        console.error('Failed to fetch notifications:', data.message);
       }
     } catch (error) {
-      console.error('Error fetching notifications:', error);
+      // Silent error handling
     }
   };
 
@@ -78,7 +67,7 @@ const NotificationBell = ({ userRole }) => {
       });
       fetchNotifications();
     } catch (error) {
-      console.error('Error marking notification as read:', error);
+      // Silent error handling
     }
   };
 
@@ -95,7 +84,7 @@ const NotificationBell = ({ userRole }) => {
       });
       fetchNotifications();
     } catch (error) {
-      console.error('Error marking all notifications as read:', error);
+      // Silent error handling
     }
   };
 

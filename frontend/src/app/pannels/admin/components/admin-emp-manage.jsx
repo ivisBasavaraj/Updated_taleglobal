@@ -110,7 +110,7 @@ function AdminEmployersAllRequest() {
                     {error && (
                         <div className="alert alert-danger m-b20">{error}</div>
                     )}
-                    <div className="p-a20 table-responsive">
+                    <div className="p-a20 table-responsive table-container">
                         <table className="table twm-table table-striped table-borderless">
                             <thead>
                                 <tr>

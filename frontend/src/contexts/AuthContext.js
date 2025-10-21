@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
         }
       }
     } catch (error) {
-      console.error('Auth check error:', error);
+      // Silent error handling
     }
     
     setLoading(false);

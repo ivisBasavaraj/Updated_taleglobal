@@ -353,6 +353,55 @@
     .emp-stats-card {
         margin-bottom: 20px;
     }
+    
+    /* Table Mobile Scrolling */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -20px;
+        padding: 0 20px;
+        position: relative;
+        scrollbar-width: thin;
+        scrollbar-color: #ff6b35 #f1f1f1;
+    }
+    
+    .table-container::-webkit-scrollbar {
+        height: 8px;
+    }
+    
+    .table-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+    
+    .table-container::-webkit-scrollbar-thumb {
+        background: #ff6b35;
+        border-radius: 4px;
+    }
+    
+    .table-container::-webkit-scrollbar-thumb:hover {
+        background: #e55a2b;
+    }
+    
+    .twm-table {
+        min-width: 800px;
+        width: 800px;
+    }
+    
+    .twm-table thead th,
+    .twm-table tbody td {
+        padding: 15px 10px;
+        min-width: 100px;
+        white-space: nowrap;
+    }
+    
+    /* Touch-friendly buttons */
+    .action-btn {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
 }
 
 /* AOS Animation Overrides */
