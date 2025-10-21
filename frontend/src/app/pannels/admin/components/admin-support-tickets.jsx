@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Badge, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
+import './admin-support-tickets.css';
 
 function AdminSupportTickets() {
     const [tickets, setTickets] = useState([]);
@@ -138,8 +139,8 @@ function AdminSupportTickets() {
 
     if (loading) {
         return (
-            <div className="text-center py-5">
-                <Spinner animation="border" role="status">
+            <div className="loading-spinner">
+                <Spinner animation="border" role="status" variant="primary">
                     <span className="visually-hidden">Loading...</span>
                 </Spinner>
             </div>
@@ -147,216 +148,234 @@ function AdminSupportTickets() {
     }
 
     return (
-        <Container fluid className="py-4">
-            <Row className="mb-4">
-                <Col>
-                    <h2>Support Tickets Management</h2>
-                </Col>
-            </Row>
+        <div className="support-tickets-container">
+            <Container fluid>
+                <div className="support-header">
+                    <h2>🎫 Support Tickets Management</h2>
+                    <p>Manage and respond to customer support requests</p>
+                </div>
 
-            {/* Stats Cards */}
-            <Row className="mb-4">
-                <Col md={2}>
-                    <Card className="text-center">
-                        <Card.Body>
-                            <h4 className="text-primary">{stats.total}</h4>
-                            <small>Total Tickets</small>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={2}>
-                    <Card className="text-center">
-                        <Card.Body>
-                            <h4 className="text-danger">{stats.unread}</h4>
-                            <small>Unread</small>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={2}>
-                    <Card className="text-center">
-                        <Card.Body>
-                            <h4 className="text-success">{stats.new}</h4>
-                            <small>New</small>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={2}>
-                    <Card className="text-center">
-                        <Card.Body>
-                            <h4 className="text-warning">{stats.inProgress}</h4>
-                            <small>In Progress</small>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={2}>
-                    <Card className="text-center">
-                        <Card.Body>
-                            <h4 className="text-info">{stats.resolved}</h4>
-                            <small>Resolved</small>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
+                {/* Stats Cards */}
+                <Row className="mb-4">
+                    <Col md={2} className="mb-3">
+                        <Card className="stats-card">
+                            <Card.Body>
+                                <span className="stats-number text-primary">{stats.total}</span>
+                                <div className="stats-label">Total Tickets</div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col md={2} className="mb-3">
+                        <Card className="stats-card">
+                            <Card.Body>
+                                <span className="stats-number text-danger">{stats.unread}</span>
+                                <div className="stats-label">Unread</div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col md={2} className="mb-3">
+                        <Card className="stats-card">
+                            <Card.Body>
+                                <span className="stats-number text-success">{stats.new}</span>
+                                <div className="stats-label">New</div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col md={2} className="mb-3">
+                        <Card className="stats-card">
+                            <Card.Body>
+                                <span className="stats-number text-warning">{stats.inProgress}</span>
+                                <div className="stats-label">In Progress</div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col md={2} className="mb-3">
+                        <Card className="stats-card">
+                            <Card.Body>
+                                <span className="stats-number text-info">{stats.resolved}</span>
+                                <div className="stats-label">Resolved</div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
 
-            {/* Filters */}
-            <Row className="mb-4">
-                <Col md={3}>
-                    <Form.Select 
-                        value={filters.status} 
-                        onChange={(e) => setFilters({...filters, status: e.target.value})}
-                    >
-                        <option value="">All Status</option>
-                        <option value="new">New</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="resolved">Resolved</option>
-                        <option value="closed">Closed</option>
-                    </Form.Select>
-                </Col>
-                <Col md={3}>
-                    <Form.Select 
-                        value={filters.userType} 
-                        onChange={(e) => setFilters({...filters, userType: e.target.value})}
-                    >
-                        <option value="">All User Types</option>
-                        <option value="employer">Employer</option>
-                        <option value="candidate">Candidate</option>
-                        <option value="guest">Guest</option>
-                    </Form.Select>
-                </Col>
-                <Col md={3}>
-                    <Form.Select 
-                        value={filters.priority} 
-                        onChange={(e) => setFilters({...filters, priority: e.target.value})}
-                    >
-                        <option value="">All Priorities</option>
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                        <option value="urgent">Urgent</option>
-                    </Form.Select>
-                </Col>
-                <Col md={3}>
-                    <Button variant="outline-secondary" onClick={() => setFilters({status: '', userType: '', priority: ''})}>
-                        Clear Filters
-                    </Button>
-                </Col>
-            </Row>
+                {/* Filters */}
+                <div className="filters-section">
+                    <Row>
+                        <Col md={3} className="mb-3">
+                            <Form.Select 
+                                className="filter-select"
+                                value={filters.status} 
+                                onChange={(e) => setFilters({...filters, status: e.target.value})}
+                            >
+                                <option value="">📋 All Status</option>
+                                <option value="new">🆕 New</option>
+                                <option value="in-progress">⏳ In Progress</option>
+                                <option value="resolved">✅ Resolved</option>
+                                <option value="closed">🔒 Closed</option>
+                            </Form.Select>
+                        </Col>
+                        <Col md={3} className="mb-3">
+                            <Form.Select 
+                                className="filter-select"
+                                value={filters.userType} 
+                                onChange={(e) => setFilters({...filters, userType: e.target.value})}
+                            >
+                                <option value="">👥 All User Types</option>
+                                <option value="employer">🏢 Employer</option>
+                                <option value="candidate">👤 Candidate</option>
+                                <option value="guest">🌐 Guest</option>
+                            </Form.Select>
+                        </Col>
+                        <Col md={3} className="mb-3">
+                            <Form.Select 
+                                className="filter-select"
+                                value={filters.priority} 
+                                onChange={(e) => setFilters({...filters, priority: e.target.value})}
+                            >
+                                <option value="">⚡ All Priorities</option>
+                                <option value="low">🟢 Low</option>
+                                <option value="medium">🟡 Medium</option>
+                                <option value="high">🟠 High</option>
+                                <option value="urgent">🔴 Urgent</option>
+                            </Form.Select>
+                        </Col>
+                        <Col md={3} className="mb-3">
+                            <Button 
+                                className="clear-filters-btn w-100" 
+                                onClick={() => setFilters({status: '', userType: '', priority: ''})}
+                            >
+                                🗑️ Clear Filters
+                            </Button>
+                        </Col>
+                    </Row>
+                </div>
 
-            {/* Tickets List */}
-            <Row>
-                <Col>
-                    <Card>
-                        <Card.Header>
-                            <h5>Support Tickets ({tickets.length})</h5>
-                        </Card.Header>
-                        <Card.Body className="p-0">
-                            {tickets.length === 0 ? (
-                                <div className="text-center py-4">
-                                    <p>No support tickets found.</p>
-                                </div>
-                            ) : (
-                                <div className="table-responsive">
-                                    <table className="table table-hover mb-0">
-                                        <thead className="table-light">
-                                            <tr>
-                                                <th>Subject</th>
-                                                <th>User</th>
-                                                <th>Type</th>
-                                                <th>Category</th>
-                                                <th>Priority</th>
-                                                <th>Status</th>
-                                                <th>Created</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {tickets.map((ticket) => (
-                                                <tr 
-                                                    key={ticket._id} 
-                                                    className={!ticket.isRead ? 'table-warning' : ''}
-                                                    style={{ cursor: 'pointer' }}
-                                                >
-                                                    <td onClick={() => handleTicketClick(ticket)}>
-                                                        <strong>{ticket.subject}</strong>
-                                                        {!ticket.isRead && <Badge bg="danger" className="ms-2">New</Badge>}
-                                                    </td>
-                                                    <td onClick={() => handleTicketClick(ticket)}>
-                                                        <div>
-                                                            <strong>{ticket.actualUserName || ticket.name || 'N/A'}</strong><br/>
-                                                            <small className="text-muted">{ticket.actualUserEmail || ticket.email || 'No email provided'}</small>
-                                                        </div>
-                                                    </td>
-                                                    <td onClick={() => handleTicketClick(ticket)}>
-                                                        {getUserTypeBadge(ticket.userType)}
-                                                    </td>
-                                                    <td onClick={() => handleTicketClick(ticket)}>
-                                                        <Badge bg="light" text="dark">{ticket.category}</Badge>
-                                                    </td>
-                                                    <td onClick={() => handleTicketClick(ticket)}>
-                                                        {getPriorityBadge(ticket.priority)}
-                                                    </td>
-                                                    <td onClick={() => handleTicketClick(ticket)}>
-                                                        {getStatusBadge(ticket.status)}
-                                                    </td>
-                                                    <td onClick={() => handleTicketClick(ticket)}>
-                                                        <small>{new Date(ticket.createdAt).toLocaleDateString()}</small>
-                                                    </td>
-                                                    <td>
-                                                        <Button 
-                                                            size="sm" 
-                                                            variant="outline-primary"
-                                                            onClick={() => handleTicketClick(ticket)}
-                                                        >
-                                                            View
-                                                        </Button>
-                                                    </td>
+                {/* Tickets List */}
+                <Row>
+                    <Col>
+                        <Card className="tickets-card">
+                            <div className="tickets-header">
+                                <h5>📋 Support Tickets ({tickets.length})</h5>
+                            </div>
+                            <Card.Body className="p-0">
+                                {tickets.length === 0 ? (
+                                    <div className="empty-state">
+                                        <i>📭</i>
+                                        <p>No support tickets found.</p>
+                                    </div>
+                                ) : (
+                                    <div className="table-responsive">
+                                        <table className="table tickets-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>📝 Subject</th>
+                                                    <th>👤 User</th>
+                                                    <th>🏷️ Type</th>
+                                                    <th>📂 Category</th>
+                                                    <th>⚡ Priority</th>
+                                                    <th>📊 Status</th>
+                                                    <th>📅 Created</th>
+                                                    <th>⚙️ Action</th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )}
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
+                                            </thead>
+                                            <tbody>
+                                                {tickets.map((ticket) => (
+                                                    <tr 
+                                                        key={ticket._id} 
+                                                        className={!ticket.isRead ? 'unread-ticket' : ''}
+                                                        style={{ cursor: 'pointer' }}
+                                                    >
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            <div className="ticket-subject">{ticket.subject}</div>
+                                                            {!ticket.isRead && <span className="new-badge">New</span>}
+                                                        </td>
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            <div className="user-info">
+                                                                <div className="user-name">{ticket.actualUserName || ticket.name || 'N/A'}</div>
+                                                                <div className="user-email">{ticket.actualUserEmail || ticket.email || 'No email provided'}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            {getUserTypeBadge(ticket.userType)}
+                                                        </td>
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            <span className="category-badge">{ticket.category}</span>
+                                                        </td>
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            {getPriorityBadge(ticket.priority)}
+                                                        </td>
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            {getStatusBadge(ticket.status)}
+                                                        </td>
+                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                            <div className="ticket-date">{new Date(ticket.createdAt).toLocaleDateString()}</div>
+                                                        </td>
+                                                        <td>
+                                                            <Button 
+                                                                className="view-btn"
+                                                                size="sm" 
+                                                                onClick={() => handleTicketClick(ticket)}
+                                                            >
+                                                                👁️ View
+                                                            </Button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
+        </div>
 
             {/* Ticket Detail Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
                 <Modal.Header closeButton>
-                    <Modal.Title>Support Ticket Details</Modal.Title>
+                    <Modal.Title>🎫 Support Ticket Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {selectedTicket && (
                         <>
                             <Row className="mb-3">
                                 <Col md={6}>
-                                    <strong>Subject:</strong> {selectedTicket.subject}
+                                    <div className="detail-label">📝 Subject:</div>
+                                    <div>{selectedTicket.subject}</div>
                                 </Col>
                                 <Col md={6}>
-                                    <strong>Priority:</strong> {getPriorityBadge(selectedTicket.priority)}
-                                </Col>
-                            </Row>
-                            <Row className="mb-3">
-                                <Col md={6}>
-                                    <strong>User:</strong> {selectedTicket.actualUserName || selectedTicket.name || 'N/A'} ({selectedTicket.actualUserEmail || selectedTicket.email || 'No email provided'})
-                                </Col>
-                                <Col md={6}>
-                                    <strong>User Type:</strong> {getUserTypeBadge(selectedTicket.userType)}
+                                    <div className="detail-label">⚡ Priority:</div>
+                                    <div>{getPriorityBadge(selectedTicket.priority)}</div>
                                 </Col>
                             </Row>
                             <Row className="mb-3">
                                 <Col md={6}>
-                                    <strong>Category:</strong> {selectedTicket.category}
+                                    <div className="detail-label">👤 User:</div>
+                                    <div>{selectedTicket.actualUserName || selectedTicket.name || 'N/A'}</div>
+                                    <small className="text-muted">({selectedTicket.actualUserEmail || selectedTicket.email || 'No email provided'})</small>
                                 </Col>
                                 <Col md={6}>
-                                    <strong>Phone:</strong> {selectedTicket.phone || 'N/A'}
+                                    <div className="detail-label">🏷️ User Type:</div>
+                                    <div>{getUserTypeBadge(selectedTicket.userType)}</div>
+                                </Col>
+                            </Row>
+                            <Row className="mb-3">
+                                <Col md={6}>
+                                    <div className="detail-label">📂 Category:</div>
+                                    <div>{selectedTicket.category}</div>
+                                </Col>
+                                <Col md={6}>
+                                    <div className="detail-label">📞 Phone:</div>
+                                    <div>{selectedTicket.phone || 'N/A'}</div>
                                 </Col>
                             </Row>
                             <Row className="mb-3">
                                 <Col>
-                                    <strong>Message:</strong>
-                                    <div className="border p-3 mt-2 bg-light">
+                                    <div className="detail-label">💬 Message:</div>
+                                    <div className="message-box">
                                         {selectedTicket.message}
                                     </div>
                                 </Col>
@@ -364,16 +383,17 @@ function AdminSupportTickets() {
                             {selectedTicket.attachments && selectedTicket.attachments.length > 0 && (
                                 <Row className="mb-3">
                                     <Col>
-                                        <strong>Attachments:</strong>
-                                        <ul className="mt-2">
+                                        <div className="detail-label">📎 Attachments:</div>
+                                        <ul className="attachment-list">
                                             {selectedTicket.attachments.map((attachment, index) => (
-                                                <li key={index}>
+                                                <li key={index} className="attachment-item">
                                                     <a 
+                                                        className="attachment-link"
                                                         href={`http://localhost:5000/api/admin/support-tickets/${selectedTicket._id}/attachments/${index}`}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                     >
-                                                        {attachment.originalName}
+                                                        📄 {attachment.originalName}
                                                     </a>
                                                 </li>
                                             ))}
@@ -384,12 +404,12 @@ function AdminSupportTickets() {
                             <Row className="mb-3">
                                 <Col md={6}>
                                     <Form.Group>
-                                        <Form.Label><strong>Status:</strong></Form.Label>
-                                        <Form.Select value={status} onChange={(e) => setStatus(e.target.value)}>
-                                            <option value="new">New</option>
-                                            <option value="in-progress">In Progress</option>
-                                            <option value="resolved">Resolved</option>
-                                            <option value="closed">Closed</option>
+                                        <Form.Label className="detail-label">📊 Status:</Form.Label>
+                                        <Form.Select className="filter-select" value={status} onChange={(e) => setStatus(e.target.value)}>
+                                            <option value="new">🆕 New</option>
+                                            <option value="in-progress">⏳ In Progress</option>
+                                            <option value="resolved">✅ Resolved</option>
+                                            <option value="closed">🔒 Closed</option>
                                         </Form.Select>
                                     </Form.Group>
                                 </Col>
@@ -397,8 +417,9 @@ function AdminSupportTickets() {
                             <Row className="mb-3">
                                 <Col>
                                     <Form.Group>
-                                        <Form.Label><strong>Admin Response:</strong></Form.Label>
+                                        <Form.Label className="detail-label">💭 Admin Response:</Form.Label>
                                         <Form.Control
+                                            className="response-textarea"
                                             as="textarea"
                                             rows={4}
                                             value={response}
@@ -412,11 +433,11 @@ function AdminSupportTickets() {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>
-                        Close
+                    <Button className="close-btn" onClick={() => setShowModal(false)}>
+                        ❌ Close
                     </Button>
-                    <Button variant="primary" onClick={handleUpdateTicket}>
-                        Update Ticket
+                    <Button className="update-btn" onClick={handleUpdateTicket}>
+                        ✅ Update Ticket
                     </Button>
                 </Modal.Footer>
             </Modal>
