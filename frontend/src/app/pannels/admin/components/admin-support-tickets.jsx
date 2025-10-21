@@ -265,65 +265,67 @@ function AdminSupportTickets() {
                                         <p>No support tickets found.</p>
                                     </div>
                                 ) : (
-                                    <div className="table-responsive">
-                                        <table className="table tickets-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>📝 Subject</th>
-                                                    <th>👤 User</th>
-                                                    <th>🏷️ Type</th>
-                                                    <th>📂 Category</th>
-                                                    <th>⚡ Priority</th>
-                                                    <th>📊 Status</th>
-                                                    <th>📅 Created</th>
-                                                    <th>⚙️ Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {tickets.map((ticket) => (
-                                                    <tr 
-                                                        key={ticket._id} 
-                                                        className={!ticket.isRead ? 'unread-ticket' : ''}
-                                                        style={{ cursor: 'pointer' }}
-                                                    >
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            <div className="ticket-subject">{ticket.subject}</div>
-                                                            {!ticket.isRead && <span className="new-badge">New</span>}
-                                                        </td>
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            <div className="user-info">
-                                                                <div className="user-name">{ticket.actualUserName || ticket.name || 'N/A'}</div>
-                                                                <div className="user-email">{ticket.actualUserEmail || ticket.email || 'No email provided'}</div>
-                                                            </div>
-                                                        </td>
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            {getUserTypeBadge(ticket.userType)}
-                                                        </td>
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            <span className="category-badge">{ticket.category}</span>
-                                                        </td>
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            {getPriorityBadge(ticket.priority)}
-                                                        </td>
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            {getStatusBadge(ticket.status)}
-                                                        </td>
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            <div className="ticket-date">{new Date(ticket.createdAt).toLocaleDateString()}</div>
-                                                        </td>
-                                                        <td>
-                                                            <Button 
-                                                                className="view-btn"
-                                                                size="sm" 
-                                                                onClick={() => handleTicketClick(ticket)}
-                                                            >
-                                                                👁️ View
-                                                            </Button>
-                                                        </td>
+                                    <div className="tickets-table-container">
+                                        <div className="table-responsive">
+                                            <table className="table tickets-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>📝 Subject</th>
+                                                        <th>👤 User</th>
+                                                        <th>🏷️ Type</th>
+                                                        <th>📂 Category</th>
+                                                        <th>⚡ Priority</th>
+                                                        <th>📊 Status</th>
+                                                        <th>📅 Created</th>
+                                                        <th>⚙️ Action</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    {tickets.map((ticket) => (
+                                                        <tr 
+                                                            key={ticket._id} 
+                                                            className={!ticket.isRead ? 'unread-ticket' : ''}
+                                                            style={{ cursor: 'pointer' }}
+                                                        >
+                                                            <td onClick={() => handleTicketClick(ticket)}>
+                                                                <div className="ticket-subject">{ticket.subject}</div>
+                                                                {!ticket.isRead && <span className="new-badge">New</span>}
+                                                            </td>
+                                                            <td onClick={() => handleTicketClick(ticket)}>
+                                                                <div className="user-info">
+                                                                    <div className="user-name">{ticket.actualUserName || ticket.name || 'N/A'}</div>
+                                                                    <div className="user-email">{ticket.actualUserEmail || ticket.email || 'No email provided'}</div>
+                                                                </div>
+                                                            </td>
+                                                            <td onClick={() => handleTicketClick(ticket)}>
+                                                                {getUserTypeBadge(ticket.userType)}
+                                                            </td>
+                                                            <td onClick={() => handleTicketClick(ticket)}>
+                                                                <span className="category-badge">{ticket.category}</span>
+                                                            </td>
+                                                            <td onClick={() => handleTicketClick(ticket)}>
+                                                                {getPriorityBadge(ticket.priority)}
+                                                            </td>
+                                                            <td onClick={() => handleTicketClick(ticket)}>
+                                                                {getStatusBadge(ticket.status)}
+                                                            </td>
+                                                            <td onClick={() => handleTicketClick(ticket)}>
+                                                                <div className="ticket-date">{new Date(ticket.createdAt).toLocaleDateString()}</div>
+                                                            </td>
+                                                            <td>
+                                                                <Button 
+                                                                    className="view-btn"
+                                                                    size="sm" 
+                                                                    onClick={() => handleTicketClick(ticket)}
+                                                                >
+                                                                    👁️ View
+                                                                </Button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 )}
                             </Card.Body>
