@@ -29,7 +29,13 @@ exports.registerPlacement = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email already registered' });
     }
 
-    const placementData = { name, email, password, phone, collegeName };
+    const placementData = { 
+      name: name.trim(), 
+      email: email.toLowerCase().trim(), 
+      password: password.trim(), 
+      phone: phone.trim(), 
+      collegeName: collegeName.trim() 
+    };
     const placement = await Placement.create(placementData);
     
     // Create notification for admin about new placement registration
@@ -132,8 +138,17 @@ exports.loginPlacement = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const placement = await Placement.findOne({ email });
-    if (!placement || !(await placement.comparePassword(password))) {
+    if (!email || !password) {
+      return res.status(400).json({ success: false, message: 'Email and password are required' });
+    }
+
+    const placement = await Placement.findOne({ email: email.toLowerCase() });
+    if (!placement) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+
+    const isPasswordValid = await placement.comparePassword(password);
+    if (!isPasswordValid) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
@@ -159,6 +174,7 @@ exports.loginPlacement = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Placement login error:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
