@@ -1,3 +1,5 @@
+import { safeApiCall } from './apiErrorHandler';
+
 // Authentication debugging utility
 export const debugAuth = () => {
     console.log('=== Authentication Debug ===');
@@ -35,6 +37,16 @@ export const testAPIConnection = async () => {
     
     try {
         const response = await fetch(`${API_BASE_URL}/../health`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error(`Expected JSON but got ${contentType || 'unknown'}`);
+        }
+        
         const data = await response.json();
         console.log('API Health Check:', data);
         return { success: true, data };
@@ -61,15 +73,18 @@ export const testPlacementAuth = async () => {
             }
         });
         
-        const data = await response.json();
-        
-        if (response.ok) {
-            console.log('Placement Auth Success:', data);
-            return { success: true, data };
-        } else {
-            console.error('Placement Auth Failed:', response.status, data);
-            return { success: false, status: response.status, error: data.message };
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
+        
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error(`Expected JSON but got ${contentType || 'unknown'}`);
+        }
+        
+        const data = await response.json();
+        console.log('Placement Auth Success:', data);
+        return { success: true, data };
     } catch (error) {
         console.error('Placement Auth Error:', error);
         return { success: false, error: error.message };
