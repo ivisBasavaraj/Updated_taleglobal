@@ -264,21 +264,43 @@
   .job-card-left {
     gap: 8px;
   }
-  
+
   .company-logo {
     width: 36px;
     height: 36px;
   }
-  
+
   .job-title {
     font-size: 14px;
   }
-  
+
   .job-location {
     font-size: 13px;
   }
-  
+
   .ctc-text, .vacancy-text {
     font-size: 13px;
+  }
+}
+
+/* Skeleton Loading Styles */
+.job-card-skeleton .skeleton-line {
+  background: #f0f0f0;
+  border-radius: 4px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
+}
+
+.job-card-skeleton .skeleton-logo {
+  background: #f0f0f0;
+  border-radius: 8px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
   }
 }

@@ -6,6 +6,7 @@ import JobZImage from "../../../../common/jobz-img";
 import SectionPagination from "../common/section-pagination";
 import { requestCache } from "../../../../../utils/requestCache";
 import { performanceMonitor } from "../../../../../utils/performanceMonitor";
+import "../../../../../new-job-card.css";
 
 const SectionJobsGrid = memo(({ filters, onTotalChange }) => {
     const [jobs, setJobs] = useState([]);
@@ -170,69 +171,118 @@ const SectionJobsGrid = memo(({ filters, onTotalChange }) => {
 
         return (
             <Col key={job._id} lg={6} md={12} className="mb-4">
-                <div ref={cardRef} className="twm-jobs-grid-style1 hover-card job-card" data-visible="true">
-                    <div className="twm-media">
-                        {job.employerProfile?.logo ? (
-                            <img src={job.employerProfile.logo} alt="Company Logo" loading="lazy" />
-                        ) : (
-                            <JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
-                        )}
-                    </div>
-
-                    <div className="twm-jobs-category green">
-                        <span className={`twm-bg-${jobTypeClass}`}>
-                            {job.jobType || 'Full-time'}
-                        </span>
-                    </div>
-
-                    <div className="twm-mid-content">
-                        <NavLink to={`${publicUser.jobs.DETAIL1}/${job._id}`} className="twm-job-title">
-                            <h4>{job.title}</h4>
-                        </NavLink>
-                        <div className="twm-job-address">
-                            <i className="feather-map-pin" />
-                            &nbsp;{job.location}
-                        </div>
-                        <div className="company-name" style={{ fontSize: '13px', color: '#666', marginTop: '4px' }}>
-                            Company: {job.employerId?.companyName || 'N/A'}
-                        </div>
-                    </div>
-
-                    <div className="twm-right-content twm-job-right-group">
-                        <div className="twm-salary-and-apply mb-2">
-                            <div className="twm-jobs-amount">
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#1967d2', marginBottom: '4px' }}>
-                                    Annual CTC: {ctcDisplay}
+                <div ref={cardRef} className="new-job-card" data-visible="true">
+                    {/* Top Row */}
+                    <div className="job-card-header">
+                        <div className="job-card-left">
+                            <div className="company-logo">
+                                {job.employerProfile?.logo ? (
+                                    <img
+                                        src={
+                                            job.companyLogo ||
+                                            (job.employerProfile.logo?.startsWith("data:")
+                                                ? job.employerProfile.logo
+                                                : `data:image/jpeg;base64,${job.employerProfile.logo}`)
+                                        }
+                                        alt="Company Logo"
+                                    />
+                                ) : (
+                                    <div className="logo-placeholder">
+                                        {(job.employerId?.companyName || "C").charAt(0)}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="job-info">
+                                <h4 className="job-title">{job.title}</h4>
+                                <div className="job-location">
+                                    <i className="feather-map-pin" />
+                                    {job.location}
                                 </div>
                             </div>
-                            <span className="vacancy-text">Vacancies: {job.vacancies || 'N/A'}</span>
                         </div>
-                        <div className="d-flex align-items-center justify-content-between">
-                            <h6 className="twm-job-address posted-by-company mb-0">
-                                Posted by {job.postedBy || 'Company'}
-                            </h6>
-                            <button 
-                                className="btn btn-sm apply-now-button"
-                                onClick={handleApplyClick}
-                            >
-                                Apply Now
-                            </button>
+                        <div className="job-type-badge">
+                            <span className={`job-type-pill ${
+                                job.jobType === "Full-Time" ? "full-time" :
+                                job.jobType === "Part-Time" ? "part-time" :
+                                job.jobType === "Contract" ? "contract" :
+                                job.jobType?.includes("Internship") ? "internship" :
+                                job.jobType === "Work From Home" ? "wfh" : "full-time"
+                            }`}>
+                                {job.jobType || "Full-Time"}
+                            </span>
                         </div>
+                    </div>
+
+                    {/* Middle Row */}
+                    <div className="job-card-middle">
+                        <div className="ctc-info">
+                            {job.ctc && typeof job.ctc === "object" && job.ctc.min > 0 && job.ctc.max > 0 ? (
+                                <span className="ctc-text">
+                                    Annual CTC: {job.ctc.min === job.ctc.max
+                                        ? `₹${Math.floor(job.ctc.min / 100000)}LPA`
+                                        : `₹${Math.floor(job.ctc.min / 100000)} - ${Math.floor(job.ctc.max / 100000)} LPA`}
+                                </span>
+                            ) : (
+                                <span className="ctc-text">CTC: Not specified</span>
+                            )}
+                        </div>
+                        <div className="vacancy-info">
+                            <span className="vacancy-text">
+                                Vacancies: {job.vacancies || "Not specified"}
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Bottom Row */}
+                    <div className="job-card-footer">
+                        <div className="company-info">
+                            <div className="posted-by-label">Posted by:</div>
+                            <div className="company-name">
+                                {job.employerId?.companyName || "Company"}
+                            </div>
+                            <div className="poster-type">
+                                {job.postedBy || (job.employerId?.employerType === "consultant" ? "Consultancy" : "Company")}
+                            </div>
+                        </div>
+                        <button
+                            className="apply-now-btn"
+                            onClick={handleApplyClick}
+                        >
+                            Apply Now
+                        </button>
                     </div>
                 </div>
             </Col>
         );
     });
 
-    const skeletonCards = useMemo(() => 
+    const skeletonCards = useMemo(() =>
         [...Array(4)].map((_, idx) => (
             <Col key={`skeleton-${idx}`} lg={6} md={12} className="mb-4">
-                <div className="twm-jobs-grid-style1 job-card-skeleton">
-                    <div className="skeleton-logo" />
-                    <div className="skeleton-lines">
-                        <div className="skeleton-line short" />
-                        <div className="skeleton-line" />
-                        <div className="skeleton-line" />
+                <div className="new-job-card job-card-skeleton">
+                    <div className="job-card-header">
+                        <div className="job-card-left">
+                            <div className="company-logo skeleton-logo" />
+                            <div className="job-info">
+                                <div className="skeleton-line short" style={{height: '18px', marginBottom: '4px'}} />
+                                <div className="skeleton-line" style={{height: '14px', width: '60%'}} />
+                            </div>
+                        </div>
+                        <div className="job-type-badge">
+                            <div className="skeleton-line" style={{height: '24px', width: '80px', borderRadius: '20px'}} />
+                        </div>
+                    </div>
+                    <div className="job-card-middle">
+                        <div className="skeleton-line" style={{height: '16px', marginBottom: '8px'}} />
+                        <div className="skeleton-line" style={{height: '14px', width: '40%'}} />
+                    </div>
+                    <div className="job-card-footer">
+                        <div className="company-info">
+                            <div className="skeleton-line" style={{height: '12px', width: '60px', marginBottom: '4px'}} />
+                            <div className="skeleton-line" style={{height: '14px', marginBottom: '4px'}} />
+                            <div className="skeleton-line" style={{height: '12px', width: '70%'}} />
+                        </div>
+                        <div className="skeleton-line" style={{height: '36px', width: '100px', borderRadius: '8px'}} />
                     </div>
                 </div>
             </Col>

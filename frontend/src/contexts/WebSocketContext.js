@@ -16,7 +16,9 @@ export const WebSocketProvider = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const socketUrl = process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000';
+    // Always use localhost for development
+    const socketUrl = 'http://localhost:5000';
+    console.log('Connecting to WebSocket:', socketUrl);
     const newSocket = io(socketUrl, {
       transports: ['websocket', 'polling']
     });
