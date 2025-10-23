@@ -167,6 +167,26 @@
   content-visibility: hidden;
 }
 
+/* Logo and Title Horizontal Layout */
+.logo-title-row {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  margin-bottom: 16px !important;
+}
+
+.twm-jobs-grid-style1 .twm-media {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 8px !important;
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+.twm-jobs-grid-style1 .twm-mid-content {
+  flex-grow: 1 !important;
+}
+
 /* Responsive optimizations */
 @media (max-width: 768px) {
   .job-card {

@@ -82,15 +82,12 @@ function SectionCandicateBasicInfo() {
         phone: '',
         email: '',
         location: '',
-        profilePicture: null,
-        idCard: null
+        profilePicture: null
     });
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);
     const [currentProfilePicture, setCurrentProfilePicture] = useState(null);
-    const [idCardPreview, setIdCardPreview] = useState(null);
-    const [currentIdCard, setCurrentIdCard] = useState(null);
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
     const [notification, setNotification] = useState(null);
@@ -142,7 +139,6 @@ function SectionCandicateBasicInfo() {
                 setErrors({});
                 setTouched({});
                 setCurrentProfilePicture(profile.profilePicture);
-                setCurrentIdCard(profile.idCard);
             }
         } catch (error) {
             console.error('Error fetching profile:', error);
@@ -172,12 +168,14 @@ function SectionCandicateBasicInfo() {
                 break;
             
             case 'middleName':
-                if (!value || !value.trim()) {
-                    newErrors.middleName = 'Middle name is required';
-                } else if (value.length > 30) {
-                    newErrors.middleName = 'Middle name cannot exceed 30 characters';
-                } else if (!/^[a-zA-Z\s]*$/.test(value)) {
-                    newErrors.middleName = 'Middle name can only contain letters and spaces';
+                if (value && value.trim()) {
+                    if (value.length > 30) {
+                        newErrors.middleName = 'Middle name cannot exceed 30 characters';
+                    } else if (!/^[a-zA-Z\s]*$/.test(value)) {
+                        newErrors.middleName = 'Middle name can only contain letters and spaces';
+                    } else {
+                        delete newErrors.middleName;
+                    }
                 } else {
                     delete newErrors.middleName;
                 }
@@ -282,43 +280,10 @@ function SectionCandicateBasicInfo() {
         }
     };
 
-    const handleIdCardChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            // Validate file size (5MB max)
-            if (file.size > 5 * 1024 * 1024) {
-                setNotification({ type: 'error', message: 'File size must be less than 5MB' });
-                e.target.value = '';
-                return;
-            }
-            
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf'];
-            if (!allowedTypes.includes(file.type)) {
-                setNotification({ type: 'error', message: 'Please upload only JPG, PNG, GIF or PDF files' });
-                e.target.value = '';
-                return;
-            }
-            
-            setFormData(prev => ({
-                ...prev,
-                idCard: file
-            }));
-            
-            // Create preview URL for images only
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    setIdCardPreview(reader.result);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                setIdCardPreview(null);
-            }
-        }
-    };
+
 
     const validateForm = () => {
-        const fieldsToValidate = ['name', 'email', 'middleName', 'lastName', 'phone', 'location'];
+        const fieldsToValidate = ['name', 'email', 'lastName', 'phone', 'location'];
         let isValid = true;
         
         fieldsToValidate.forEach(field => {
@@ -326,11 +291,20 @@ function SectionCandicateBasicInfo() {
             if (!fieldValid) isValid = false;
         });
         
+        // Validate middle name only if it has a value
+        if (formData.middleName && formData.middleName.trim()) {
+            const middleNameValid = validateField('middleName', formData.middleName);
+            if (!middleNameValid) isValid = false;
+        }
+        
         // Mark all fields as touched
         const allTouched = {};
         fieldsToValidate.forEach(field => {
             allTouched[field] = true;
         });
+        if (formData.middleName && formData.middleName.trim()) {
+            allTouched.middleName = true;
+        }
         setTouched(allTouched);
         
         return isValid;
@@ -357,9 +331,6 @@ function SectionCandicateBasicInfo() {
             if (formData.profilePicture) {
                 submitData.append('profilePicture', formData.profilePicture);
             }
-            if (formData.idCard) {
-                submitData.append('idCard', formData.idCard);
-            }
             
             console.log('Form data being sent:', formData);
             
@@ -370,7 +341,6 @@ function SectionCandicateBasicInfo() {
                 setTimeout(() => setNotification(null), 3000);
                 fetchProfile();
                 setImagePreview(null);
-                setIdCardPreview(null);
                 window.dispatchEvent(new Event('profileUpdated'));
             } else {
                 if (response.errors && Array.isArray(response.errors)) {
@@ -466,60 +436,7 @@ function SectionCandicateBasicInfo() {
                         </div>
                     </div>
 
-                    {/* ID Card Section */}
-                    <div className="row mb-4">
-                        <div className="col-md-12">
-                            <div className="id-card-section text-center">
-                                <label className="form-label fw-bold mb-3">
-                                    <i className="fa fa-id-card me-2" style={{color: '#ff6b35'}}></i>
-                                    ID Card (Optional)
-                                </label>
-                                <div className="mb-3">
-                                    {idCardPreview ? (
-                                        <img 
-                                            src={idCardPreview} 
-                                            alt="ID Card Preview" 
-                                            className="id-card-preview"
-                                            style={{maxWidth: '300px', maxHeight: '200px', objectFit: 'contain', border: '2px solid #ff6b35', borderRadius: '8px'}}
-                                        />
-                                    ) : currentIdCard ? (
-                                        currentIdCard.startsWith('data:image') ? (
-                                            <img 
-                                                src={currentIdCard} 
-                                                alt="Current ID Card" 
-                                                className="id-card-preview"
-                                                style={{maxWidth: '300px', maxHeight: '200px', objectFit: 'contain', border: '2px solid #ff6b35', borderRadius: '8px'}}
-                                            />
-                                        ) : (
-                                            <div className="id-card-placeholder d-flex align-items-center justify-content-center" 
-                                                 style={{width: '300px', height: '200px', backgroundColor: '#f8f9fa', border: '2px solid #ff6b35', borderRadius: '8px', margin: '0 auto'}}>
-                                                <div className="text-center">
-                                                    <i className="fa fa-file-pdf-o fa-3x text-muted mb-2"></i>
-                                                    <p className="text-muted mb-0">PDF ID Card Uploaded</p>
-                                                </div>
-                                            </div>
-                                        )
-                                    ) : (
-                                        <div className="id-card-placeholder d-flex align-items-center justify-content-center" 
-                                             style={{width: '300px', height: '200px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '0 auto'}}>
-                                            <div className="text-center">
-                                                <i className="fa fa-id-card fa-3x text-muted mb-2"></i>
-                                                <p className="text-muted mb-0">No ID Card Uploaded</p>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                                <input 
-                                    className="form-control mx-auto" 
-                                    type="file" 
-                                    accept="image/*,application/pdf"
-                                    onChange={handleIdCardChange}
-                                    style={{maxWidth: '300px'}}
-                                />
-                                <small className="text-muted mt-2 d-block">Upload JPG, PNG, GIF or PDF (Max 5MB)</small>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <hr className="my-4" />
 
@@ -540,7 +457,7 @@ function SectionCandicateBasicInfo() {
                             {errors.name && <div className="invalid-feedback">{errors.name}</div>}
                         </div>
                         <div className="col-md-4 mb-3">
-                            <label className="form-label"><i className="fa fa-user me-2" style={{color: '#ff6b35'}}></i>Middle Name *</label>
+                            <label className="form-label"><i className="fa fa-user me-2" style={{color: '#ff6b35'}}></i>Middle Name</label>
                             <input
                                 className={`form-control ${errors.middleName ? 'is-invalid' : ''}`}
                                 type="text"
@@ -548,8 +465,7 @@ function SectionCandicateBasicInfo() {
                                 value={formData.middleName}
                                 onChange={handleInputChange}
                                 onBlur={handleBlur}
-                                placeholder="Middle name"
-                                required
+                                placeholder="Middle name (optional)"
                             />
                             {errors.middleName && <div className="invalid-feedback">{errors.middleName}</div>}
                         </div>
