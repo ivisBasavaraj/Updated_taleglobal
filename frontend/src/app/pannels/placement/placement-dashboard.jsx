@@ -36,8 +36,8 @@ function PlacementDashboard() {
             // Test API connection
             const apiTest = await testAPIConnection();
             if (!apiTest.success) {
-                
-                alert('Cannot connect to server. Please check if the backend is running on port 5000.');
+                console.error('API Connection failed:', apiTest.error);
+                setLoading(false);
                 return;
             }
             
@@ -45,9 +45,8 @@ function PlacementDashboard() {
                 // Test placement authentication
                 const authTest = await testPlacementAuth();
                 if (!authTest.success) {
-                    
+                    console.error('Auth test failed:', authTest.error);
                     if (authTest.status === 401) {
-                        alert('Your session has expired. Please login again.');
                         localStorage.removeItem('placementToken');
                         localStorage.removeItem('placementUser');
                         window.location.href = '/login';
@@ -75,8 +74,7 @@ function PlacementDashboard() {
             // Check if token exists
             const token = localStorage.getItem('placementToken');
             if (!token) {
-                
-                alert('Authentication token missing. Please login again.');
+                console.error('Authentication token missing');
                 return;
             }
             
@@ -104,7 +102,7 @@ function PlacementDashboard() {
             // Check if token exists
             const token = localStorage.getItem('placementToken');
             if (!token) {
-                
+                console.error('No placement token found');
                 setLoading(false);
                 return;
             }

@@ -70,11 +70,6 @@ app.use((error, req, res, next) => {
 
 // Note: Static file serving removed - all files now stored as Base64 in database
 
-// Health Check Route (must be before other routes)
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Tale Job Portal API is running' });
-});
-
 // API Routes
 app.use('/api/public', publicRoutes);
 app.use('/api/candidate', candidateRoutes);
@@ -83,6 +78,15 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/placement', placementRoutes);
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api', holidaysRoutes);
+
+// Health Check Route
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Tale Job Portal API is running' });
+});
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Tale Job Portal API is running' });
+});
 
 // Error Handling Middleware
 app.use(errorHandler);

@@ -24,9 +24,7 @@ export const debugAuth = () => {
 // Test API connectivity
 export const testAPIConnection = async () => {
     try {
-        const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
-        const healthUrl = API_BASE_URL.replace('/api', '/health');
-        const response = await fetch(healthUrl);
+        const response = await fetch('/health');
         const text = await response.text();
         
         if (text.includes('<!DOCTYPE') || text.includes('<html')) {
@@ -48,8 +46,7 @@ export const testPlacementAuth = async () => {
     }
     
     try {
-        const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
-        const response = await fetch(`${API_BASE_URL}/placement/profile`, {
+        const response = await fetch('/api/placement/profile', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -60,13 +57,13 @@ export const testPlacementAuth = async () => {
             if (response.status === 0 || response.type === 'opaque') {
                 throw new Error('Backend server not running');
             }
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            return { success: false, error: `HTTP ${response.status}: ${response.statusText}`, status: response.status };
         }
         
         const data = await response.json();
         return { success: true, data };
     } catch (error) {
-        return { success: false, error: error.message };
+        return { success: false, error: error.message, status: error.status };
     }
 };
 
