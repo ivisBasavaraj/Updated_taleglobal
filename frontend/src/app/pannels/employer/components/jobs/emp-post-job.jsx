@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { employer, empRoute, publicUser } from "../../../../../globals/route-names";
+import { holidaysApi } from "../../../../../utils/holidaysApi";
+import HolidayIndicator from "../../../../../components/HolidayIndicator";
 
 export default function EmpPostJob({ onNext }) {
 	const { id } = useParams();
@@ -243,7 +245,7 @@ export default function EmpPostJob({ onNext }) {
 	};
 
 	/* Update interview round details */
-	const updateRoundDetails = (roundType, field, value) => {
+	const updateRoundDetails = async (roundType, field, value) => {
 		setFormData(s => ({
 			...s,
 			interviewRoundDetails: {
@@ -254,6 +256,14 @@ export default function EmpPostJob({ onNext }) {
 				}
 			}
 		}));
+
+		// Check for holidays when date is selected
+		if ((field === 'fromDate' || field === 'toDate') && value) {
+			const holidayCheck = await holidaysApi.checkHoliday(value);
+			if (holidayCheck.success && holidayCheck.isHoliday) {
+				alert(`Note: ${value} is a public holiday (${holidayCheck.holidayInfo.name}). Consider selecting a different date.`);
+			}
+		}
 	};
 
 	const handleLogoUpload = (e) => {
@@ -1312,7 +1322,10 @@ export default function EmpPostJob({ onNext }) {
 													/>
 												</div>
 												<div>
-													<label style={{...label, marginBottom: 4}}>From Date</label>
+													<label style={{...label, marginBottom: 4}}>
+														<i className="fa fa-calendar" style={{marginRight: 4, color: '#ff6b35'}}></i>
+														From Date
+													</label>
 													<input
 														style={{...input, fontSize: 13}}
 														type="date"
@@ -1320,9 +1333,13 @@ export default function EmpPostJob({ onNext }) {
 														value={formData.interviewRoundDetails[roundType].fromDate}
 														onChange={(e) => updateRoundDetails(roundType, 'fromDate', e.target.value)}
 													/>
+													<HolidayIndicator date={formData.interviewRoundDetails[roundType].fromDate} />
 												</div>
 												<div>
-													<label style={{...label, marginBottom: 4}}>To Date</label>
+													<label style={{...label, marginBottom: 4}}>
+														<i className="fa fa-calendar" style={{marginRight: 4, color: '#ff6b35'}}></i>
+														To Date
+													</label>
 													<input
 														style={{...input, fontSize: 13}}
 														type="date"
@@ -1330,6 +1347,7 @@ export default function EmpPostJob({ onNext }) {
 														value={formData.interviewRoundDetails[roundType].toDate}
 														onChange={(e) => updateRoundDetails(roundType, 'toDate', e.target.value)}
 													/>
+													<HolidayIndicator date={formData.interviewRoundDetails[roundType].toDate} />
 												</div>
 												<div>
 													<label style={{...label, marginBottom: 4}}>Time</label>
@@ -1369,6 +1387,7 @@ export default function EmpPostJob({ onNext }) {
 							value={formData.offerLetterDate}
 							onChange={(e) => update({ offerLetterDate: e.target.value })}
 						/>
+						<HolidayIndicator date={formData.offerLetterDate} />
 					</div>
 
 					<div>
@@ -1383,6 +1402,7 @@ export default function EmpPostJob({ onNext }) {
 							value={formData.lastDateOfApplication}
 							onChange={(e) => update({ lastDateOfApplication: e.target.value })}
 						/>
+						<HolidayIndicator date={formData.lastDateOfApplication} />
 					</div>
 
 					{/* Transportation */}
