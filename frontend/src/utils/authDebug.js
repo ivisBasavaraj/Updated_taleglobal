@@ -1,4 +1,4 @@
-import { safeApiCall } from './apiErrorHandler';
+
 
 // Authentication debugging utility
 export const debugAuth = () => {
@@ -33,25 +33,24 @@ export const debugAuth = () => {
 
 // Test API connectivity
 export const testAPIConnection = async () => {
-    const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-    
     try {
-        const response = await fetch(`${API_BASE_URL}/../health`);
+        const response = await fetch('http://localhost:5000/health');
         
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            throw new Error(`Backend server not running (HTTP ${response.status})`);
         }
         
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
-            throw new Error(`Expected JSON but got ${contentType || 'unknown'}`);
+            throw new Error('Backend server not responding with JSON - please start the backend');
         }
         
         const data = await response.json();
-        console.log('API Health Check:', data);
+        console.log('✅ Backend connected:', data);
         return { success: true, data };
     } catch (error) {
-        console.error('API Connection Failed:', error);
+        console.error('❌ Backend connection failed:', error.message);
+        console.log('💡 Run: cd backend && npm start');
         return { success: false, error: error.message };
     }
 };
@@ -63,10 +62,8 @@ export const testPlacementAuth = async () => {
         return { success: false, error: 'No placement token found' };
     }
     
-    const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-    
     try {
-        const response = await fetch(`${API_BASE_URL}/placement/profile`, {
+        const response = await fetch('http://localhost:5000/api/placement/profile', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -74,25 +71,31 @@ export const testPlacementAuth = async () => {
         });
         
         if (!response.ok) {
+            if (response.status === 0 || response.type === 'opaque') {
+                throw new Error('Backend server not running');
+            }
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
         
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            throw new Error(`Expected JSON but got ${contentType || 'unknown'}`);
-        }
-        
         const data = await response.json();
-        console.log('Placement Auth Success:', data);
+        console.log('✅ Placement auth success:', data);
         return { success: true, data };
     } catch (error) {
-        console.error('Placement Auth Error:', error);
+        console.error('❌ Placement auth failed:', error.message);
         return { success: false, error: error.message };
     }
 };
 
 // Fix authentication issues
-export const fixAuthIssues = () => {
+export const fixAuthIssues = async () => {
+    // First check if backend is running
+    const healthCheck = await testAPIConnection();
+    if (!healthCheck.success) {
+        console.log('🚨 Backend server is not running!');
+        console.log('💡 Please run: cd backend && npm start');
+        return { backendDown: true };
+    }
+    
     const { activeUserType } = debugAuth();
     
     if (!activeUserType) {
@@ -102,13 +105,13 @@ export const fixAuthIssues = () => {
     }
     
     if (activeUserType === 'placement') {
-        testPlacementAuth().then(result => {
-            if (!result.success) {
-                console.log('Placement auth failed. Clearing tokens and redirecting...');
-                localStorage.removeItem('placementToken');
-                localStorage.removeItem('placementUser');
-                window.location.href = '/login';
-            }
-        });
+        const result = await testPlacementAuth();
+        if (!result.success) {
+            console.log('Placement auth failed. Clearing tokens and redirecting...');
+            localStorage.removeItem('placementToken');
+            localStorage.removeItem('placementUser');
+            window.location.href = '/login';
+        }
+        return result;
     }
 };

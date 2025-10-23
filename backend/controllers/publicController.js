@@ -70,82 +70,41 @@ exports.getJobs = async (req, res) => {
     };
     const sortCriteria = sortMap[sortBy] || { createdAt: -1 };
 
-    // Optimized aggregation pipeline with minimal data transfer
-    const pipeline = [
-      { $match: query },
-      {
-        $lookup: {
-          from: 'employers',
-          localField: 'employerId',
-          foreignField: '_id',
-          as: 'employer',
-          pipeline: [
-            { $match: { status: 'active', isApproved: true } },
-            { $project: { companyName: 1, employerType: 1 } }
-          ]
-        }
-      },
-      { $match: { 'employer.0': { $exists: true } } },
-      {
-        $lookup: {
-          from: 'employerprofiles',
-          localField: 'employerId',
-          foreignField: 'employerId',
-          as: 'employerProfile',
-          pipeline: [
-            { $project: { logo: 1, companyName: 1 } } // Only get essential profile data
-          ]
-        }
-      },
-      {
-        $addFields: {
-          employerId: { $arrayElemAt: ['$employer', 0] },
-          employerProfile: { $arrayElemAt: ['$employerProfile', 0] },
-          postedBy: {
-            $cond: {
-              if: { $eq: [{ $arrayElemAt: ['$employer.employerType', 0] }, 'consultant'] },
-              then: 'Consultant',
-              else: 'Company'
-            }
-          }
-        }
-      },
-      {
-        $project: {
-          title: 1,
-          location: 1,
-          jobType: 1,
-          vacancies: 1,
-          category: 1,
-          ctc: 1,
-          description: 1,
-          requiredSkills: 1,
-          createdAt: 1,
-          employerProfile: 1,
-          postedBy: 1,
-          employerId: 1
-        }
-      },
-      { $sort: sortCriteria },
-      {
-        $facet: {
-          jobs: [
-            { $skip: (parseInt(page) - 1) * parseInt(limit) },
-            { $limit: parseInt(limit) }
-          ],
-          totalCount: [{ $count: 'count' }]
-        }
-      }
-    ];
+    // Simplified query for better performance
+    const jobs = await Job.find(query)
+      .populate({
+        path: 'employerId',
+        select: 'companyName employerType',
+        match: { status: 'active', isApproved: true }
+      })
+      .select('title location jobType vacancies category ctc description requiredSkills createdAt employerId')
+      .sort(sortCriteria)
+      .limit(parseInt(limit))
+      .skip((parseInt(page) - 1) * parseInt(limit))
+      .lean();
 
-    const [result] = await Job.aggregate(pipeline);
-    const jobs = result.jobs || [];
-    const totalJobs = result.totalCount[0]?.count || 0;
+    const totalJobs = await Job.countDocuments(query);
+    const filteredJobs = jobs.filter(job => job.employerId);
+
+    // Add employer profiles in parallel
+    const EmployerProfile = require('../models/EmployerProfile');
+    const jobsWithProfiles = await Promise.all(
+      filteredJobs.map(async (job) => {
+        const profile = await EmployerProfile.findOne({ employerId: job.employerId._id })
+          .select('logo companyName')
+          .lean();
+        return {
+          ...job,
+          employerProfile: profile,
+          postedBy: job.employerId.employerType === 'consultant' ? 'Consultant' : 'Company'
+        };
+      })
+    );
     
     const response = {
       success: true,
-      jobs,
-      total: jobs.length,
+      jobs: jobsWithProfiles,
+      total: jobsWithProfiles.length,
       totalCount: totalJobs,
       currentPage: parseInt(page),
       totalPages: Math.ceil(totalJobs / parseInt(limit)),
