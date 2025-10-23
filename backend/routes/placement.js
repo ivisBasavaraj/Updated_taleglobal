@@ -16,10 +16,7 @@ router.post('/register', [
 ], handleValidationErrors, placementController.registerPlacement);
 
 // Login route
-router.post('/login', [
-  body('email').isEmail().withMessage('Valid email is required'),
-  body('password').notEmpty().withMessage('Password is required')
-], handleValidationErrors, placementController.loginPlacement);
+router.post('/login', placementController.loginPlacement);
 
 // Get placement officer's student data
 router.get('/students', auth(['placement']), placementController.getMyStudents);

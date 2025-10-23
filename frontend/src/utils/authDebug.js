@@ -24,7 +24,9 @@ export const debugAuth = () => {
 // Test API connectivity
 export const testAPIConnection = async () => {
     try {
-        const response = await fetch('/health');
+        const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
+        const healthUrl = API_BASE_URL.replace('/api', '/health');
+        const response = await fetch(healthUrl);
         const text = await response.text();
         
         if (text.includes('<!DOCTYPE') || text.includes('<html')) {
@@ -46,7 +48,8 @@ export const testPlacementAuth = async () => {
     }
     
     try {
-        const response = await fetch('/api/placement/profile', {
+        const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
+        const response = await fetch(`${API_BASE_URL}/placement/profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'

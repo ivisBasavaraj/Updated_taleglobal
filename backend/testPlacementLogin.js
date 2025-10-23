@@ -1,45 +1,28 @@
-const fetch = require('node-fetch');
+const mongoose = require('mongoose');
+const Placement = require('./models/Placement');
+require('dotenv').config();
 
-async function testPlacementLogin() {
+const testLogin = async () => {
   try {
-    const API_BASE_URL = 'http://localhost:5000/api';
+    await mongoose.connect(process.env.MONGODB_URI);
     
-    console.log('Testing placement login...');
-    
-    // Test login
-    const loginResponse = await fetch(`${API_BASE_URL}/placement/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: 'placement@test.com',
-        password: 'password123'
-      })
-    });
-
-    console.log('Login response status:', loginResponse.status);
-    const loginData = await loginResponse.json();
-    console.log('Login response data:', loginData);
-
-    if (loginData.success && loginData.token) {
-      console.log('\nTesting profile endpoint with login token...');
-      
-      const profileResponse = await fetch(`${API_BASE_URL}/placement/profile`, {
-        headers: {
-          'Authorization': `Bearer ${loginData.token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      console.log('Profile response status:', profileResponse.status);
-      const profileData = await profileResponse.json();
-      console.log('Profile response data:', profileData);
+    const placement = await Placement.findOne({ email: 'placement@test.com' });
+    if (!placement) {
+      console.log('Placement not found');
+      return;
     }
-
+    
+    console.log('Placement found:', placement.email);
+    console.log('Status:', placement.status);
+    
+    const isValid = await placement.comparePassword('password123');
+    console.log('Password valid:', isValid);
+    
+    process.exit(0);
   } catch (error) {
-    console.error('Test failed:', error);
+    console.error('Error:', error);
+    process.exit(1);
   }
-}
+};
 
-testPlacementLogin();
+testLogin();

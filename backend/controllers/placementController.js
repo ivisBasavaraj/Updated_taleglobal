@@ -135,30 +135,32 @@ exports.uploadStudentData = async (req, res) => {
 };
 
 exports.loginPlacement = async (req, res) => {
+  console.log('=== PLACEMENT LOGIN ===');
+  console.log('Body:', req.body);
+  
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ success: false, message: 'Email and password are required' });
+      return res.status(400).json({ success: false, message: 'Email and password required' });
     }
 
     const placement = await Placement.findOne({ email: email.toLowerCase() });
+    console.log('Found placement:', !!placement);
+    
     if (!placement) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
-    const isPasswordValid = await placement.comparePassword(password);
-    if (!isPasswordValid) {
+    const isValid = await placement.comparePassword(password);
+    console.log('Password valid:', isValid);
+    
+    if (!isValid) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
-    // Block login until admin approval - check status
     if (placement.status !== 'active') {
-      return res.status(403).json({ 
-        success: false, 
-        message: 'Account pending admin approval. Please wait for admin to approve your account.',
-        requiresApproval: true
-      });
+      return res.status(403).json({ success: false, message: 'Account pending approval' });
     }
 
     const token = generateToken(placement._id, 'placement');
@@ -169,12 +171,11 @@ exports.loginPlacement = async (req, res) => {
       placement: {
         id: placement._id,
         name: placement.name,
-        email: placement.email,
-        phone: placement.phone
+        email: placement.email
       }
     });
   } catch (error) {
-    console.error('Placement login error:', error);
+    console.error('Login error:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
