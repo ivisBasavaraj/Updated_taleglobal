@@ -34,7 +34,7 @@ export const debugAuth = () => {
 // Test API connectivity
 export const testAPIConnection = async () => {
     try {
-        const response = await fetch('http://localhost:5000/health');
+        const response = await fetch('https://taleglobal.cloud/health');
         
         if (!response.ok) {
             throw new Error(`Backend server not running (HTTP ${response.status})`);
@@ -63,7 +63,7 @@ export const testPlacementAuth = async () => {
     }
     
     try {
-        const response = await fetch('http://localhost:5000/api/placement/profile', {
+        const response = await fetch('https://taleglobal.cloud/api/placement/profile', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
