@@ -14,8 +14,15 @@ const generateToken = (id, role) => {
 
 exports.registerPlacement = async (req, res) => {
   try {
-    // Removed console debug line for security;
     const { name, email, password, phone, collegeName } = req.body;
+
+    // Validate required fields
+    if (!name || !email || !password || !phone || !collegeName) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'All fields are required: name, email, password, phone, collegeName' 
+      });
+    }
 
     const existingPlacement = await Placement.findOne({ email });
     if (existingPlacement) {

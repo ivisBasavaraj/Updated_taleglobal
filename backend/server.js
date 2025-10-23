@@ -30,8 +30,10 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://taleglobal.cloud', 'https://www.taleglobal.cloud'],
-  credentials: true
+  origin: ['http://localhost:3000', 'https://taleglobal.cloud', 'https://www.taleglobal.cloud', 'http://taleglobal.cloud'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Rate Limiting
@@ -96,7 +98,7 @@ const PORT = process.env.PORT || 5000;
 const server = http.createServer(app);
 initializeWebSocket(server);
 
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`Tale Job Portal API running on port ${PORT}`);
   console.log('WebSocket server initialized for real-time updates');
 });
