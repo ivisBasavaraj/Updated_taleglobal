@@ -34,7 +34,7 @@ function AdminEmployersAllRequest() {
             }
         } catch (error) {
             setError('Error fetching employers');
-            console.error('Error:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -51,7 +51,7 @@ function AdminEmployersAllRequest() {
             }
         } catch (error) {
             alert('Error approving employer');
-            console.error('Error:', error);
+            
         }
     };
 
@@ -66,7 +66,7 @@ function AdminEmployersAllRequest() {
             }
         } catch (error) {
             alert('Error rejecting employer');
-            console.error('Error:', error);
+            
         }
     };
 

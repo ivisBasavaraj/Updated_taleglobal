@@ -26,7 +26,7 @@ function EmpDashboardPage() {
         try {
             const token = localStorage.getItem('employerToken');
             if (!token) {
-                console.log('No employer token found');
+                
                 return;
             }
 
@@ -94,7 +94,7 @@ function EmpDashboardPage() {
                 }
             }
         } catch (error) {
-            console.error('Error fetching dashboard data:', error);
+            
         }
     };
 

@@ -24,7 +24,7 @@ function AdminCandidates() {
                 setCandidates(data.users);
             }
         } catch (error) {
-            console.error('Error fetching candidates:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -49,7 +49,7 @@ function AdminCandidates() {
                 alert('Failed to delete candidate');
             }
         } catch (error) {
-            console.error('Error deleting candidate:', error);
+            
             alert('Failed to delete candidate');
         }
     };

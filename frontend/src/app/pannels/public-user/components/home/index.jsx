@@ -23,12 +23,12 @@ function TopRecruitersSection() {
         try {
             const response = await fetch('http://localhost:5000/api/public/jobs?limit=8');
             const data = await response.json();
-            console.log('Top jobs data:', data);
+            
             if (data.success) {
                 setJobs(data.jobs);
             }
         } catch (error) {
-            console.error('Error fetching top jobs:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -88,11 +88,11 @@ function HomeJobsList() {
             const response = await fetch('http://localhost:5000/api/public/jobs?limit=5');
             const data = await response.json();
             if (data.success) {
-                console.log('First job:', data.jobs[0]?.title, 'JobType:', data.jobs[0]?.jobType);
+                
                 setJobs(data.jobs.slice(0, 5));
             }
         } catch (error) {
-            console.error('Error fetching jobs:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -180,7 +180,7 @@ function Home1Page() {
         try {
             const response = await fetch('http://localhost:5000/api/public/jobs');
             const data = await response.json();
-            console.log('Categories data:', data);
+            
             if (data.success) {
                 const categoryCount = {};
                 data.jobs.forEach(job => {
@@ -194,11 +194,11 @@ function Home1Page() {
                     icon: getCategoryIcon(name)
                 }));
                 
-                console.log('Category list:', categoryList);
+                
                 setCategories(categoryList);
             }
         } catch (error) {
-            console.error('Error fetching categories:', error);
+            
             // Fallback categories
             setCategories([
                 {name: 'IT', count: 5, icon: 'flaticon-coding'},

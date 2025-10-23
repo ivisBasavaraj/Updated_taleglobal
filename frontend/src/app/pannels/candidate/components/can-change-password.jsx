@@ -85,7 +85,7 @@ function CanChangePasswordPage() {
                 setMessage({ type: 'error', text: response.message || 'Failed to change password' });
             }
         } catch (error) {
-            console.error('Password change error:', error);
+            
             let errorMessage = error.message || 'An error occurred while changing password';
             
             if (error.message.includes('401') || error.message.includes('authorization') || error.message.includes('token')) {

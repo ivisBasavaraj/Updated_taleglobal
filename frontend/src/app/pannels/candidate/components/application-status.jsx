@@ -95,39 +95,31 @@ function CanStatusPage() {
 	const fetchApplications = async () => {
 		setLoading(true);
 		try {
-			console.log('Fetching applications with company and position data...');
+			
 			const response = await api.getCandidateApplicationsWithInterviews();
 			if (response.success) {
 				const apps = response.applications || response.data || [];
-				console.log('Fetched applications:', apps.length);
 				
-				// Log company and position data for debugging
-				apps.forEach((app, index) => {
-					console.log(`Application ${index + 1}:`, {
-						company: app.employerId?.companyName,
-						position: app.jobId?.title,
-						status: app.status,
-						appliedDate: app.createdAt
-					});
-				});
+				
+
 				
 				setApplications(apps);
 			} else {
-				console.error('API response not successful:', response);
+				
 			}
 		} catch (error) {
-			console.error('Error fetching applications:', error);
+			
 			// Fallback to regular applications if new endpoint fails
 			try {
-				console.log('Trying fallback API...');
+				
 				const fallbackResponse = await api.getCandidateApplications();
 				if (fallbackResponse.success) {
 					const apps = fallbackResponse.applications || fallbackResponse.data || [];
-					console.log('Fallback applications fetched:', apps.length);
+					
 					setApplications(apps);
 				}
 			} catch (fallbackError) {
-				console.error('Fallback fetch also failed:', fallbackError);
+				
 			}
 		} finally {
 			setLoading(false);

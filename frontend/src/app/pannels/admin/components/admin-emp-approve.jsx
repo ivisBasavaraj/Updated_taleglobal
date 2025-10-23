@@ -26,7 +26,7 @@ function AdminEmployersApproved() {
             }
         } catch (error) {
             setError('Error fetching approved employers');
-            console.error('Error:', error);
+            
         } finally {
             setLoading(false);
         }

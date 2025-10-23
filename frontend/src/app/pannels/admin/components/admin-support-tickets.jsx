@@ -54,7 +54,7 @@ function AdminSupportTickets() {
                 setStats(newStats);
             }
         } catch (error) {
-            console.error('Error fetching support tickets:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -78,7 +78,7 @@ function AdminSupportTickets() {
                 });
                 fetchSupportTickets(); // Refresh to update read status
             } catch (error) {
-                console.error('Error marking ticket as read:', error);
+                
             }
         }
     };
@@ -103,7 +103,7 @@ function AdminSupportTickets() {
                 alert('Failed to update support ticket');
             }
         } catch (error) {
-            console.error('Error updating support ticket:', error);
+            
             alert('Error updating support ticket');
         }
     };

@@ -32,8 +32,8 @@ function EmployerDetails() {
             });
             const data = await response.json();
             if (data.success) {
-                console.log('Profile data:', data.profile);
-                console.log('Authorization letters:', data.profile.authorizationLetters);
+                
+                
                 // Set default verification status for existing profiles
                 const profileWithDefaults = {
                     ...data.profile,
@@ -43,11 +43,11 @@ function EmployerDetails() {
                     incorporationVerified: data.profile.incorporationVerified || 'pending',
                     authorizationVerified: data.profile.authorizationVerified || 'pending'
                 };
-                console.log('Profile with defaults:', profileWithDefaults);
+                
                 setProfile(profileWithDefaults);
             }
         } catch (error) {
-            console.error('Error:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -78,7 +78,7 @@ function EmployerDetails() {
                 alert('Failed to download document');
             }
         } catch (error) {
-            console.error('Download error:', error);
+            
             alert('Error downloading document');
         }
     };
@@ -95,7 +95,7 @@ function EmployerDetails() {
                 setJobCount(data.jobCount);
             }
         } catch (error) {
-            console.error('Error fetching jobs:', error);
+            
         } finally {
             setJobsLoading(false);
         }
@@ -120,7 +120,7 @@ function EmployerDetails() {
                 alert('Failed to update document status');
             }
         } catch (error) {
-            console.error('Update error:', error);
+            
             alert('Error updating document status');
         }
     };
@@ -152,7 +152,7 @@ function EmployerDetails() {
                 alert(data.message || 'Failed to approve authorization letter');
             }
         } catch (error) {
-            console.error('Approve error:', error);
+            
             alert('Error approving authorization letter');
         }
     };
@@ -184,7 +184,7 @@ function EmployerDetails() {
                 alert(data.message || 'Failed to reject authorization letter');
             }
         } catch (error) {
-            console.error('Reject error:', error);
+            
             alert('Error rejecting authorization letter');
         }
     };
@@ -628,9 +628,9 @@ function EmployerDetails() {
                                         <td>
                                             <i className="fa fa-building me-2 text-muted"></i>
                                             {(() => {
-                                                console.log('Doc company name:', doc.companyName);
-                                                console.log('Profile company name:', profile.companyName);
-                                                console.log('Employer company name:', profile.employerId?.companyName);
+                                                
+                                                
+                                                
                                                 return doc.companyName || profile.companyName || profile.employerId?.companyName || 'N/A';
                                             })()}
                                         </td>

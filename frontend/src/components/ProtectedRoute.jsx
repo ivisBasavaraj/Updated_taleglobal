@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     const isAuthenticated = (adminToken && adminData) || (subAdminToken && subAdminData);
     
     if (!isAuthenticated) {
-        console.log('Not authenticated, redirecting to login');
+        
         return <Navigate to="/admin-login" replace />;
     }
 

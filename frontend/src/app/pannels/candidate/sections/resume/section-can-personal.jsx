@@ -104,7 +104,7 @@ function SectionCanPersonalDetail({ profile }) {
             };
             await api.updateCandidateProfile(updateData);
         } catch (error) {
-            console.error('Auto-save failed:', error);
+            
         }
     };
 

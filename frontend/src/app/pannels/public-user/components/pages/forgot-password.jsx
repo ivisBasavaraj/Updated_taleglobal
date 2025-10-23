@@ -45,14 +45,14 @@ function ForgotPassword() {
           },
           'IUBFJTFkQbQuIA-6P'
         );
-        console.log('EmailJS Success:', result);
+        
         setMessage(`OTP sent to ${email} successfully!`);
         setOtpSent(true);
       } else {
         throw new Error('EmailJS not loaded');
       }
     } catch (error) {
-      console.error('EmailJS Error Details:', error);
+      
       setMessage(`Failed to send email: ${error.text || error.message}. Demo OTP: ${otpCode}`);
       setOtpSent(true);
     } finally {
@@ -76,8 +76,8 @@ function ForgotPassword() {
       return;
     }
 
-    console.log('🔄 Starting password reset for:', email);
-    console.log('🔑 New password length:', newPassword.length);
+    
+    
 
     try {
       const response = await fetch('http://localhost:5000/api/candidate/password/update-reset', {
@@ -87,21 +87,21 @@ function ForgotPassword() {
       });
 
       const data = await response.json();
-      console.log('📡 API Response:', data);
-      console.log('✅ Response status:', response.status);
+      
+      
 
       if (data.success) {
-        console.log('✅ Password reset successful in database');
+        
         setMessage('Password reset successful! Redirecting to login...');
         setTimeout(() => {
           window.location.href = '/';
         }, 1500);
       } else {
-        console.log('❌ Password reset failed:', data.message);
+        
         setMessage(data.message || 'Failed to reset password');
       }
     } catch (error) {
-      console.error('❌ Password reset error:', error);
+      
       setMessage('Network error. Please try again.');
     } finally {
       setLoading(false);

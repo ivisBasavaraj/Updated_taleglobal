@@ -24,7 +24,7 @@ function AdminPlacementOfficersRejected() {
             }
         } catch (error) {
             setError('Error fetching placement officers');
-            console.error('Error:', error);
+            
         } finally {
             setLoading(false);
         }

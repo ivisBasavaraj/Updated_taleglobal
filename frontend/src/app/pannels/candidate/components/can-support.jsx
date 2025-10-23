@@ -109,7 +109,7 @@ function CanSupport() {
                 setErrors({ submit: data.message || 'Failed to submit support ticket' });
             }
         } catch (error) {
-            console.error('Support submission error:', error);
+            
             setErrors({ submit: 'Backend server not running. Please start the backend server on port 5000.' });
         } finally {
             setIsSubmitting(false);

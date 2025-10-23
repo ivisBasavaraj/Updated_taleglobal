@@ -38,7 +38,7 @@ function HomeNaukriPreview() {
       if (companiesRes?.success && Array.isArray(companiesRes.companies))
         setCompanies(companiesRes.companies);
     } catch (e) {
-      console.error("Home preview data fetch failed:", e);
+      
     } finally {
       setLoading(false);
     }

@@ -33,7 +33,7 @@ function CompleteProfileCard() {
 				window.dispatchEvent(new CustomEvent('refreshNotifications'));
 			}
 		} catch (error) {
-			console.error('Error fetching profile:', error);
+			
 		} finally {
 			setLoading(false);
 		}

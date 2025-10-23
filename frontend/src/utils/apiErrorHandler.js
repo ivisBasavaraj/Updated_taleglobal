@@ -14,7 +14,7 @@ export const safeApiCall = async (url, options = {}) => {
     return await handleApiResponse(response);
   } catch (error) {
     if (error.message.includes('Unexpected token')) {
-      console.error('API connection failed: Server returned HTML instead of JSON');
+      
       throw new Error('API server is not responding correctly. Please check if the backend is running.');
     }
     throw error;

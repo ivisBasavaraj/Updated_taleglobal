@@ -50,7 +50,7 @@ function EmpCandidatesPage() {
         setEmployerType(data.profile.employerId.employerType || "company");
       }
     } catch (error) {
-      console.error("Error fetching employer type:", error);
+      
     }
   };
 
@@ -68,7 +68,7 @@ function EmpCandidatesPage() {
         setCompanies(data.companies || []);
       }
     } catch (error) {
-      console.error("Error fetching companies:", error);
+      
     }
   };
 
@@ -101,7 +101,7 @@ function EmpCandidatesPage() {
         }
       }
     } catch (error) {
-      console.error("Error fetching applications:", error);
+      
     } finally {
       setLoading(false);
     }

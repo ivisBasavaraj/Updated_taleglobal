@@ -24,7 +24,7 @@ const AdminCandidateAddEdit = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		// Submit logic here (e.g., POST to API)
-		console.log("Submitted:", formData);
+		
 		navigate("/admin/candidates");
 	};
 

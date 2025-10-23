@@ -48,11 +48,11 @@ function PlacementDetails() {
         try {
             setLoading(true);
             const response = await api.getPlacementDetails(id);
-            console.log('Placement details response:', response);
+            
             if (response.success) {
-                console.log('Placement data:', response.placement);
-                console.log('File name:', response.placement.fileName);
-                console.log('Is processed:', response.placement.isProcessed);
+                
+                
+                
                 setPlacement(response.placement);
                 // Credits are now managed per file, not globally
             } else {
@@ -60,7 +60,7 @@ function PlacementDetails() {
             }
         } catch (error) {
             setError('Error fetching placement details');
-            console.error('Error:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -89,7 +89,7 @@ function PlacementDetails() {
             }
         } catch (error) {
             alert('Error downloading file');
-            console.error('Error:', error);
+            
         }
     };
 
@@ -114,7 +114,7 @@ function PlacementDetails() {
             }
         } catch (error) {
             alert('Error approving placement officer');
-            console.error('Error:', error);
+            
         }
     };
 
@@ -214,7 +214,7 @@ function PlacementDetails() {
             }
         } catch (error) {
             alert('Error rejecting placement officer');
-            console.error('Error:', error);
+            
         }
     };
 
@@ -236,11 +236,11 @@ function PlacementDetails() {
             if (response.ok && data.success) {
                 setStudentData(data.students || []);
             } else {
-                console.error('API Error:', data.message || 'Failed to load file data');
+                
                 setStudentData([]);
             }
         } catch (error) {
-            console.error('Error loading file data:', error);
+            
             setStudentData([]);
         } finally {
             setLoadingData(false);

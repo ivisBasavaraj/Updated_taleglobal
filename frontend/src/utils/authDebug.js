@@ -2,9 +2,6 @@
 
 // Authentication debugging utility
 export const debugAuth = () => {
-    console.log('=== Authentication Debug ===');
-    
-    // Check all tokens
     const tokens = {
         placement: localStorage.getItem('placementToken'),
         candidate: localStorage.getItem('candidateToken'),
@@ -12,9 +9,6 @@ export const debugAuth = () => {
         admin: localStorage.getItem('adminToken')
     };
     
-    console.log('Stored Tokens:', tokens);
-    
-    // Check user data
     const users = {
         placement: localStorage.getItem('placementUser'),
         candidate: localStorage.getItem('candidateUser'),
@@ -22,11 +16,7 @@ export const debugAuth = () => {
         admin: localStorage.getItem('adminUser')
     };
     
-    console.log('Stored Users:', users);
-    
-    // Find active user type
     const activeUserType = Object.keys(tokens).find(type => tokens[type]);
-    console.log('Active User Type:', activeUserType);
     
     return { tokens, users, activeUserType };
 };
@@ -34,23 +24,16 @@ export const debugAuth = () => {
 // Test API connectivity
 export const testAPIConnection = async () => {
     try {
-        const response = await fetch('https://taleglobal.cloud/health');
+        const response = await fetch('/health');
+        const text = await response.text();
         
-        if (!response.ok) {
-            throw new Error(`Backend server not running (HTTP ${response.status})`);
+        if (text.includes('<!DOCTYPE') || text.includes('<html')) {
+            throw new Error('Backend not accessible');
         }
         
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            throw new Error('Backend server not responding with JSON - please start the backend');
-        }
-        
-        const data = await response.json();
-        console.log('✅ Backend connected:', data);
+        const data = JSON.parse(text);
         return { success: true, data };
     } catch (error) {
-        console.error('❌ Backend connection failed:', error.message);
-        console.log('💡 Run: cd backend && npm start');
         return { success: false, error: error.message };
     }
 };
@@ -63,7 +46,7 @@ export const testPlacementAuth = async () => {
     }
     
     try {
-        const response = await fetch('https://taleglobal.cloud/api/placement/profile', {
+        const response = await fetch('/api/placement/profile', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -78,28 +61,17 @@ export const testPlacementAuth = async () => {
         }
         
         const data = await response.json();
-        console.log('✅ Placement auth success:', data);
         return { success: true, data };
     } catch (error) {
-        console.error('❌ Placement auth failed:', error.message);
         return { success: false, error: error.message };
     }
 };
 
 // Fix authentication issues
 export const fixAuthIssues = async () => {
-    // First check if backend is running
-    const healthCheck = await testAPIConnection();
-    if (!healthCheck.success) {
-        console.log('🚨 Backend server is not running!');
-        console.log('💡 Please run: cd backend && npm start');
-        return { backendDown: true };
-    }
-    
     const { activeUserType } = debugAuth();
     
     if (!activeUserType) {
-        console.log('No active user found. Redirecting to login...');
         window.location.href = '/login';
         return;
     }
@@ -107,7 +79,6 @@ export const fixAuthIssues = async () => {
     if (activeUserType === 'placement') {
         const result = await testPlacementAuth();
         if (!result.success) {
-            console.log('Placement auth failed. Clearing tokens and redirecting...');
             localStorage.removeItem('placementToken');
             localStorage.removeItem('placementUser');
             window.location.href = '/login';

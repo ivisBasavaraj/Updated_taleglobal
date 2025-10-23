@@ -10,12 +10,12 @@ function JobDetailSimple() {
             try {
                 const response = await fetch(`http://localhost:5000/api/public/jobs/${id || '68c016cff2e8ea3aca542c27'}`);
                 const data = await response.json();
-                console.log('API Response:', data);
+                
                 if (data.success) {
                     setJob(data.job);
                 }
             } catch (error) {
-                console.error('Error:', error);
+                
             }
         };
         fetchJob();

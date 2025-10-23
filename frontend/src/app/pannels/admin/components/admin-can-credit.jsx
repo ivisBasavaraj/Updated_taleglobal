@@ -26,7 +26,7 @@ function AdminCreditsPage() {
 				})));
 			}
 		} catch (error) {
-			console.error('Error fetching candidates:', error);
+			
 		} finally {
 			setLoading(false);
 		}
@@ -86,7 +86,7 @@ function AdminCreditsPage() {
 				alert(data.message || 'Failed to update credits');
 			}
 		} catch (error) {
-			console.error('Error updating credits:', error);
+			
 			alert('Failed to update credits');
 		}
 	};
@@ -127,7 +127,7 @@ function AdminCreditsPage() {
 				alert(data.message || 'Failed to assign credits');
 			}
 		} catch (error) {
-			console.error('Error assigning credits:', error);
+			
 			alert('Failed to assign credits');
 		}
 	};

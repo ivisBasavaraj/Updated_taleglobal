@@ -68,7 +68,7 @@ export default function EmpPostJob({ onNext }) {
 	const autoSaveCTC = useCallback((ctcValue) => {
 		if (ctcValue && String(ctcValue).trim()) {
 			localStorage.setItem('draft_ctc', ctcValue);
-			console.log('CTC auto-saved:', ctcValue);
+			
 		}
 	}, []);
 
@@ -103,15 +103,15 @@ export default function EmpPostJob({ onNext }) {
 				headers: { 'Authorization': `Bearer ${token}` }
 			});
 			const data = await response.json();
-			console.log('Profile data:', data);
+			
 			if (data.success && data.profile?.employerId) {
 				const empType = data.profile.employerId.employerType || 'company';
 				const empCategory = data.profile.employerCategory;
-				console.log('Employer Type from DB:', empType);
-				console.log('Employer Category from DB:', empCategory);
+				
+				
 				// Check both employerType and employerCategory
 				const finalType = (empType === 'consultant' || empCategory === 'consultancy') ? 'consultant' : 'company';
-				console.log('Final employer type set to:', finalType);
+				
 				setEmployerType(finalType);
 				// For consultants, check if they have default company info in profile
 				if (empType === 'consultant' && data.profile.consultantCompanyName) {
@@ -123,7 +123,7 @@ export default function EmpPostJob({ onNext }) {
 				}
 			}
 		} catch (error) {
-			console.error('Error fetching employer type:', error);
+			
 		}
 	};
 
@@ -191,7 +191,7 @@ export default function EmpPostJob({ onNext }) {
 				}
 			}
 		} catch (error) {
-			console.error('Error fetching job data:', error);
+			
 		}
 	};
 
@@ -335,8 +335,8 @@ export default function EmpPostJob({ onNext }) {
 			}
 
 			// Debug logging
-			console.log('Employer Type:', employerType);
-			console.log('Form Data:', formData);
+			
+			
 
 			const jobData = {
 				title: formData.jobTitle,
@@ -376,7 +376,7 @@ export default function EmpPostJob({ onNext }) {
 				jobData.companyDescription = formData.companyDescription;
 			}
 
-			console.log('Final job data being sent:', jobData);
+			
 
 			const url = isEditMode 
 				? `http://localhost:5000/api/employer/jobs/${id}`
@@ -393,7 +393,7 @@ export default function EmpPostJob({ onNext }) {
 				body: JSON.stringify(jobData)
 			});
 
-			console.log('Response status:', response.status);
+			
 
 			if (response.ok) {
 				const data = await response.json();
@@ -406,7 +406,7 @@ export default function EmpPostJob({ onNext }) {
 				alert(error.message || `Failed to ${isEditMode ? 'update' : 'post'} job`);
 			}
 		} catch (error) {
-			console.error('Error posting job:', error);
+			
 			alert('Failed to post job. Please try again.');
 		}
 	};

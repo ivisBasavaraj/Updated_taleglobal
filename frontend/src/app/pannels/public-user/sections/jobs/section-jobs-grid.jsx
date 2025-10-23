@@ -90,7 +90,7 @@ const SectionJobsGrid = memo(({ filters, onTotalChange }) => {
                 }
             } catch (error) {
                 if (error.name !== 'AbortError') {
-                    console.error('Error fetching jobs:', error);
+                    
                     setJobs([]);
                     onTotalChange?.(0);
                 }

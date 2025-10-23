@@ -53,7 +53,7 @@ function SectionCandicateBasicInfo() {
                 });
             }
         } catch (error) {
-            console.error('Error fetching profile:', error);
+            
         }
     };
 
@@ -129,7 +129,7 @@ function SectionCandicateBasicInfo() {
                 alert('Failed to update profile');
             }
         } catch (error) {
-            console.error('Error updating profile:', error);
+            
             alert('Failed to update profile');
         } finally {
             setLoading(false);

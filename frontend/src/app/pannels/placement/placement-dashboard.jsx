@@ -36,7 +36,7 @@ function PlacementDashboard() {
             // Test API connection
             const apiTest = await testAPIConnection();
             if (!apiTest.success) {
-                console.error('API connection failed:', apiTest.error);
+                
                 alert('Cannot connect to server. Please check if the backend is running on port 5000.');
                 return;
             }
@@ -45,7 +45,7 @@ function PlacementDashboard() {
                 // Test placement authentication
                 const authTest = await testPlacementAuth();
                 if (!authTest.success) {
-                    console.error('Placement authentication failed:', authTest.error);
+                    
                     if (authTest.status === 401) {
                         alert('Your session has expired. Please login again.');
                         localStorage.removeItem('placementToken');
@@ -59,7 +59,7 @@ function PlacementDashboard() {
                 Promise.all([
                     fetchPlacementDetails(),
                     fetchStudentData()
-                ]).catch(console.error);
+                ]).catch(() => {});
             }
         };
         
@@ -75,7 +75,7 @@ function PlacementDashboard() {
             // Check if token exists
             const token = localStorage.getItem('placementToken');
             if (!token) {
-                console.error('No placement token found');
+                
                 alert('Authentication token missing. Please login again.');
                 return;
             }
@@ -87,7 +87,7 @@ function PlacementDashboard() {
                 setProfileLoaded(true);
             }
         } catch (error) {
-            console.error('Error fetching placement details:', error);
+            
             if (error.message.includes('401')) {
                 alert('Authentication failed. Please login again.');
                 localStorage.removeItem('placementToken');
@@ -104,7 +104,7 @@ function PlacementDashboard() {
             // Check if token exists
             const token = localStorage.getItem('placementToken');
             if (!token) {
-                console.error('No placement token found for student data');
+                
                 setLoading(false);
                 return;
             }
@@ -115,9 +115,9 @@ function PlacementDashboard() {
                 setDataLoaded(true);
             }
         } catch (error) {
-            console.error('Error fetching student data:', error);
+            
             if (error.message.includes('401')) {
-                console.error('Authentication failed for student data');
+                
             }
         } finally {
             setLoading(false);
@@ -236,7 +236,7 @@ function PlacementDashboard() {
                 alert('Unable to view file. Please try again.');
             }
         } catch (error) {
-            console.error('Error viewing file:', error);
+            
             alert('Error viewing file. Please try again.');
         }
     };
@@ -278,7 +278,7 @@ function PlacementDashboard() {
                 alert(data.message || 'Upload failed');
             }
         } catch (error) {
-            console.error('Upload error:', error);
+            
             if (error.message.includes('401') || error.message.includes('authentication')) {
                 alert('Authentication failed. Please login again.');
                 localStorage.removeItem('placementToken');
@@ -421,7 +421,7 @@ function PlacementDashboard() {
                 alert(response.message || 'Failed to update profile');
             }
         } catch (error) {
-            console.error('Error updating profile:', error);
+            
             alert('Error updating profile. Please try again.');
         } finally {
             setUpdating(false);

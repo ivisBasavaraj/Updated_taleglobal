@@ -29,7 +29,7 @@ function CanPostedJobs() {
                 setJobs(data.jobs || data.data || []);
             }
         } catch (error) {
-            console.error('Error fetching jobs:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -54,7 +54,7 @@ function CanPostedJobs() {
                 alert(data.message || 'Failed to apply');
             }
         } catch (error) {
-            console.error('Error applying to job:', error);
+            
             alert('Error applying to job');
         }
     };

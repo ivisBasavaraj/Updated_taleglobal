@@ -180,7 +180,7 @@ function SectionCanEducation({ profile }) {
                 alert('Failed to save education details');
             }
         } catch (error) {
-            console.error('Error saving education:', error);
+            
             alert('Error saving education details');
         } finally {
             setLoading(false);
@@ -203,7 +203,7 @@ function SectionCanEducation({ profile }) {
                 alert('Failed to delete education record');
             }
         } catch (error) {
-            console.error('Error deleting education:', error);
+            
             alert('Error deleting education record');
         } finally {
             setLoading(false);

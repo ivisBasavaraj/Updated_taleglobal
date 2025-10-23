@@ -18,18 +18,18 @@ export const WebSocketProvider = ({ children }) => {
   useEffect(() => {
     // Always use localhost for development
     const socketUrl = 'http://localhost:5000';
-    console.log('Connecting to WebSocket:', socketUrl);
+    
     const newSocket = io(socketUrl, {
       transports: ['websocket', 'polling']
     });
 
     newSocket.on('connect', () => {
-      console.log('WebSocket connected');
+      
       setIsConnected(true);
     });
 
     newSocket.on('disconnect', () => {
-      console.log('WebSocket disconnected');
+      
       setIsConnected(false);
     });
 
@@ -43,14 +43,14 @@ export const WebSocketProvider = ({ children }) => {
   const joinCandidateRoom = (candidateId) => {
     if (socket && candidateId) {
       socket.emit('join-candidate', candidateId);
-      console.log(`Joined candidate room: ${candidateId}`);
+      
     }
   };
 
   const joinAdminRoom = () => {
     if (socket) {
       socket.emit('join-admin');
-      console.log('Joined admin room');
+      
     }
   };
 

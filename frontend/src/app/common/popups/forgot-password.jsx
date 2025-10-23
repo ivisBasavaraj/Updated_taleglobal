@@ -46,14 +46,14 @@ function ForgotPassword() {
           },
           'IUBFJTFkQbQuIA-6P'
         );
-        console.log('EmailJS Success:', result);
+        
         setMessage(`OTP sent to ${email} successfully!`);
         setOtpSent(true);
       } else {
         throw new Error('EmailJS not loaded');
       }
     } catch (error) {
-      console.error('EmailJS Error Details:', error);
+      
       setMessage(`Failed to send email: ${error.text || error.message}. Demo OTP: ${otpCode}`);
       setOtpSent(true);
     } finally {
@@ -99,7 +99,7 @@ function ForgotPassword() {
         setMessage(result.message || 'Failed to update password. Please try again.');
       }
     } catch (error) {
-      console.error('Password update error:', error);
+      
       setMessage('Failed to update password. Please try again.');
     } finally {
       setLoading(false);

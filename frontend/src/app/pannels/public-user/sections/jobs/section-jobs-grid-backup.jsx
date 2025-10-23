@@ -46,7 +46,7 @@ function SectionJobsGrid({ filters, onTotalChange }) {
             }
             if (filters?.category) {
                 params.append('category', filters.category);
-                console.log('Category filter being sent:', filters.category);
+                
             }
             if (filters?.sortBy) {
                 params.append('sortBy', filters.sortBy);
@@ -56,12 +56,12 @@ function SectionJobsGrid({ filters, onTotalChange }) {
             }
 
             const url = `http://localhost:5000/api/public/jobs?${params.toString()}`;
-            console.log('API URL:', url);
-            console.log('Filters received:', filters);
+            
+            
             const response = await fetch(url);
             const data = await response.json();
-            console.log('API Response:', data);
-            console.log('Jobs count:', data.jobs?.length || 0);
+            
+            
             if (data.success) {
                 let jobList = data.jobs || data.data || [];
                 setJobs(jobList);
@@ -75,7 +75,7 @@ function SectionJobsGrid({ filters, onTotalChange }) {
                 }
             }
         } catch (error) {
-            console.error('Error fetching jobs:', error);
+            
             setJobs([]);
             if (onTotalChange) {
                 onTotalChange(0);

@@ -17,14 +17,14 @@ function EmpManageJobsPage() {
             setLoading(true);
             const response = await api.getEmployerJobs();
             if (response.success) {
-                console.log('Jobs data:', response.jobs); // Debug log
+                 // Debug log
                 setJobs(response.jobs || []);
             } else {
                 setError(response.message || 'Failed to fetch jobs');
             }
         } catch (error) {
             setError('Error fetching jobs');
-            console.error('Error:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -63,7 +63,7 @@ function EmpManageJobsPage() {
                 }
             } catch (error) {
                 alert('Error deleting job');
-                console.error('Error:', error);
+                
             }
         }
     };

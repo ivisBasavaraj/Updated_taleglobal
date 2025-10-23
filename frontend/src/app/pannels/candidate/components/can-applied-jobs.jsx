@@ -80,7 +80,7 @@ function CanAppliedJobsPage() {
                 setApplications(response.data || []);
             }
         } catch (error) {
-            console.error('Error fetching applications:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -113,7 +113,7 @@ function CanAppliedJobsPage() {
             }
             setShowCompanyModal(true);
         } catch (error) {
-            console.error('Error fetching company details:', error);
+            
         }
     };
 

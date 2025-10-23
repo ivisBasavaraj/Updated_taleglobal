@@ -33,7 +33,7 @@ export default function SubAdminLogin() {
             });
 
             const data = await response.json();
-            console.log('Sub-admin login response:', data);
+            
 
             if (response.ok && data.success) {
                 localStorage.setItem("adminToken", data.token);
@@ -52,11 +52,11 @@ export default function SubAdminLogin() {
                     setError("Access denied. This login is for sub-admins only.");
                 }
             } else {
-                console.error('Sub-admin login failed:', data);
+                
                 setError(data.message || `Login failed (${response.status})`);
             }
         } catch (error) {
-            console.error('Network error:', error);
+            
             setError(`Network error: ${error.message}. Please ensure backend server is running.`);
         } finally {
             setLoading(false);

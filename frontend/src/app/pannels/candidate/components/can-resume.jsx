@@ -30,7 +30,7 @@ function CanMyResumePage() {
         try {
             setError(null);
             const response = await api.getCandidateProfile();
-            console.log('Resume profile response:', response);
+            
             if (response.success) {
                 setProfile(response.profile);
                 // Trigger dashboard refresh by dispatching custom event
@@ -39,7 +39,7 @@ function CanMyResumePage() {
                 setError('Failed to load profile data');
             }
         } catch (error) {
-            console.error('Error fetching profile:', error);
+            
             setError('Unable to connect to server. Please check your internet connection.');
         } finally {
             setLoading(false);

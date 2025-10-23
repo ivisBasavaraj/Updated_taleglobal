@@ -21,7 +21,7 @@ function SectionRecommendedJobs() {
                 setError('Failed to fetch recommended jobs');
             }
         } catch (error) {
-            console.error('Error fetching recommended jobs:', error);
+            
             setError('Unable to load recommended jobs');
         } finally {
             setLoading(false);

@@ -89,7 +89,7 @@ const EmployersGridPage = memo(() => {
                 }
             } catch (error) {
                 if (error.name !== 'AbortError') {
-                    console.error('Error fetching employers:', error);
+                    
                     setEmployers([]);
                     setTotalEmployers(0);
                 }

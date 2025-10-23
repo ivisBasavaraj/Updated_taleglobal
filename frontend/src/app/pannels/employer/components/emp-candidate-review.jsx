@@ -80,7 +80,7 @@ function EmpCandidateReviewPage () {
 
 			}
 		} catch (error) {
-			console.error('Error fetching application details:', error);
+			
 		} finally {
 			setLoading(false);
 		}
@@ -124,13 +124,13 @@ function EmpCandidateReviewPage () {
 			if (response.ok) {
 				const result = await response.json();
 				alert('Interview review saved successfully! Candidate will see the updated status.');
-				console.log('Review saved:', result);
+				
 			} else {
 				const errorData = await response.json();
 				alert(`Failed to save review: ${errorData.message || 'Unknown error'}`);
 			}
 		} catch (error) {
-			console.error('Error saving review:', error);
+			
 			alert('Error saving review. Please try again.');
 		}
 	};
@@ -155,7 +155,7 @@ function EmpCandidateReviewPage () {
 				alert(`Failed to shortlist candidate: ${errorData.message || 'Unknown error'}`);
 			}
 		} catch (error) {
-			console.error('Error shortlisting candidate:', error);
+			
 			alert('Error shortlisting candidate. Please try again.');
 		}
 	};
@@ -180,7 +180,7 @@ function EmpCandidateReviewPage () {
 				alert(`Failed to reject candidate: ${errorData.message || 'Unknown error'}`);
 			}
 		} catch (error) {
-			console.error('Error rejecting candidate:', error);
+			
 			alert('Error rejecting candidate. Please try again.');
 		}
 	};

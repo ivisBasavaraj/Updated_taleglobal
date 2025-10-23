@@ -35,7 +35,7 @@ function CanDashboardPage() {
         }
       }
     } catch (error) {
-      console.error('Error fetching candidate data:', error);
+      
     }
   };
 

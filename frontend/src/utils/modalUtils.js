@@ -31,7 +31,7 @@ export const initializeModal = (modalElement) => {
             return window.$(modalElement);
         }
     } catch (error) {
-        console.error('Error initializing modal:', error);
+        
     }
     
     return null;
@@ -41,7 +41,7 @@ export const showModal = (modalId) => {
     try {
         const modalElement = document.getElementById(modalId);
         if (!modalElement) {
-            console.warn(`Modal element with id '${modalId}' not found`);
+            
             return;
         }
 
@@ -76,7 +76,7 @@ export const showModal = (modalId) => {
             }
         }, 50);
     } catch (error) {
-        console.error('Error showing modal:', error);
+        
     }
 };
 
@@ -98,7 +98,7 @@ export const hideModal = (modalId) => {
             cleanupBodyClass();
         }, 300);
     } catch (error) {
-        console.error('Error hiding modal:', error);
+        
     }
 };
 
@@ -121,6 +121,6 @@ export const initializeAllModals = () => {
             }
         });
     } catch (error) {
-        console.error('Error initializing all modals:', error);
+        
     }
 };

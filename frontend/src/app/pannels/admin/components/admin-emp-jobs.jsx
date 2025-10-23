@@ -21,7 +21,7 @@ function AdminEmployerJobs() {
             }
         } catch (error) {
             setError('Error fetching jobs');
-            console.error('Error:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -38,7 +38,7 @@ function AdminEmployerJobs() {
                 }
             } catch (error) {
                 alert('Error deleting job');
-                console.error('Error:', error);
+                
             }
         }
     };

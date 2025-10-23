@@ -27,6 +27,11 @@ const handleApiResponse = async (response) => {
 };
 
 export const api = {
+  // Health check
+  healthCheck: () => {
+    return fetch('/health').then((res) => res.json());
+  },
+
   // Public APIs
   getJobs: (params = {}) => {
     const queryString = new URLSearchParams(params).toString();

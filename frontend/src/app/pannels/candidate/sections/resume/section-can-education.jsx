@@ -202,7 +202,7 @@ function SectionCanEducation({ profile, onUpdate }) {
             
             if (response.ok) {
                 const result = await response.json();
-                console.log('Marksheet uploaded successfully:', result);
+                
                 
                 // Update local state with the uploaded marksheet
                 if (index !== null) {
@@ -217,11 +217,11 @@ function SectionCanEducation({ profile, onUpdate }) {
                 
                 alert('Marksheet uploaded successfully!');
             } else {
-                console.error('Failed to upload marksheet');
+                
                 alert('Failed to upload marksheet');
             }
         } catch (error) {
-            console.error('Error uploading marksheet:', error);
+            
             alert('Error uploading marksheet');
         }
     };
@@ -283,7 +283,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                 alert('Failed to save education details');
             }
         } catch (error) {
-            console.error('Error saving education:', error);
+            
             alert('Failed to save education details');
         } finally {
             setLoading(false);

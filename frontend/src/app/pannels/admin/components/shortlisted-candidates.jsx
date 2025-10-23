@@ -21,7 +21,7 @@ function ShortlistedCandidatesPage() {
                 setShortlistedCandidates(data.data);
             }
         } catch (error) {
-            console.error('Error fetching shortlisted candidates:', error);
+            
         } finally {
             setLoading(false);
         }

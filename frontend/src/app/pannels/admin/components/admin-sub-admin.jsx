@@ -164,7 +164,7 @@ function AdminSubAdmin() {
                 setError(data.message || 'Failed to fetch sub admins');
             }
         } catch (error) {
-            console.error('Error fetching sub admins:', error);
+            
             setError('Failed to connect to server');
         }
     };

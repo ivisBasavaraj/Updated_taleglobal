@@ -25,7 +25,7 @@ function PlacementDashboard() {
             
             const token = localStorage.getItem('placementToken');
             if (!token) {
-                console.error('No placement token found');
+                
                 return;
             }
             
@@ -36,7 +36,7 @@ function PlacementDashboard() {
             });
             
             if (!profileResponse.ok) {
-                console.error('Failed to get profile:', profileResponse.status);
+                
                 return;
             }
             
@@ -44,13 +44,13 @@ function PlacementDashboard() {
             const userEmail = profileData.placement?.email;
             
             if (!userEmail) {
-                console.error('No email found in profile');
+                
                 return;
             }
             
             const allPlacementsResponse = await api.getAllPlacements();
             if (!allPlacementsResponse.success) {
-                console.error('Failed to get placements');
+                
                 return;
             }
             
@@ -59,7 +59,7 @@ function PlacementDashboard() {
             );
             
             if (!userPlacement) {
-                console.error('No placement found for user email:', userEmail);
+                
                 return;
             }
             
@@ -73,7 +73,7 @@ function PlacementDashboard() {
                 fetchStudentData(userPlacement._id);
             }
         } catch (error) {
-            console.error('Error fetching placement details:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -93,7 +93,7 @@ function PlacementDashboard() {
                 setStudentData(data.students || []);
             }
         } catch (error) {
-            console.error('Error fetching student data:', error);
+            
         } finally {
             setLoadingData(false);
         }
@@ -164,7 +164,7 @@ function PlacementDashboard() {
                 alert(data.message || 'Upload failed');
             }
         } catch (error) {
-            console.error('Upload error:', error);
+            
             alert('Upload failed. Please try again.');
         } finally {
             setUploadingFile(false);

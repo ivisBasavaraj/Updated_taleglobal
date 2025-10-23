@@ -66,7 +66,7 @@ function SectionJobsSidebar1 ({ onFilterChange }) {
                 setCategories(Object.entries(categoryCounts));
             }
         } catch (error) {
-            console.error('Error fetching categories:', error);
+            
         }
     };
 
@@ -79,7 +79,7 @@ function SectionJobsSidebar1 ({ onFilterChange }) {
                 setLocations(dbLocations);
             }
         } catch (error) {
-            console.error('Error fetching locations:', error);
+            
         }
     };
 
@@ -114,7 +114,7 @@ function SectionJobsSidebar1 ({ onFilterChange }) {
                 setJobTypes(Object.entries(typeCounts));
             }
         } catch (error) {
-            console.error('Error fetching job types:', error);
+            
         }
     };
 
@@ -143,7 +143,7 @@ function SectionJobsSidebar1 ({ onFilterChange }) {
                 setJobTitles(Array.from(allKeywords).sort());
             }
         } catch (error) {
-            console.error('Error fetching job titles:', error);
+            
         }
     };
 

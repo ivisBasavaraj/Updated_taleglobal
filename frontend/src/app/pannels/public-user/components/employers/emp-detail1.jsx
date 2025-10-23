@@ -47,10 +47,10 @@ function EmployersDetail1Page() {
             const data = await response.json();
             if (data.success) {
                 setSubmittedReviews(data.reviews);
-                console.log('Fetched submitted reviews:', data.reviews);
+                
             }
         } catch (error) {
-            console.error('Error fetching submitted reviews:', error);
+            
         }
     };
 
@@ -58,15 +58,15 @@ function EmployersDetail1Page() {
         try {
             const response = await fetch(`http://localhost:5000/api/public/employers/${id}`);
             const data = await response.json();
-            console.log('Employer API response:', data);
+            
             if (data.success) {
                 setEmployer(data.profile);
-                console.log('Employer data set:', data.profile);
+                
             } else {
-                console.error('API error:', data.message);
+                
             }
         } catch (error) {
-            console.error('Error fetching employer details:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -84,7 +84,7 @@ function EmployersDetail1Page() {
                 });
             }
         } catch (error) {
-            console.error('Error fetching reviews:', error);
+            
         }
     };
 
@@ -122,7 +122,7 @@ function EmployersDetail1Page() {
                 alert(data.message || 'Error submitting review');
             }
         } catch (error) {
-            console.error('Error submitting review:', error);
+            
             alert('Error submitting review');
         }
     };

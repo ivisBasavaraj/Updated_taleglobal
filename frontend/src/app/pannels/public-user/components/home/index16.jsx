@@ -76,7 +76,7 @@ function Home16Page() {
                     
                     // Show all jobs without filtering
                     const validJobs = jobsData.jobs || [];
-                    console.log('Total jobs from API:', validJobs.length);
+                    
                     
                     setAllJobs(validJobs);
                     setJobs(validJobs.slice(0, 6));
@@ -101,7 +101,7 @@ function Home16Page() {
                     throw new Error(jobsData.message || 'Failed to fetch jobs');
                 }
             } catch (jobError) {
-                console.error('Error fetching jobs:', jobError);
+                
                 errors.jobs = true;
                 setAllJobs([]);
                 setJobs([]);
@@ -133,7 +133,7 @@ function Home16Page() {
                     }
                 }
             } catch (statsError) {
-                console.error('Error fetching stats:', statsError);
+                
                 errors.stats = true;
                 setStats({ totalJobs: 0, totalEmployers: 0, totalApplications: 0 });
             }
@@ -161,7 +161,7 @@ function Home16Page() {
                     throw new Error(recruitersData.message || 'Failed to fetch recruiters');
                 }
             } catch (recruitersError) {
-                console.error('Error fetching recruiters:', recruitersError);
+                
                 errors.recruiters = true;
                 setRecruiters([]);
             }
@@ -173,7 +173,7 @@ function Home16Page() {
                 setError('Unable to load page data. Please check your connection and try again.');
             }
         } catch (error) {
-            console.error('Critical error fetching home data:', error);
+            
             setError('An unexpected error occurred. Please refresh the page.');
         } finally {
             setLoading(false);
@@ -184,16 +184,16 @@ function Home16Page() {
         try {
             // Validate filters object
             if (!filters || typeof filters !== 'object') {
-                console.error('Invalid filters object');
+                
                 return;
             }
 
-            console.log('Received filters:', filters);
-            console.log('All jobs count:', allJobs.length);
+            
+            
             
             // Validate allJobs array
             if (!Array.isArray(allJobs)) {
-                console.error('Invalid jobs data');
+                
                 setError('Unable to search jobs. Please refresh the page.');
                 return;
             }
@@ -215,7 +215,7 @@ function Home16Page() {
                     return;
                 }
                 
-                console.log('Filtering by search term:', searchTerm);
+                
                 filtered = filtered.filter(job => {
                     try {
                         return job.title?.toLowerCase().includes(searchTerm) ||
@@ -224,11 +224,11 @@ function Home16Page() {
                                job.description?.toLowerCase().includes(searchTerm) ||
                                job.category?.toLowerCase().includes(searchTerm);
                     } catch (err) {
-                        console.error('Error filtering job:', err);
+                        
                         return false;
                     }
                 });
-                console.log('After search filter:', filtered.length);
+                
             }
             
             // Filter by job type
@@ -240,17 +240,17 @@ function Home16Page() {
                     return;
                 }
                 
-                console.log('Filtering by job type:', jobType);
+                
                 filtered = filtered.filter(job => {
                     try {
                         const jobTypeField = job.jobType || job.type || '';
                         return jobTypeField.toLowerCase().includes(jobType);
                     } catch (err) {
-                        console.error('Error filtering job by type:', err);
+                        
                         return false;
                     }
                 });
-                console.log('After job type filter:', filtered.length);
+                
             }
             
             // Filter by location
@@ -267,19 +267,19 @@ function Home16Page() {
                     return;
                 }
                 
-                console.log('Filtering by location:', location);
+                
                 filtered = filtered.filter(job => {
                     try {
                         return job.location?.toLowerCase().includes(location);
                     } catch (err) {
-                        console.error('Error filtering job by location:', err);
+                        
                         return false;
                     }
                 });
-                console.log('After location filter:', filtered.length);
+                
             }
             
-            console.log('Final filtered jobs:', filtered.length);
+            
             
             setFilteredJobs(filtered);
             setJobs(filtered.slice(0, 6)); // Show first 6 filtered results
@@ -296,7 +296,7 @@ function Home16Page() {
                 }, 100);
             }
         } catch (error) {
-            console.error('Error in handleSearch:', error);
+            
             setError('An error occurred while searching. Please try again.');
         }
     };
@@ -305,7 +305,7 @@ function Home16Page() {
         try {
             // Validate current state
             if (!Array.isArray(allJobs) || !Array.isArray(filteredJobs)) {
-                console.error('Invalid jobs data');
+                
                 setError('Unable to load more jobs. Please refresh the page.');
                 return;
             }
@@ -314,7 +314,7 @@ function Home16Page() {
             
             // Validate newCount
             if (newCount < 0 || newCount > 1000) {
-                console.error('Invalid count value');
+                
                 return;
             }
             
@@ -324,7 +324,7 @@ function Home16Page() {
             setJobs(newJobs);
             setShowingCount(newCount);
         } catch (error) {
-            console.error('Error in handleShowMore:', error);
+            
             setError('An error occurred while loading more jobs.');
         }
     };

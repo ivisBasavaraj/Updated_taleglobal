@@ -19,7 +19,7 @@ function EmpHeaderSection(props) {
                 setProfileData(response.profile);
             }
         } catch (error) {
-            console.error('Error fetching profile:', error);
+            
         }
     };
     return (

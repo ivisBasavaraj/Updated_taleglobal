@@ -28,7 +28,7 @@ function AdminCandidateReviewPage() {
                 setCandidate(data.candidate);
             }
         } catch (error) {
-            console.error('Error fetching candidate details:', error);
+            
         } finally {
             setLoading(false);
         }

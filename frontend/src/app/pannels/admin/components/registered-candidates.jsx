@@ -30,7 +30,7 @@ function RegisteredCandidatesPage() {
                 setShortlistedApplications(shortlistedResponse.data);
             }
         } catch (err) {
-            console.error('Error fetching data:', err);
+            
         } finally {
             setLoading(false);
         }

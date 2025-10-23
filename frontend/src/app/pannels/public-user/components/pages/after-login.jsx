@@ -35,7 +35,7 @@ function AfterLoginPage() {
                     moveToCandidate();
                 } else {
                     // show error
-                    console.log('error');
+                    
                 }
             }
         );
@@ -53,7 +53,7 @@ function AfterLoginPage() {
                     moveToEmployer();
                 } else {
                     // show error
-                    console.log('error');
+                    
                 }
             }
         );
@@ -84,7 +84,7 @@ function AfterLoginPage() {
                 setJobs(data.jobs.slice(0, 3));
             }
         } catch (error) {
-            console.error('Error fetching jobs:', error);
+            
         }
     };
 
@@ -108,7 +108,7 @@ function AfterLoginPage() {
                 setCategories(categoryList);
             }
         } catch (error) {
-            console.error('Error fetching categories:', error);
+            
         }
     };
 

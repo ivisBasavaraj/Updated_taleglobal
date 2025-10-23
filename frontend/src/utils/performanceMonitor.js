@@ -134,12 +134,12 @@ class PerformanceMonitor {
     
     Object.entries(metrics).forEach(([key, value]) => {
       if (key !== 'memory' && key !== 'timestamp') {
-        console.log(`${key}:`, value);
+        
       }
     });
     
     if (metrics.memory) {
-      console.log('Memory Usage:', `${metrics.memory.used}MB / ${metrics.memory.total}MB`);
+      
     }
     
     console.groupEnd();

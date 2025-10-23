@@ -26,7 +26,7 @@ function AdminEmployersRejected() {
             }
         } catch (error) {
             setError('Error fetching rejected employers');
-            console.error('Error:', error);
+            
         } finally {
             setLoading(false);
         }

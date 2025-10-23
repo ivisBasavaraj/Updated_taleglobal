@@ -19,7 +19,7 @@ function EmpSupport() {
 
     useEffect(() => {
         // Debug: Check all localStorage keys
-        console.log('All localStorage keys:', Object.keys(localStorage));
+        
         
         // Try multiple localStorage keys for employer data
         const possibleKeys = ['employerData', 'employer', 'user', 'authData', 'loginData'];
@@ -28,12 +28,12 @@ function EmpSupport() {
         for (const key of possibleKeys) {
             const data = localStorage.getItem(key);
             if (data) {
-                console.log(`Found data in ${key}:`, data);
+                
                 try {
                     foundData = JSON.parse(data);
                     break;
                 } catch (e) {
-                    console.log(`Error parsing ${key}:`, e);
+                    
                 }
             }
         }
@@ -42,11 +42,11 @@ function EmpSupport() {
         const employerToken = localStorage.getItem('employerToken') || 
                             localStorage.getItem('token') ||
                             localStorage.getItem('authToken');
-        console.log('Token found:', !!employerToken);
+        
         
         // Update form data if we found any data
         if (foundData) {
-            console.log('Using data:', foundData);
+            
             setFormData(prev => ({
                 ...prev,
                 name: foundData.companyName || foundData.name || foundData.firstName || 'Employer',
@@ -60,7 +60,7 @@ function EmpSupport() {
         if (!foundData && employerToken) {
             try {
                 const tokenPayload = JSON.parse(atob(employerToken.split('.')[1]));
-                console.log('Token payload:', tokenPayload);
+                
                 setFormData(prev => ({
                     ...prev,
                     userId: tokenPayload.id || tokenPayload.userId || '',
@@ -68,7 +68,7 @@ function EmpSupport() {
                     email: tokenPayload.email || ''
                 }));
             } catch (error) {
-                console.log('Error decoding token:', error);
+                
             }
         }
     }, []);
@@ -141,7 +141,7 @@ function EmpSupport() {
             // Use fallback email if none found
             if (!requiredData.email) {
                 requiredData.email = 'employer@jobportal.com';
-                console.warn('No email found, using fallback');
+                
             }
             
             Object.keys(requiredData).forEach(key => {
@@ -172,7 +172,7 @@ function EmpSupport() {
                 setErrors({ submit: data.message || 'Failed to submit support ticket' });
             }
         } catch (error) {
-            console.error('Support submission error:', error);
+            
             setErrors({ submit: 'Backend server not running. Please start the backend server on port 5000.' });
         } finally {
             setIsSubmitting(false);

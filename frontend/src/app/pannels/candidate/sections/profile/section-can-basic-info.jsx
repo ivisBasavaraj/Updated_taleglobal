@@ -121,7 +121,7 @@ function SectionCandicateBasicInfo() {
             }
             
             const response = await api.getCandidateProfile();
-            console.log('Profile response:', response);
+            
             
             if (response.success && response.profile) {
                 const profile = response.profile;
@@ -141,7 +141,7 @@ function SectionCandicateBasicInfo() {
                 setCurrentProfilePicture(profile.profilePicture);
             }
         } catch (error) {
-            console.error('Error fetching profile:', error);
+            
             if (error.message && error.message.includes('401')) {
                 setNotification({ type: 'error', message: 'Please log in to access your profile.' });
                 setTimeout(() => window.location.href = '/login', 2000);
@@ -332,10 +332,10 @@ function SectionCandicateBasicInfo() {
                 submitData.append('profilePicture', formData.profilePicture);
             }
             
-            console.log('Form data being sent:', formData);
+            
             
             const response = await api.updateCandidateProfile(submitData);
-            console.log('API response:', response);
+            
             if (response.success) {
                 setNotification({ type: 'success', message: 'Profile updated successfully!' });
                 setTimeout(() => setNotification(null), 3000);
@@ -351,7 +351,7 @@ function SectionCandicateBasicInfo() {
                 }
             }
         } catch (error) {
-            console.error('Error updating profile:', error);
+            
             if (error.response?.status === 401) {
                 setNotification({ type: 'error', message: 'Please log in to update your profile.' });
                 setTimeout(() => window.location.href = '/login', 2000);

@@ -39,16 +39,16 @@ function JobDetail1Page() {
             const response = await fetch(`http://localhost:5000/api/public/jobs/${jobId}`);
             const data = await response.json();
             if (data.success) {
-                console.log('Job data received:', data.job);
-                console.log('Employer profile:', data.job.employerProfile);
+                
+                
                 if (data.job.employerProfile) {
-                    console.log('Logo exists:', !!data.job.employerProfile.logo);
-                    console.log('Cover exists:', !!data.job.employerProfile.coverImage);
+                    
+                    
                 }
                 setJob(data.job);
             }
         } catch (error) {
-            console.error('Error fetching job details:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -65,7 +65,7 @@ function JobDetail1Page() {
                 setHasApplied(data.hasApplied);
             }
         } catch (error) {
-            console.error('Error checking application status:', error);
+            
         }
     }, [jobId]);
 
@@ -80,7 +80,7 @@ function JobDetail1Page() {
                 setCandidateCredits(data.credits || 0);
             }
         } catch (error) {
-            console.error('Error fetching candidate credits:', error);
+            
         }
     }, []);
 
@@ -204,7 +204,7 @@ function JobDetail1Page() {
                     alert(data.message || 'Failed to submit application');
                 }
             } catch (error) {
-                console.error('Error applying for job:', error);
+                
                 alert('Failed to submit application');
             }
         }

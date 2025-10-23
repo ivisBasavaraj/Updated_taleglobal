@@ -26,11 +26,11 @@ function EmpJobReviewPage() {
             const data = await response.json();
             if (data.success) {
                 const job = data.jobs.find(j => j._id === id);
-                console.log('Job details:', job);
+                
                 setJobDetails(job);
             }
         } catch (error) {
-            console.error('Error fetching job:', error);
+            
         } finally {
             setLoading(false);
         }

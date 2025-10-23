@@ -231,7 +231,7 @@ function SectionCandidateOverview() {
 					
 					// Listen for credit updates
 					socket.on('credit-updated', (data) => {
-						console.log('Credit update received:', data);
+						
 						if (data.candidateId === candidateId) {
 							setCandidate(prev => ({
 								...prev,
@@ -257,7 +257,7 @@ function SectionCandidateOverview() {
 						}
 					});
 				} catch (error) {
-					console.error('Error parsing token:', error);
+					
 				}
 			}
 		}
@@ -292,10 +292,10 @@ function SectionCandidateOverview() {
 			
 			if (statsResponse.ok) {
 				const data = await statsResponse.json();
-				console.log('Dashboard API Response:', data);
+				
 				setStats(data.stats);
 				setCandidate(data.candidate);
-				console.log('Candidate credits:', data.candidate?.credits);
+				
 			}
 
 			if (notificationResponse.ok) {
@@ -305,7 +305,7 @@ function SectionCandidateOverview() {
 				}
 			}
 		} catch (error) {
-			console.error('Error fetching dashboard data:', error);
+			
 		}
 	};
 

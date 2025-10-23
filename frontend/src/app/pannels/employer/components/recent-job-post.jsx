@@ -22,7 +22,7 @@ const RecentJobPosts = () => {
         setJobPosts(data.jobs || []);
       }
     } catch (error) {
-      console.error('Error fetching recent jobs:', error);
+      
     }
   };
   return (

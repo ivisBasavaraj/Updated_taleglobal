@@ -92,7 +92,7 @@ function EmpCompanyProfilePage() {
                 }
             }
         } catch (error) {
-            console.error('Error fetching profile:', error);
+            
         }
     };
 
@@ -363,7 +363,7 @@ function EmpCompanyProfilePage() {
                 alert(data.message || 'Logo upload failed');
             }
         } catch (error) {
-            console.error('Logo upload failed:', error);
+            
             alert('Logo upload failed. Please try again.');
         }
     };
@@ -410,7 +410,7 @@ function EmpCompanyProfilePage() {
                 alert(data.message || 'Cover image upload failed');
             }
         } catch (error) {
-            console.error('Cover upload failed:', error);
+            
             alert('Cover image upload failed. Please try again.');
         }
     };
@@ -458,7 +458,7 @@ function EmpCompanyProfilePage() {
                 alert(data.message || 'Document upload failed');
             }
         } catch (error) {
-            console.error('Document upload failed:', error);
+            
             alert('Document upload failed. Please try again.');
         }
     };
@@ -524,7 +524,7 @@ function EmpCompanyProfilePage() {
                 alert(data.message || 'Document upload failed');
             }
         } catch (error) {
-            console.error('Document upload failed:', error);
+            
             alert('Document upload failed. Please try again.');
         }
     };
@@ -561,7 +561,7 @@ function EmpCompanyProfilePage() {
                 alert(data.message || 'Failed to delete document');
             }
         } catch (error) {
-            console.error('Delete failed:', error);
+            
             alert('Failed to delete document. Please try again.');
         }
     };
@@ -622,7 +622,7 @@ function EmpCompanyProfilePage() {
                 alert(data.message || 'Gallery upload failed');
             }
         } catch (error) {
-            console.error('Gallery upload failed:', error);
+            
             alert('Gallery upload failed. Please try again.');
         }
     };
@@ -659,7 +659,7 @@ function EmpCompanyProfilePage() {
                 alert(data.message || 'Failed to delete image');
             }
         } catch (error) {
-            console.error('Delete failed:', error);
+            
             alert('Failed to delete image. Please try again.');
         }
     };
@@ -757,7 +757,7 @@ function EmpCompanyProfilePage() {
                 }
             }
         } catch (error) {
-            console.error('Error updating profile:', error);
+            
             if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
                 alert('Network error or request too large. Please check your connection and ensure all files are uploaded individually.');
             } else {
@@ -805,7 +805,7 @@ function EmpCompanyProfilePage() {
                                             alt="Logo" 
                                             style={{maxWidth: '150px', maxHeight: '150px', objectFit: 'contain', border: '1px solid #ddd'}} 
                                             onError={(e) => {
-                                                console.log('Logo load error'); 
+                                                 
                                                 e.target.style.display = 'none';
                                             }}
                                         />
@@ -834,7 +834,7 @@ function EmpCompanyProfilePage() {
                                             alt="Cover" 
                                             style={{width: '100%', maxWidth: '400px', height: 'auto', maxHeight: '200px', objectFit: 'contain', border: '1px solid #ddd', borderRadius: '4px'}} 
                                             onError={(e) => {
-                                                console.log('Cover load error'); 
+                                                 
                                                 e.target.style.display = 'none';
                                             }}
                                         />
@@ -1515,7 +1515,7 @@ function EmpCompanyProfilePage() {
                                                 alt="Company ID Card" 
                                                 style={{maxWidth: '200px', maxHeight: '120px', objectFit: 'contain', border: '1px solid #ddd'}} 
                                                 onError={(e) => {
-                                                    console.log('Company ID Card load error'); 
+                                                     
                                                     e.target.style.display = 'none';
                                                 }}
                                             />

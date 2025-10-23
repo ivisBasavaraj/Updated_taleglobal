@@ -120,12 +120,12 @@ function SignUpPopup() {
                 setCandidateData({ username: '', email: '', mobile: '', password: '', confirmPassword: '' });
             } else {
                 setError(data.message || 'Registration failed');
-                console.error('Registration error:', data);
-                console.log('Error details:', JSON.stringify(data, null, 2));
+                
+                
             }
         } catch (error) {
             setError('Registration failed. Please try again.');
-            console.error('Network error:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -163,12 +163,12 @@ function SignUpPopup() {
                 setEmployerData({ name: '', email: '', mobile: '', password: '', confirmPassword: '', employerCategory: '' });
             } else {
                 setError(data.message || 'Registration failed');
-                console.error('Registration error:', data);
-                console.log('Error details:', JSON.stringify(data, null, 2));
+                
+                
             }
         } catch (error) {
             setError('Registration failed. Please try again.');
-            console.error('Network error:', error);
+            
         } finally {
             setLoading(false);
         }

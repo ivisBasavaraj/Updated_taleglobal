@@ -18,7 +18,7 @@ function AdminHeaderSection(props) {
                 setAdminData({ name: 'Admin', email: 'admin@jobportal.com' });
             }
         } catch (error) {
-            console.error('Error fetching admin data:', error);
+            
         }
     };
     return (

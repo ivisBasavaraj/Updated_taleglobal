@@ -10,15 +10,15 @@ function JobDetailDebug() {
             try {
                 const response = await fetch(`http://localhost:5000/api/public/jobs/${id}`);
                 const data = await response.json();
-                console.log('Job API Response:', data);
+                
                 if (data.success) {
                     setJob(data.job);
-                    console.log('Employer Profile:', data.job.employerProfile);
-                    console.log('Logo exists:', !!data.job.employerProfile?.logo);
-                    console.log('Cover exists:', !!data.job.employerProfile?.coverImage);
+                    
+                    
+                    
                 }
             } catch (error) {
-                console.error('Error:', error);
+                
             }
         };
         
@@ -50,10 +50,10 @@ function JobDetailDebug() {
                                 alt="Logo" 
                                 style={{maxWidth: '200px', border: '1px solid #ccc'}}
                                 onError={(e) => {
-                                    console.error('Logo failed to load');
+                                    
                                     e.target.style.border = '2px solid red';
                                 }}
-                                onLoad={() => console.log('Logo loaded successfully')}
+                                onLoad={() => }
                             />
                         </div>
                     )}
@@ -66,10 +66,10 @@ function JobDetailDebug() {
                                 alt="Cover" 
                                 style={{maxWidth: '400px', border: '1px solid #ccc'}}
                                 onError={(e) => {
-                                    console.error('Cover failed to load');
+                                    
                                     e.target.style.border = '2px solid red';
                                 }}
-                                onLoad={() => console.log('Cover loaded successfully')}
+                                onLoad={() => }
                             />
                         </div>
                     )}

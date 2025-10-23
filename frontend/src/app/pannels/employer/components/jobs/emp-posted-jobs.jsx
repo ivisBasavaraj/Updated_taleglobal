@@ -69,7 +69,7 @@ export default function EmpPostedJobs() {
                 fetchApplicationCounts(data.jobs);
             }
         } catch (error) {
-            console.error('Error fetching jobs:', error);
+            
         } finally {
             setLoading(false);
         }
@@ -90,14 +90,14 @@ export default function EmpPostedJobs() {
                         counts[job._id] = data.applications.length;
                     }
                 } catch (error) {
-                    console.error(`Error fetching applications for job ${job._id}:`, error);
+                    
                     counts[job._id] = 0;
                 }
             }));
             
             setApplicationCounts(counts);
         } catch (error) {
-            console.error('Error fetching application counts:', error);
+            
         }
     };
 
@@ -141,7 +141,7 @@ export default function EmpPostedJobs() {
                 alert('Failed to delete job');
             }
         } catch (error) {
-            console.error('Error deleting job:', error);
+            
             alert('Failed to delete job');
         }
     };
@@ -167,7 +167,7 @@ export default function EmpPostedJobs() {
                 alert('Failed to update job status');
             }
         } catch (error) {
-            console.error('Error updating job status:', error);
+            
             alert('Failed to update job status');
         }
     };

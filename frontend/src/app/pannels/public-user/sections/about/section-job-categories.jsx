@@ -73,7 +73,7 @@ function SectionJobCategories() {
                 setCategoryCounts(counts);
             }
         } catch (error) {
-            console.error('Error fetching category counts:', error);
+            
         }
     };
 
@@ -87,7 +87,7 @@ function SectionJobCategories() {
                 setShowRolesModal(true);
             }
         } catch (error) {
-            console.error('Error fetching category roles:', error);
+            
         }
     };
 

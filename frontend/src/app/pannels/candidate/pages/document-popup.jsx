@@ -27,8 +27,8 @@ export default function DocumentPopup({ isOpen, onClose, onSubmit }) {
 
 	const handleSubmit = () => {
 		// Only front-end demo, no backend
-		console.log("Form Data:", form);
-		console.log("Files:", files);
+		
+		
 		onSubmit();
 	};
 
