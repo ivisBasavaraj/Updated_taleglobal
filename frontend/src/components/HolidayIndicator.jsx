@@ -4,7 +4,6 @@ import { holidaysApi } from '../utils/holidaysApi';
 const HolidayIndicator = ({ date, style = {} }) => {
   const [holidayInfo, setHolidayInfo] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isWeekend, setIsWeekend] = useState(false);
 
   useEffect(() => {
     if (date) {
@@ -35,14 +34,7 @@ const HolidayIndicator = ({ date, style = {} }) => {
     );
   }
 
-  const [isWeekend, setIsWeekend] = useState(false);
-
-  useEffect(() => {
-    if (date) {
-      const day = new Date(date).getDay();
-      setIsWeekend(day === 0 || day === 6);
-    }
-  }, [date]);
+  const isWeekend = date ? (new Date(date).getDay() === 0 || new Date(date).getDay() === 6) : false;
 
   if (!holidayInfo && !isWeekend) {
     return null;
