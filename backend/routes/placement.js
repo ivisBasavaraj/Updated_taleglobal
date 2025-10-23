@@ -28,8 +28,9 @@ router.get('/students', auth(['placement']), placementController.getMyStudents);
 router.get('/profile', auth(['placement']), async (req, res) => {
   try {
     const Placement = require('../models/Placement');
-    const placement = await Placement.findById(req.user.id)
-      .select('name email phone collegeName logo idCard fileHistory status')
+    const placementId = req.user._id || req.user.id;
+    const placement = await Placement.findById(placementId)
+      .select('name email phone collegeName status')
       .lean();
     
     if (!placement) {

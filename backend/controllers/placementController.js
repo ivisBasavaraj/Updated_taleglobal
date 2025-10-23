@@ -899,9 +899,9 @@ exports.saveDashboardState = async (req, res) => {
 // Get placement dashboard stats
 exports.getPlacementDashboard = async (req, res) => {
   try {
-    const placementId = req.user.id;
+    const placementId = req.user._id || req.user.id;
     
-    const placement = await Placement.findById(placementId).select('name collegeName fileHistory lastDashboardState');
+    const placement = await Placement.findById(placementId).select('name collegeName fileHistory');
     if (!placement) {
       return res.status(404).json({ success: false, message: 'Placement officer not found' });
     }
@@ -909,38 +909,28 @@ exports.getPlacementDashboard = async (req, res) => {
     // Count files by status
     const totalFiles = placement.fileHistory?.length || 0;
     const pendingFiles = placement.fileHistory?.filter(f => f.status === 'pending').length || 0;
-    const approvedFiles = placement.fileHistory?.filter(f => f.status === 'approved').length || 0;
-    const rejectedFiles = placement.fileHistory?.filter(f => f.status === 'rejected').length || 0;
+    const processedFiles = placement.fileHistory?.filter(f => f.status === 'processed').length || 0;
     
     // Count total candidates created
-    const totalCandidates = await Candidate.countDocuments({ placementId });
-    
-    // Get recent file uploads
-    const recentFiles = placement.fileHistory
-      ?.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))
-      ?.slice(0, 5)
-      ?.map(file => ({
-        fileName: file.fileName,
-        uploadedAt: file.uploadedAt,
-        status: file.status,
-        candidatesCreated: file.candidatesCreated || 0
-      })) || [];
+    let totalCandidates = 0;
+    try {
+      totalCandidates = await Candidate.countDocuments({ placementId });
+    } catch (e) {
+      console.error('Error counting candidates:', e);
+    }
     
     res.json({
       success: true,
       stats: {
         totalFiles,
         pendingFiles,
-        approvedFiles,
-        rejectedFiles,
+        processedFiles,
         totalCandidates
       },
-      recentFiles,
       placementInfo: {
         name: placement.name,
         collegeName: placement.collegeName
-      },
-      lastDashboardState: placement.lastDashboardState
+      }
     });
   } catch (error) {
     console.error('Error getting placement dashboard:', error);
