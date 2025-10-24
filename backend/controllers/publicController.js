@@ -412,7 +412,9 @@ exports.getEmployers = async (req, res) => {
               industry: 1, 
               corporateAddress: 1, 
               website: 1, 
-              companySize: 1 
+              companySize: 1,
+              establishedSince: 1,
+              foundedYear: 1
             } }
           ]
         }
@@ -519,7 +521,7 @@ exports.getTopRecruiters = async (req, res) => {
           description: profile?.description || profile?.companyDescription || 'Leading recruitment company',
           location: profile?.location || profile?.corporateAddress || 'Multiple Locations',
           industry: profile?.industry || profile?.industrySector || 'Various Industries',
-          establishedSince: profile?.establishedSince || profile?.foundedYear || null,
+          establishedSince: profile?.establishedSince || (profile?.foundedYear ? profile.foundedYear.toString() : null),
           teamSize: profile?.teamSize || profile?.companySize || null,
           website: profile?.website || null
         };

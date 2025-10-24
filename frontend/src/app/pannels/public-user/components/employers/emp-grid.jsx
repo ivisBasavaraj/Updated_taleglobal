@@ -161,7 +161,7 @@ const EmployersGridPage = memo(() => {
                     <div className="job-card-footer">
                         <div className="company-info">
                             <div className="posted-by-label">Est. Since:</div>
-                            <div className="company-name">{employer.profile?.establishedSince || 'N/A'}</div>
+                            <div className="company-name">{employer.establishedSince || employer.profile?.establishedSince || employer.profile?.foundedYear || 'Not specified'}</div>
                             <div className="poster-type">{employer.profile?.companyType || 'Company'}</div>
                         </div>
                         <button className="apply-now-btn" onClick={handleViewClick}>
