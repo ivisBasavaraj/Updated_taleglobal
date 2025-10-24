@@ -1,6 +1,28 @@
+/* Force light mode globally */
+html, body {
+    color-scheme: light !important;
+    background-color: white !important;
+}
+
 /* Global Font */
 body {
     font-family: 'Rubik', sans-serif !important;
+}
+
+/* Prevent dark backgrounds on all text elements */
+*, *::before, *::after {
+    color-scheme: light !important;
+}
+
+/* Ensure all text elements have proper backgrounds */
+h1, h2, h3, h4, h5, h6, p, span, div, a {
+    background-color: transparent !important;
+}
+
+/* Force white backgrounds for cards and containers */
+.card, .panel, .new-job-card, .hover-card {
+    background-color: white !important;
+    color-scheme: light !important;
 }
 
 .site-text-primary {
