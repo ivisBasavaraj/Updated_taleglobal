@@ -161,17 +161,20 @@ button:active,
     transform: translateY(0);
 }
 
-.site-text-primary {
-    color: #fd7e14 !important;
+.site-text-primary,
+.site-text-warning {
+    color: #2563eb !important;
 }
 
-.twm-jobs-browse.site-text-primary {
-    color: #fd7e14 !important;
+.twm-jobs-browse.site-text-primary,
+.twm-jobs-browse.site-text-warning {
+    color: #2563eb !important;
     font-weight: 600 !important;
 }
 
-.twm-jobs-browse.site-text-primary:hover {
-    color: #e8690a !important;
+.twm-jobs-browse.site-text-primary:hover,
+.twm-jobs-browse.site-text-warning:hover {
+    color: #1e40af !important;
 }
 
 .btn-apply,
@@ -449,10 +452,10 @@ html {
 .recruiter-job-card {
     position: relative;
     background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
     transition: all 0.3s ease;
     height: auto;
     min-height: 280px;
@@ -461,8 +464,8 @@ html {
 }
 
 .recruiter-job-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(15, 23, 42, 0.15);
 }
 
 /* Header with job type badge only */
