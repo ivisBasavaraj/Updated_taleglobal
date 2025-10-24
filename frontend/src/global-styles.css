@@ -139,16 +139,19 @@ button,
 .site-button,
 .ant-btn {
     font-weight: 600 !important;
+    background-color: #fd7e14 !important;
+    color: #ffffff !important;
+    border-color: #fd7e14 !important;
 }
 
 button:hover,
 .btn:hover,
 .site-button:hover,
 .ant-btn:hover {
-    border-color: #2563eb !important;
-    background-color: #f8fafc !important;
-    color: #111827 !important;
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12) !important;
+    background-color: #e8690a !important;
+    color: #ffffff !important;
+    border-color: #e8690a !important;
+    box-shadow: 0 6px 18px rgba(253, 126, 20, 0.3) !important;
     transform: translateY(-1px);
 }
 
@@ -156,8 +159,10 @@ button:active,
 .btn:active,
 .site-button:active,
 .ant-btn:active {
-    background-color: #f1f5f9 !important;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.16) !important;
+    background-color: #d1570a !important;
+    color: #ffffff !important;
+    border-color: #d1570a !important;
+    box-shadow: 0 2px 8px rgba(253, 126, 20, 0.4) !important;
     transform: translateY(0);
 }
 
@@ -198,27 +203,27 @@ button.btn-apply:hover,
     border-color: #2563eb !important;
 }
 
-/* Override site-button default styling */
+/* Orange site-button styling */
 .site-button,
 button.site-button,
 .panel-body .site-button,
 .twm-tabs-style-1 .site-button {
-    background-color: #ffffff !important;
-    color: #111827 !important;
+    background-color: #fd7e14 !important;
+    color: #ffffff !important;
     text-shadow: none !important;
-    border: 1px solid #d1d5db !important;
+    border: 1px solid #fd7e14 !important;
 }
 
 .site-button:hover,
 button.site-button:hover,
 .panel-body .site-button:hover,
 .twm-tabs-style-1 .site-button:hover {
-    background-color: #f8fafc !important;
-    color: #111827 !important;
+    background-color: #e8690a !important;
+    color: #ffffff !important;
     text-shadow: none !important;
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
-    border-color: #2563eb !important;
+    box-shadow: 0 6px 18px rgba(253, 126, 20, 0.3);
+    border-color: #e8690a !important;
     transition: all 0.3s ease;
 }
 
@@ -284,7 +289,7 @@ button.site-button:hover {
     box-shadow: 0 4px 15px rgba(253, 126, 20, 0.3);
 }
 
-/* Specific orange button backgrounds */
+/* Orange button backgrounds */
 .twm-nav-sign-up,
 .twm-nav-post-a-job,
 .browse-btn,
@@ -297,9 +302,9 @@ button,
 .btn,
 .site-button,
 a.site-button {
-    background-color: #ffffff !important;
-    color: #111827 !important;
-    border-color: #d1d5db !important;
+    background-color: #fd7e14 !important;
+    color: #ffffff !important;
+    border-color: #fd7e14 !important;
     text-decoration: none !important;
 }
 
@@ -315,10 +320,12 @@ button:hover,
 .btn:hover,
 .site-button:hover,
 a.site-button:hover {
-    background-color: #f8fafc !important;
-    color: #111827 !important;
-    border-color: #2563eb !important;
+    background-color: #e8690a !important;
+    color: #ffffff !important;
+    border-color: #e8690a !important;
     text-decoration: none !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(253, 126, 20, 0.3);
 }
 
 /* Smooth scrolling for the entire page */
