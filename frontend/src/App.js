@@ -9,9 +9,9 @@ import "aos/dist/aos.css";
 import "./global-styles.css";
 import "./notification-animations.css";
 import "./mobile-responsive.css";
+import "./employer-mobile-responsive.css";
 import "./index16-mobile-fix.css";
 import "./logo-fix.css";
-import "./mobile-responsive.css";
 import "./mobile-card-scrolling.css";
 
 function App() {

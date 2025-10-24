@@ -15,7 +15,7 @@ function EmpSidebarSection(props) {
 
     return (
         <>
-            <nav id="sidebar-admin-wraper" className={props.sidebarActive ? "" : "active"}>
+            <nav id="sidebar-admin-wraper" className={props.sidebarActive ? "active" : ""}>
                 <div className="page-logo">
                     <NavLink to={publicUser.INITIAL}><JobZImage id="skin_page_logo" src="images/logo-dark.png" alt="" /></NavLink>
                 </div>

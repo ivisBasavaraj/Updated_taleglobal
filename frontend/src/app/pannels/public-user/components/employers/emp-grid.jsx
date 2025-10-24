@@ -10,6 +10,7 @@ import { requestCache } from "../../../../../utils/requestCache";
 import { performanceMonitor } from "../../../../../utils/performanceMonitor";
 import "../../../../../job-grid-optimizations.css";
 import "../../../../../emp-grid-optimizations.css";
+import "../../../../../new-job-card.css";
 
 const EmployersGridPage = memo(() => {
     const [employers, setEmployers] = useState([]);
@@ -115,105 +116,57 @@ const EmployersGridPage = memo(() => {
     }, [fetchEmployers]);
 
     const EmployerCard = memo(({ employer }) => {
-        const cardRef = useRef(null);
-        
-        // Intersection observer for lazy loading
-        useEffect(() => {
-            const observer = performanceMonitor.setupIntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            entry.target.setAttribute('data-visible', 'true');
-                        } else {
-                            entry.target.setAttribute('data-visible', 'false');
-                        }
-                    });
-                },
-                { rootMargin: '100px' }
-            );
-            
-            if (cardRef.current) {
-                observer.observe(cardRef.current);
-            }
-            
-            return () => {
-                if (cardRef.current) {
-                    observer.unobserve(cardRef.current);
-                }
-            };
-        }, []);
-        const handleViewClick = useCallback((e) => {
-            e.preventDefault();
+        const handleViewClick = useCallback(() => {
             navigate(`/emp-detail/${employer._id}`);
         }, [employer._id, navigate]);
 
-        const companyTypeClass = useMemo(() => {
-            const typeMap = {
-                'IT': 'green',
-                'Healthcare': 'brown', 
-                'Finance': 'purple',
-                'Education': 'sky'
-            };
-            return typeMap[employer.profile?.industry] || 'golden';
-        }, [employer.profile?.industry]);
-
         return (
-            <Col key={employer._id} lg={6} md={12} className="mb-4">
-                <div ref={cardRef} className="twm-jobs-grid-style1 hover-card job-card" data-visible="true">
-                    <div className="twm-media">
-                        {employer.profile?.logo ? (
-                            <img 
-                                src={employer.profile.logo} 
-                                alt="Company Logo" 
-                                loading="lazy"
-                            />
-                        ) : (
-                            <JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
-                        )}
-                    </div>
-
-                    <div className="twm-jobs-category green">
-                        <span className={`twm-bg-${companyTypeClass}`}>
-                            {employer.profile?.industry || 'Company'}
-                        </span>
-                    </div>
-
-                    <div className="twm-mid-content">
-                        <NavLink to={`/emp-detail/${employer._id}`} className="twm-job-title">
-                            <h4>{employer.companyName}</h4>
-                        </NavLink>
-                        <div className="twm-job-address">
-                            <i className="feather-map-pin" />
-                            &nbsp;{employer.profile?.corporateAddress || 'Location not specified'}
-                        </div>
-                    </div>
-
-                    <div className="twm-right-content twm-job-right-group">
-                        <div className="twm-salary-and-apply mb-2">
-                            <div className="twm-jobs-amount">
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#1967d2', marginBottom: '4px' }}>
-                                    Active Jobs: {employer.jobCount || 0}
+            <Col lg={6} md={6} sm={12} xs={12} className="mb-4">
+                <div className="new-job-card">
+                    <div className="job-card-header">
+                        <div className="job-card-left">
+                            <div className="company-logo">
+                                {employer.profile?.logo ? (
+                                    <img src={employer.profile.logo} alt="Company Logo" />
+                                ) : (
+                                    <div className="logo-placeholder">
+                                        {(employer.companyName || "C").charAt(0)}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="job-info">
+                                <h4 className="job-title">{employer.companyName}</h4>
+                                <div className="job-location">
+                                    <i className="feather-map-pin" />
+                                    {employer.profile?.corporateAddress || 'Multiple Locations'}
                                 </div>
                             </div>
-                            {employer.profile?.website && (
-                                <span className="vacancy-text">
-                                    <a href={employer.profile.website} target="_blank" rel="noopener noreferrer" className="site-text-primary">
-                                        Visit Website
-                                    </a>
-                                </span>
-                            )}
                         </div>
-                        <div className="d-flex align-items-center justify-content-between">
-                            <h6 className="twm-job-address posted-by-company mb-0">
-                                {employer.profile?.companySize ? `${employer.profile.companySize} employees` : 'Company'}
-                            </h6>
-                            <button 
-                                className="btn btn-sm apply-now-button"
-                                onClick={handleViewClick}
-                            >
-                                View Details
-                            </button>
+                        <div className="job-type-badge">
+                            <span className="job-type-pill full-time">
+                                {employer.profile?.industry || 'Company'}
+                            </span>
                         </div>
+                    </div>
+                    <div className="job-card-middle">
+                        <div className="ctc-info">
+                            <span className="ctc-text">Active Jobs: {employer.jobCount || 0}</span>
+                        </div>
+                        <div className="vacancy-info">
+                            <span className="vacancy-text">
+                                Team Size: {employer.profile?.teamSize || 'Growing'}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="job-card-footer">
+                        <div className="company-info">
+                            <div className="posted-by-label">Est. Since:</div>
+                            <div className="company-name">{employer.profile?.establishedSince || 'N/A'}</div>
+                            <div className="poster-type">{employer.profile?.companyType || 'Company'}</div>
+                        </div>
+                        <button className="apply-now-btn" onClick={handleViewClick}>
+                            View Details
+                        </button>
                     </div>
                 </div>
             </Col>
@@ -221,14 +174,26 @@ const EmployersGridPage = memo(() => {
     });
 
     const skeletonCards = useMemo(() => 
-        [...Array(4)].map((_, idx) => (
-            <Col key={`skeleton-${idx}`} lg={6} md={12} className="mb-4">
-                <div className="twm-jobs-grid-style1 job-card-skeleton">
-                    <div className="skeleton-logo" />
-                    <div className="skeleton-lines">
+        [...Array(6)].map((_, idx) => (
+            <Col key={`skeleton-${idx}`} lg={6} md={6} sm={12} xs={12} className="mb-4">
+                <div className="new-job-card job-card-skeleton">
+                    <div className="job-card-header">
+                        <div className="job-card-left">
+                            <div className="skeleton-logo" />
+                            <div className="skeleton-lines">
+                                <div className="skeleton-line short" />
+                                <div className="skeleton-line" />
+                            </div>
+                        </div>
+                        <div className="skeleton-badge" />
+                    </div>
+                    <div className="job-card-middle">
+                        <div className="skeleton-line" />
                         <div className="skeleton-line short" />
+                    </div>
+                    <div className="job-card-footer">
                         <div className="skeleton-line" />
-                        <div className="skeleton-line" />
+                        <div className="skeleton-button" />
                     </div>
                 </div>
             </Col>

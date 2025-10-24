@@ -62,6 +62,7 @@ export default function EmpPostJob({ onNext }) {
 
 	const [employerType, setEmployerType] = useState('company');
 	const [logoFile, setLogoFile] = useState(null);
+	const [isMobile, setIsMobile] = useState(false);
 
 	/* Helpers */
 	const update = (patch) => setFormData((s) => ({ ...s, ...patch }));
@@ -96,6 +97,16 @@ export default function EmpPostJob({ onNext }) {
 			}
 		}
 		fetchEmployerType();
+		
+		// Mobile detection
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth <= 767);
+		};
+		
+		checkMobile();
+		window.addEventListener('resize', checkMobile);
+		
+		return () => window.removeEventListener('resize', checkMobile);
 	}, [id, isEditMode]);
 
 	const fetchEmployerType = async () => {
@@ -423,7 +434,7 @@ export default function EmpPostJob({ onNext }) {
 
 	/* Inline style objects */
 	const page = {
-		padding: "30px 20px",
+		padding: isMobile ? "15px 10px" : "30px 20px",
 		maxWidth: 1200,
 		margin: "0 auto",
 		fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif",
@@ -432,10 +443,10 @@ export default function EmpPostJob({ onNext }) {
 	};
 	const card = {
 		background: "#fff",
-		padding: "32px",
-		borderRadius: 12,
+		padding: isMobile ? "16px" : "32px",
+		borderRadius: isMobile ? 8 : 12,
 		boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-		marginBottom: 24,
+		marginBottom: isMobile ? 16 : 24,
 	};
 	const heading = {
 		margin: 0,
@@ -453,8 +464,8 @@ export default function EmpPostJob({ onNext }) {
 
 	const grid = {
 		display: "grid",
-		gridTemplateColumns: "1fr 1fr",
-		gap: 24,
+		gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+		gap: isMobile ? 16 : 24,
 		alignItems: "start",
 	};
 	const fullRow = { gridColumn: "1 / -1" };
@@ -467,12 +478,12 @@ export default function EmpPostJob({ onNext }) {
 	};
 	const input = {
 		width: "100%",
-		padding: "12px 14px",
-		borderRadius: 8,
+		padding: isMobile ? "10px 12px" : "12px 14px",
+		borderRadius: isMobile ? 6 : 8,
 		border: "1px solid #d1d5db",
 		background: "#fff",
 		outline: "none",
-		fontSize: 14,
+		fontSize: isMobile ? 16 : 14, // Prevents zoom on iOS
 		boxSizing: "border-box",
 		transition: "all 0.2s ease",
 	};
@@ -945,8 +956,8 @@ export default function EmpPostJob({ onNext }) {
 						</label>
 						<div style={{
 							display: 'grid',
-							gridTemplateColumns: 'repeat(3, 1fr)',
-							gap: 12,
+							gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+							gap: isMobile ? 8 : 12,
 							marginBottom: 16
 						}}>
 							<label style={{
@@ -1093,8 +1104,8 @@ export default function EmpPostJob({ onNext }) {
 						<div
 							style={{
 								display: "grid",
-								gridTemplateColumns: "repeat(2, 1fr)",
-								gap: 12,
+								gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
+								gap: isMobile ? 8 : 12,
 								padding: 16,
 								background: '#f9fafb',
 								borderRadius: 8,
@@ -1311,7 +1322,7 @@ export default function EmpPostJob({ onNext }) {
 											<h5 style={{ margin: '0 0 8px 0', fontSize: 14, color: '#374151' }}>
 												{roundNames[roundType]}
 											</h5>
-											<div style={{ display: 'grid', gridTemplateColumns: '1fr 120px 120px 100px', gap: 12, alignItems: 'end' }}>
+											<div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 120px 120px 100px', gap: isMobile ? 8 : 12, alignItems: 'end' }}>
 												<div>
 													<label style={{...label, marginBottom: 4}}>Description</label>
 													<textarea
@@ -1496,9 +1507,10 @@ export default function EmpPostJob({ onNext }) {
 				{/* Action Buttons */}
 				<div style={{ 
 					display: "flex", 
+					flexDirection: isMobile ? "column" : "row",
 					justifyContent: "space-between", 
-					marginTop: 32,
-					paddingTop: 24,
+					marginTop: isMobile ? 24 : 32,
+					paddingTop: isMobile ? 16 : 24,
 					borderTop: '2px solid #f3f4f6',
 					gap: 16,
 				}}>

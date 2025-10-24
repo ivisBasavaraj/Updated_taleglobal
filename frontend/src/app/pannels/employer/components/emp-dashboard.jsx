@@ -17,9 +17,19 @@ function EmpDashboardPage() {
     const [profileCompletion, setProfileCompletion] = useState({ completion: 75, missingFields: [] });
     const [recentActivity, setRecentActivity] = useState([]);
     const [notifications, setNotifications] = useState([]);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         fetchDashboardData();
+        
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 767);
+        };
+        
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        
+        return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
     const fetchDashboardData = async () => {
@@ -191,7 +201,7 @@ function EmpDashboardPage() {
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexDirection: isMobile ? 'column' : 'row', textAlign: isMobile ? 'center' : 'left' }}>
                                     {/* Circular Progress */}
                                     <div style={{ position: 'relative', width: '8rem', height: '8rem' }}>
                                         <svg style={{ width: '8rem', height: '8rem', transform: 'rotate(-90deg)' }} viewBox="0 0 120 120">

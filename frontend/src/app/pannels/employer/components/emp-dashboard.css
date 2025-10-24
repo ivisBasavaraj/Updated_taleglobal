@@ -110,6 +110,23 @@
   transition: transform 0.2s ease;
 }
 
+/* Mobile-specific card styles */
+@media (max-width: 767px) {
+  .emp-dashboard .panel,
+  .emp-dashboard .wt-panel-body,
+  .emp-dashboard .dashboard-card-2 {
+    border-radius: 8px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  }
+  
+  .emp-dashboard .panel:hover,
+  .emp-dashboard .wt-panel-body:hover,
+  .emp-dashboard .dashboard-card-2:hover {
+    transform: none !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  }
+}
+
 /* Hide all checkmarks and tick boxes on Shortlisted card */
 .emp-dashboard .col-xl-4:nth-child(3) *::before,
 .emp-dashboard .col-xl-4:nth-child(3) *::after,
@@ -132,10 +149,75 @@
   border: none !important;
 }
 
+/* Mobile Touch Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .emp-dashboard .panel:hover,
+  .emp-dashboard .dashboard-card-2:hover {
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  .emp-dashboard button,
+  .emp-dashboard .btn {
+    min-height: 44px !important;
+    padding: 0.75rem 1rem !important;
+  }
+}
+
 /* Responsive paddings */
 @media (max-width: 992px) {
   .emp-dashboard .wt-admin-right-page-header { padding: 20px !important; }
 }
 @media (max-width: 768px) {
   .emp-dashboard { padding-bottom: 20px; }
+}
+
+/* Mobile Responsive Enhancements */
+@media (max-width: 767px) {
+  .emp-dashboard .row {
+    margin: 0 !important;
+  }
+  
+  .emp-dashboard .col-xl-4,
+  .emp-dashboard .col-lg-4 {
+    padding: 0 0.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .emp-dashboard .dashboard-card-2 {
+    padding: 1rem !important;
+    text-align: center !important;
+  }
+  
+  .emp-dashboard .d-flex.align-items-center {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+  
+  .emp-dashboard .wt-card-icon-2 {
+    margin-bottom: 0.5rem !important;
+    margin-right: 0 !important;
+  }
+  
+  .emp-dashboard .counter {
+    font-size: 2rem !important;
+  }
+  
+  .emp-dashboard h5 {
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .emp-dashboard .dashboard-card-2 {
+    padding: 0.75rem !important;
+  }
+  
+  .emp-dashboard .counter {
+    font-size: 1.75rem !important;
+  }
+  
+  .emp-dashboard .wt-card-icon-2 {
+    font-size: 1.5rem !important;
+  }
 }

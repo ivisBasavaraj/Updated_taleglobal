@@ -94,23 +94,66 @@
 }
 
 /* Skeleton Loading for Employers */
-.twm-employer-grid-style1.job-card-skeleton {
+.new-job-card.job-card-skeleton {
   background: #f8f9fa;
   border: 1px solid #e9ecef;
   animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .twm-employer-grid-style1 {
-    padding: 16px;
+.job-card-skeleton .skeleton-logo {
+  width: 50px;
+  height: 50px;
+  background: #e9ecef;
+  border-radius: 8px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
+}
+
+.job-card-skeleton .skeleton-lines {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.job-card-skeleton .skeleton-line {
+  height: 12px;
+  background: #e9ecef;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
+}
+
+.job-card-skeleton .skeleton-line.short {
+  width: 60%;
+}
+
+.job-card-skeleton .skeleton-badge {
+  width: 80px;
+  height: 24px;
+  background: #e9ecef;
+  border-radius: 12px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
+}
+
+.job-card-skeleton .skeleton-button {
+  width: 100px;
+  height: 32px;
+  background: #e9ecef;
+  border-radius: 6px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 1;
   }
-  
-  .twm-employer-grid-style1 .twm-job-title h4 {
-    font-size: 16px;
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
+/* New Job Card Style for Employers - Mobile Responsive */
 @media (max-width: 992px) {
   .emp-grid-page .rightSidebar {
     order: 2;
@@ -120,67 +163,73 @@
   .emp-grid-page .col-lg-8 {
     order: 1;
   }
+  
+  .new-job-card {
+    margin-bottom: 1rem;
+  }
 }
 
 @media (max-width: 768px) {
-  .twm-employer-grid-style1 {
-    padding: 15px;
-    margin-bottom: 16px;
-    transform: none; /* Disable transforms on mobile */
+  .emp-grid-page .col-lg-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
   }
   
-  .twm-employer-grid-style1 .twm-media {
-    height: 70px;
-    margin-bottom: 12px;
+  .new-job-card {
+    padding: 16px;
   }
   
-  .twm-employer-grid-style1 .twm-media img {
-    max-width: 50px;
-    max-height: 50px;
+  .new-job-card .company-logo {
+    width: 45px;
+    height: 45px;
   }
   
-  .twm-employer-grid-style1 .twm-job-title h4 {
-    font-size: 15px;
-    margin-bottom: 6px;
+  .new-job-card .job-title {
+    font-size: 16px;
   }
   
-  .twm-employer-grid-style1 .twm-job-address {
+  .new-job-card .job-location {
     font-size: 13px;
-    margin-bottom: 6px;
   }
   
-  .twm-employer-grid-style1 .twm-job-websites {
+  .new-job-card .ctc-text,
+  .new-job-card .vacancy-text {
     font-size: 12px;
   }
   
-  .twm-jobs-vacancies {
-    padding: 6px 12px;
+  .new-job-card .apply-now-btn {
+    padding: 8px 16px;
     font-size: 13px;
   }
 }
 
 @media (max-width: 576px) {
   .emp-grid-page .container {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
   
-  .twm-employer-grid-style1 {
+  .new-job-card {
     padding: 12px;
+    margin-bottom: 12px;
   }
   
-  .twm-employer-grid-style1 .twm-job-title h4 {
+  .new-job-card .company-logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .new-job-card .job-title {
     font-size: 14px;
   }
   
-  .twm-employer-grid-style1 .twm-job-address {
+  .new-job-card .job-location {
     font-size: 12px;
-    flex-direction: column;
-    gap: 2px;
   }
   
-  .twm-employer-grid-style1 .twm-job-websites {
-    font-size: 11px;
+  .new-job-card .job-type-pill {
+    font-size: 10px;
+    padding: 4px 8px;
   }
 }
 
@@ -191,7 +240,7 @@
 }
 
 /* Intersection observer optimization */
-.twm-employer-grid-style1[data-visible="false"] {
+.new-job-card[data-visible="false"] {
   content-visibility: hidden;
 }
 

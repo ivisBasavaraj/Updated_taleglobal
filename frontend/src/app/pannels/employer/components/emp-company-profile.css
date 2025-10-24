@@ -596,15 +596,17 @@ input[type="radio"]:checked {
   }
   
   .form-control {
-    padding: 10px 12px;
+    padding: 12px 15px;
     font-size: 16px; /* Prevents zoom on iOS */
+    border-radius: 6px;
   }
   
   .site-button {
-    padding: 10px 25px;
+    padding: 12px 25px;
     font-size: 14px;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 15px;
+    border-radius: 6px;
   }
   
   .panel-heading {
@@ -612,11 +614,39 @@ input[type="radio"]:checked {
   }
   
   .panel-tittle {
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 600;
   }
   
   .document-card {
     margin-bottom: 15px;
+  }
+  
+  /* Mobile form layout */
+  .row {
+    margin: 0 !important;
+  }
+  
+  .col-xl-4,
+  .col-lg-4,
+  .col-lg-6,
+  .col-md-6,
+  .col-md-12 {
+    padding: 0 0.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Input group adjustments */
+  .input-group-text {
+    padding: 12px 10px;
+    font-size: 14px;
+  }
+  
+  /* File upload styling */
+  input[type="file"] {
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 6px;
   }
   
   /* Mobile-specific animations */
@@ -638,19 +668,61 @@ input[type="radio"]:checked {
 
 @media (max-width: 480px) {
   .emp-company-profile {
-    padding: 10px;
+    padding: 5px;
   }
   
   .panel {
     border-radius: 6px;
+    margin: 0 0.25rem 1rem 0.25rem;
+  }
+  
+  .panel-heading,
+  .panel-body {
+    padding: 12px;
+  }
+  
+  .wt-admin-right-page-header {
+    padding: 12px;
   }
   
   .wt-admin-right-page-header h2 {
-    font-size: 20px;
+    font-size: 18px;
   }
   
   .progress-indicator {
     height: 3px;
+  }
+  
+  .form-control,
+  .form-select {
+    padding: 10px 12px;
+    font-size: 16px;
+  }
+  
+  .site-button {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+  
+  .panel-tittle {
+    font-size: 14px;
+  }
+  
+  /* Gallery adjustments */
+  .gallery-item {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  
+  /* Document cards */
+  .document-card {
+    padding: 10px;
+  }
+  
+  /* Authorization letter sections */
+  .col-md-6 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
   }
 }
 
@@ -675,4 +747,46 @@ html {
   content: ' *';
   color: #e53e3e;
   font-weight: bold;
+}
+
+/* Mobile Touch Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .panel:hover,
+  .document-card:hover,
+  .site-button:hover,
+  .btn:hover {
+    transform: none !important;
+  }
+  
+  .form-control,
+  .form-select,
+  .site-button,
+  .btn {
+    min-height: 44px !important;
+  }
+  
+  /* Better tap targets */
+  .btn-outline-danger,
+  .btn-success {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+}
+
+/* Prevent horizontal scroll */
+.emp-company-profile {
+  overflow-x: hidden;
+}
+
+/* Better image handling */
+.emp-company-profile img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Mobile menu considerations */
+@media (max-width: 991px) {
+  .emp-company-profile {
+    padding-top: 60px; /* Account for mobile menu toggle */
+  }
 }
