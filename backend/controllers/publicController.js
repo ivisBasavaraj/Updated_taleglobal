@@ -380,7 +380,7 @@ exports.getEmployers = async (req, res) => {
   try {
     const { page = 1, limit = 10, sortBy } = req.query;
     
-    const cacheKey = `employers_${JSON.stringify({ page, limit, sortBy })}`;
+    const cacheKey = `employers_v3_${JSON.stringify({ page, limit, sortBy })}`; // v3 to clear cache
     const cached = cache.get(cacheKey);
     
     if (cached) {
@@ -434,7 +434,9 @@ exports.getEmployers = async (req, res) => {
       {
         $addFields: {
           profile: { $arrayElemAt: ['$profile', 0] },
-          jobCount: { $ifNull: [{ $arrayElemAt: ['$jobs.count', 0] }, 0] }
+          jobCount: { $ifNull: [{ $arrayElemAt: ['$jobs.count', 0] }, 0] },
+          establishedSince: { $arrayElemAt: ['$profile.establishedSince', 0] },
+          foundedYear: { $arrayElemAt: ['$profile.foundedYear', 0] }
         }
       },
       {
@@ -445,7 +447,9 @@ exports.getEmployers = async (req, res) => {
           employerType: 1,
           createdAt: 1,
           profile: 1,
-          jobCount: 1
+          jobCount: 1,
+          establishedSince: 1,
+          foundedYear: 1
         }
       },
       { $sort: sortCriteria },
