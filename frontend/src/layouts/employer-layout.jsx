@@ -5,7 +5,6 @@ import EmployerRoutes from "../routing/employer-routes";
 import { popupType } from "../globals/constants";
 import { useState, useEffect } from "react";
 import "../employer-layout-fix.css";
-import "../force-sidebar-desktop.css";
 
 function EmployerLayout() {
     const [sidebarActive, setSidebarActive] = useState(true);
@@ -18,12 +17,6 @@ function EmployerLayout() {
                 setSidebarActive(false);
             } else {
                 setSidebarActive(true);
-                // Force sidebar visibility on desktop
-                const sidebar = document.getElementById('sidebar-admin-wraper');
-                if (sidebar) {
-                    sidebar.style.display = 'block';
-                    sidebar.style.transform = 'translateX(0)';
-                }
             }
         };
         
