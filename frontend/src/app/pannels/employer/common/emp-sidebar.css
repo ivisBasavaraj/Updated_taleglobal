@@ -11,6 +11,7 @@
     z-index: 1000 !important;
     transition: transform 0.3s ease !important;
     overflow-y: auto !important;
+    transform: translateX(0) !important;
 }
 
 /* Override any existing background styles */
@@ -162,19 +163,26 @@ nav#sidebar-admin-wraper {
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* Main content area adjustments */
-.content-admin-main {
-    margin-left: 280px !important;
-    min-height: 100vh !important;
-    transition: margin-left 0.3s ease !important;
+/* Ensure sidebar is always visible on desktop */
+@media (min-width: 992px) {
+    #sidebar-admin-wraper {
+        transform: translateX(0) !important;
+        display: block !important;
+    }
+    
+    .content-admin-main {
+        margin-left: 280px !important;
+        min-height: 100vh !important;
+        transition: margin-left 0.3s ease !important;
+    }
+    
+    /* When sidebar is collapsed on desktop */
+    #content.active .content-admin-main {
+        margin-left: 0 !important;
+    }
 }
 
-/* When sidebar is collapsed */
-#content.active .content-admin-main {
-    margin-left: 0 !important;
-}
-
-/* Responsive */
+/* Mobile/Tablet Responsive */
 @media (max-width: 991px) {
     #sidebar-admin-wraper {
         transform: translateX(-100%) !important;
@@ -201,6 +209,7 @@ nav#sidebar-admin-wraper {
         background: rgba(0,0,0,0.5);
         z-index: 9998;
         display: none;
+        backdrop-filter: blur(2px);
     }
     
     .sidebar-overlay.active {
@@ -251,8 +260,8 @@ nav#sidebar-admin-wraper {
     top: 15px;
     left: 15px;
     z-index: 10000;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    color: white;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+    color: white !important;
     border: none;
     padding: 12px 15px;
     border-radius: 8px;
@@ -260,6 +269,11 @@ nav#sidebar-admin-wraper {
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle i {
+    color: white !important;
+    font-size: 18px !important;
 }
 
 .mobile-menu-toggle:hover {

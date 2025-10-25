@@ -10,14 +10,20 @@
 /* Content area positioning - Desktop */
 @media (min-width: 992px) {
   #content {
-    margin-left: 280px;
+    margin-left: 280px !important;
     min-height: 100vh;
     transition: margin-left 0.3s ease;
     background: #f8fafc;
   }
 
   #content.active {
-    margin-left: 0;
+    margin-left: 0 !important;
+  }
+  
+  /* Ensure sidebar is always visible on desktop */
+  #sidebar-admin-wraper {
+    transform: translateX(0) !important;
+    display: block !important;
   }
 }
 
