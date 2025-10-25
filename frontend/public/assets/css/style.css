@@ -11861,14 +11861,19 @@ strong {
 #sidebar-admin-wraper.active {
   margin-left: -320px;
 }
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   #sidebar-admin-wraper.active {
-    margin-left: 0;
+    margin-left: -320px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   #sidebar-admin-wraper {
     margin-left: -320px;
+  }
+}
+@media (max-width: 991px) {
+  #sidebar-admin-wraper.mobile-open {
+    margin-left: 0;
   }
 }
 
@@ -11891,20 +11896,11 @@ strong {
   width: 100%;
   overflow: hidden;
 }
-@media (max-width: 768px) {
-  #content.active {
-    width: calc(100% - 260px);
-  }
-}
-#content.active .content-admin-main {
-  min-width: 480px;
-}
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   #content {
     width: 100%;
   }
 }
-
 @media (max-width: 768px) {
   #header-admin {
     width: 100%;
