@@ -1,6 +1,8 @@
 /* Modern Employer Sidebar Styles */
 #sidebar-admin-wraper {
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+    background-color: #1e3c72 !important;
+    background-image: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
     box-shadow: 2px 0 15px rgba(0,0,0,0.15) !important;
     border-right: none !important;
     position: fixed !important;
@@ -15,8 +17,11 @@
 }
 
 /* Override any existing background styles */
-nav#sidebar-admin-wraper {
+nav#sidebar-admin-wraper,
+nav#sidebar-admin-wraper.active,
+#sidebar-admin-wraper.active {
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+    background-color: #1e3c72 !important;
     background-image: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
 }
 
@@ -166,6 +171,17 @@ nav#sidebar-admin-wraper {
 /* Ensure sidebar is always visible on desktop */
 @media (min-width: 992px) {
     #sidebar-admin-wraper {
+        transform: translateX(0) !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+        background-color: #1e3c72 !important;
+        background-image: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+    }
+    
+    /* Force sidebar to be visible even when not active */
+    #sidebar-admin-wraper:not(.active) {
         transform: translateX(0) !important;
         display: block !important;
     }

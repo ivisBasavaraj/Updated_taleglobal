@@ -87,7 +87,7 @@ function EmployerLayout() {
                     ></div>
                 )}
                 
-                <EmpSidebarSection sidebarActive={sidebarActive} />
+                <EmpSidebarSection sidebarActive={isMobile ? sidebarActive : true} />
 
                 <div id="content" className={!isMobile && !sidebarActive ? "active" : ""} style={{
                     marginLeft: isMobile ? '0' : (sidebarActive ? '280px' : '0'),
