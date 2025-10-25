@@ -2,6 +2,8 @@
 .emp-dashboard {
   /* page background */
   background: #f8fafc; /* light slate */
+  min-height: 100vh !important;
+  width: 100% !important;
 }
 
 /* Header improvements */
@@ -9,6 +11,8 @@
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   padding: 24px 28px !important;
+  margin: 0 !important;
+  width: 100% !important;
 }
 
 /* Card base */
@@ -164,12 +168,34 @@
   }
 }
 
+/* Dashboard content container */
+.emp-dashboard .twm-right-section-panel {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #f8fafc !important;
+}
+
 /* Responsive paddings */
 @media (max-width: 992px) {
-  .emp-dashboard .wt-admin-right-page-header { padding: 20px !important; }
+  .emp-dashboard .wt-admin-right-page-header { 
+    padding: 20px !important; 
+    margin: 0 !important;
+  }
+  
+  .emp-dashboard .twm-right-section-panel {
+    padding-top: 0 !important;
+  }
 }
+
 @media (max-width: 768px) {
-  .emp-dashboard { padding-bottom: 20px; }
+  .emp-dashboard { 
+    padding-bottom: 20px; 
+  }
+  
+  .emp-dashboard .wt-admin-right-page-header {
+    padding: 15px !important;
+  }
 }
 
 /* Mobile Responsive Enhancements */
@@ -179,7 +205,9 @@
   }
   
   .emp-dashboard .col-xl-4,
-  .emp-dashboard .col-lg-4 {
+  .emp-dashboard .col-lg-4,
+  .emp-dashboard .col-xl-8,
+  .emp-dashboard .col-lg-8 {
     padding: 0 0.5rem !important;
     margin-bottom: 1rem !important;
   }
@@ -206,6 +234,12 @@
   .emp-dashboard h5 {
     font-size: 0.9rem !important;
   }
+  
+  /* Profile completion section mobile fixes */
+  .emp-dashboard .col-xl-8 > div,
+  .emp-dashboard .col-xl-4 > div {
+    padding: 1.5rem !important;
+  }
 }
 
 @media (max-width: 575px) {
@@ -218,6 +252,14 @@
   }
   
   .emp-dashboard .wt-card-icon-2 {
+    font-size: 1.5rem !important;
+  }
+  
+  .emp-dashboard .wt-admin-right-page-header {
+    padding: 12px !important;
+  }
+  
+  .emp-dashboard .wt-admin-right-page-header h2 {
     font-size: 1.5rem !important;
   }
 }

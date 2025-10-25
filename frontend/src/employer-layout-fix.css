@@ -1,0 +1,251 @@
+/* Employer Layout Fix CSS */
+
+/* Page wrapper and main layout */
+.page-wraper {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Content area positioning - Desktop */
+@media (min-width: 992px) {
+  #content {
+    margin-left: 280px;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease;
+    background: #f8fafc;
+  }
+
+  #content.active {
+    margin-left: 0;
+  }
+}
+
+/* Content area positioning - Mobile */
+@media (max-width: 991px) {
+  #content {
+    margin-left: 0 !important;
+    min-height: 100vh;
+    background: #f8fafc;
+    padding-top: 60px;
+  }
+}
+
+/* Main content container */
+.content-admin-main {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+  background: #f8fafc;
+}
+
+/* Dashboard panel fixes */
+.twm-right-section-panel {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #f8fafc !important;
+  min-height: 100vh !important;
+}
+
+/* Header section fixes */
+.wt-admin-right-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+/* Dashboard content padding */
+.emp-dashboard > div:last-child {
+  padding: 2rem !important;
+}
+
+/* Mobile menu toggle positioning */
+.mobile-menu-toggle {
+  position: fixed !important;
+  top: 15px !important;
+  left: 15px !important;
+  z-index: 10001 !important;
+}
+
+/* Mobile menu toggle visibility */
+.mobile-menu-toggle {
+  display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+  .mobile-menu-toggle {
+    display: block !important;
+  }
+  
+  .content-admin-main {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .emp-dashboard > div:last-child {
+    padding: 1rem !important;
+  }
+  
+  .wt-admin-right-page-header {
+    padding: 15px !important;
+  }
+  
+  .mobile-menu-toggle {
+    top: 10px !important;
+    left: 10px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .emp-dashboard > div:last-child {
+    padding: 0.75rem !important;
+  }
+  
+  .wt-admin-right-page-header {
+    padding: 12px !important;
+  }
+}
+
+/* Sidebar overlay improvements */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  display: none;
+  backdrop-filter: blur(2px);
+}
+
+.sidebar-overlay.active {
+  display: block;
+}
+
+/* Smooth transitions */
+* {
+  box-sizing: border-box;
+}
+
+/* Fix for dashboard cards spacing */
+.emp-dashboard .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.emp-dashboard .col-xl-4,
+.emp-dashboard .col-lg-4,
+.emp-dashboard .col-xl-8,
+.emp-dashboard .col-lg-8 {
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+}
+
+/* Ensure proper scrolling */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Prevent horizontal scroll on dashboard */
+.emp-dashboard {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Fix Bootstrap row margins */
+.emp-dashboard .row {
+  --bs-gutter-x: 1.5rem;
+}
+
+@media (max-width: 767px) {
+  .emp-dashboard .row {
+    --bs-gutter-x: 1rem;
+  }
+}
+
+/* Fix for profile completion section */
+.emp-dashboard .col-xl-8 > div,
+.emp-dashboard .col-xl-4 > div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mobile specific fixes */
+@media (max-width: 767px) {
+  .emp-dashboard .col-xl-4,
+  .emp-dashboard .col-lg-4,
+  .emp-dashboard .col-xl-8,
+  .emp-dashboard .col-lg-8 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+}
+
+/* Dashboard header improvements */
+.emp-dashboard .wt-admin-right-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Stats cards hover effects */
+.emp-dashboard .panel {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.emp-dashboard .panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+/* Profile completion progress ring */
+.emp-dashboard .progress-ring {
+  filter: drop-shadow(0 4px 8px rgba(249, 115, 22, 0.2));
+}
+
+/* Notification cards */
+.emp-dashboard .notification-item {
+  transition: background-color 0.2s ease;
+}
+
+.emp-dashboard .notification-item:hover {
+  background-color: #f8fafc !important;
+}
+
+/* Button improvements */
+.emp-dashboard button {
+  transition: all 0.2s ease;
+}
+
+.emp-dashboard button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Ensure proper spacing on all devices */
+.emp-dashboard .container-fluid {
+  padding: 0 !important;
+}
+
+/* Fix for very small screens */
+@media (max-width: 480px) {
+  .emp-dashboard .wt-admin-right-page-header h2 {
+    font-size: 1.25rem !important;
+    line-height: 1.3 !important;
+  }
+  
+  .emp-dashboard .wt-admin-right-page-header p {
+    font-size: 0.875rem !important;
+  }
+}

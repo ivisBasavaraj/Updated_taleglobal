@@ -110,7 +110,13 @@ function EmpDashboardPage() {
 
     return (
         <>
-            <div className="twm-right-section-panel site-bg-gray emp-dashboard">
+            <div className="twm-right-section-panel site-bg-gray emp-dashboard" style={{
+                width: '100%',
+                margin: 0,
+                padding: 0,
+                background: '#f8fafc',
+                minHeight: '100vh'
+            }}>
                 {/* Header */}
                 <div className="wt-admin-right-page-header clearfix" style={{ background: 'white', borderBottom: '1px solid #e5e7eb', padding: '2rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -127,8 +133,8 @@ function EmpDashboardPage() {
                 </div>
 
                 {/* Stats Cards */}
-                <div style={{ padding: '2rem' }}>
-                    <div className="row" style={{ marginBottom: '2rem' }}>
+                <div style={{ padding: isMobile ? '1rem' : '2rem' }}>
+                    <div className="row" style={{ marginBottom: '2rem', margin: '0' }}>
                         <div className="col-xl-4 col-lg-4 col-md-12 mb-3">
                             <div className="panel panel-default">
                                 <div className="panel-body wt-panel-body dashboard-card-2" style={{ backgroundColor: '#e0f7fa' }}>
@@ -185,14 +191,15 @@ function EmpDashboardPage() {
                     </div>
 
                     {/* Profile Completion and Recent Activity */}
-                    <div className="row">
+                    <div className="row" style={{ margin: '0' }}>
                         {/* Profile Completion Section */}
                         <div className="col-xl-8 col-lg-8 col-md-12 mb-4">
                             <div style={{
                                 background: 'white',
                                 borderRadius: '0.75rem',
                                 border: '1px solid #e5e7eb',
-                                padding: '2rem'
+                                padding: isMobile ? '1.5rem' : '2rem',
+                                height: '100%'
                             }}>
                                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
                                     <div>
@@ -201,7 +208,13 @@ function EmpDashboardPage() {
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexDirection: isMobile ? 'column' : 'row', textAlign: isMobile ? 'center' : 'left' }}>
+                                <div style={{ 
+                                    display: 'flex', 
+                                    alignItems: isMobile ? 'center' : 'flex-start', 
+                                    gap: isMobile ? '1.5rem' : '2rem', 
+                                    flexDirection: isMobile ? 'column' : 'row', 
+                                    textAlign: isMobile ? 'center' : 'left' 
+                                }}>
                                     {/* Circular Progress */}
                                     <div style={{ position: 'relative', width: '8rem', height: '8rem' }}>
                                         <svg style={{ width: '8rem', height: '8rem', transform: 'rotate(-90deg)' }} viewBox="0 0 120 120">
@@ -244,17 +257,25 @@ function EmpDashboardPage() {
                                             You are <span style={{ fontWeight: '600' }}>{profileCompletion.completion}% done</span>. Complete the remaining fields to improve your company visibility.
                                         </p>
                                         
-                                        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+                                        <div style={{ 
+                                            display: 'flex', 
+                                            gap: '1rem', 
+                                            marginBottom: '1.5rem',
+                                            flexDirection: isMobile ? 'column' : 'row',
+                                            width: isMobile ? '100%' : 'auto'
+                                        }}>
                                             <button 
                                                 onClick={() => window.location.href = '/employer/profile'}
                                                 style={{
                                                     background: '#f97316',
                                                     color: 'white',
-                                                    padding: '0.5rem 1rem',
+                                                    padding: '0.75rem 1rem',
                                                     borderRadius: '0.5rem',
                                                     border: 'none',
                                                     fontWeight: '500',
-                                                    cursor: 'pointer'
+                                                    cursor: 'pointer',
+                                                    width: isMobile ? '100%' : 'auto',
+                                                    minHeight: '44px'
                                                 }}
                                             >
                                                 Complete Profile
@@ -270,11 +291,13 @@ function EmpDashboardPage() {
                                                 style={{
                                                     background: 'transparent',
                                                     color: '#6b7280',
-                                                    padding: '0.5rem 1rem',
+                                                    padding: '0.75rem 1rem',
                                                     borderRadius: '0.5rem',
                                                     border: '1px solid #d1d5db',
                                                     fontWeight: '500',
-                                                    cursor: 'pointer'
+                                                    cursor: 'pointer',
+                                                    width: isMobile ? '100%' : 'auto',
+                                                    minHeight: '44px'
                                                 }}
                                             >
                                                 View Profile
@@ -298,7 +321,8 @@ function EmpDashboardPage() {
                                 background: 'white',
                                 borderRadius: '0.75rem',
                                 border: '1px solid #e5e7eb',
-                                padding: '1.5rem'
+                                padding: isMobile ? '1rem' : '1.5rem',
+                                height: '100%'
                             }}>
                                 <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', marginBottom: '1rem' }}>Notifications</h3>
                                 

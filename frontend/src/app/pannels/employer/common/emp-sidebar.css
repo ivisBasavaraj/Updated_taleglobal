@@ -3,6 +3,14 @@
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
     box-shadow: 2px 0 15px rgba(0,0,0,0.15) !important;
     border-right: none !important;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    height: 100vh !important;
+    width: 280px !important;
+    z-index: 1000 !important;
+    transition: transform 0.3s ease !important;
+    overflow-y: auto !important;
 }
 
 /* Override any existing background styles */
@@ -154,21 +162,33 @@ nav#sidebar-admin-wraper {
     background: rgba(255, 255, 255, 0.3);
 }
 
+/* Main content area adjustments */
+.content-admin-main {
+    margin-left: 280px !important;
+    min-height: 100vh !important;
+    transition: margin-left 0.3s ease !important;
+}
+
+/* When sidebar is collapsed */
+#content.active .content-admin-main {
+    margin-left: 0 !important;
+}
+
 /* Responsive */
 @media (max-width: 991px) {
     #sidebar-admin-wraper {
-        position: fixed !important;
-        left: -280px !important;
-        top: 0 !important;
-        height: 100vh !important;
+        transform: translateX(-100%) !important;
         z-index: 9999 !important;
-        transition: left 0.3s ease !important;
-        width: 280px !important;
         box-shadow: 2px 0 20px rgba(0,0,0,0.3) !important;
     }
     
     #sidebar-admin-wraper.active {
-        left: 0 !important;
+        transform: translateX(0) !important;
+    }
+    
+    .content-admin-main {
+        margin-left: 0 !important;
+        padding-top: 60px !important;
     }
     
     /* Overlay for mobile menu */
@@ -185,12 +205,6 @@ nav#sidebar-admin-wraper {
     
     .sidebar-overlay.active {
         display: block;
-    }
-    
-    /* Main content adjustments */
-    .wt-admin-dashboard-2 {
-        margin-left: 0 !important;
-        padding-top: 60px; /* Space for mobile menu toggle */
     }
 }
 
