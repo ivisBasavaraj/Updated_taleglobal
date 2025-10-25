@@ -21,11 +21,17 @@ function AdminHeaderSection(props) {
             
         }
     };
+
+    const headerClasses = [
+        props.sidebarActive ? "" : "active",
+        props.isMobile ? "mobile-view" : ""
+    ].filter(Boolean).join(" ");
+
     return (
         <>
             <header id="header-admin-wrap" className="header-admin-fixed">
                 {/* Header Start */}
-                <div id="header-admin" className={props.sidebarActive ? "" : "active"}>
+                <div id="header-admin" className={headerClasses}>
                     <div className="container">
                         {/* Left Side Content */}
                         <div className="header-left">

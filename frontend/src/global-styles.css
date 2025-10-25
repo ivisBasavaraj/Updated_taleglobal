@@ -1,11 +1,12 @@
 .modal-backdrop,
 .offcanvas-backdrop {
-    display: none !important;
+    --bs-backdrop-bg: transparent !important;
+    --bs-backdrop-opacity: 0 !important;
+    background-color: transparent !important;
 }
 
 .modal-backdrop.show,
 .offcanvas-backdrop.show {
-    display: none !important;
     opacity: 0 !important;
 }
 

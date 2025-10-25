@@ -22,13 +22,17 @@ function EmpHeaderSection(props) {
             
         }
     };
+
+    const headerClasses = [
+        props.sidebarActive ? "" : "active",
+        props.isMobile ? "mobile-view" : ""
+    ].filter(Boolean).join(" ");
+
     return (
         <>
             <header id="header-admin-wrap" className="header-admin-fixed">
-                {/* Header Start */}
-                <div id="header-admin" className={props.sidebarActive ? "" : "active"}>
+                <div id="header-admin" className={headerClasses}>
                     <div className="container">
-                        {/* Left Side Content */}
                         <div className="header-left">
                             <div className="nav-btn-wrap">
                                 <a className="nav-btn-admin" id="sidebarCollapse" onClick={props.onClick}>
@@ -37,18 +41,12 @@ function EmpHeaderSection(props) {
                             </div>
                         </div>
 
-                        {/* Left Side Content End */}
-                        {/* Right Side Content */}
                         <div className="header-right">
                             <ul className="header-widget-wrap">
-                          
-                                
-                                {/*Notification*/}
                                 <li className="header-widget dashboard-noti-dropdown">
                                     <NotificationBell userRole="employer" />
                                 </li>
 
-                                {/*Account*/}
                                 <li className="header-widget">
                                     <div className="dashboard-user-section">
                                         <div className="listing-user">
@@ -70,10 +68,8 @@ function EmpHeaderSection(props) {
                                 </li>
                             </ul>
                         </div>
-                        {/* Right Side Content End */}
                     </div>
                 </div>
-                {/* Header End */}
             </header>
 
         </>

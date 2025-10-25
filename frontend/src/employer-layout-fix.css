@@ -11,19 +11,65 @@
 @media (min-width: 992px) {
   #content {
     margin-left: 280px !important;
+    width: calc(100% - 280px) !important;
     min-height: 100vh;
-    transition: margin-left 0.3s ease;
+    transition: margin-left 0.3s ease, width 0.3s ease;
     background: #f8fafc;
+    padding-top: 90px;
   }
 
-  #content.active {
+  #content.sidebar-hidden {
     margin-left: 0 !important;
+    width: 100% !important;
   }
   
-  /* Ensure sidebar is always visible on desktop */
   #sidebar-admin-wraper {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 280px !important;
+    height: 100vh !important;
     transform: translateX(0) !important;
     display: block !important;
+    z-index: 1000 !important;
+    background: #ffffff !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    margin-left: 0 !important;
+    visibility: visible !important;
+    transition: opacity 0.2s ease !important;
+  }
+  
+  #sidebar-admin-wraper.active {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    margin-left: 0 !important;
+    visibility: visible !important;
+  }
+
+  #sidebar-admin-wraper.collapsed {
+    transform: translateX(0) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    margin-left: 0 !important;
+    visibility: hidden !important;
+    display: none !important;
+  }
+
+  #header-admin {
+    width: calc(100% - 280px) !important;
+    top: 0;
+    right: 0;
+    position: fixed;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    z-index: 1001;
+    transition: width 0.3s ease;
+  }
+
+  #header-admin.active {
+    width: 100% !important;
   }
 }
 
@@ -33,7 +79,36 @@
     margin-left: 0 !important;
     min-height: 100vh;
     background: #f8fafc;
-    padding-top: 60px;
+    padding-top: 90px;
+  }
+
+  #sidebar-admin-wraper {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 280px !important;
+    height: 100vh !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+    z-index: 10000 !important;
+    background: #ffffff !important;
+    margin-left: 0 !important;
+  }
+
+  #sidebar-admin-wraper.active {
+    transform: translateX(0) !important;
+    margin-left: 0 !important;
+  }
+
+  #sidebar-admin-wraper.collapsed {
+    transform: translateX(-100%) !important;
+    margin-left: 0 !important;
+  }
+
+  #header-admin {
+    width: 100% !important;
+    left: 0;
+    right: 0;
   }
 }
 

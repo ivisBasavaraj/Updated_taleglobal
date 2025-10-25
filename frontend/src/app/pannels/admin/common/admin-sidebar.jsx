@@ -6,7 +6,7 @@ import { admin, adminRoute, publicUser } from "../../../../globals/route-names";
 import { useEffect, useState } from "react";
 import "./admin-sidebar.css";
 
-function AdminSidebarSection(props) {
+function AdminSidebarSection({ sidebarActive, isMobile }) {
     const currentpath = useLocation().pathname;
     const [userPermissions, setUserPermissions] = useState([]);
     const [isSubAdmin, setIsSubAdmin] = useState(false);
@@ -35,9 +35,28 @@ function AdminSidebarSection(props) {
         return !isSubAdmin || userPermissions.includes(permission);
     };
 
+    const sidebarClasses = [
+        sidebarActive ? "active" : "",
+        !isMobile && !sidebarActive ? "collapsed" : ""
+    ].filter(Boolean).join(" ");
+
+    const mobileStyles = isMobile ? {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "280px",
+        transform: sidebarActive ? "translateX(0)" : "translateX(-100%)",
+        transition: "transform 0.3s ease",
+        boxShadow: sidebarActive ? "0 4px 24px rgba(0,0,0,0.25)" : "none",
+        zIndex: 10000,
+        background: "#ffffff",
+        height: "100vh",
+        overflowY: "auto"
+    } : {};
+
     return (
         <>
-            <nav id="sidebar-admin-wraper" className={props.sidebarActive ? "" : "active"}>
+            <nav id="sidebar-admin-wraper" className={sidebarClasses} style={mobileStyles}>
                 <div className="page-logo">
                     <NavLink to={publicUser.INITIAL}><JobZImage id="skin_page_logo" src="images/logo-dark.png" alt="" /></NavLink>
                 </div>

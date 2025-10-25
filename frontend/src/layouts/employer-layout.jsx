@@ -40,10 +40,14 @@ function EmployerLayout() {
         }
     }
 
+    const contentClasses = [
+        !isMobile && !sidebarActive ? "sidebar-hidden" : "",
+        isMobile ? "mobile-view" : ""
+    ].filter(Boolean).join(" ");
+
     return (
         <>
             <div className="page-wraper">
-                {/* Mobile Menu Toggle Button */}
                 {isMobile && (
                     <button 
                         className="mobile-menu-toggle"
@@ -69,7 +73,6 @@ function EmployerLayout() {
                     </button>
                 )}
                 
-                {/* Mobile Overlay */}
                 {isMobile && sidebarActive && (
                     <div 
                         className="sidebar-overlay active"
@@ -87,14 +90,11 @@ function EmployerLayout() {
                     ></div>
                 )}
                 
-                <EmpSidebarSection sidebarActive={isMobile ? sidebarActive : true} />
+                <EmpSidebarSection sidebarActive={sidebarActive} isMobile={isMobile} />
 
-                <div id="content" className={!isMobile && !sidebarActive ? "active" : ""} style={{
-                    marginLeft: isMobile ? '0' : (sidebarActive ? '280px' : '0'),
-                    minHeight: '100vh',
-                    transition: 'margin-left 0.3s ease',
-                    background: '#f8fafc'
-                }}>
+                <EmpHeaderSection sidebarActive={sidebarActive} onClick={handleSidebarCollapse} isMobile={isMobile} />
+
+                <div id="content" className={contentClasses}>
                     <div className="content-admin-main" style={{
                         width: '100%',
                         minHeight: '100vh',

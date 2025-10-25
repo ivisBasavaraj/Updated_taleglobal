@@ -5,7 +5,7 @@ import { loadScript, setMenuActive } from "../../../../globals/constants";
 import { employer, empRoute, publicUser } from "../../../../globals/route-names";
 import { useEffect } from "react";
 
-function EmpSidebarSection(props) {
+function EmpSidebarSection({ sidebarActive, isMobile }) {
     const currentpath = useLocation().pathname;
 
     useEffect(() => {
@@ -13,9 +13,29 @@ function EmpSidebarSection(props) {
         loadScript("js/emp-sidebar.js");
     });
 
+    const sidebarClasses = [
+        sidebarActive ? "active" : "",
+        !isMobile && !sidebarActive ? "collapsed" : ""
+    ].filter(Boolean).join(" ");
+
     return (
         <>
-            <nav id="sidebar-admin-wraper" className={props.sidebarActive ? "active" : ""}>
+            <nav 
+                id="sidebar-admin-wraper" 
+                className={sidebarClasses}
+                style={isMobile ? {
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "280px",
+                    transform: sidebarActive ? "translateX(0)" : "translateX(-100%)",
+                    transition: "transform 0.3s ease",
+                    boxShadow: sidebarActive ? "0 4px 24px rgba(0,0,0,0.25)" : "none",
+                    zIndex: 10000,
+                    background: "#ffffff",
+                    height: "100vh",
+                    overflowY: "auto"
+                } : {}}>
                 <div className="page-logo">
                     <NavLink to={publicUser.INITIAL}><JobZImage id="skin_page_logo" src="images/logo-dark.png" alt="" /></NavLink>
                 </div>
