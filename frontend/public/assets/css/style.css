@@ -11844,11 +11844,11 @@ strong {
 #sidebar-admin-wraper {
   width: 320px;
   position: fixed;
-  z-index: 1 !important;
+  z-index: 10002 !important;
   top: 0px;
   left: 0px;
   height: 100vh;
-  z-index: 999;
+  z-index: 10001;
   background: #d4e6ff;
   color: #17171d;
   transition: 0.5s all ease;

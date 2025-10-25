@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./global-styles.css";
+import "./dark-screen-fix.css";
 import "./notification-animations.css";
 import "./mobile-responsive.css";
 import "./employer-mobile-responsive.css";

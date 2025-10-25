@@ -1,0 +1,149 @@
+/* Dark Screen Fix - Comprehensive solution for modal and sidebar overlay issues */
+
+/* COMPLETELY DISABLE ALL BOOTSTRAP MODAL BACKDROPS */
+.modal-backdrop,
+.offcanvas-backdrop,
+.modal-backdrop.fade,
+.modal-backdrop.show,
+.offcanvas-backdrop.fade,
+.offcanvas-backdrop.show {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    background: none !important;
+    z-index: -1 !important;
+}
+
+/* Prevent body modifications by Bootstrap modals */
+body.modal-open {
+    overflow: auto !important;
+    padding-right: 0 !important;
+}
+
+/* Fix modal positioning without backdrop */
+.modal {
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(2px) !important;
+}
+
+.modal.fade {
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+.modal.show {
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Ensure modal content is properly positioned */
+.modal-dialog {
+    position: relative !important;
+    z-index: 1051 !important;
+}
+
+/* Fix for sidebar overlay on mobile */
+@media (max-width: 991px) {
+    /* Sidebar overlay - lighter and non-intrusive */
+    .sidebar-overlay {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: rgba(0, 0, 0, 0.2) !important;
+        z-index: 999 !important;
+        backdrop-filter: blur(1px) !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transition: opacity 0.2s ease, visibility 0.2s ease !important;
+        pointer-events: none !important;
+    }
+    
+    .sidebar-overlay.active {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+    }
+    
+    /* Ensure sidebar is above overlay */
+    #sidebar-admin-wraper {
+        z-index: 1000 !important;
+    }
+    
+    /* Mobile menu button */
+    .mobile-menu-toggle {
+        z-index: 1001 !important;
+    }
+}
+
+/* Prevent any other dark overlays */
+*::before,
+*::after {
+    background: none !important;
+}
+
+/* Fix for any remaining Bootstrap conflicts */
+.fade {
+    opacity: 1 !important;
+}
+
+.fade:not(.show) {
+    opacity: 0 !important;
+}
+
+/* Ensure proper modal functionality without backdrop */
+.modal-content {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 12px !important;
+}
+
+/* Additional safety measures */
+.page-wraper,
+.twm-right-section-panel,
+#content {
+    position: relative !important;
+}
+
+/* Prevent any pseudo-elements from creating dark overlays */
+.page-wraper::before,
+.page-wraper::after,
+.twm-right-section-panel::before,
+.twm-right-section-panel::after,
+#content::before,
+#content::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Fix for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+    .modal {
+        -webkit-backdrop-filter: blur(2px) !important;
+    }
+}
+
+/* Ensure no conflicting z-indexes */
+.navbar,
+.header,
+.main-bar {
+    z-index: 1030 !important;
+}
+
+/* Fix for any remaining overlay issues */
+body {
+    background: #ffffff !important;
+}
+
+html {
+    background: #ffffff !important;
+}
+
+/* Prevent dark themes from interfering */
+@media (prefers-color-scheme: dark) {
+    body,
+    html,
+    .modal,
+    .modal-content {
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+}

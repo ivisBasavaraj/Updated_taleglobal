@@ -5,11 +5,14 @@ import { useState, useEffect } from "react";
 import CanHeaderSection from "../app/pannels/candidate/common/can-header";
 import CanSidebarSection from "../app/pannels/candidate/common/can-sidebar";
 import CandidateRoutes from "../routing/candidate-routes";
+import "../candidate-layout-fix.css";
+import "../mobile-menu-fix.css";
 
 function CandidateLayout() {
 
     const [isMobile, setIsMobile] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const checkMobile = () => {
@@ -28,23 +31,53 @@ function CandidateLayout() {
         return () => window.removeEventListener("resize", checkMobile);
     }, []);
 
+    useEffect(() => {
+        const updateModalState = () => {
+            setModalOpen(document.body.classList.contains("modal-open"));
+        };
+
+        updateModalState();
+        document.addEventListener("show.bs.modal", updateModalState);
+        document.addEventListener("hidden.bs.modal", updateModalState);
+
+        return () => {
+            document.removeEventListener("show.bs.modal", updateModalState);
+            document.removeEventListener("hidden.bs.modal", updateModalState);
+            // Cleanup: remove sidebar-open class when component unmounts
+            document.body.classList.remove('sidebar-open');
+        };
+    }, []);
+
     const handleSidebarCollapse = () => {
         setSidebarOpen(prev => !prev);
     }
 
     const handleMobileMenuToggle = () => {
-        setSidebarOpen(prev => !prev);
+        setSidebarOpen(prev => {
+            const newState = !prev;
+            console.log('Mobile menu toggle:', newState); // Debug log
+            
+            // Add/remove body class to prevent scrolling when sidebar is open
+            if (newState) {
+                document.body.classList.add('sidebar-open');
+            } else {
+                document.body.classList.remove('sidebar-open');
+            }
+            return newState;
+        });
     }
 
     const handleOverlayClick = () => {
         if (isMobile) {
             setSidebarOpen(false);
+            document.body.classList.remove('sidebar-open');
         }
     }
 
     const handleRouteNavigate = () => {
         if (isMobile) {
             setSidebarOpen(false);
+            document.body.classList.remove('sidebar-open');
         }
     }
 
@@ -72,27 +105,18 @@ function CandidateLayout() {
                             borderRadius: "8px",
                             fontSize: "18px",
                             boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
-                            cursor: "pointer"
+                            cursor: "pointer",
+                            transition: "all 0.3s ease"
                         }}
                     >
-                        <i className="fas fa-bars"></i>
+                        <i className={sidebarOpen ? "fas fa-times" : "fas fa-bars"}></i>
                     </button>
                 )}
 
-                {isMobile && sidebarOpen && (
+                {isMobile && sidebarOpen && !modalOpen && (
                     <div
                         className="sidebar-overlay active"
                         onClick={handleOverlayClick}
-                        style={{
-                            position: "fixed",
-                            top: 0,
-                            left: 0,
-                            width: "100%",
-                            height: "100%",
-                            background: "rgba(0,0,0,0.5)",
-                            zIndex: 9998,
-                            backdropFilter: "blur(2px)"
-                        }}
                     ></div>
                 )}
 
@@ -107,7 +131,9 @@ function CandidateLayout() {
                     marginLeft: isMobile ? "0" : (sidebarOpen ? "280px" : "0"),
                     minHeight: "100vh",
                     transition: "margin-left 0.3s ease",
-                    background: "#f8fafc"
+                    background: "#f8fafc",
+                    position: "relative",
+                    zIndex: isMobile && sidebarOpen ? 1 : "auto"
                 }}>
                     <div className="content-admin-main" style={{
                         width: "100%",
