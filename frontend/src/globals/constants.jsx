@@ -49,7 +49,6 @@ export function updateSkinStyle(skin, headerLogoLight, footerLogoLight) {
     var _skin_style = document.getElementById("skin_style");
     var _skin_header_logo = document.getElementById("skin_header_logo");
     var _skin_header_logo_light = document.getElementById("skin_header_logo_light");
-    var _skin_footer_dark_logo = document.getElementById("skin_footer_dark_logo");
     var _skin_footer_light_logo = document.getElementById("skin_footer_light_logo");
     var _skin_page_logo = document.getElementById("skin_page_logo");
     var _skin_maintain_logo = document.getElementById("skin_maintain_logo");
@@ -68,11 +67,8 @@ export function updateSkinStyle(skin, headerLogoLight, footerLogoLight) {
     if (_skin_header_logo_light) // initially light, on switcher change => it should change
         _skin_header_logo_light.src = headerLogoLight ? _logo_light : _logo;
 
-    if (_skin_footer_dark_logo)
-        _skin_footer_dark_logo.src = footerLogoLight ? _logo_white : publicUrlFor('images/skins-logo/logo-skin-' + skin + '-ftr.png');
-
     if (_skin_footer_light_logo)
-        _skin_footer_light_logo.src = _logo;
+        _skin_footer_light_logo.src = footerLogoLight ? _logo_white : _logo;
 
     if (_skin_page_logo)
         _skin_page_logo.src = _logo;
