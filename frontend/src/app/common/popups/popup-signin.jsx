@@ -165,7 +165,7 @@ function SignInPopup() {
 												type="button"
 											>
 												<i className="fas fa-graduation-cap" style={{color: 'white'}} />
-												Placement
+												Placement Officer
 											</button>
 										</li>
 									</ul>

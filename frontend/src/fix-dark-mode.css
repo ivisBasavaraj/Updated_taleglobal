@@ -17,4 +17,14 @@
   .modal-content {
     background-color: #ffffff !important;
   }
+  
+  /* Preserve checkbox and blue text visibility */
+  input[type="checkbox"], .form-check-input {
+    background-color: transparent !important;
+    border: 1px solid #1967d2 !important;
+  }
+  
+  .text-primary, .site-text-primary, a {
+    color: #1967d2 !important;
+  }
 }
