@@ -78,14 +78,20 @@ function PlacementDashboard() {
                 return;
             }
             
+            console.log('Fetching placement profile...');
             const profileData = await api.getPlacementProfile();
+            console.log('Profile data received:', profileData);
+            
             if (profileData.success) {
+                console.log('Setting placement data:', profileData.placement);
                 setPlacementData(profileData.placement);
                 setPlacementId(profileData.placement._id);
                 setProfileLoaded(true);
+            } else {
+                console.error('Profile fetch failed:', profileData.message);
             }
         } catch (error) {
-            
+            console.error('Profile fetch error:', error);
             if (error.message.includes('401')) {
                 alert('Authentication failed. Please login again.');
                 localStorage.removeItem('placementToken');

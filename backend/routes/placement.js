@@ -27,15 +27,24 @@ router.get('/profile', auth(['placement']), async (req, res) => {
     const Placement = require('../models/Placement');
     const placementId = req.user._id || req.user.id;
     const placement = await Placement.findById(placementId)
-      .select('name email phone collegeName status')
+      .select('name email phone collegeName status logo idCard fileHistory credits')
       .lean();
     
     if (!placement) {
       return res.status(404).json({ success: false, message: 'Placement officer not found' });
     }
     
+    console.log('Placement profile data:', {
+      id: placement._id,
+      name: placement.name,
+      hasLogo: !!placement.logo,
+      hasIdCard: !!placement.idCard,
+      fileHistoryCount: placement.fileHistory?.length || 0
+    });
+    
     res.json({ success: true, placement });
   } catch (error) {
+    console.error('Error getting placement profile:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
