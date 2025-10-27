@@ -227,19 +227,16 @@ function AdminSupportTickets() {
         return <Badge bg={variants[userType] || 'secondary'}>{userType?.toUpperCase()}</Badge>;
     };
 
-    if (loading) {
-        return (
-            <div className="loading-spinner">
-                <Spinner animation="border" role="status" variant="primary">
-                    <span className="visually-hidden">Loading...</span>
-                </Spinner>
-            </div>
-        );
-    }
-
     return (
         <div className="support-tickets-container admin-container">
-            <Container fluid>
+            {loading && tickets.length === 0 ? (
+                <div className="loading-spinner">
+                    <Spinner animation="border" role="status" variant="primary">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </div>
+            ) : (
+                <Container fluid>
                 <div className="support-header">
                     <h2>🎫 Support Tickets Management</h2>
                     <p>Manage and respond to customer support requests</p>
@@ -479,6 +476,7 @@ function AdminSupportTickets() {
                     </Col>
                 </Row>
             </Container>
+            )}
 
             {/* Ticket Detail Modal */}
             <Modal 
