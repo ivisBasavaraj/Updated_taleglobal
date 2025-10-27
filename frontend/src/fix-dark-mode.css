@@ -10,7 +10,11 @@
     border: 1px solid #d1d5db !important;
   }
   
-  .panel, .card, .modal, .dropdown-menu {
+  .panel, .card, .dropdown-menu {
+    background-color: #ffffff !important;
+  }
+  
+  .modal-content {
     background-color: #ffffff !important;
   }
 }
