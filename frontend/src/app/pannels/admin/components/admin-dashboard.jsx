@@ -136,7 +136,7 @@ function AdminDashboardPage() {
 
                 <div className="row">
                     <div className="col-lg-12 col-md-12 col-12 mb-4">
-                        <div className="chart-section" data-aos="fade-up" data-aos-delay="150">
+                        <div className="chart-section">
                             <div className="chart-header">
                                 <h3>
                                     <i className="fa fa-chart-area me-3" style={{color: '#ff6b35'}}></i>
