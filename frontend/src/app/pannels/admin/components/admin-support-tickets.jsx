@@ -33,8 +33,10 @@ function AdminSupportTickets() {
     }, []);
 
     useEffect(() => {
-        fetchSupportTickets();
-    }, [filters]);
+        if (isMounted) {
+            fetchSupportTickets();
+        }
+    }, [filters, isMounted]);
 
     const fetchSupportTickets = async () => {
         try {
@@ -97,6 +99,8 @@ function AdminSupportTickets() {
     };
 
     const handleTicketClick = async (ticket) => {
+        if (!isMounted || !ticket) return;
+        
         setSelectedTicket(ticket);
         setResponse(ticket.response || '');
         setStatus(ticket.status);
