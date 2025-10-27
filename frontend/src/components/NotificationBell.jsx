@@ -4,11 +4,19 @@ const NotificationBell = ({ userRole }) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  // Animation flags for bell and badge
+  const [isMobile, setIsMobile] = useState(false);
   const [animateBell, setAnimateBell] = useState(false);
   const [animateBadge, setAnimateBadge] = useState(false);
 
-  // Trigger a brief animation whenever unread count changes (>0)
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 767);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     if (unreadCount > 0) {
       setAnimateBell(true);
@@ -24,7 +32,6 @@ const NotificationBell = ({ userRole }) => {
   useEffect(() => {
     if (userRole) {
       fetchNotifications();
-      // Poll for new notifications every 30 seconds
       const interval = setInterval(fetchNotifications, 30000);
       return () => clearInterval(interval);
     }
@@ -50,7 +57,6 @@ const NotificationBell = ({ userRole }) => {
         setUnreadCount(data.unreadCount);
       }
     } catch (error) {
-      // Silent error handling
     }
   };
 
@@ -127,12 +133,16 @@ const NotificationBell = ({ userRole }) => {
           position: 'absolute',
           top: '100%',
           right: '0',
-          width: '300px',
+          width: isMobile ? 'calc(100vw - 40px)' : '300px',
+          maxWidth: isMobile ? '360px' : '300px',
           background: 'white',
           border: '1px solid #ddd',
           borderRadius: '8px',
           boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          zIndex: 1000
+          zIndex: 1000,
+          left: isMobile ? '50%' : 'auto',
+          transform: isMobile ? 'translateX(-50%)' : 'none',
+          marginTop: isMobile ? '10px' : '0'
         }}>
           <div style={{
             padding: '12px 16px',

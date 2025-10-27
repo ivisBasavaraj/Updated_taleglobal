@@ -640,6 +640,52 @@ exports.updateApplicationStatus = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Application not found' });
     }
 
+    try {
+      const { createNotification } = require('./notificationController');
+      const statusLabels = {
+        pending: 'Pending',
+        shortlisted: 'Shortlisted',
+        interviewed: 'Interviewed',
+        hired: 'Hired',
+        rejected: 'Rejected'
+      };
+      const statusLabel = statusLabels[status] || status;
+      const trimmedNotes = typeof notes === 'string' ? notes.trim() : '';
+      const jobTitle = application.jobId?.title || 'the position';
+      const candidateName = application.candidateId?.name || 'Candidate';
+
+      if (application.candidateId?._id) {
+        let candidateMessage = `Your application for ${jobTitle} is now ${statusLabel}.`;
+        if (trimmedNotes) {
+          candidateMessage += ` Employer note: ${trimmedNotes}`;
+        }
+        await createNotification({
+          title: 'Application Status Updated',
+          message: candidateMessage,
+          type: 'application_status_updated',
+          role: 'candidate',
+          relatedId: application._id,
+          candidateId: application.candidateId._id,
+          createdBy: req.user._id
+        });
+      }
+
+      let employerMessage = `${candidateName}'s application for ${jobTitle} is now ${statusLabel}.`;
+      if (trimmedNotes) {
+        employerMessage += ` Notes: ${trimmedNotes}`;
+      }
+      await createNotification({
+        title: 'Application Status Updated',
+        message: employerMessage,
+        type: 'application_status_updated',
+        role: 'employer',
+        relatedId: application._id,
+        createdBy: req.user._id
+      });
+    } catch (notificationError) {
+      console.error('Application status notification failed:', notificationError);
+    }
+
     res.json({ success: true, application });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

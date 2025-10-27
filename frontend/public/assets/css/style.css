@@ -11927,6 +11927,20 @@ strong {
   border: 0px;
 }
 
+@media (max-width: 767px) {
+  .dashboard-noti-dropdown {
+    position: static;
+  }
+  .dashboard-noti-dropdown .dropdown-menu {
+    width: calc(100vw - 40px);
+    max-width: 360px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    margin-top: 10px;
+  }
+}
+
 /*Dashboard Message*/
 .jobzilla-admin-messange {
   color: #999;
