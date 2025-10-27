@@ -155,7 +155,7 @@ function RegisteredCandidatesPage() {
                                     {candidates.map((candidate, index) => {
                                         const shortlistInfo = getCandidateShortlistInfo(candidate._id);
                                         return (
-                                            <tr key={candidate._id} data-aos="fade-left" data-aos-delay={300 + (index * 50)}>
+                                            <tr key={candidate._id}>
                                                 <td>
                                                     <span className="candidate-name">
                                                         {candidate.name}
