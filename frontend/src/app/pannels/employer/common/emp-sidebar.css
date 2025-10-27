@@ -149,23 +149,20 @@ nav#sidebar-admin-wraper.active,
     background: rgba(220, 53, 69, 0.3) !important;
 }
 
-/* Scrollbar styling */
+/* Hide scrollbar */
+#sidebar-admin-wraper,
+#sidebar-admin-wraper .admin-nav,
+#sidebar-admin-wraper .admin-nav.scrollbar-macosx {
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+#sidebar-admin-wraper::-webkit-scrollbar,
+#sidebar-admin-wraper .admin-nav::-webkit-scrollbar,
 #sidebar-admin-wraper .admin-nav.scrollbar-macosx::-webkit-scrollbar {
-    width: 6px;
-}
-
-#sidebar-admin-wraper .admin-nav.scrollbar-macosx::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-}
-
-#sidebar-admin-wraper .admin-nav.scrollbar-macosx::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-}
-
-#sidebar-admin-wraper .admin-nav.scrollbar-macosx::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
+    display: none !important;
+    width: 0 !important;
 }
 
 /* Ensure sidebar is always visible on desktop */

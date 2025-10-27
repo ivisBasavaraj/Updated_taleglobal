@@ -5,6 +5,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { loadScript, setMenuActive } from "../../../../globals/constants";
 import { candidate, canRoute, publicUser } from "../../../../globals/route-names";
 import { useEffect } from "react";
+import "./can-sidebar.css";
 
 function CanSidebarSection({ sidebarActive, isMobile }) {
   const currentpath = useLocation().pathname;
