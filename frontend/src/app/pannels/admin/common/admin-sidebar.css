@@ -95,9 +95,14 @@ nav#sidebar-admin-wraper {
 
 #sidebar-admin-wraper .admin-nav ul li a .arrow {
     margin-left: auto !important;
-    font-size: 0.9rem !important;
+    font-size: 0.8rem !important;
+    color: #666 !important;
+    transition: transform 0.3s ease !important;
+    flex-shrink: 0 !important;
+}
+
+#sidebar-admin-wraper .admin-nav ul li a:hover .arrow {
     color: #ff6b35 !important;
-    font-weight: bold !important;
 }
 
 /* Sub-menu styles */
@@ -108,6 +113,7 @@ nav#sidebar-admin-wraper {
     padding: 0.5rem 0;
     display: none;
     transition: all 0.3s ease;
+    margin-left: 1rem;
 }
 
 #sidebar-admin-wraper .admin-nav ul li .sub-menu.open {
@@ -115,50 +121,61 @@ nav#sidebar-admin-wraper {
 }
 
 #sidebar-admin-wraper .admin-nav ul li .sub-menu li {
-    margin: 0.125rem 0.5rem;
+    margin: 0.125rem 0;
 }
 
 #sidebar-admin-wraper .admin-nav ul li .sub-menu li a {
     padding: 0.5rem 1rem !important;
     font-size: 0.85rem !important;
-    color: #000 !important;
-    font-weight: bold !important;
+    color: #666 !important;
+    font-weight: 500 !important;
+    border-radius: 6px !important;
 }
 
 #sidebar-admin-wraper .admin-nav ul li .sub-menu li a:hover {
+    background: rgba(255, 107, 53, 0.1) !important;
+    color: #333 !important;
+}
+
+#sidebar-admin-wraper .admin-nav ul li .sub-menu li.active a,
+#sidebar-admin-wraper .admin-nav ul li .sub-menu li a.active {
     background: rgba(255, 107, 53, 0.2) !important;
-    color: #000 !important;
+    color: #ff6b35 !important;
+    font-weight: 600 !important;
 }
 
-/* Specific styling for Placement Officers */
-#sidebar-admin-wraper .admin-nav ul li a[href*="placement"] {
-    color: #000 !important;
-    font-weight: bold !important;
+/* Ensure parent menu doesn't get active styling when submenu is active */
+#sidebar-admin-wraper .admin-nav ul li:not(.active) a {
+    background: transparent !important;
+    color: #333 !important;
 }
 
-#sidebar-admin-wraper .admin-nav ul li a[href*="placement"]:hover {
-    color: #000 !important;
+#sidebar-admin-wraper .admin-nav ul li:not(.active) a:hover {
+    background: rgba(255, 107, 53, 0.1) !important;
+    color: #333 !important;
 }
 
-#sidebar-admin-wraper .admin-nav ul li a[href*="placement"] i {
+/* Remove specific placement officer styling to prevent conflicts */
+
+/* Icon styling */
+#sidebar-admin-wraper .admin-nav ul li a i:not(.arrow) {
     color: #ff6b35 !important;
 }
 
-#sidebar-admin-wraper .admin-nav ul li a[href*="placement"]:hover i {
+#sidebar-admin-wraper .admin-nav ul li a:hover i:not(.arrow) {
     color: #ff6b35 !important;
 }
 
-/* Force ALL icons to ALWAYS be orange */
-#sidebar-admin-wraper i {
+#sidebar-admin-wraper .admin-nav ul li.active a i:not(.arrow) {
     color: #ff6b35 !important;
 }
 
-#sidebar-admin-wraper .admin-nav ul li a i,
-#sidebar-admin-wraper .admin-nav ul li a:hover i,
-#sidebar-admin-wraper .admin-nav ul li a:active i,
-#sidebar-admin-wraper .admin-nav ul li a:focus i,
-#sidebar-admin-wraper .admin-nav ul li.active a i,
-#sidebar-admin-wraper .admin-nav ul li a.active i {
+#sidebar-admin-wraper .admin-nav ul li .sub-menu li a i {
+    color: #666 !important;
+}
+
+#sidebar-admin-wraper .admin-nav ul li .sub-menu li.active a i,
+#sidebar-admin-wraper .admin-nav ul li .sub-menu li a.active i {
     color: #ff6b35 !important;
 }
 

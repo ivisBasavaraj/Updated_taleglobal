@@ -29,7 +29,25 @@ function AdminSidebarSection({ sidebarActive, isMobile }) {
             setUserPermissions(['employers', 'placement_officers', 'registered_candidates']);
             setIsSubAdmin(false);
         }
-    }, [])
+
+        // Auto-open menus if current path matches submenu items
+        const isEmployerPath = [
+            adminRoute(admin.CAN_MANAGE),
+            adminRoute(admin.CAN_APPROVE), 
+            adminRoute(admin.CAN_REJECT)
+        ].includes(currentpath);
+        
+        const isPlacementPath = [
+            adminRoute(admin.PLACEMENT_MANAGE),
+            adminRoute(admin.PLACEMENT_APPROVE),
+            adminRoute(admin.PLACEMENT_REJECT)
+        ].includes(currentpath);
+
+        setOpenMenus({
+            employers: isEmployerPath,
+            placement: isPlacementPath
+        });
+    }, [currentpath])
 
     const hasPermission = (permission) => {
         return !isSubAdmin || userPermissions.includes(permission);
@@ -69,23 +87,35 @@ function AdminSidebarSection({ sidebarActive, isMobile }) {
                         </li>
 
                         {hasPermission('employers') && (
-                            <li
-                                className={
-                                    setMenuActive(currentpath, adminRoute(admin.CAN_MANAGE)) +
-                                    setMenuActive(currentpath, adminRoute(admin.CAN_APPROVE)) +
-                                    setMenuActive(currentpath, adminRoute(admin.CAN_REJECT))
-                                }>
+                            <li className={(
+                                currentpath === adminRoute(admin.CAN_MANAGE) ||
+                                currentpath === adminRoute(admin.CAN_APPROVE) ||
+                                currentpath === adminRoute(admin.CAN_REJECT)
+                            ) ? 'active' : ''}>
                                 <a href="#" onClick={(e) => {
                                     e.preventDefault();
                                     setOpenMenus(prev => ({...prev, employers: !prev.employers}));
                                 }}>
                                     <i className="fa fa-user-tie" />
                                     <span className="admin-nav-text">Employers</span>
+                                    <i className={`fa fa-chevron-${openMenus.employers ? 'down' : 'right'} arrow`} />
                                 </a>
                                 <ul className={`sub-menu ${openMenus.employers ? 'open' : ''}`}>
-                                    <li><NavLink to={adminRoute(admin.CAN_MANAGE)} id="allList"><span className="admin-nav-text">All Submissions</span></NavLink></li>
-                                    <li><NavLink to={adminRoute(admin.CAN_APPROVE)} id="approvedList"><span className="admin-nav-text">Approved</span></NavLink></li>
-                                    <li><NavLink to={adminRoute(admin.CAN_REJECT)} id="rejectedList"><span className="admin-nav-text">Rejected</span></NavLink></li>
+                                    <li className={currentpath === adminRoute(admin.CAN_MANAGE) ? 'active' : ''}>
+                                        <NavLink to={adminRoute(admin.CAN_MANAGE)} id="allList">
+                                            <span className="admin-nav-text">All Submissions</span>
+                                        </NavLink>
+                                    </li>
+                                    <li className={currentpath === adminRoute(admin.CAN_APPROVE) ? 'active' : ''}>
+                                        <NavLink to={adminRoute(admin.CAN_APPROVE)} id="approvedList">
+                                            <span className="admin-nav-text">Approved</span>
+                                        </NavLink>
+                                    </li>
+                                    <li className={currentpath === adminRoute(admin.CAN_REJECT) ? 'active' : ''}>
+                                        <NavLink to={adminRoute(admin.CAN_REJECT)} id="rejectedList">
+                                            <span className="admin-nav-text">Rejected</span>
+                                        </NavLink>
+                                    </li>
                                 </ul>
                             </li>
                         )}
@@ -100,23 +130,35 @@ function AdminSidebarSection({ sidebarActive, isMobile }) {
                         )}
 
                         {hasPermission('placement_officers') && (
-                            <li
-                                className={
-                                    setMenuActive(currentpath, adminRoute(admin.PLACEMENT_MANAGE)) +
-                                    setMenuActive(currentpath, adminRoute(admin.PLACEMENT_APPROVE)) +
-                                    setMenuActive(currentpath, adminRoute(admin.PLACEMENT_REJECT))
-                                }>
+                            <li className={(
+                                currentpath === adminRoute(admin.PLACEMENT_MANAGE) ||
+                                currentpath === adminRoute(admin.PLACEMENT_APPROVE) ||
+                                currentpath === adminRoute(admin.PLACEMENT_REJECT)
+                            ) ? 'active' : ''}>
                                 <a href="#" onClick={(e) => {
                                     e.preventDefault();
                                     setOpenMenus(prev => ({...prev, placement: !prev.placement}));
                                 }}>
                                     <i className="fa fa-graduation-cap" />
                                     <span className="admin-nav-text">Placement Officers</span>
+                                    <i className={`fa fa-chevron-${openMenus.placement ? 'down' : 'right'} arrow`} />
                                 </a>
                                 <ul className={`sub-menu ${openMenus.placement ? 'open' : ''}`}>
-                                    <li><NavLink to={adminRoute(admin.PLACEMENT_MANAGE)}><span className="admin-nav-text">All Submissions</span></NavLink></li>
-                                    <li><NavLink to={adminRoute(admin.PLACEMENT_APPROVE)}><span className="admin-nav-text">Approved</span></NavLink></li>
-                                    <li><NavLink to={adminRoute(admin.PLACEMENT_REJECT)}><span className="admin-nav-text">Rejected</span></NavLink></li>
+                                    <li className={currentpath === adminRoute(admin.PLACEMENT_MANAGE) ? 'active' : ''}>
+                                        <NavLink to={adminRoute(admin.PLACEMENT_MANAGE)}>
+                                            <span className="admin-nav-text">All Submissions</span>
+                                        </NavLink>
+                                    </li>
+                                    <li className={currentpath === adminRoute(admin.PLACEMENT_APPROVE) ? 'active' : ''}>
+                                        <NavLink to={adminRoute(admin.PLACEMENT_APPROVE)}>
+                                            <span className="admin-nav-text">Approved</span>
+                                        </NavLink>
+                                    </li>
+                                    <li className={currentpath === adminRoute(admin.PLACEMENT_REJECT) ? 'active' : ''}>
+                                        <NavLink to={adminRoute(admin.PLACEMENT_REJECT)}>
+                                            <span className="admin-nav-text">Rejected</span>
+                                        </NavLink>
+                                    </li>
                                 </ul>
                             </li>
                         )}

@@ -661,23 +661,31 @@ exports.getRegisteredCandidates = async (req, res) => {
   try {
     const { page = 1, limit = 50 } = req.query;
 
-    const candidates = await Candidate.find()
-      .select('-password')
-      .sort({ createdAt: -1 })
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
-
-    // Get profiles for each candidate
-    const candidatesWithProfiles = await Promise.all(
-      candidates.map(async (candidate) => {
-        const profile = await CandidateProfile.findOne({ candidateId: candidate._id });
-        return {
-          ...candidate.toObject(),
-          profile: profile || null,
-          hasProfile: !!profile
-        };
-      })
-    );
+    // Use aggregation for better performance
+    const candidatesWithProfiles = await Candidate.aggregate([
+      { $sort: { createdAt: -1 } },
+      { $skip: (page - 1) * parseInt(limit) },
+      { $limit: parseInt(limit) },
+      {
+        $lookup: {
+          from: 'candidateprofiles',
+          localField: '_id',
+          foreignField: 'candidateId',
+          as: 'profile'
+        }
+      },
+      {
+        $addFields: {
+          profile: { $arrayElemAt: ['$profile', 0] },
+          hasProfile: { $gt: [{ $size: '$profile' }, 0] }
+        }
+      },
+      {
+        $project: {
+          password: 0
+        }
+      }
+    ]);
 
     res.json({ success: true, data: candidatesWithProfiles });
   } catch (error) {
@@ -1998,15 +2006,15 @@ exports.updateSupportTicketStatus = async (req, res) => {
         let notificationTitle = 'Support Ticket Updated';
         let notificationMessage = `Your support ticket "${ticket.subject}" has been updated by admin.`;
         
-        if (status === 'resolved') {
+        if (response && response.trim()) {
+          notificationTitle = 'Admin Response to Your Support Ticket';
+          notificationMessage = `Subject: ${ticket.subject}\n\nStatus: ${status.toUpperCase()}\n\nAdmin Response:\n${response.trim()}`;
+        } else if (status === 'resolved') {
           notificationTitle = 'Support Ticket Resolved';
-          notificationMessage = `Your support ticket "${ticket.subject}" has been resolved.`;
+          notificationMessage = `Subject: ${ticket.subject}\n\nYour support ticket has been resolved by admin.\n\nStatus: RESOLVED`;
         } else if (status === 'closed') {
           notificationTitle = 'Support Ticket Closed';
-          notificationMessage = `Your support ticket "${ticket.subject}" has been closed.`;
-        } else if (response && response.trim()) {
-          notificationTitle = 'Support Ticket Response';
-          notificationMessage = `Your support ticket "${ticket.subject}" has been responded to by admin. Response: ${response.trim()}`;
+          notificationMessage = `Subject: ${ticket.subject}\n\nYour support ticket has been closed by admin.\n\nStatus: CLOSED`;
         }
         
         // Find user by email if userId not available
@@ -2025,19 +2033,35 @@ exports.updateSupportTicketStatus = async (req, res) => {
         }
         
         if (targetUserId) {
-          await createNotification({
+          const notificationData = {
             title: notificationTitle,
             message: notificationMessage,
             type: 'support_response',
-            role: ticket.userType,
+            role: ticket.userType === 'guest' ? 'candidate' : ticket.userType,
             relatedId: targetUserId,
             createdBy: req.user.id
+          };
+          
+          console.log('Creating support notification with full response:', {
+            title: notificationTitle,
+            messageLength: notificationMessage.length,
+            hasResponse: !!(response && response.trim()),
+            status: status
           });
+          
+          await createNotification(notificationData);
         }
       } catch (notifError) {
         console.error('Error creating support response notification:', notifError);
         // Don't fail the request if notification fails
       }
+    } else {
+      console.log('No notification created - no response or status change:', {
+        hasResponse: !!(response && response.trim()),
+        status: status,
+        isResolved: status === 'resolved',
+        isClosed: status === 'closed'
+      });
     }
 
     res.json({ 
