@@ -36,6 +36,9 @@ function SignUpPopup() {
     const [showEmployerConfirmPassword, setShowEmployerConfirmPassword] = useState(false);
     const [showPlacementPassword, setShowPlacementPassword] = useState(false);
     const [showPlacementConfirmPassword, setShowPlacementConfirmPassword] = useState(false);
+    const [candidateAgreeTerms, setCandidateAgreeTerms] = useState(false);
+    const [employerAgreeTerms, setEmployerAgreeTerms] = useState(false);
+    const [placementAgreeTerms, setPlacementAgreeTerms] = useState(false);
 
     useEffect(() => {
         setCandidateData({ username: '', email: '', mobile: '', password: '', confirmPassword: '' });
@@ -382,11 +385,13 @@ function SignUpPopup() {
 												
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<div className=" form-check">
+														<div className="form-check">
 															<input
 																type="checkbox"
 																className="form-check-input"
 																id="agree1"
+																checked={candidateAgreeTerms}
+																onChange={(e) => setCandidateAgreeTerms(e.target.checked)}
 																required
 															/>
 															<label
@@ -394,7 +399,7 @@ function SignUpPopup() {
 																htmlFor="agree1"
 															>
 																I agree to the{" "}
-																<a href="#">Terms and conditions</a>
+																<a href="#" onClick={(e) => e.preventDefault()}>Terms and conditions</a>
 															</label>
 															<p>
 																Already registered?
@@ -412,7 +417,7 @@ function SignUpPopup() {
 													</div>
 												</div>
 												<div className="col-md-12">
-													<button type="submit" className="site-button" disabled={loading || passwordError}>
+													<button type="submit" className="site-button" disabled={loading || passwordError || !candidateAgreeTerms}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -535,11 +540,13 @@ function SignUpPopup() {
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<div className=" form-check">
+														<div className="form-check">
 															<input
 																type="checkbox"
 																className="form-check-input"
 																id="agree2"
+																checked={employerAgreeTerms}
+																onChange={(e) => setEmployerAgreeTerms(e.target.checked)}
 																required
 															/>
 															<label
@@ -547,7 +554,7 @@ function SignUpPopup() {
 																htmlFor="agree2"
 															>
 																I agree to the{" "}
-																<a href="#">Terms and conditions</a>
+																<a href="#" onClick={(e) => e.preventDefault()}>Terms and conditions</a>
 															</label>
 															<p>
 																Already registered?
@@ -566,7 +573,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" className="site-button" disabled={loading || passwordError}>
+													<button type="submit" className="site-button" disabled={loading || passwordError || !employerAgreeTerms}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -690,11 +697,13 @@ function SignUpPopup() {
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<div className=" form-check">
+														<div className="form-check">
 															<input
 																type="checkbox"
 																className="form-check-input"
 																id="agree3"
+																checked={placementAgreeTerms}
+																onChange={(e) => setPlacementAgreeTerms(e.target.checked)}
 																required
 															/>
 															<label
@@ -702,7 +711,7 @@ function SignUpPopup() {
 																htmlFor="agree3"
 															>
 																I agree to the{" "}
-																<a href="#">Terms and conditions</a>
+																<a href="#" onClick={(e) => e.preventDefault()}>Terms and conditions</a>
 															</label>
 															<p>
 																Already registered?
@@ -721,7 +730,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" className="site-button" disabled={loading || passwordError}>
+													<button type="submit" className="site-button" disabled={loading || passwordError || !placementAgreeTerms}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
