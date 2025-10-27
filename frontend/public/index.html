@@ -51,7 +51,13 @@
   <meta name="theme-color" content="#fd7e14">
   
   <!-- Color Scheme: Force light mode to prevent dark auto-styling -->
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light">
+  <style>
+    :root { color-scheme: light only !important; }
+    html { color-scheme: light only !important; }
+    body { color-scheme: light only !important; background-color: #ffffff !important; color: #111827 !important; }
+  </style>
   
   <!-- Disable pinch-zoom on content scales (accessibility friendly) -->
   <meta name="minimum-scale" content="1.0">
@@ -112,6 +118,39 @@
         }
       }
     };
+    
+    // Force light mode immediately
+    (function() {
+      // Override matchMedia to always return false for dark mode
+      if (window.matchMedia) {
+        const originalMatchMedia = window.matchMedia;
+        window.matchMedia = function(query) {
+          if (query.includes('prefers-color-scheme: dark')) {
+            return {
+              matches: false,
+              media: query,
+              onchange: null,
+              addListener: function() {},
+              removeListener: function() {},
+              addEventListener: function() {},
+              removeEventListener: function() {},
+              dispatchEvent: function() { return true; }
+            };
+          }
+          return originalMatchMedia(query);
+        };
+      }
+      
+      // Force light color scheme
+      document.documentElement.style.setProperty('color-scheme', 'light only', 'important');
+      document.body.style.setProperty('background-color', '#ffffff', 'important');
+      document.body.style.setProperty('color', '#111827', 'important');
+      
+      // Add class to enable transitions after forcing light mode
+      setTimeout(() => {
+        document.documentElement.classList.add('light-mode-forced');
+      }, 100);
+    })();
   </script>
 </head>
 

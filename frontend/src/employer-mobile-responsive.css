@@ -654,25 +654,7 @@
   }
 }
 
-/* Dark Mode Support (if implemented) */
-@media (prefers-color-scheme: dark) {
-  .emp-dashboard,
-  .emp-company-profile {
-    background-color: #1a1a1a !important;
-  }
-  
-  .panel {
-    background-color: #2d2d2d !important;
-    border-color: #404040 !important;
-  }
-  
-  .form-control,
-  .form-select {
-    background-color: #2d2d2d !important;
-    border-color: #404040 !important;
-    color: #ffffff !important;
-  }
-}
+/* Dark Mode Support removed - using force-light-mode.css instead */
 
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {

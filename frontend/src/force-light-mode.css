@@ -1,0 +1,294 @@
+/* Force Light Mode - Override all dark mode styles */
+
+/* CRITICAL: Force light color scheme */
+:root {
+  color-scheme: light only !important;
+}
+
+html {
+  color-scheme: light only !important;
+}
+
+body {
+  color-scheme: light only !important;
+}
+
+/* Override system dark mode preferences */
+@media (prefers-color-scheme: dark) {
+  :root,
+  html,
+  body,
+  #root,
+  main,
+  .app,
+  .container,
+  .container-fluid {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    color-scheme: light only !important;
+  }
+
+  /* Force all form elements to light mode */
+  input,
+  select,
+  textarea,
+  button,
+  .btn,
+  .site-button,
+  .form-control,
+  .wt-search-bar-select,
+  .form-select,
+  .ant-input,
+  .ant-select-selector,
+  .ant-picker,
+  .ant-picker-input > input,
+  .ant-input-affix-wrapper,
+  .ant-input-number,
+  .ant-input-number-input,
+  .ant-btn,
+  .ant-select-dropdown,
+  .ant-select-selection-search-input {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #d1d5db !important;
+  }
+
+  /* Force all panels and cards to light mode */
+  .panel,
+  .panel-default,
+  .panel-body,
+  .panel-heading,
+  .card,
+  .card-body,
+  .card-header,
+  .manage-jobs-card,
+  .dashboard-card-2,
+  .emp-dashboard,
+  .emp-company-profile {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  /* Force modals and overlays to light mode */
+  .modal,
+  .modal-content,
+  .modal-header,
+  .modal-body,
+  .modal-footer,
+  .dropdown-menu,
+  .popover,
+  .tooltip {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  /* Force navigation elements to light mode */
+  .navbar,
+  .nav,
+  .nav-link,
+  .sidebar,
+  #sidebar-admin-wraper {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  /* Force table elements to light mode */
+  table,
+  thead,
+  tbody,
+  tr,
+  td,
+  th {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  /* Force all text elements */
+  h1, h2, h3, h4, h5, h6,
+  p, span, div, a, label,
+  .text-muted,
+  .text-secondary {
+    color: #111827 !important;
+  }
+
+  /* Force links */
+  a {
+    color: #1967d2 !important;
+  }
+
+  a:hover {
+    color: #1e40af !important;
+  }
+
+  /* Force badges and alerts */
+  .badge,
+  .alert {
+    background-color: #f3f4f6 !important;
+    color: #111827 !important;
+  }
+
+  /* Force list items */
+  ul, ol, li {
+    color: #111827 !important;
+  }
+
+  /* Force all containers */
+  .container,
+  .container-fluid,
+  .row,
+  .col,
+  [class*="col-"] {
+    background-color: transparent !important;
+    color: #111827 !important;
+  }
+
+  /* Force specific employer dashboard elements */
+  .wt-admin-dashboard-2,
+  .wt-admin-right-page-header,
+  .twm-right-section-panel {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  /* Force all input placeholders */
+  input::placeholder,
+  textarea::placeholder,
+  .form-control::placeholder {
+    color: #6b7280 !important;
+  }
+
+  /* Force autofill styles */
+  input:-webkit-autofill,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+    -webkit-text-fill-color: #111827 !important;
+  }
+
+  /* Force focus states */
+  input:focus,
+  select:focus,
+  textarea:focus,
+  .form-control:focus,
+  .form-select:focus {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
+  }
+
+  /* Force button states */
+  button:focus,
+  .btn:focus,
+  .site-button:focus {
+    background-color: #fd7e14 !important;
+    color: #ffffff !important;
+    border-color: #fd7e14 !important;
+  }
+
+  /* Force hover states */
+  input:hover,
+  select:hover,
+  textarea:hover,
+  .form-control:hover,
+  .form-select:hover {
+    background-color: #f8fafc !important;
+    color: #111827 !important;
+  }
+
+  /* Force all other elements that might be affected */
+  .twm-jobs-grid-style1,
+  .twm-jobs-list-style1,
+  .job-categories-block,
+  .job-categories-block-2,
+  .twm-employer-list-style1,
+  .twm-employer-grid-style1 {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  /* Force footer elements */
+  .footer-dark,
+  .footer-light,
+  .footer-top,
+  .footer-bottom {
+    background-color: #f0f6fe !important;
+    color: #2c2c2c !important;
+  }
+
+  /* Force any remaining dark elements */
+  * {
+    color: inherit !important;
+  }
+
+  /* Ensure no dark backgrounds leak through */
+  *:before,
+  *:after {
+    background-color: transparent !important;
+  }
+}
+
+/* Additional safeguards for specific components */
+.emp-dashboard,
+.emp-company-profile {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+}
+
+.panel {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border-color: #e5e7eb !important;
+}
+
+.form-control,
+.form-select {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border-color: #d1d5db !important;
+}
+
+/* Force light mode for any CSS custom properties */
+:root {
+  --bs-body-bg: #ffffff !important;
+  --bs-body-color: #111827 !important;
+  --bs-dark: #ffffff !important;
+  --bs-light: #f8f9fa !important;
+}
+
+/* Disable any dark mode transitions */
+* {
+  transition: none !important;
+}
+
+/* Re-enable transitions after forcing light mode */
+html.light-mode-forced * {
+  transition: all 0.2s ease !important;
+}
+
+/* Force specific text colors for better readability */
+h1, h2, h3, h4, h5, h6 {
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
+
+.text-muted {
+  color: #6b7280 !important;
+}
+
+/* Ensure buttons maintain their orange theme */
+.site-button,
+button.site-button,
+.btn-primary {
+  background-color: #fd7e14 !important;
+  color: #ffffff !important;
+  border-color: #fd7e14 !important;
+}
+
+.site-button:hover,
+button.site-button:hover,
+.btn-primary:hover {
+  background-color: #e8690a !important;
+  color: #ffffff !important;
+  border-color: #e8690a !important;
+}

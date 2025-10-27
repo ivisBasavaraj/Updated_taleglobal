@@ -153,13 +153,4 @@ html {
     background: #ffffff !important;
 }
 
-/* Prevent dark themes from interfering */
-@media (prefers-color-scheme: dark) {
-    body,
-    html,
-    .modal,
-    .modal-content {
-        background: #ffffff !important;
-        color: #000000 !important;
-    }
-}
+/* Dark mode prevention moved to force-light-mode.css */

@@ -25,15 +25,7 @@ main {
     color: #111827 !important;
 }
 
-@media (prefers-color-scheme: dark) {
-    html,
-    body,
-    #root,
-    main {
-        background-color: #ffffff !important;
-        color: #111827 !important;
-    }
-}
+/* Dark mode media query removed - using force-light-mode.css instead */
 
 input,
 select,
