@@ -1,0 +1,16 @@
+/* Minimal Dark Mode Fix - Only fix backgrounds, preserve original colors */
+@media (prefers-color-scheme: dark) {
+  html, body, #root {
+    background-color: #ffffff !important;
+  }
+  
+  input, textarea, select, .form-control, .form-select {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #d1d5db !important;
+  }
+  
+  .panel, .card, .modal, .dropdown-menu {
+    background-color: #ffffff !important;
+  }
+}
