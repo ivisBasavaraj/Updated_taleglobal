@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Card, Badge, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
 import './admin-support-tickets.css';
 
@@ -23,6 +23,7 @@ function AdminSupportTickets() {
     });
     const [updating, setUpdating] = useState(false);
     const [isMounted, setIsMounted] = useState(true);
+    const modalContainerRef = useRef(null);
 
     useEffect(() => {
         setIsMounted(true);
@@ -143,10 +144,7 @@ function AdminSupportTickets() {
             const result = await apiResponse.json();
             
             if (apiResponse.ok && result.success && isMounted) {
-                setShowModal(false);
-                setSelectedTicket(null);
-                setResponse('');
-                setStatus('');
+                handleCloseModal();
                 fetchSupportTickets();
             } else if (isMounted) {
                 console.error('Update failed:', result);
@@ -227,6 +225,16 @@ function AdminSupportTickets() {
         return <Badge bg={variants[userType] || 'secondary'}>{userType?.toUpperCase()}</Badge>;
     };
 
+    const handleCloseModal = () => {
+        if (!isMounted) {
+            return;
+        }
+        setShowModal(false);
+        setSelectedTicket(null);
+        setResponse('');
+        setStatus('');
+    };
+
     return (
         <div className="support-tickets-container admin-container">
             {loading && tickets.length === 0 ? (
@@ -237,13 +245,13 @@ function AdminSupportTickets() {
                 </div>
             ) : (
                 <Container fluid>
-                <div className="support-header">
-                    <h2>🎫 Support Tickets Management</h2>
-                    <p>Manage and respond to customer support requests</p>
-                </div>
+                    <div className="support-header">
+                        <h2>🎫 Support Tickets Management</h2>
+                        <p>Manage and respond to customer support requests</p>
+                    </div>
 
-                {/* Stats Cards */}
-                <div className="row mb-4">
+                    {/* Stats Cards */}
+                    <div className="row mb-4">
                     <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
                         <div className="panel panel-default dashboard-stats-card">
                             <div className="panel-body wt-panel-body gradi-1">
@@ -479,19 +487,19 @@ function AdminSupportTickets() {
             )}
 
             {/* Ticket Detail Modal */}
-            <Modal 
-                show={showModal} 
-                onHide={() => {
-                    setShowModal(false);
-                    setSelectedTicket(null);
-                    setResponse('');
-                    setStatus('');
-                }} 
-                size="lg"
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>🎫 Support Ticket Details</Modal.Title>
-                </Modal.Header>
+            <div id="support-ticket-modal-container" ref={modalContainerRef}>
+                <Modal 
+                    id="support-ticket-modal"
+                    show={showModal} 
+                    onHide={handleCloseModal}
+                    container={modalContainerRef.current || undefined}
+                    backdrop={false}
+                    enforceFocus={false}
+                    size="lg"
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>🎫 Support Ticket Details</Modal.Title>
+                    </Modal.Header>
                 <Modal.Body>
                     {selectedTicket && (
                         <>
@@ -585,14 +593,7 @@ function AdminSupportTickets() {
                 <Modal.Footer>
                     <Button 
                         className="close-btn" 
-                        onClick={() => {
-                            if (isMounted) {
-                                setShowModal(false);
-                                setSelectedTicket(null);
-                                setResponse('');
-                                setStatus('');
-                            }
-                        }}
+                        onClick={handleCloseModal}
                     >
                         ❌ Close
                     </Button>
@@ -611,7 +612,8 @@ function AdminSupportTickets() {
                         )}
                     </Button>
                 </Modal.Footer>
-            </Modal>
+                </Modal>
+            </div>
         </div>
     );
 }
