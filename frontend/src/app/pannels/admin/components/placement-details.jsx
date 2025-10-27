@@ -35,13 +35,6 @@ function PlacementDetails() {
         
         // Join admin room for real-time updates
         joinAdminRoom();
-        
-        // Auto-refresh every 10 seconds to show new uploads
-        const interval = setInterval(() => {
-            fetchPlacementDetails();
-        }, 10000);
-        
-        return () => clearInterval(interval);
     }, [id, joinAdminRoom]);
 
     const fetchPlacementDetails = async () => {
