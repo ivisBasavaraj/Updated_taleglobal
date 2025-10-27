@@ -87,18 +87,13 @@ function AdminSidebarSection({ sidebarActive, isMobile }) {
                         </li>
 
                         {hasPermission('employers') && (
-                            <li className={(
-                                currentpath === adminRoute(admin.CAN_MANAGE) ||
-                                currentpath === adminRoute(admin.CAN_APPROVE) ||
-                                currentpath === adminRoute(admin.CAN_REJECT)
-                            ) ? 'active' : ''}>
+                            <li>
                                 <a href="#" onClick={(e) => {
                                     e.preventDefault();
                                     setOpenMenus(prev => ({...prev, employers: !prev.employers}));
                                 }}>
                                     <i className="fa fa-user-tie" />
                                     <span className="admin-nav-text">Employers</span>
-                                    <i className={`fa fa-chevron-${openMenus.employers ? 'down' : 'right'} arrow`} />
                                 </a>
                                 <ul className={`sub-menu ${openMenus.employers ? 'open' : ''}`}>
                                     <li className={currentpath === adminRoute(admin.CAN_MANAGE) ? 'active' : ''}>
@@ -130,18 +125,13 @@ function AdminSidebarSection({ sidebarActive, isMobile }) {
                         )}
 
                         {hasPermission('placement_officers') && (
-                            <li className={(
-                                currentpath === adminRoute(admin.PLACEMENT_MANAGE) ||
-                                currentpath === adminRoute(admin.PLACEMENT_APPROVE) ||
-                                currentpath === adminRoute(admin.PLACEMENT_REJECT)
-                            ) ? 'active' : ''}>
+                            <li>
                                 <a href="#" onClick={(e) => {
                                     e.preventDefault();
                                     setOpenMenus(prev => ({...prev, placement: !prev.placement}));
                                 }}>
                                     <i className="fa fa-graduation-cap" />
                                     <span className="admin-nav-text">Placement Officers</span>
-                                    <i className={`fa fa-chevron-${openMenus.placement ? 'down' : 'right'} arrow`} />
                                 </a>
                                 <ul className={`sub-menu ${openMenus.placement ? 'open' : ''}`}>
                                     <li className={currentpath === adminRoute(admin.PLACEMENT_MANAGE) ? 'active' : ''}>
