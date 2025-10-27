@@ -47,6 +47,9 @@ function CanSupport() {
 
     const validateForm = () => {
         const newErrors = {};
+        if (!formData.name.trim()) newErrors.name = 'Name is required';
+        if (!formData.email.trim()) newErrors.email = 'Email is required';
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Valid email is required';
         if (!formData.subject.trim()) newErrors.subject = 'Subject is required';
         if (!formData.message.trim()) newErrors.message = 'Message is required';
         setErrors(newErrors);
@@ -81,15 +84,31 @@ function CanSupport() {
         setIsSubmitting(true);
         try {
             const submitData = new FormData();
-            Object.keys(formData).forEach(key => {
-                submitData.append(key, formData[key]);
+            
+            // Ensure all required fields are present
+            const requiredData = {
+                name: formData.name.trim() || 'Candidate User',
+                email: formData.email.trim() || 'candidate@jobportal.com',
+                phone: formData.phone.trim() || '',
+                userType: formData.userType,
+                userId: formData.userId || '',
+                subject: formData.subject.trim(),
+                category: formData.category,
+                priority: formData.priority,
+                message: formData.message.trim()
+            };
+            
+            console.log('Submitting candidate support ticket with data:', requiredData);
+            
+            Object.keys(requiredData).forEach(key => {
+                submitData.append(key, requiredData[key]);
             });
             
             files.forEach(file => {
                 submitData.append('attachments', file);
             });
 
-            const response = await fetch('/api/public/support', {
+            const response = await fetch('http://localhost:5000/api/public/support', {
                 method: 'POST',
                 body: submitData
             });
@@ -106,7 +125,20 @@ function CanSupport() {
                 setFiles([]);
             } else {
                 const data = await response.json();
-                setErrors({ submit: data.message || 'Failed to submit support ticket' });
+                console.error('Support ticket submission failed:', data);
+                
+                // Handle validation errors
+                if (data.errors && Array.isArray(data.errors)) {
+                    const validationErrors = {};
+                    data.errors.forEach(error => {
+                        if (error.path) {
+                            validationErrors[error.path] = error.msg;
+                        }
+                    });
+                    setErrors({ ...validationErrors, submit: data.message || 'Validation failed' });
+                } else {
+                    setErrors({ submit: data.message || 'Failed to submit support ticket' });
+                }
             }
         } catch (error) {
             
@@ -162,6 +194,36 @@ function CanSupport() {
                                 )}
                                 
                                 <div className="row">
+                                    <div className="col-xl-6 col-lg-6 col-md-12">
+                                        <div className="form-group">
+                                            <label>Name *</label>
+                                            <input 
+                                                name="name" 
+                                                type="text" 
+                                                className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                                                placeholder="Your name" 
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                            />
+                                            {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="col-xl-6 col-lg-6 col-md-12">
+                                        <div className="form-group">
+                                            <label>Email *</label>
+                                            <input 
+                                                name="email" 
+                                                type="email" 
+                                                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                                                placeholder="Your email address" 
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                            />
+                                            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                                        </div>
+                                    </div>
+                                    
                                     <div className="col-xl-12 col-lg-12 col-md-12">
                                         <div className="form-group">
                                             <label>Subject *</label>

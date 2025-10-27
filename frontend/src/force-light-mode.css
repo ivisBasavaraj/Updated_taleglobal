@@ -53,6 +53,32 @@ body {
     border: 1px solid #d1d5db !important;
   }
 
+  /* Checkbox specific styles for visual feedback */
+  input[type="checkbox"], .form-check-input {
+    background-color: transparent !important;
+    border: 2px solid #d1d5db !important;
+    width: 1.25em !important;
+    height: 1.25em !important;
+    margin-top: 0.125em !important;
+    vertical-align: top !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+    border-radius: 0.25rem !important;
+    cursor: pointer !important;
+  }
+  
+  input[type="checkbox"]:checked, .form-check-input:checked {
+    background-color: #fd7e14 !important;
+    border-color: #fd7e14 !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='4' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+    background-size: 16px 16px !important;
+  }
+  
+  input[type="checkbox"]:hover, .form-check-input:hover {
+    border-color: #fd7e14 !important;
+  }
+
   /* Force all panels and cards to light mode */
   .panel,
   .panel-default,

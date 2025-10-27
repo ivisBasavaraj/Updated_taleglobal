@@ -1958,10 +1958,26 @@ exports.getSupportTicketById = async (req, res) => {
 exports.updateSupportTicketStatus = async (req, res) => {
   try {
     const { status, response } = req.body;
+    const ticketId = req.params.id;
     
-    const updateData = { status };
-    if (response) {
-      updateData.response = response;
+    // Validate ticket ID
+    if (!ticketId || !mongoose.Types.ObjectId.isValid(ticketId)) {
+      return res.status(400).json({ success: false, message: 'Invalid ticket ID provided' });
+    }
+    
+    // Validate status
+    const validStatuses = ['new', 'in-progress', 'resolved', 'closed'];
+    if (!status || !validStatuses.includes(status)) {
+      return res.status(400).json({ success: false, message: 'Invalid status provided' });
+    }
+    
+    const updateData = { 
+      status,
+      isRead: true // Mark as read when admin updates
+    };
+    
+    if (response && response.trim()) {
+      updateData.response = response.trim();
       updateData.respondedAt = new Date();
       updateData.respondedBy = req.user.id;
     }
@@ -1969,38 +1985,67 @@ exports.updateSupportTicketStatus = async (req, res) => {
     const ticket = await Support.findByIdAndUpdate(
       req.params.id,
       updateData,
-      { new: true }
-    ).populate('userId', 'name email companyName');
+      { new: true, runValidators: true }
+    ).populate('userId', 'name email companyName').populate('respondedBy', 'name email');
 
     if (!ticket) {
       return res.status(404).json({ success: false, message: 'Support ticket not found' });
     }
 
-    // Create notification for user if responded
-    if (response && ticket.userId) {
+    // Create notification for user if responded or status changed to resolved/closed
+    if ((response && response.trim()) || status === 'resolved' || status === 'closed') {
       try {
-        await createNotification({
-          title: 'Support Ticket Response',
-          message: `Your support ticket "${ticket.subject}" has been responded to by admin.`,
-          type: 'support_response',
-          role: ticket.userType,
-          relatedId: ticket.userId,
-          createdBy: req.user.id
-        });
+        let notificationTitle = 'Support Ticket Updated';
+        let notificationMessage = `Your support ticket "${ticket.subject}" has been updated by admin.`;
+        
+        if (status === 'resolved') {
+          notificationTitle = 'Support Ticket Resolved';
+          notificationMessage = `Your support ticket "${ticket.subject}" has been resolved.`;
+        } else if (status === 'closed') {
+          notificationTitle = 'Support Ticket Closed';
+          notificationMessage = `Your support ticket "${ticket.subject}" has been closed.`;
+        } else if (response && response.trim()) {
+          notificationTitle = 'Support Ticket Response';
+          notificationMessage = `Your support ticket "${ticket.subject}" has been responded to by admin.`;
+        }
+        
+        if (ticket.userId) {
+          await createNotification({
+            title: notificationTitle,
+            message: notificationMessage,
+            type: 'support_response',
+            role: ticket.userType,
+            relatedId: ticket.userId,
+            createdBy: req.user.id
+          });
+        }
       } catch (notifError) {
         console.error('Error creating support response notification:', notifError);
+        // Don't fail the request if notification fails
       }
     }
 
-    res.json({ success: true, ticket });
+    res.json({ 
+      success: true, 
+      ticket,
+      message: `Support ticket ${status === 'closed' ? 'closed' : 'updated'} successfully`
+    });
   } catch (error) {
+    console.error('Error updating support ticket:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
 exports.deleteSupportTicket = async (req, res) => {
   try {
-    const ticket = await Support.findByIdAndDelete(req.params.id);
+    const ticketId = req.params.id;
+    
+    // Validate ticket ID
+    if (!ticketId || !mongoose.Types.ObjectId.isValid(ticketId)) {
+      return res.status(400).json({ success: false, message: 'Invalid ticket ID provided' });
+    }
+    
+    const ticket = await Support.findByIdAndDelete(ticketId);
     
     if (!ticket) {
       return res.status(404).json({ success: false, message: 'Support ticket not found' });
@@ -2008,6 +2053,7 @@ exports.deleteSupportTicket = async (req, res) => {
 
     res.json({ success: true, message: 'Support ticket deleted successfully' });
   } catch (error) {
+    console.error('Error deleting support ticket:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

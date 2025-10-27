@@ -2,6 +2,44 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Badge, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
 import './admin-support-tickets.css';
 
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false, error: null };
+    }
+
+    static getDerivedStateFromError(error) {
+        return { hasError: true, error };
+    }
+
+    componentDidCatch(error, errorInfo) {
+        console.error('Support Tickets Error:', error, errorInfo);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return (
+                <div className="error-boundary-container">
+                    <div className="error-content">
+                        <h3>⚠️ Something went wrong</h3>
+                        <p>There was an error loading the support tickets page.</p>
+                        <Button 
+                            onClick={() => {
+                                this.setState({ hasError: false, error: null });
+                                window.location.reload();
+                            }}
+                        >
+                            🔄 Reload Page
+                        </Button>
+                    </div>
+                </div>
+            );
+        }
+
+        return this.props.children;
+    }
+}
+
 function AdminSupportTickets() {
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -21,6 +59,7 @@ function AdminSupportTickets() {
         inProgress: 0,
         resolved: 0
     });
+    const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
         fetchSupportTickets();
@@ -30,6 +69,13 @@ function AdminSupportTickets() {
         try {
             setLoading(true);
             const token = localStorage.getItem('adminToken');
+            
+            if (!token) {
+                console.error('No admin token found');
+                alert('Authentication token not found. Please login again.');
+                return;
+            }
+            
             const queryParams = new URLSearchParams(filters).toString();
             
             const response = await fetch(`http://localhost:5000/api/admin/support-tickets?${queryParams}`, {
@@ -41,20 +87,38 @@ function AdminSupportTickets() {
 
             if (response.ok) {
                 const data = await response.json();
-                setTickets(data.tickets || []);
                 
-                // Calculate stats
-                const newStats = {
-                    total: data.totalTickets || 0,
-                    unread: data.unreadCount || 0,
-                    new: data.tickets?.filter(t => t.status === 'new').length || 0,
-                    inProgress: data.tickets?.filter(t => t.status === 'in-progress').length || 0,
-                    resolved: data.tickets?.filter(t => t.status === 'resolved').length || 0
-                };
-                setStats(newStats);
+                if (data.success) {
+                    setTickets(data.tickets || []);
+                    
+                    // Calculate stats
+                    const newStats = {
+                        total: data.totalTickets || 0,
+                        unread: data.unreadCount || 0,
+                        new: data.tickets?.filter(t => t.status === 'new').length || 0,
+                        inProgress: data.tickets?.filter(t => t.status === 'in-progress').length || 0,
+                        resolved: data.tickets?.filter(t => t.status === 'resolved').length || 0
+                    };
+                    setStats(newStats);
+                } else {
+                    console.error('API returned error:', data.message);
+                    alert(data.message || 'Failed to fetch support tickets');
+                }
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                console.error('HTTP error:', response.status, errorData);
+                
+                if (response.status === 401) {
+                    alert('Session expired. Please login again.');
+                    localStorage.removeItem('adminToken');
+                    window.location.href = '/admin-login';
+                } else {
+                    alert(errorData.message || 'Failed to fetch support tickets');
+                }
             }
         } catch (error) {
-            
+            console.error('Error fetching support tickets:', error);
+            alert('Network error. Please check your connection and try again.');
         } finally {
             setLoading(false);
         }
@@ -84,9 +148,18 @@ function AdminSupportTickets() {
     };
 
     const handleUpdateTicket = async () => {
+        if (updating) return; // Prevent multiple clicks
+        
         try {
+            setUpdating(true);
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`http://localhost:5000/api/admin/support-tickets/${selectedTicket._id}/status`, {
+            
+            if (!token) {
+                alert('Authentication token not found. Please login again.');
+                return;
+            }
+            
+            const apiResponse = await fetch(`http://localhost:5000/api/admin/support-tickets/${selectedTicket._id}/status`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -95,16 +168,60 @@ function AdminSupportTickets() {
                 body: JSON.stringify({ status, response })
             });
 
-            if (response.ok) {
+            const result = await apiResponse.json();
+            
+            if (apiResponse.ok && result.success) {
                 setShowModal(false);
-                fetchSupportTickets();
-                alert('Support ticket updated successfully');
+                setSelectedTicket(null);
+                setResponse('');
+                setStatus('');
+                await fetchSupportTickets();
+                alert(result.message || 'Support ticket updated successfully');
             } else {
-                alert('Failed to update support ticket');
+                console.error('Update failed:', result);
+                alert(result.message || 'Failed to update support ticket');
             }
         } catch (error) {
+            console.error('Error updating support ticket:', error);
+            alert('Error updating support ticket. Please try again.');
+        } finally {
+            setUpdating(false);
+        }
+    };
+
+    const handleDeleteTicket = async (ticketId) => {
+        if (!window.confirm('Are you sure you want to delete this support ticket? This action cannot be undone.')) {
+            return;
+        }
+        
+        try {
+            const token = localStorage.getItem('adminToken');
             
-            alert('Error updating support ticket');
+            if (!token) {
+                alert('Authentication token not found. Please login again.');
+                return;
+            }
+            
+            const response = await fetch(`http://localhost:5000/api/admin/support-tickets/${ticketId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+            
+            if (response.ok && result.success) {
+                await fetchSupportTickets();
+                alert('Support ticket deleted successfully');
+            } else {
+                console.error('Delete failed:', result);
+                alert(result.message || 'Failed to delete support ticket');
+            }
+        } catch (error) {
+            console.error('Error deleting support ticket:', error);
+            alert('Error deleting support ticket. Please try again.');
         }
     };
 
@@ -148,6 +265,7 @@ function AdminSupportTickets() {
     }
 
     return (
+        <ErrorBoundary>
         <div className="support-tickets-container admin-container">
             <Container fluid>
                 <div className="support-header">
@@ -357,13 +475,26 @@ function AdminSupportTickets() {
                                                             <div className="ticket-date">{new Date(ticket.createdAt).toLocaleDateString()}</div>
                                                         </td>
                                                         <td>
-                                                            <Button 
-                                                                className="view-btn"
-                                                                size="sm" 
-                                                                onClick={() => handleTicketClick(ticket)}
-                                                            >
-                                                                👁️ View
-                                                            </Button>
+                                                            <div className="action-buttons">
+                                                                <Button 
+                                                                    className="view-btn"
+                                                                    size="sm" 
+                                                                    onClick={() => handleTicketClick(ticket)}
+                                                                >
+                                                                    👁️ View
+                                                                </Button>
+                                                                <Button 
+                                                                    className="delete-btn ms-1"
+                                                                    size="sm" 
+                                                                    variant="outline-danger"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handleDeleteTicket(ticket._id);
+                                                                    }}
+                                                                >
+                                                                    🗑️
+                                                                </Button>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -378,7 +509,18 @@ function AdminSupportTickets() {
             </Container>
 
             {/* Ticket Detail Modal */}
-            <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
+            <Modal 
+                show={showModal} 
+                onHide={() => {
+                    setShowModal(false);
+                    setSelectedTicket(null);
+                    setResponse('');
+                    setStatus('');
+                }} 
+                size="lg"
+                backdrop="static"
+                keyboard={false}
+            >
                 <Modal.Header closeButton>
                     <Modal.Title>🎫 Support Ticket Details</Modal.Title>
                 </Modal.Header>
@@ -407,13 +549,9 @@ function AdminSupportTickets() {
                                 </Col>
                             </Row>
                             <Row className="mb-3">
-                                <Col md={6}>
+                                <Col md={12}>
                                     <div className="detail-label">📂 Category:</div>
                                     <div>{selectedTicket.category}</div>
-                                </Col>
-                                <Col md={6}>
-                                    <div className="detail-label">📞 Phone:</div>
-                                    <div>{selectedTicket.phone || 'N/A'}</div>
                                 </Col>
                             </Row>
                             <Row className="mb-3">
@@ -477,15 +615,35 @@ function AdminSupportTickets() {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button className="close-btn" onClick={() => setShowModal(false)}>
+                    <Button 
+                        className="close-btn" 
+                        onClick={() => {
+                            setShowModal(false);
+                            setSelectedTicket(null);
+                            setResponse('');
+                            setStatus('');
+                        }}
+                    >
                         ❌ Close
                     </Button>
-                    <Button className="update-btn" onClick={handleUpdateTicket}>
-                        ✅ Update Ticket
+                    <Button 
+                        className="update-btn" 
+                        onClick={handleUpdateTicket}
+                        disabled={updating}
+                    >
+                        {updating ? (
+                            <>
+                                <Spinner animation="border" size="sm" className="me-2" />
+                                Updating...
+                            </>
+                        ) : (
+                            '✅ Update Ticket'
+                        )}
                     </Button>
                 </Modal.Footer>
             </Modal>
         </div>
+        </ErrorBoundary>
     );
 }
 
