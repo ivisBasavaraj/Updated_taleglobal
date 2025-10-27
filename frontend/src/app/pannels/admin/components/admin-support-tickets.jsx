@@ -2,44 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Badge, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
 import './admin-support-tickets.css';
 
-class ErrorBoundary extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { hasError: false, error: null };
-    }
-
-    static getDerivedStateFromError(error) {
-        return { hasError: true, error };
-    }
-
-    componentDidCatch(error, errorInfo) {
-        console.error('Support Tickets Error:', error, errorInfo);
-    }
-
-    render() {
-        if (this.state.hasError) {
-            return (
-                <div className="error-boundary-container">
-                    <div className="error-content">
-                        <h3>⚠️ Something went wrong</h3>
-                        <p>There was an error loading the support tickets page.</p>
-                        <Button 
-                            onClick={() => {
-                                this.setState({ hasError: false, error: null });
-                                window.location.reload();
-                            }}
-                        >
-                            🔄 Reload Page
-                        </Button>
-                    </div>
-                </div>
-            );
-        }
-
-        return this.props.children;
-    }
-}
-
 function AdminSupportTickets() {
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -60,6 +22,12 @@ function AdminSupportTickets() {
         resolved: 0
     });
     const [updating, setUpdating] = useState(false);
+    const [isMounted, setIsMounted] = useState(true);
+
+    useEffect(() => {
+        setIsMounted(true);
+        return () => setIsMounted(false);
+    }, []);
 
     useEffect(() => {
         fetchSupportTickets();
@@ -88,7 +56,7 @@ function AdminSupportTickets() {
             if (response.ok) {
                 const data = await response.json();
                 
-                if (data.success) {
+                if (data.success && isMounted) {
                     setTickets(data.tickets || []);
                     
                     // Calculate stats
@@ -120,7 +88,9 @@ function AdminSupportTickets() {
             console.error('Error fetching support tickets:', error);
             alert('Network error. Please check your connection and try again.');
         } finally {
-            setLoading(false);
+            if (isMounted) {
+                setLoading(false);
+            }
         }
     };
 
@@ -171,11 +141,13 @@ function AdminSupportTickets() {
             const result = await apiResponse.json();
             
             if (apiResponse.ok && result.success) {
-                setShowModal(false);
-                setSelectedTicket(null);
-                setResponse('');
-                setStatus('');
                 await fetchSupportTickets();
+                setShowModal(false);
+                setTimeout(() => {
+                    setSelectedTicket(null);
+                    setResponse('');
+                    setStatus('');
+                }, 100);
                 alert(result.message || 'Support ticket updated successfully');
             } else {
                 console.error('Update failed:', result);
@@ -185,7 +157,9 @@ function AdminSupportTickets() {
             console.error('Error updating support ticket:', error);
             alert('Error updating support ticket. Please try again.');
         } finally {
-            setUpdating(false);
+            if (isMounted) {
+                setUpdating(false);
+            }
         }
     };
 
@@ -265,7 +239,6 @@ function AdminSupportTickets() {
     }
 
     return (
-        <ErrorBoundary>
         <div className="support-tickets-container admin-container">
             <Container fluid>
                 <div className="support-header">
@@ -643,7 +616,6 @@ function AdminSupportTickets() {
                 </Modal.Footer>
             </Modal>
         </div>
-        </ErrorBoundary>
     );
 }
 
