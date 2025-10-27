@@ -141,13 +141,11 @@ function AdminSupportTickets() {
             const result = await apiResponse.json();
             
             if (apiResponse.ok && result.success) {
-                await fetchSupportTickets();
                 setShowModal(false);
-                setTimeout(() => {
-                    setSelectedTicket(null);
-                    setResponse('');
-                    setStatus('');
-                }, 100);
+                setSelectedTicket(null);
+                setResponse('');
+                setStatus('');
+                fetchSupportTickets();
                 alert(result.message || 'Support ticket updated successfully');
             } else {
                 console.error('Update failed:', result);
@@ -157,9 +155,7 @@ function AdminSupportTickets() {
             console.error('Error updating support ticket:', error);
             alert('Error updating support ticket. Please try again.');
         } finally {
-            if (isMounted) {
-                setUpdating(false);
-            }
+            setUpdating(false);
         }
     };
 
@@ -486,11 +482,9 @@ function AdminSupportTickets() {
                 show={showModal} 
                 onHide={() => {
                     setShowModal(false);
-                    setTimeout(() => {
-                        setSelectedTicket(null);
-                        setResponse('');
-                        setStatus('');
-                    }, 100);
+                    setSelectedTicket(null);
+                    setResponse('');
+                    setStatus('');
                 }} 
                 size="lg"
             >
