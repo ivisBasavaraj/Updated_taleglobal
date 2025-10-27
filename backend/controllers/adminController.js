@@ -1992,7 +1992,7 @@ exports.updateSupportTicketStatus = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Support ticket not found' });
     }
 
-    // Create notification for user if responded or status changed to resolved/closed
+    // Create notification for user if responded or status changed
     if ((response && response.trim()) || status === 'resolved' || status === 'closed') {
       try {
         let notificationTitle = 'Support Ticket Updated';
@@ -2006,16 +2006,31 @@ exports.updateSupportTicketStatus = async (req, res) => {
           notificationMessage = `Your support ticket "${ticket.subject}" has been closed.`;
         } else if (response && response.trim()) {
           notificationTitle = 'Support Ticket Response';
-          notificationMessage = `Your support ticket "${ticket.subject}" has been responded to by admin.`;
+          notificationMessage = `Your support ticket "${ticket.subject}" has been responded to by admin. Response: ${response.trim()}`;
         }
         
-        if (ticket.userId) {
+        // Find user by email if userId not available
+        let targetUserId = ticket.userId;
+        if (!targetUserId && ticket.email) {
+          const Employer = require('../models/Employer');
+          const Candidate = require('../models/Candidate');
+          
+          if (ticket.userType === 'employer') {
+            const employer = await Employer.findOne({ email: ticket.email }).select('_id');
+            targetUserId = employer?._id;
+          } else if (ticket.userType === 'candidate') {
+            const candidate = await Candidate.findOne({ email: ticket.email }).select('_id');
+            targetUserId = candidate?._id;
+          }
+        }
+        
+        if (targetUserId) {
           await createNotification({
             title: notificationTitle,
             message: notificationMessage,
             type: 'support_response',
             role: ticket.userType,
-            relatedId: ticket.userId,
+            relatedId: targetUserId,
             createdBy: req.user.id
           });
         }
