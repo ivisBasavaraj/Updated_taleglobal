@@ -15,7 +15,6 @@ import "./index16-mobile-fix.css";
 import "./logo-fix.css";
 import "./mobile-card-scrolling.css";
 import "./force-light-mode.css";
-import "./interactive-feedback.css";
 
 function App() {
 

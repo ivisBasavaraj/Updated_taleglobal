@@ -18,9 +18,6 @@ function SignInPopup() {
     const [showCanPassword, setShowCanPassword] = useState(false);
     const [showEmpPassword, setShowEmpPassword] = useState(false);
     const [showPlacementPassword, setShowPlacementPassword] = useState(false);
-    const [canRememberMe, setCanRememberMe] = useState(false);
-    const [empRememberMe, setEmpRememberMe] = useState(false);
-    const [placementRememberMe, setPlacementRememberMe] = useState(false);
 
     useEffect(() => {
         setCanUsername('');
@@ -230,23 +227,18 @@ function SignInPopup() {
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<div className="form-check">
+														<div className=" form-check">
 															<input
 																type="checkbox"
 																className="form-check-input"
 																id="Password3"
-																checked={canRememberMe}
-																onChange={(e) => setCanRememberMe(e.target.checked)}
 															/>
 															<label
-																className="form-check-label"
+																className="form-check-label rem-forgot"
 																htmlFor="Password3"
 															>
-																Remember me
-															</label>
-															<div className="rem-forgot">
 																<NavLink to={pubRoute(publicUser.pages.FORGOT)} onClick={() => navigate(pubRoute(publicUser.pages.FORGOT))}>Forgot Password</NavLink>
-															</div>
+															</label>
 														</div>
 													</div>
 												</div>
@@ -330,23 +322,18 @@ function SignInPopup() {
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<div className="form-check">
+														<div className=" form-check">
 															<input
 																type="checkbox"
 																className="form-check-input"
 																id="Password4"
-																checked={empRememberMe}
-																onChange={(e) => setEmpRememberMe(e.target.checked)}
 															/>
 															<label
-																className="form-check-label"
+																className="form-check-label rem-forgot"
 																htmlFor="Password4"
 															>
-																Remember me
-															</label>
-															<div className="rem-forgot">
 																<a href="/forgot-password">Forgot Password</a>
-															</div>
+															</label>
 														</div>
 													</div>
 												</div>
@@ -430,23 +417,18 @@ function SignInPopup() {
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<div className="form-check">
+														<div className=" form-check">
 															<input
 																type="checkbox"
 																className="form-check-input"
 																id="Password5"
-																checked={placementRememberMe}
-																onChange={(e) => setPlacementRememberMe(e.target.checked)}
 															/>
 															<label
-																className="form-check-label"
+																className="form-check-label rem-forgot"
 																htmlFor="Password5"
 															>
-																Remember me
-															</label>
-															<div className="rem-forgot">
 																<NavLink to={pubRoute(publicUser.pages.FORGOT)} onClick={() => navigate(pubRoute(publicUser.pages.FORGOT))}>Forgot Password</NavLink>
-															</div>
+															</label>
 														</div>
 													</div>
 												</div>
