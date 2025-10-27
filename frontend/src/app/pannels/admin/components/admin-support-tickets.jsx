@@ -513,13 +513,13 @@ function AdminSupportTickets() {
                 show={showModal} 
                 onHide={() => {
                     setShowModal(false);
-                    setSelectedTicket(null);
-                    setResponse('');
-                    setStatus('');
+                    setTimeout(() => {
+                        setSelectedTicket(null);
+                        setResponse('');
+                        setStatus('');
+                    }, 100);
                 }} 
                 size="lg"
-                backdrop="static"
-                keyboard={false}
             >
                 <Modal.Header closeButton>
                     <Modal.Title>🎫 Support Ticket Details</Modal.Title>
