@@ -155,7 +155,7 @@ function LoginPage() {
                                                         <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Employer" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-building me-2" style={{color: 'white'}} />Employer</button>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Placement" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-graduation-cap me-2" style={{color: 'white'}} />Placement</button>
+                                                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Placement" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-graduation-cap me-2" style={{color: 'white'}} />Placement Officer</button>
                                                     </li>
                                                 </ul>
                                                 <div className="tab-content" id="myTab2Content">
