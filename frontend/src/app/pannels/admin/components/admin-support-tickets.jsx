@@ -26,7 +26,9 @@ function AdminSupportTickets() {
 
     useEffect(() => {
         setIsMounted(true);
-        return () => setIsMounted(false);
+        return () => {
+            setIsMounted(false);
+        };
     }, []);
 
     useEffect(() => {
@@ -140,14 +142,13 @@ function AdminSupportTickets() {
 
             const result = await apiResponse.json();
             
-            if (apiResponse.ok && result.success) {
+            if (apiResponse.ok && result.success && isMounted) {
                 setShowModal(false);
                 setSelectedTicket(null);
                 setResponse('');
                 setStatus('');
                 fetchSupportTickets();
-                alert(result.message || 'Support ticket updated successfully');
-            } else {
+            } else if (isMounted) {
                 console.error('Update failed:', result);
                 alert(result.message || 'Failed to update support ticket');
             }
@@ -155,7 +156,9 @@ function AdminSupportTickets() {
             console.error('Error updating support ticket:', error);
             alert('Error updating support ticket. Please try again.');
         } finally {
-            setUpdating(false);
+            if (isMounted) {
+                setUpdating(false);
+            }
         }
     };
 
@@ -585,10 +588,12 @@ function AdminSupportTickets() {
                     <Button 
                         className="close-btn" 
                         onClick={() => {
-                            setShowModal(false);
-                            setSelectedTicket(null);
-                            setResponse('');
-                            setStatus('');
+                            if (isMounted) {
+                                setShowModal(false);
+                                setSelectedTicket(null);
+                                setResponse('');
+                                setStatus('');
+                            }
                         }}
                     >
                         ❌ Close

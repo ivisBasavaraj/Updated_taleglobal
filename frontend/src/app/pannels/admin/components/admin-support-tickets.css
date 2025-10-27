@@ -308,12 +308,14 @@
 }
 
 .update-btn:disabled {
-  background: #6c757d;
-  cursor: not-allowed;
+  background: #6c757d !important;
+  cursor: not-allowed !important;
+  color: white !important;
 }
 
 .update-btn:disabled:hover {
-  background: #6c757d;
+  background: #6c757d !important;
+  color: white !important;
 }
 
 .new-badge {
@@ -399,31 +401,47 @@
 }
 
 .update-btn {
-  background: #28a745;
-  border: none;
-  border-radius: 6px;
-  padding: 0.75rem 1.5rem;
-  color: white;
-  font-weight: 500;
-  transition: background 0.2s ease;
+  background: #28a745 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 0.75rem 1.5rem !important;
+  color: white !important;
+  font-weight: 500 !important;
+  transition: background 0.2s ease !important;
+  cursor: pointer !important;
 }
 
 .update-btn:hover {
-  background: #218838;
+  background: #218838 !important;
+  color: white !important;
+}
+
+.update-btn:focus {
+  background: #218838 !important;
+  color: white !important;
+  box-shadow: none !important;
 }
 
 .close-btn {
-  background: #6c757d;
-  border: none;
-  border-radius: 6px;
-  padding: 0.75rem 1.5rem;
-  color: white;
-  font-weight: 500;
-  transition: background 0.2s ease;
+  background: #6c757d !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 0.75rem 1.5rem !important;
+  color: white !important;
+  font-weight: 500 !important;
+  transition: background 0.2s ease !important;
+  cursor: pointer !important;
 }
 
 .close-btn:hover {
-  background: #5a6268;
+  background: #5a6268 !important;
+  color: white !important;
+}
+
+.close-btn:focus {
+  background: #5a6268 !important;
+  color: white !important;
+  box-shadow: none !important;
 }
 
 .empty-state {
