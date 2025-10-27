@@ -62,7 +62,6 @@ function AdminSupportTickets() {
                 if (data.success && isMounted) {
                     setTickets(data.tickets || []);
                     
-                    // Calculate stats
                     const newStats = {
                         total: data.totalTickets || 0,
                         unread: data.unreadCount || 0,
@@ -103,7 +102,6 @@ function AdminSupportTickets() {
         setStatus(ticket.status);
         setShowModal(true);
 
-        // Mark as read if not already read
         if (!ticket.isRead) {
             try {
                 const token = localStorage.getItem('adminToken');
@@ -113,10 +111,59 @@ function AdminSupportTickets() {
                         'Content-Type': 'application/json'
                     }
                 });
-                fetchSupportTickets(); // Refresh to update read status
+                fetchSupportTickets();
             } catch (error) {
                 
             }
+        }
+    };
+
+    const handleAttachmentClick = async (event, ticketId, attachmentIndex, originalName) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const token = localStorage.getItem('adminToken');
+        if (!token) {
+            alert('Authentication token not found. Please login again.');
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:5000/api/admin/support-tickets/${ticketId}/attachments/${attachmentIndex}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) {
+                if (response.status === 401) {
+                    alert('Session expired. Please login again.');
+                    localStorage.removeItem('adminToken');
+                    window.location.href = '/admin-login';
+                    return;
+                }
+                const errorData = await response.json().catch(() => ({}));
+                alert(errorData.message || 'Failed to open attachment');
+                return;
+            }
+            const blob = await response.blob();
+            const fileName = originalName || `attachment-${attachmentIndex + 1}`;
+            const objectURL = URL.createObjectURL(blob);
+            if (blob.type.startsWith('image/')) {
+                const imageWindow = window.open();
+                if (imageWindow) {
+                    imageWindow.document.write(`<title>${fileName}</title><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;"><img src="${objectURL}" style="max-width:100%;height:auto;"/></body>`);
+                } else {
+                    window.open(objectURL, '_blank');
+                }
+            } else {
+                const downloadLink = document.createElement('a');
+                downloadLink.href = objectURL;
+                downloadLink.download = fileName;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            }
+            setTimeout(() => URL.revokeObjectURL(objectURL), 10000);
+        } catch (error) {
+            alert('Failed to open attachment. Please try again.');
         }
     };
 
@@ -545,14 +592,12 @@ function AdminSupportTickets() {
                                         <ul className="attachment-list">
                                             {selectedTicket.attachments.map((attachment, index) => (
                                                 <li key={index} className="attachment-item">
-                                                    <a 
+                                                    <button 
                                                         className="attachment-link"
-                                                        href={`http://localhost:5000/api/admin/support-tickets/${selectedTicket._id}/attachments/${index}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
+                                                        onClick={(event) => handleAttachmentClick(event, selectedTicket._id, index, attachment.originalName)}
                                                     >
                                                         📄 {attachment.originalName}
-                                                    </a>
+                                                    </button>
                                                 </li>
                                             ))}
                                         </ul>

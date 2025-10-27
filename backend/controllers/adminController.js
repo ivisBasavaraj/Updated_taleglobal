@@ -2074,8 +2074,10 @@ exports.downloadSupportAttachment = async (req, res) => {
 
     const { buffer, mimeType } = base64ToBuffer(attachment.data);
     
+    if (req.query.download === '1') {
+      res.setHeader('Content-Disposition', `attachment; filename="${attachment.originalName}"`);
+    }
     res.setHeader('Content-Type', mimeType);
-    res.setHeader('Content-Disposition', `attachment; filename="${attachment.originalName}"`);
     res.send(buffer);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

@@ -21,7 +21,8 @@
 
 .support-header p {
   margin: 0.5rem 0 0 0;
-  opacity: 0.9;
+  opacity: 0.95;
+  color: #ff8c42;
 }
 
 /* Dashboard Stats Cards */
@@ -375,6 +376,10 @@
   color: #667eea;
   text-decoration: none;
   font-weight: 500;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 .attachment-link:hover {
