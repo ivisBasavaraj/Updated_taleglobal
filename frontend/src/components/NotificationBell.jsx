@@ -130,19 +130,19 @@ const NotificationBell = ({ userRole }) => {
 
       {userRole && isOpen && (
         <div style={{
-          position: 'absolute',
-          top: '100%',
-          right: '0',
-          width: isMobile ? 'calc(100vw - 40px)' : '300px',
+          position: isMobile ? 'fixed' : 'absolute',
+          top: isMobile ? '60px' : '100%',
+          right: isMobile ? '10px' : '0',
+          width: isMobile ? 'calc(100vw - 20px)' : '300px',
           maxWidth: isMobile ? '360px' : '300px',
           background: 'white',
           border: '1px solid #ddd',
           borderRadius: '8px',
           boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          zIndex: 1000,
-          left: isMobile ? '50%' : 'auto',
-          transform: isMobile ? 'translateX(-50%)' : 'none',
-          marginTop: isMobile ? '10px' : '0'
+          zIndex: 99999,
+          left: isMobile ? '10px' : 'auto',
+          transform: 'none',
+          marginTop: '0'
         }}>
           <div style={{
             padding: '12px 16px',

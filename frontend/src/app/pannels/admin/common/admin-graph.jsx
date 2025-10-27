@@ -117,39 +117,32 @@ function AdminDashboardActivityChart() {
 	};
 
 	return (
-		<div
-			className="row"
-			style={{
-				display: "flex",
-				flexWrap: "nowrap",
-				gap: "30px",
-			}}
-		>
+		<div className="row">
 			{/* Bar Chart */}
-			<div className="col-md-6" style={{ flex: 1 }}>
-				<div className="panel panel-default site-bg-white">
-					<div className="panel-heading wt-panel-heading p-a25">
-						<h4 className="panel-tittle m-a0">
-							<i className="far fa-chart-bar" /> Monthly Trends (Last 6 Months)
+			<div className="col-lg-6 col-md-12 mb-4">
+				<div className="panel panel-default site-bg-white" style={{ borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
+					<div className="panel-heading wt-panel-heading p-a25" style={{ background: '#f8f9fa', borderBottom: '1px solid #dee2e6' }}>
+						<h4 className="panel-tittle m-a0" style={{ color: '#333', fontSize: '16px', fontWeight: '600' }}>
+							<i className="far fa-chart-bar" style={{ color: '#ff6b35', marginRight: '8px' }} /> Monthly Trends (Last 6 Months)
 						</h4>
 					</div>
 
-					<div className="panel-body wt-panel-body" style={{ height: "350px" }}>
+					<div className="panel-body wt-panel-body" style={{ height: window.innerWidth <= 768 ? "250px" : "350px", padding: '20px' }}>
 						<Bar data={barData} options={chartOptions} />
 					</div>
 				</div>
 			</div>
 
 			{/* Pie Chart */}
-			<div className="col-md-6" style={{ flex: 1 }}>
-				<div className="panel panel-default site-bg-white">
-					<div className="panel-heading wt-panel-heading p-a25">
-						<h4 className="panel-tittle m-a0">
-							<i className="fas fa-chart-pie" /> Top Employers by Job Count
+			<div className="col-lg-6 col-md-12 mb-4">
+				<div className="panel panel-default site-bg-white" style={{ borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
+					<div className="panel-heading wt-panel-heading p-a25" style={{ background: '#f8f9fa', borderBottom: '1px solid #dee2e6' }}>
+						<h4 className="panel-tittle m-a0" style={{ color: '#333', fontSize: '16px', fontWeight: '600' }}>
+							<i className="fas fa-chart-pie" style={{ color: '#ff6b35', marginRight: '8px' }} /> Top Employers by Job Count
 						</h4>
 					</div>
 					
-					<div className="panel-body wt-panel-body" style={{ height: "350px" }}>
+					<div className="panel-body wt-panel-body" style={{ height: window.innerWidth <= 768 ? "250px" : "350px", padding: '20px' }}>
 						<Pie data={pieData} options={chartOptions} />
 					</div>
 				</div>

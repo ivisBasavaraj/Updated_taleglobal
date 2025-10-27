@@ -163,38 +163,88 @@
 /* Responsive design */
 @media (max-width: 768px) {
     .admin-dashboard-container {
-        padding: 15px;
+        padding: 10px;
     }
     
     .admin-dashboard-header {
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-    
-    .admin-dashboard-header h2 {
-        font-size: 24px;
-    }
-    
-    .wt-card-wrap {
-        padding: 25px 15px;
-    }
-    
-    .wt-card-icon {
-        font-size: 40px;
+        padding: 15px;
         margin-bottom: 15px;
     }
     
+    .admin-dashboard-header h2 {
+        font-size: 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .admin-dashboard-header .dashboard-subtitle {
+        font-size: 14px;
+        text-align: center;
+    }
+    
+    .wt-card-wrap {
+        padding: 20px 10px;
+    }
+    
+    .wt-card-icon {
+        font-size: 36px;
+        margin-bottom: 12px;
+    }
+    
     .wt-card-right {
-        font-size: 28px;
-        margin-bottom: 10px;
+        font-size: 24px;
+        margin-bottom: 8px;
     }
     
     .wt-card-bottom h4 {
-        font-size: 14px;
+        font-size: 12px;
     }
     
     .chart-section {
-        padding: 20px;
+        padding: 15px;
+        margin: 0 -5px;
+    }
+    
+    .chart-header h3 {
+        font-size: 18px;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    /* Chart panels mobile optimization */
+    .panel {
+        margin-bottom: 15px !important;
+    }
+    
+    .panel-heading {
+        padding: 15px !important;
+    }
+    
+    .panel-tittle {
+        font-size: 14px !important;
+        text-align: center;
+    }
+    
+    .panel-body {
+        padding: 15px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-dashboard-container {
+        padding: 5px;
+    }
+    
+    .admin-dashboard-header h2 {
+        font-size: 18px;
+    }
+    
+    .wt-card-right {
+        font-size: 20px;
+    }
+    
+    .chart-section {
+        padding: 10px;
     }
 }
 
