@@ -659,13 +659,9 @@ exports.getApplications = async (req, res) => {
 
 exports.getRegisteredCandidates = async (req, res) => {
   try {
-    const { page = 1, limit = 50 } = req.query;
-
-    // Use aggregation for better performance
+    // Remove pagination to load all candidates quickly
     const candidatesWithProfiles = await Candidate.aggregate([
       { $sort: { createdAt: -1 } },
-      { $skip: (page - 1) * parseInt(limit) },
-      { $limit: parseInt(limit) },
       {
         $lookup: {
           from: 'candidateprofiles',
