@@ -562,76 +562,70 @@ function Home16Page() {
 						<div className="twm-how-it-work-section3">
 							<Row>
 								<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-4">
-									<div className="twm-w-process-steps3 hover-card">
-										<div className="twm-w-pro-top">
-											<div className="twm-media">
-												<span>
-													<JobZImage
-														src="images/work-process/icon1.png"
-														alt="icon1"
-													/>
-												</span>
+									<div className="twm-w-process-steps3 hover-card" style={{display: 'flex', alignItems: 'center', padding: '25px', borderRadius: '12px'}}>
+										<div className="twm-media" style={{flexShrink: '0', marginRight: '20px'}}>
+											<div style={{width: '60px', height: '60px', background: 'linear-gradient(135deg, #FF6A00 0%, #FF8A00 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+												<svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<circle cx="12" cy="7" r="4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+												</svg>
 											</div>
 										</div>
-
-										<h4 className="twm-title">Register Your Account</h4>
-										<p>You need to create an account to find the best jobs.</p>
+										<div style={{flex: '1'}}>
+											<h4 className="twm-title" style={{marginBottom: '10px', fontSize: '18px'}}>1. Register Your Account</h4>
+											<p style={{marginBottom: '0', fontSize: '14px', lineHeight: '1.5'}}>You need to create an account to find the best jobs.</p>
+										</div>
 									</div>
 								</Col>
 
 								<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-4">
-									<div className="twm-w-process-steps3 hover-card">
-										<div className="twm-w-pro-top">
-											<div className="twm-media">
-												<span>
-													<JobZImage
-														src="images/work-process/icon4.png"
-														alt="icon2"
-													/>
-												</span>
+									<div className="twm-w-process-steps3 hover-card" style={{display: 'flex', alignItems: 'center', padding: '25px', borderRadius: '12px'}}>
+										<div className="twm-media" style={{flexShrink: '0', marginRight: '20px'}}>
+											<div style={{width: '60px', height: '60px', background: 'linear-gradient(135deg, #FF6A00 0%, #FF8A00 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+												<svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<circle cx="11" cy="11" r="8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<path d="M21 21L16.65 16.65" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+												</svg>
 											</div>
 										</div>
-
-										<h4 className="twm-title">Search and Apply</h4>
-										<p>Search your preferred jobs and apply the best jobs.</p>
+										<div style={{flex: '1'}}>
+											<h4 className="twm-title" style={{marginBottom: '10px', fontSize: '18px'}}>2. Search and Apply</h4>
+											<p style={{marginBottom: '0', fontSize: '14px', lineHeight: '1.5'}}>Search your preferred jobs and apply the best jobs.</p>
+										</div>
 									</div>
 								</Col>
 
 								<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-4">
-									<div className="twm-w-process-steps3 hover-card">
-										<div className="twm-w-pro-top">
-											<div className="twm-media">
-												<span>
-													<JobZImage
-														src="images/work-process/icon3.png"
-														alt="icon1"
-													/>
-												</span>
+									<div className="twm-w-process-steps3 hover-card" style={{display: 'flex', alignItems: 'center', padding: '25px', borderRadius: '12px'}}>
+										<div className="twm-media" style={{flexShrink: '0', marginRight: '20px'}}>
+											<div style={{width: '60px', height: '60px', background: 'linear-gradient(135deg, #FF6A00 0%, #FF8A00 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+												<svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<path d="M9 12L11 14L15 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+												</svg>
 											</div>
 										</div>
-
-										<h4 className="twm-title">Take Assessment</h4>
-										<p>Take assessment curated based on the job profile.</p>
+										<div style={{flex: '1'}}>
+											<h4 className="twm-title" style={{marginBottom: '10px', fontSize: '18px'}}>3. Take Assessment</h4>
+											<p style={{marginBottom: '0', fontSize: '14px', lineHeight: '1.5'}}>Take assessment curated based on the job profile.</p>
+										</div>
 									</div>
 								</Col>
 
 								<Col xl={3} lg={6} md={6} sm={12} xs={12} className="mb-4">
-									<div className="twm-w-process-steps3 hover-card">
-										<div className="twm-w-pro-top">
-											<div className="twm-media">
-												<span>
-													<JobZImage
-														src="images/work-process/icon2.png"
-														alt="icon1"
-													/>
-												</span>
+									<div className="twm-w-process-steps3 hover-card" style={{display: 'flex', alignItems: 'center', padding: '25px', borderRadius: '12px'}}>
+										<div className="twm-media" style={{flexShrink: '0', marginRight: '20px'}}>
+											<div style={{width: '60px', height: '60px', background: 'linear-gradient(135deg, #FF6A00 0%, #FF8A00 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+												<svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.7088 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4905 2.02168 11.3363C2.16356 9.18218 2.99721 7.13677 4.39828 5.49707C5.79935 3.85736 7.69279 2.71548 9.79619 2.24015C11.8996 1.76482 14.1003 1.98186 16.07 2.86" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<path d="M22 4L12 14.01L9 11.01" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+												</svg>
 											</div>
 										</div>
-
-										<h4 className="twm-title">Recruitment Process</h4>
-										<p>
-											Interviews and discussion rounds scheduled by company.
-										</p>
+										<div style={{flex: '1'}}>
+											<h4 className="twm-title" style={{marginBottom: '10px', fontSize: '18px'}}>4. Get Hired</h4>
+											<p style={{marginBottom: '0', fontSize: '14px', lineHeight: '1.5'}}>Interviews and discussion rounds scheduled by company.</p>
+										</div>
 									</div>
 								</Col>
 							</Row>
@@ -655,39 +649,61 @@ function Home16Page() {
 
 						<div className="twm-how-it-work-section3">
 							<Row>
-								<Col xl={6} lg={6} md={6} sm={12} xs={12} className="mb-4">
-									<div className="twm-w-process-steps3 hover-card">
-										<div className="twm-w-pro-top">
-											<div className="twm-media">
-												<span>
-													<JobZImage
-														src="images/work-process/icon1.png"
-														alt="icon1"
-													/>
-												</span>
+								<Col xl={4} lg={4} md={4} sm={12} xs={12} className="mb-4">
+									<div className="twm-w-process-steps3 hover-card" style={{display: 'flex', alignItems: 'center', padding: '25px', borderRadius: '12px'}}>
+										<div className="twm-media" style={{flexShrink: '0', marginRight: '20px'}}>
+											<div style={{width: '60px', height: '60px', background: 'linear-gradient(135deg, #FF6A00 0%, #FF8A00 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+												<svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<path d="M14 2V8H20" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<path d="M16 13H8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<path d="M16 17H8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<path d="M10 9H9H8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+												</svg>
 											</div>
 										</div>
-
-										<h4 className="twm-title"> Post Your Job</h4>
-										<p>Create your employer account and post job openings in just a few clicks. Add job details, skills required, salary range, and company information to attract the right talent. Make your listings stand out with clear, compelling job descriptions.</p>
+										<div style={{flex: '1'}}>
+											<h4 className="twm-title" style={{marginBottom: '10px', fontSize: '18px'}}>1. Post Your Job</h4>
+											<p style={{marginBottom: '0', fontSize: '14px', lineHeight: '1.5'}}>Create your employer account and post job openings in just a few clicks. Add job details, skills required, salary range, and company information to attract the right talent.</p>
+										</div>
 									</div>
 								</Col>
 
-								<Col xl={6} lg={6} md={6} sm={12} xs={12} className="mb-4">
-									<div className="twm-w-process-steps3 hover-card">
-										<div className="twm-w-pro-top">
-											<div className="twm-media">
-												<span>
-													<JobZImage
-														src="images/work-process/icon2.png"
-														alt="icon2"
-													/>
-												</span>
+								<Col xl={4} lg={4} md={4} sm={12} xs={12} className="mb-4">
+									<div className="twm-w-process-steps3 hover-card" style={{display: 'flex', alignItems: 'center', padding: '25px', borderRadius: '12px'}}>
+										<div className="twm-media" style={{flexShrink: '0', marginRight: '20px'}}>
+											<div style={{width: '60px', height: '60px', background: 'linear-gradient(135deg, #FF6A00 0%, #FF8A00 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+												<svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<circle cx="8.5" cy="7" r="4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<path d="M20 8V14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<path d="M23 11H17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+												</svg>
 											</div>
 										</div>
+										<div style={{flex: '1'}}>
+											<h4 className="twm-title" style={{marginBottom: '10px', fontSize: '18px'}}>2. Hire the Best</h4>
+											<p style={{marginBottom: '0', fontSize: '14px', lineHeight: '1.5'}}>Get instant access to qualified candidates. Review profiles, shortlist top talent, schedule interviews, and finalize your perfect hire from one easy-to-use dashboard.</p>
+										</div>
+									</div>
+								</Col>
 
-										<h4 className="twm-title"> Hire the Best</h4>
-										<p>Get instant access to qualified candidates. Review profiles, shortlist top talent, schedule interviews, and finalize your perfect hire — all from one easy-to-use dashboard. Streamline your hiring process and build your dream team effortlessly.</p>
+								<Col xl={4} lg={4} md={4} sm={12} xs={12} className="mb-4">
+									<div className="twm-w-process-steps3 hover-card" style={{display: 'flex', alignItems: 'center', padding: '25px', borderRadius: '12px'}}>
+										<div className="twm-media" style={{flexShrink: '0', marginRight: '20px'}}>
+											<div style={{width: '60px', height: '60px', background: 'linear-gradient(135deg, #FF6A00 0%, #FF8A00 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+												<svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<circle cx="9" cy="7" r="4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<path d="M23 21V19C23 18.1645 22.7155 17.3541 22.2094 16.6977C21.7033 16.0414 20.9999 15.5759 20.2 15.3726" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+													<path d="M16 3.37006C16.7999 3.57343 17.5033 4.03891 18.0094 4.69526C18.5155 5.3516 18.8 6.16204 18.8 6.99756C18.8 7.83308 18.5155 8.64352 18.0094 9.29987C17.5033 9.95621 16.7999 10.4217 16 10.625" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+												</svg>
+											</div>
+										</div>
+										<div style={{flex: '1'}}>
+											<h4 className="twm-title" style={{marginBottom: '10px', fontSize: '18px'}}>3. Build Your Team</h4>
+											<p style={{marginBottom: '0', fontSize: '14px', lineHeight: '1.5'}}>Successfully onboard new hires and build your dream team. Access analytics and insights to improve your hiring process continuously.</p>
+										</div>
 									</div>
 								</Col>
 							</Row>
