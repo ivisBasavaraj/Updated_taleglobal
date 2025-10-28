@@ -547,8 +547,8 @@ function Home16Page() {
 				</div>
 
 				{/* HOW IT WORK SECTION START */}
-				<div className="section-full p-t70 p-b60 site-bg-gray twm-how-it-work-area animate-on-scroll">
-					<Container className="py-5">
+				<div className="section-full p-t30 p-b20 site-bg-gray twm-how-it-work-area animate-on-scroll">
+					<Container className="py-2">
 						{/* title="" START*/}
 						<div className="section-head center wt-small-separator-outer mb-5">
 							<div className="wt-small-separator site-text-primary">
@@ -635,8 +635,8 @@ function Home16Page() {
 				{/* HOW IT WORK SECTION END */}
 
 				{/* HOW IT WORK FOR EMPLOYERS SECTION START */}
-				<div className="section-full p-t70 p-b60 site-bg-white twm-how-it-work-area animate-on-scroll">
-					<Container className="py-5">
+				<div className="section-full p-t20 p-b30 site-bg-white twm-how-it-work-area animate-on-scroll">
+					<Container className="py-2">
 						{/* title="" START*/}
 						<div className="section-head center wt-small-separator-outer mb-5">
 							<div className="wt-small-separator site-text-primary">
