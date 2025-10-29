@@ -220,7 +220,7 @@ function SignInPopup() {
 															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
 															onClick={() => setShowCanPassword(!showCanPassword)}
 														>
-															<i className={showCanPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+															<i className={showCanPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: 'black' }} />
 														</button>
 													</div>
 												</div>
@@ -315,7 +315,7 @@ function SignInPopup() {
 															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
 															onClick={() => setShowEmpPassword(!showEmpPassword)}
 														>
-															<i className={showEmpPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+															<i className={showEmpPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: 'black' }} />
 														</button>
 													</div>
 												</div>
@@ -410,7 +410,7 @@ function SignInPopup() {
 															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
 															onClick={() => setShowPlacementPassword(!showPlacementPassword)}
 														>
-															<i className={showPlacementPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+															<i className={showPlacementPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: 'black' }} />
 														</button>
 													</div>
 												</div>

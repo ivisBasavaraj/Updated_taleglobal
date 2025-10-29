@@ -1,0 +1,34 @@
+/* HOME16 Navbar Transparency on Hero Section */
+
+/* Make navbar transparent initially (before scroll) */
+.h-page-16-hdr .main-bar {
+  background-color: transparent !important;
+}
+
+/* Make navbar white and styled when fixed (after scroll) */
+.h-page-16-hdr .is-fixed .main-bar.color-fill {
+  background-color: #fff !important;
+  border-radius: 10px;
+  box-shadow: 0px 0px 25px rgba(56, 152, 226, 0.3);
+}
+
+/* Ensure logo visibility on transparent background */
+.h-page-16-hdr .logo-header {
+  z-index: 10;
+}
+
+/* Optional: Add semi-transparent backdrop on scroll for better text contrast */
+.h-page-16-hdr .is-fixed .main-bar.color-fill {
+  backdrop-filter: blur(10px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .h-page-16-hdr .main-bar {
+    background-color: transparent !important;
+  }
+  
+  .h-page-16-hdr .is-fixed .main-bar.color-fill {
+    background-color: #fff !important;
+  }
+}

@@ -369,7 +369,7 @@ function SignUpPopup() {
 															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
 															onClick={() => setShowCandidatePassword(!showCandidatePassword)}
 														>
-															<i className={showCandidatePassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+															<i className={showCandidatePassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: 'black' }} />
 														</button>
 													</div>
 												</div>
@@ -392,7 +392,7 @@ function SignUpPopup() {
 															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
 															onClick={() => setShowCandidateConfirmPassword(!showCandidateConfirmPassword)}
 														>
-															<i className={showCandidateConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+															<i className={showCandidateConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: 'black' }} />
 														</button>
 														{passwordError && <small className="text-danger">{passwordError}</small>}
 													</div>
@@ -522,7 +522,7 @@ function SignUpPopup() {
 															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
 															onClick={() => setShowEmployerPassword(!showEmployerPassword)}
 														>
-															<i className={showEmployerPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+															<i className={showEmployerPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: 'black' }} />
 														</button>
 													</div>
 												</div>
@@ -545,7 +545,7 @@ function SignUpPopup() {
 															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
 															onClick={() => setShowEmployerConfirmPassword(!showEmployerConfirmPassword)}
 														>
-															<i className={showEmployerConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+															<i className={showEmployerConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: 'black' }} />
 														</button>
 														{passwordError && <small className="text-danger">{passwordError}</small>}
 													</div>
@@ -675,7 +675,7 @@ function SignUpPopup() {
 															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
 															onClick={() => setShowPlacementPassword(!showPlacementPassword)}
 														>
-															<i className={showPlacementPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+															<i className={showPlacementPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: 'black' }} />
 														</button>
 													</div>
 												</div>
@@ -698,7 +698,7 @@ function SignUpPopup() {
 															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
 															onClick={() => setShowPlacementConfirmPassword(!showPlacementConfirmPassword)}
 														>
-															<i className={showPlacementConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
+															<i className={showPlacementConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: 'black' }} />
 														</button>
 														{passwordError && <small className="text-danger">{passwordError}</small>}
 													</div>

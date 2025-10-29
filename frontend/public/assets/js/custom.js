@@ -126,24 +126,17 @@ All JavaScript fuctions Start
 			});
 	}
 
-	// > page scroll top on button click function by = custom.js ===================== //	
+	// > page scroll top on button click function by = custom.js	
 	function scroll_top() {
-		jQuery("button.scroltop").on('click', function () {
-			jQuery("html, body").animate({
+		jQuery('.scroltop').on('click', function () {
+			jQuery('html, body').animate({
 				scrollTop: 0
 			}, 1000);
 			return false;
 		});
-
-		jQuery(window).on("scroll", function () {
-			var scroll = jQuery(window).scrollTop();
-			if (scroll > 900) {
-				jQuery("button.scroltop").fadeIn(1000);
-			} else {
-				jQuery("button.scroltop").fadeOut(1000);
-			}
-		});
 	}
+
+
 
 	// > input type file function by = custom.js ========================== //	 	 
 	function input_type_file_form() {
