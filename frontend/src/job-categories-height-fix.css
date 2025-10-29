@@ -1,0 +1,78 @@
+/* Reduce Job Categories Card Height */
+
+.job-cat-block-hpage-6 {
+  min-height: 120px !important;
+  height: auto !important;
+  padding: 10px !important;
+}
+
+.job-cat-block-hpage-6 .twm-media {
+  min-height: 40px !important;
+  margin-bottom: 5px !important;
+}
+
+.job-cat-block-hpage-6 .twm-media .category-svg {
+  width: 35px !important;
+  height: 35px !important;
+}
+
+.job-cat-block-hpage-6 .twm-content {
+  padding: 5px 0 !important;
+}
+
+.job-cat-block-hpage-6 .twm-content .twm-jobs-available {
+  margin: 5px 0 !important;
+  padding: 2px 6px !important;
+  font-size: 11px !important;
+}
+
+.job-cat-block-hpage-6 .circle-line-wrap {
+  padding-top: 5px !important;
+}
+
+.job-cat-block-hpage-6 .twm-content > a {
+  font-size: 14px !important;
+  margin-bottom: 3px !important;
+}
+
+/* Fix arrow color and job count background */
+.circle-line-btn {
+  border: 2px solid #000000 !important;
+  background-color: transparent !important;
+}
+
+.circle-line-btn i {
+  color: #000000 !important;
+}
+
+.circle-line-btn * {
+  color: #000000 !important;
+}
+
+.fa-arrow-right {
+  color: #000000 !important;
+}
+
+i.fa-arrow-right {
+  color: #000000 !important;
+}
+
+.job-cat-block-hpage-6 .twm-content .twm-jobs-available {
+  background-color: transparent !important;
+  color: #fd7e14 !important;
+  border: none !important;
+}
+
+.job-cat-block-hpage-6 .twm-content .twm-jobs-available span {
+  color: #fd7e14 !important;
+}
+
+/* Remove hover background on job count */
+.job-cat-block-hpage-6:hover .twm-content .twm-jobs-available {
+  background-color: transparent !important;
+  color: #fd7e14 !important;
+}
+
+.job-cat-block-hpage-6:hover .twm-content .twm-jobs-available span {
+  color: #fd7e14 !important;
+}

@@ -116,21 +116,14 @@ function SignUpPopup() {
             
             const data = await response.json();
             if (data.success) {
-                alert('Registration successful! Please login.');
                 setCandidateData({ username: '', email: '', mobile: '', password: '', confirmPassword: '' });
                 // Close signup modal and open login modal
-                const signupModal = document.getElementById('sign_up_popup');
-                const loginModal = document.getElementById('sign_up_popup2');
-                if (signupModal && loginModal) {
-                    const bsSignupModal = window.bootstrap.Modal.getInstance(signupModal);
-                    if (bsSignupModal) {
-                        bsSignupModal.hide();
-                    }
-                    setTimeout(() => {
-                        const bsLoginModal = new window.bootstrap.Modal(loginModal);
-                        bsLoginModal.show();
-                    }, 300);
-                }
+                const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
+                if (signupModal) signupModal.hide();
+                setTimeout(() => {
+                    const loginModal = new window.bootstrap.Modal(document.getElementById('sign_up_popup2'));
+                    loginModal.show();
+                }, 300);
             } else {
                 setError(data.message || 'Registration failed');
                 
@@ -172,21 +165,14 @@ function SignUpPopup() {
             
             const data = await response.json();
             if (data.success) {
-                alert('Registration successful! Please login.');
                 setEmployerData({ name: '', email: '', mobile: '', password: '', confirmPassword: '', employerCategory: '' });
                 // Close signup modal and open login modal
-                const signupModal = document.getElementById('sign_up_popup');
-                const loginModal = document.getElementById('sign_up_popup2');
-                if (signupModal && loginModal) {
-                    const bsSignupModal = window.bootstrap.Modal.getInstance(signupModal);
-                    if (bsSignupModal) {
-                        bsSignupModal.hide();
-                    }
-                    setTimeout(() => {
-                        const bsLoginModal = new window.bootstrap.Modal(loginModal);
-                        bsLoginModal.show();
-                    }, 300);
-                }
+                const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
+                if (signupModal) signupModal.hide();
+                setTimeout(() => {
+                    const loginModal = new window.bootstrap.Modal(document.getElementById('sign_up_popup2'));
+                    loginModal.show();
+                }, 300);
             } else {
                 setError(data.message || 'Registration failed');
                 
@@ -226,21 +212,14 @@ function SignUpPopup() {
             
             const data = await response.json();
             if (data.success) {
-                alert('Registration successful! Please login.');
                 setPlacementData({ name: '', email: '', phone: '', password: '', confirmPassword: '', collegeName: '' });
                 // Close signup modal and open login modal
-                const signupModal = document.getElementById('sign_up_popup');
-                const loginModal = document.getElementById('sign_up_popup2');
-                if (signupModal && loginModal) {
-                    const bsSignupModal = window.bootstrap.Modal.getInstance(signupModal);
-                    if (bsSignupModal) {
-                        bsSignupModal.hide();
-                    }
-                    setTimeout(() => {
-                        const bsLoginModal = new window.bootstrap.Modal(loginModal);
-                        bsLoginModal.show();
-                    }, 300);
-                }
+                const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
+                if (signupModal) signupModal.hide();
+                setTimeout(() => {
+                    const loginModal = new window.bootstrap.Modal(document.getElementById('sign_up_popup2'));
+                    loginModal.show();
+                }, 300);
             } else {
                 setError(data.message || 'Registration failed');
             }

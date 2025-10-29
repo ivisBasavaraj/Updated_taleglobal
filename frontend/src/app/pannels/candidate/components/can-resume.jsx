@@ -14,7 +14,6 @@ import { loadScript } from "../../../../globals/constants";
 import { api } from "../../../../utils/api";
 import { initializeAllModals } from "../../../../utils/modalUtils";
 import "./resume-styles.css";
-import "../../../../remove-orange-lines-resume.css";
 
 function CanMyResumePage() {
     const [profile, setProfile] = useState(null);

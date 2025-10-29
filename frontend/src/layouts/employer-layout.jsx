@@ -5,6 +5,7 @@ import EmployerRoutes from "../routing/employer-routes";
 import { popupType } from "../globals/constants";
 import { useState, useEffect } from "react";
 import "../employer-layout-fix.css";
+import "../admin-orange-underline-fix.css";
 
 function EmployerLayout() {
     const [sidebarActive, setSidebarActive] = useState(true);

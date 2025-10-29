@@ -1,0 +1,269 @@
+/* Home Page Spacing and Color Scheme Fix */
+
+/* Reduce section gaps */
+.section-full {
+  padding: 40px 0 !important;
+}
+
+.twm-home-8-banner-section {
+  padding: 60px 0 40px 0 !important;
+}
+
+.twm-job-categories-hpage-6-area {
+  padding: 40px 0 !important;
+}
+
+.twm-how-it-work-area {
+  padding: 40px 0 !important;
+}
+
+.twm-testimonials-h-page-8 {
+  padding: 40px 0 !important;
+}
+
+.twm-recruiters-area {
+  padding: 40px 0 !important;
+}
+
+.twm-blog-post-h-page-8 {
+  padding: 40px 0 !important;
+}
+
+/* Remove extra margins */
+.container {
+  margin-bottom: 0 !important;
+}
+
+.row {
+  margin-bottom: 0 !important;
+}
+
+/* Color Scheme - Black, Orange, White Only */
+
+/* Background colors - preserve light mode */
+body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.site-bg-white {
+  background-color: #ffffff !important;
+}
+
+.site-bg-gray {
+  background-color: #ffffff !important;
+}
+
+/* Text colors - Black primary but preserve light mode */
+h1, h2, h3, h4, h5, h6 {
+  color: #000000 !important;
+}
+
+/* Only target specific elements to avoid dark mode conflicts */
+.twm-bnr-inr-entry h1,
+.twm-bnr-inr-entry p,
+.section-head h2,
+.twm-title {
+  color: #000000 !important;
+}
+
+.site-text-primary {
+  color: #fd7e14 !important;
+}
+
+.site-text-dark {
+  color: #000000 !important;
+}
+
+/* Button colors - Orange primary */
+.site-button {
+  background-color: #fd7e14 !important;
+  color: #ffffff !important;
+  border: 2px solid #fd7e14 !important;
+}
+
+.site-button:hover {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+}
+
+.btn-primary {
+  background-color: #fd7e14 !important;
+  border-color: #fd7e14 !important;
+  color: #ffffff !important;
+}
+
+.btn-primary:hover {
+  background-color: #000000 !important;
+  border-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Link colors */
+a {
+  color: #fd7e14 !important;
+}
+
+a:hover {
+  color: #000000 !important;
+}
+
+/* Card backgrounds */
+.card, .panel {
+  background-color: #ffffff !important;
+  border: 1px solid #e0e0e0 !important;
+}
+
+/* Job category cards */
+.job-cat-block-hpage-6 {
+  background-color: #ffffff !important;
+  border: 1px solid #e0e0e0 !important;
+}
+
+.job-cat-block-hpage-6 .twm-content > a {
+  color: #000000 !important;
+}
+
+.job-cat-block-hpage-6 .twm-content .twm-jobs-available {
+  background-color: rgba(253, 126, 20, 0.1) !important;
+  color: #fd7e14 !important;
+}
+
+/* Navigation colors */
+.navbar {
+  background-color: #ffffff !important;
+}
+
+.navbar-nav .nav-link {
+  color: #000000 !important;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #fd7e14 !important;
+}
+
+/* Hero section */
+.twm-bnr-inr-entry h1 {
+  color: #000000 !important;
+}
+
+.twm-bnr-inr-entry p {
+  color: #000000 !important;
+}
+
+/* Stats section */
+.counter-outer-two .counter {
+  color: #fd7e14 !important;
+}
+
+.counter-outer-two h3 {
+  color: #000000 !important;
+}
+
+/* Testimonials */
+.testimonials-v {
+  background-color: #ffffff !important;
+}
+
+.testimonials-v .testimonial-text {
+  color: #000000 !important;
+}
+
+.testimonials-v .testimonial-author {
+  color: #fd7e14 !important;
+}
+
+/* Footer adjustments */
+.footer-dark {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.footer-dark a {
+  color: #fd7e14 !important;
+}
+
+.footer-dark a:hover {
+  color: #ffffff !important;
+}
+
+/* Remove blue colors */
+.text-primary {
+  color: #fd7e14 !important;
+}
+
+.bg-primary {
+  background-color: #fd7e14 !important;
+}
+
+/* Override any remaining blue/other colors */
+*[style*="color: blue"], *[style*="color: #007bff"], *[style*="color: #1967d2"] {
+  color: #fd7e14 !important;
+}
+
+*[style*="background-color: blue"], *[style*="background-color: #007bff"], *[style*="background-color: #1967d2"] {
+  background-color: #fd7e14 !important;
+}
+
+/* Job cards */
+.twm-jobs-grid-style .twm-job-self-wrap {
+  background-color: #ffffff !important;
+  border: 1px solid #e0e0e0 !important;
+}
+
+.twm-jobs-grid-style .twm-job-self-wrap .twm-job-self-info h4 a {
+  color: #000000 !important;
+}
+
+.twm-jobs-grid-style .twm-job-self-wrap .twm-job-self-info .twm-job-self-author {
+  color: #fd7e14 !important;
+}
+
+/* Search form */
+.twm-search-bar {
+  background-color: #ffffff !important;
+  border: 2px solid #fd7e14 !important;
+}
+
+.twm-search-bar input {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+.twm-search-bar button {
+  background-color: #fd7e14 !important;
+  color: #ffffff !important;
+}
+
+/* Icons */
+.fa, .fas, .far, .fab {
+  color: #fd7e14 !important;
+}
+
+/* Ensure white backgrounds for all sections */
+.section-full, .container-fluid, .row, .col-12, .col-lg-12 {
+  background-color: #ffffff !important;
+}
+
+/* Spacing adjustments only - no color overrides */
+.mb-5 {
+  margin-bottom: 2rem !important;
+}
+
+.pb-5 {
+  padding-bottom: 2rem !important;
+}
+
+.pt-5 {
+  padding-top: 2rem !important;
+}
+
+.mt-5 {
+  margin-top: 2rem !important;
+}
+
+/* Force light mode compatibility */
+html[data-theme="light"] * {
+  color-scheme: light !important;
+}
