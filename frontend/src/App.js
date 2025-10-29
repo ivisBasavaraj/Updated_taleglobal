@@ -15,6 +15,9 @@ import "./index16-mobile-fix.css";
 import "./logo-fix.css";
 import "./mobile-card-scrolling.css";
 import "./force-light-mode.css";
+import "./dark-screen-fix.css";
+import "./fix-dark-mode.css";
+import "./orange-preserve.css";
 
 function App() {
 

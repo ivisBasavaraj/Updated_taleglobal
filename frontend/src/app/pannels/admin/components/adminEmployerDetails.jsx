@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './employer-details-styles.css';
+import './employer-visibility-fix.css';
 
 function EmployerDetails() {
     const navigate = useNavigate();

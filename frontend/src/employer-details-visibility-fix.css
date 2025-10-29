@@ -1,0 +1,76 @@
+/* Employer Details Visibility Fix */
+
+/* Ensure all content is visible */
+.employer-details-container * {
+  visibility: visible !important;
+  display: block !important;
+  opacity: 1 !important;
+}
+
+/* Fix for profile fields */
+.profile-field {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.profile-field p {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: #232323 !important;
+}
+
+/* Fix for table content */
+.documents-table tbody td {
+  display: table-cell !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Fix for status badges */
+.status-badge {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Fix for action buttons */
+.action-btn {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Override any hidden elements */
+[style*="display: none"] {
+  display: block !important;
+}
+
+[style*="visibility: hidden"] {
+  visibility: visible !important;
+}
+
+[style*="opacity: 0"] {
+  opacity: 1 !important;
+}
+
+/* Ensure text is readable */
+.profile-field h6,
+.profile-field p,
+.documents-table td,
+.status-badge,
+.action-btn {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+/* Fix for loading states */
+.loading-container,
+.not-found-container {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}

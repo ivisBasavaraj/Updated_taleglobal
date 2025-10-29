@@ -1,0 +1,53 @@
+/* Remove Orange Lines from Resume Cards */
+
+/* Remove any orange borders from panels */
+.panel {
+  border-left: none !important;
+  border-color: #e0e0e0 !important;
+}
+
+/* Remove orange left borders from cards */
+.card {
+  border-left: none !important;
+  border-color: #e0e0e0 !important;
+}
+
+/* Remove orange borders from any elements with orange styling */
+.border-left-orange,
+.border-orange,
+[style*="border-left: 4px solid #ff"],
+[style*="border-left: 3px solid #ff"],
+[style*="border: 4px solid #ff"],
+[style*="border-color: #ff"] {
+  border-left: none !important;
+  border-color: #e0e0e0 !important;
+}
+
+/* Ensure no orange accent lines */
+.panel::before,
+.card::before,
+.panel-heading::before,
+.card-header::before {
+  display: none !important;
+}
+
+/* Remove any pseudo-element orange lines */
+*::before,
+*::after {
+  border-color: transparent !important;
+}
+
+/* Override any orange border utilities */
+.border-primary {
+  border-color: #e0e0e0 !important;
+}
+
+.border-left-primary {
+  border-left-color: transparent !important;
+}
+
+/* Remove orange accent from form elements */
+.form-control:focus {
+  border-color: #86b7fe !important;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+}

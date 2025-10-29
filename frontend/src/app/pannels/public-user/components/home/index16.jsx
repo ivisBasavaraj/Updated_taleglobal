@@ -2,14 +2,21 @@ import JobZImage from "../../../../common/jobz-img";
 import { NavLink } from "react-router-dom";
 import { publicUser } from "../../../../../globals/route-names";
 import CountUp from "react-countup";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { loadScript, updateSkinStyle } from "../../../../../globals/constants";
 import api from "../../../../../utils/api";
 import HeroBody from "../../../../../components/HeroBody";
 import { Container, Row, Col } from "react-bootstrap";
 import HomeJobCard from "../../../../../components/HomeJobCard";
+import showToast from "../../../../../utils/toastNotification";
+import useDebounce from "../../../../../utils/useDebounce";
+import { SkeletonContainer, JobCardSkeleton, StatsSkeleton, RecruiterSkeleton } from "../../../../../components/SkeletonLoader";
 import "../../../../../new-job-card.css";
 import "../../../../../home-responsive.css";
+import "../../../../../remove-orange-categories.css";
+import "../../../../../index16-job-categories-orange.css";
+import "../../../../../employer-how-it-works.css";
+import "../../../../../ux-improvements.css";
 
 function Home16Page() {
     const [jobs, setJobs] = useState([]);
@@ -22,6 +29,10 @@ function Home16Page() {
     const [isFiltered, setIsFiltered] = useState(false);
     const [showingCount, setShowingCount] = useState(6);
     const [error, setError] = useState(null);
+    const [searchValue, setSearchValue] = useState('');
+    const [isSearching, setIsSearching] = useState(false);
+    const debouncedSearchValue = useDebounce(searchValue, 300);
+    const dataLoadErrorRef = useRef({});
     const [dataLoadError, setDataLoadError] = useState({
         jobs: false,
         stats: false,
@@ -180,114 +191,102 @@ function Home16Page() {
         }
     };
 
-    const handleSearch = (filters) => {
+    const handleSearch = useCallback((filters) => {
         try {
             // Validate filters object
             if (!filters || typeof filters !== 'object') {
-                
                 return;
             }
 
-            
-            
-            
             // Validate allJobs array
             if (!Array.isArray(allJobs)) {
-                
                 setError('Unable to search jobs. Please refresh the page.');
+                showToast('Unable to search jobs. Please refresh the page.', 'error');
                 return;
             }
-            
+
             let filtered = [...allJobs];
-            
+
             // Filter by search term (job title, company name, or description)
             if (filters.search) {
                 // Sanitize search term
                 const searchTerm = String(filters.search).trim().toLowerCase();
-                
+
                 if (searchTerm.length < 2) {
-                    alert('Search term must be at least 2 characters');
+                    showToast('Search term must be at least 2 characters', 'warning');
                     return;
                 }
-                
+
                 if (searchTerm.length > 100) {
-                    alert('Search term is too long');
+                    showToast('Search term is too long (max 100 characters)', 'warning');
                     return;
                 }
-                
-                
+
                 filtered = filtered.filter(job => {
                     try {
                         return job.title?.toLowerCase().includes(searchTerm) ||
-                               job.companyName?.toLowerCase().includes(searchTerm) ||
-                               job.employerId?.companyName?.toLowerCase().includes(searchTerm) ||
-                               job.description?.toLowerCase().includes(searchTerm) ||
-                               job.category?.toLowerCase().includes(searchTerm);
+                            job.companyName?.toLowerCase().includes(searchTerm) ||
+                            job.employerId?.companyName?.toLowerCase().includes(searchTerm) ||
+                            job.description?.toLowerCase().includes(searchTerm) ||
+                            job.category?.toLowerCase().includes(searchTerm);
                     } catch (err) {
-                        
                         return false;
                     }
                 });
-                
             }
-            
+
             // Filter by job type
             if (filters.jobType) {
                 const jobType = String(filters.jobType).trim().toLowerCase();
-                
+
                 if (jobType.length > 50) {
-                    alert('Job type filter is invalid');
+                    showToast('Job type filter is invalid', 'warning');
                     return;
                 }
-                
-                
+
                 filtered = filtered.filter(job => {
                     try {
                         const jobTypeField = job.jobType || job.type || '';
                         return jobTypeField.toLowerCase().includes(jobType);
                     } catch (err) {
-                        
                         return false;
                     }
                 });
-                
             }
-            
+
             // Filter by location
             if (filters.location) {
                 const location = String(filters.location).trim().toLowerCase();
-                
+
                 if (location.length < 2) {
-                    alert('Location must be at least 2 characters');
+                    showToast('Location must be at least 2 characters', 'warning');
                     return;
                 }
-                
+
                 if (location.length > 100) {
-                    alert('Location filter is too long');
+                    showToast('Location filter is too long (max 100 characters)', 'warning');
                     return;
                 }
-                
-                
+
                 filtered = filtered.filter(job => {
                     try {
                         return job.location?.toLowerCase().includes(location);
                     } catch (err) {
-                        
                         return false;
                     }
                 });
-                
             }
-            
-            
-            
+
             setFilteredJobs(filtered);
             setJobs(filtered.slice(0, 6)); // Show first 6 filtered results
             setShowingCount(6);
             setIsFiltered(Object.keys(filters).length > 0);
-            
-            // Scroll to jobs section when search is performed
+
+            // Show success message with result count
             if (Object.keys(filters).length > 0) {
+                showToast(`Found ${filtered.length} job(s) matching your criteria`, 'success', 2000);
+
+                // Scroll to jobs section when search is performed
                 setTimeout(() => {
                     const jobsSection = document.querySelector('.twm-jobs-grid-wrap');
                     if (jobsSection) {
@@ -296,38 +295,42 @@ function Home16Page() {
                 }, 100);
             }
         } catch (error) {
-            
             setError('An error occurred while searching. Please try again.');
+            showToast('An error occurred while searching. Please try again.', 'error');
         }
-    };
+    }, [allJobs]);
     
-    const handleShowMore = () => {
+    const handleShowMore = useCallback(() => {
         try {
             // Validate current state
             if (!Array.isArray(allJobs) || !Array.isArray(filteredJobs)) {
-                
                 setError('Unable to load more jobs. Please refresh the page.');
+                showToast('Unable to load more jobs. Please refresh the page.', 'error');
                 return;
             }
-            
+
             const newCount = showingCount + 6;
-            
+
             // Validate newCount
             if (newCount < 0 || newCount > 1000) {
-                
+                showToast('No more jobs to load', 'info');
                 return;
             }
-            
+
             const sourceJobs = isFiltered ? filteredJobs : allJobs;
             const newJobs = sourceJobs.slice(0, newCount);
-            
+
             setJobs(newJobs);
             setShowingCount(newCount);
+
+            // Show feedback to user
+            const loadedCount = Math.min(6, sourceJobs.length - showingCount);
+            showToast(`Loaded ${loadedCount} more job(s)`, 'info', 1500);
         } catch (error) {
-            
             setError('An error occurred while loading more jobs.');
+            showToast('An error occurred while loading more jobs.', 'error');
         }
-    };
+    }, [showingCount, isFiltered, filteredJobs, allJobs]);
 
     return (
 			<>
@@ -547,7 +550,7 @@ function Home16Page() {
 				</div>
 
 				{/* HOW IT WORK SECTION START */}
-				<div className="section-full p-t30 p-b20 site-bg-gray twm-how-it-work-area animate-on-scroll">
+				<div className="section-full p-t30 p-b20 twm-how-it-work-area animate-on-scroll" style={{backgroundColor: 'white'}}>
 					<Container className="py-2">
 						{/* title="" START*/}
 						<div className="section-head center wt-small-separator-outer mb-5">
@@ -635,74 +638,72 @@ function Home16Page() {
 				{/* HOW IT WORK SECTION END */}
 
 				{/* HOW IT WORK FOR EMPLOYERS SECTION START */}
-				<div className="section-full p-t20 p-b30 site-bg-white twm-how-it-work-area animate-on-scroll">
-					<Container className="py-2">
-						{/* title="" START*/}
+				<div className="section-full twm-how-it-work-area animate-on-scroll">
+					<Container className="py-4">
+						{/* title START */}
 						<div className="section-head center wt-small-separator-outer mb-5">
-							<div className="wt-small-separator site-text-primary">
+							<div className="wt-small-separator">
 								<div>For Employers</div>
 							</div>
-
 							<h2 className="wt-title">How It Works for Employers</h2>
 						</div>
-						{/* title="" END*/}
+						{/* title END */}
 
 						<div className="twm-how-it-work-section3">
-							<Row>
-								<Col xl={4} lg={4} md={4} sm={12} xs={12} className="mb-4">
-									<div className="twm-w-process-steps3 hover-card" style={{display: 'flex', alignItems: 'center', padding: '25px', borderRadius: '12px'}}>
-										<div className="twm-media" style={{flexShrink: '0', marginRight: '20px'}}>
-											<div style={{width: '60px', height: '60px', background: 'linear-gradient(135deg, #FF6A00 0%, #FF8A00 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-												<svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-													<path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<path d="M14 2V8H20" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<path d="M16 13H8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<path d="M16 17H8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<path d="M10 9H9H8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-												</svg>
+							<Row className="g-4">
+								{/* Card 1: Post Your Job */}
+								<Col xl={4} lg={4} md={6} sm={12} xs={12}>
+									<div className="twm-w-process-steps3">
+										<div className="twm-media">
+											<div style={{width: '80px', height: '80px', borderRadius: '12px', overflow: 'hidden'}}>
+												<img 
+													src="https://static.vecteezy.com/system/resources/previews/067/381/647/non_2x/job-posting-announcement-recruitment-hiring-application-candidate-employment-vector.jpg" 
+													alt="Post Your Job" 
+													style={{width: '100%', height: '100%', objectFit: 'cover'}}
+												/>
 											</div>
 										</div>
-										<div style={{flex: '1'}}>
-											<h4 className="twm-title" style={{marginBottom: '10px', fontSize: '18px'}}>1. Post Your Job</h4>
-											<p style={{marginBottom: '0', fontSize: '14px', lineHeight: '1.5'}}>Create your employer account and post job openings in just a few clicks. Add job details, skills required, salary range, and company information to attract the right talent.</p>
+										<div>
+											<h4 className="twm-title">1. Post Your Job</h4>
+											<p>Create your employer account and post job openings in just a few clicks. Add job details, skills required, salary range, and company information to attract the right talent.</p>
 										</div>
 									</div>
 								</Col>
 
-								<Col xl={4} lg={4} md={4} sm={12} xs={12} className="mb-4">
-									<div className="twm-w-process-steps3 hover-card" style={{display: 'flex', alignItems: 'center', padding: '25px', borderRadius: '12px'}}>
-										<div className="twm-media" style={{flexShrink: '0', marginRight: '20px'}}>
-											<div style={{width: '60px', height: '60px', background: 'linear-gradient(135deg, #FF6A00 0%, #FF8A00 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-												<svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-													<path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<circle cx="8.5" cy="7" r="4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<path d="M20 8V14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<path d="M23 11H17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-												</svg>
+								{/* Card 2: Hire the Best */}
+								<Col xl={4} lg={4} md={6} sm={12} xs={12}>
+									<div className="twm-w-process-steps3">
+										<div className="twm-media">
+											<div style={{width: '80px', height: '80px', borderRadius: '12px', overflow: 'hidden'}}>
+												<img 
+													src="https://i.pinimg.com/736x/57/2e/14/572e1453e353f60c803bd01c4ea68a05.jpg" 
+													alt="Hire the Best" 
+													style={{width: '100%', height: '100%', objectFit: 'cover'}}
+												/>
 											</div>
 										</div>
-										<div style={{flex: '1'}}>
-											<h4 className="twm-title" style={{marginBottom: '10px', fontSize: '18px'}}>2. Hire the Best</h4>
-											<p style={{marginBottom: '0', fontSize: '14px', lineHeight: '1.5'}}>Get instant access to qualified candidates. Review profiles, shortlist top talent, schedule interviews, and finalize your perfect hire from one easy-to-use dashboard.</p>
+										<div>
+											<h4 className="twm-title">2. Hire the Best</h4>
+											<p>Get instant access to qualified candidates. Review profiles, shortlist top talent, schedule interviews, and finalize your perfect hire from one easy-to-use dashboard.</p>
 										</div>
 									</div>
 								</Col>
 
-								<Col xl={4} lg={4} md={4} sm={12} xs={12} className="mb-4">
-									<div className="twm-w-process-steps3 hover-card" style={{display: 'flex', alignItems: 'center', padding: '25px', borderRadius: '12px'}}>
-										<div className="twm-media" style={{flexShrink: '0', marginRight: '20px'}}>
-											<div style={{width: '60px', height: '60px', background: 'linear-gradient(135deg, #FF6A00 0%, #FF8A00 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-												<svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-													<path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<circle cx="9" cy="7" r="4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<path d="M23 21V19C23 18.1645 22.7155 17.3541 22.2094 16.6977C21.7033 16.0414 20.9999 15.5759 20.2 15.3726" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<path d="M16 3.37006C16.7999 3.57343 17.5033 4.03891 18.0094 4.69526C18.5155 5.3516 18.8 6.16204 18.8 6.99756C18.8 7.83308 18.5155 8.64352 18.0094 9.29987C17.5033 9.95621 16.7999 10.4217 16 10.625" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-												</svg>
+								{/* Card 3: Build Your Team */}
+								<Col xl={4} lg={4} md={6} sm={12} xs={12}>
+									<div className="twm-w-process-steps3">
+										<div className="twm-media">
+											<div style={{width: '80px', height: '80px', borderRadius: '12px', overflow: 'hidden'}}>
+												<img 
+													src="https://i.pinimg.com/736x/c3/10/17/c31017b46cfd17082e7ab29ba1df4f55.jpg" 
+													alt="Build Your Team" 
+													style={{width: '100%', height: '100%', objectFit: 'cover'}}
+												/>
 											</div>
 										</div>
-										<div style={{flex: '1'}}>
-											<h4 className="twm-title" style={{marginBottom: '10px', fontSize: '18px'}}>3. Build Your Team</h4>
-											<p style={{marginBottom: '0', fontSize: '14px', lineHeight: '1.5'}}>Successfully onboard new hires and build your dream team. Access analytics and insights to improve your hiring process continuously.</p>
+										<div>
+											<h4 className="twm-title">3. Build Your Team</h4>
+											<p>Successfully onboard new hires and build your dream team. Access analytics and insights to improve your hiring process continuously.</p>
 										</div>
 									</div>
 								</Col>
@@ -713,7 +714,7 @@ function Home16Page() {
 				{/* HOW IT WORK FOR EMPLOYERS SECTION END */}
 
 				{/* JOBS CATEGORIES SECTION START */}
-				<div className="section-full p-t50 p-b50 site-bg-white twm-job-categories-hpage-6-area animate-on-scroll">
+				<div className="section-full p-t50 p-b50 twm-job-categories-hpage-6-area animate-on-scroll" style={{backgroundColor: 'white !important'}}>
 					{/* title="" START*/}
 					<div className="section-head center wt-small-separator-outer mb-5">
 						<div className="wt-small-separator site-text-primary">
@@ -729,9 +730,15 @@ function Home16Page() {
 								<Row>
 									{/* COLUMNS 1 */}
 									<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
-										<div className="job-cat-block-hpage-6 m-b30 hover-card">
+										<div className="job-cat-block-hpage-6 m-b30 hover-card" style={{backgroundColor: 'white'}}>
 											<div className="twm-media">
-												<div className="flaticon-dashboard" />
+												<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="category-svg">
+														<rect x="10" y="15" width="50" height="40" fill="none" stroke="#fd7e14" strokeWidth="3" rx="3"/>
+														<circle cx="20" cy="25" r="2" fill="#fd7e14"/>
+														<circle cx="30" cy="25" r="2" fill="#fd7e14"/>
+														<line x1="10" y1="35" x2="60" y2="35" stroke="#fd7e14" strokeWidth="2"/>
+														<path d="M 20 45 L 25 50 L 20 55 M 40 45 L 45 50 L 40 55 M 30 48 L 35 48 M 30 52 L 35 52" stroke="#fd7e14" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+													</svg>
 											</div>
 											<div className="twm-content">
 												<NavLink to="/job-grid?category=IT">
@@ -755,9 +762,16 @@ function Home16Page() {
 
 									{/* COLUMNS 2 */}
 									<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
-										<div className="job-cat-block-hpage-6 m-b30 hover-card">
+										<div className="job-cat-block-hpage-6 m-b30 hover-card" style={{backgroundColor: 'white'}}>
 											<div className="twm-media">
-												<div className="flaticon-project-management" />
+												<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="category-svg">
+														<path d="M 15 20 L 15 60 Q 15 65 20 65 L 55 65 Q 60 65 60 60 L 60 20 Q 60 15 55 15 L 20 15 Q 15 15 15 20 Z" fill="none" stroke="#fd7e14" strokeWidth="2.5"/>
+														<line x1="20" y1="25" x2="55" y2="25" stroke="#fd7e14" strokeWidth="2"/>
+														<line x1="20" y1="35" x2="55" y2="35" stroke="#fd7e14" strokeWidth="2"/>
+														<line x1="20" y1="45" x2="55" y2="45" stroke="#fd7e14" strokeWidth="2"/>
+														<line x1="20" y1="55" x2="40" y2="55" stroke="#fd7e14" strokeWidth="2"/>
+														<path d="M 45 48 L 50 43 L 55 48 L 50 53 Z" fill="#fd7e14"/>
+													</svg>
 											</div>
 											<div className="twm-content">
 												<NavLink to="/job-grid?category=Content">
@@ -781,9 +795,20 @@ function Home16Page() {
 
 									{/* COLUMNS 3 */}
 									<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
-										<div className="job-cat-block-hpage-6 m-b30 hover-card">
+										<div className="job-cat-block-hpage-6 m-b30 hover-card" style={{backgroundColor: 'white'}}>
 											<div className="twm-media">
-												<div className="flaticon-note" />
+												<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="category-svg">
+														<line x1="15" y1="55" x2="65" y2="55" stroke="#fd7e14" strokeWidth="3"/>
+														<rect x="18" y="45" width="8" height="10" fill="#fd7e14"/>
+														<rect x="30" y="35" width="8" height="20" fill="#fd7e14"/>
+														<rect x="42" y="25" width="8" height="30" fill="#fd7e14"/>
+														<rect x="54" y="15" width="8" height="40" fill="#fd7e14"/>
+														<path d="M 25 45 L 35 35 L 45 25 L 55 15" stroke="#fd7e14" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+														<circle cx="25" cy="45" r="2.5" fill="#fd7e14"/>
+														<circle cx="35" cy="35" r="2.5" fill="#fd7e14"/>
+														<circle cx="45" cy="25" r="2.5" fill="#fd7e14"/>
+														<circle cx="55" cy="15" r="2.5" fill="#fd7e14"/>
+													</svg>
 											</div>
 											<div className="twm-content">
 												<NavLink to="/job-grid?category=Sales">
@@ -807,9 +832,12 @@ function Home16Page() {
 
 									{/* COLUMNS 4 */}
 									<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
-										<div className="job-cat-block-hpage-6 m-b30 hover-card">
+										<div className="job-cat-block-hpage-6 m-b30 hover-card" style={{backgroundColor: 'white'}}>
 											<div className="twm-media">
-												<div className="flaticon-customer-support" />
+												<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="category-svg">
+														<path d="M 40 18 C 40 18 28 28 28 38 C 28 48 33 55 40 55 C 47 55 52 48 52 38 C 52 28 40 18 40 18 Z" fill="none" stroke="#fd7e14" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+														<path d="M 40 32 L 40 45 M 35 38.5 L 45 38.5" stroke="#fd7e14" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+													</svg>
 											</div>
 											<div className="twm-content">
 												<NavLink to="/job-grid?category=Healthcare">
@@ -833,9 +861,17 @@ function Home16Page() {
 
 									{/* COLUMNS 5 */}
 									<Col lg={4} md={6} sm={12} xs={12} className="mb-4">
-										<div className="job-cat-block-hpage-6 m-b30 hover-card">
+										<div className="job-cat-block-hpage-6 m-b30 hover-card" style={{backgroundColor: 'white'}}>
 											<div className="twm-media">
-												<div className="flaticon-bars" />
+												<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="category-svg">
+														<circle cx="25" cy="24" r="5.5" fill="none" stroke="#fd7e14" strokeWidth="2.5"/>
+														<path d="M 18 32 Q 18 32 32 32" fill="none" stroke="#fd7e14" strokeWidth="2.5" strokeLinecap="round"/>
+														<circle cx="55" cy="24" r="5.5" fill="none" stroke="#fd7e14" strokeWidth="2.5"/>
+														<path d="M 48 32 Q 48 32 62 32" fill="none" stroke="#fd7e14" strokeWidth="2.5" strokeLinecap="round"/>
+														<circle cx="40" cy="38" r="6" fill="none" stroke="#fd7e14" strokeWidth="2.5"/>
+														<path d="M 30 48 Q 30 48 50 48" fill="none" stroke="#fd7e14" strokeWidth="2.5" strokeLinecap="round"/>
+														<path d="M 25 56 Q 25 52 55 52 Q 55 56 40 62 Q 25 56 25 56 Z" fill="#fd7e14" opacity="0.3" stroke="#fd7e14" strokeWidth="2.5"/>
+													</svg>
 											</div>
 											<div className="twm-content">
 												<NavLink to="/job-grid?category=HR">
@@ -870,7 +906,7 @@ function Home16Page() {
 				{/* JOBS CATEGORIES SECTION END */}
 
 				{/* JOB POST START */}
-				<div className="section-full p-t50 p-b30 site-bg-gray twm-bg-ring-wrap2 animate-on-scroll">
+				<div className="section-full p-t50 p-b30 twm-bg-ring-wrap2 animate-on-scroll" style={{backgroundColor: 'white'}}>
 					<div className="twm-bg-ring-right" />
 					<div className="twm-bg-ring-left" />
 					<Container className="py-5">
@@ -1022,10 +1058,10 @@ function Home16Page() {
 																	if (sanitizedJobId) {
 																		window.location.href = `/job-detail/${sanitizedJobId}`;
 																	} else {
-																		alert('Invalid job ID. Cannot navigate to job details.');
+																		showToast('Invalid job ID. Cannot navigate to job details.', 'error');
 																	}
 																} else {
-																	alert('Job ID is missing. Cannot navigate to job details.');
+																	showToast('Job ID is missing. Cannot navigate to job details.', 'error');
 																}
 															}}
 														>

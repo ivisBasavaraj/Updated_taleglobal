@@ -25,8 +25,12 @@ export const forceLightMode = () => {
   // Force light color scheme on document
   const forceStyles = () => {
     document.documentElement.style.setProperty('color-scheme', 'light only', 'important');
+    document.documentElement.style.setProperty('background-color', '#ffffff', 'important');
+    document.documentElement.style.setProperty('color', '#111827', 'important');
+    
     document.body.style.setProperty('background-color', '#ffffff', 'important');
     document.body.style.setProperty('color', '#111827', 'important');
+    document.body.style.setProperty('color-scheme', 'light only', 'important');
     
     // Add meta tag if not exists
     if (!document.querySelector('meta[name="color-scheme"]')) {
@@ -34,6 +38,14 @@ export const forceLightMode = () => {
       meta.name = 'color-scheme';
       meta.content = 'light only';
       document.head.appendChild(meta);
+    }
+    
+    // Add viewport meta for better mobile handling
+    if (!document.querySelector('meta[name="theme-color"]')) {
+      const themeMeta = document.createElement('meta');
+      themeMeta.name = 'theme-color';
+      themeMeta.content = '#ffffff';
+      document.head.appendChild(themeMeta);
     }
   };
 
@@ -50,25 +62,33 @@ export const forceLightMode = () => {
     attributeFilter: ['style', 'class']
   });
 
-  // Also watch for style changes
-  const styleObserver = new MutationObserver(() => {
-    forceStyles();
-  });
-
-  styleObserver.observe(document.head, {
-    childList: true,
-    subtree: true
-  });
+  // Override CSS.supports for dark mode queries
+  if (window.CSS && window.CSS.supports) {
+    const originalSupports = window.CSS.supports;
+    window.CSS.supports = function(property, value) {
+      if (property === 'color-scheme' && value === 'dark') {
+        return false;
+      }
+      return originalSupports.call(this, property, value);
+    };
+  }
 
   return () => {
     observer.disconnect();
-    styleObserver.disconnect();
   };
 };
 
 // Initialize immediately when module loads
 if (typeof window !== 'undefined') {
-  forceLightMode();
+  // Run on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', forceLightMode);
+  } else {
+    forceLightMode();
+  }
+  
+  // Also run on window load as backup
+  window.addEventListener('load', forceLightMode);
 }
 
 export default forceLightMode;

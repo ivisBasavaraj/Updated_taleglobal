@@ -1,0 +1,22 @@
+/* Employer Details Visibility Fix */
+.employer-details-container * {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.profile-field p {
+  color: #232323 !important;
+  display: block !important;
+}
+
+.documents-table tbody td {
+  display: table-cell !important;
+}
+
+.status-badge {
+  display: inline-flex !important;
+}
+
+.action-btn {
+  display: inline-flex !important;
+}

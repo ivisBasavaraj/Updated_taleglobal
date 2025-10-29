@@ -1,0 +1,54 @@
+/* Override orange colors in job categories and companies sections */
+
+/* Remove orange background from job category icons */
+.job-cat-block-hpage-6 .twm-media:after {
+  background-color: #1967d2 !important;
+}
+
+/* Remove orange color from job available count */
+.job-cat-block-hpage-6 .twm-content .twm-jobs-available span {
+  color: #1967d2 !important;
+}
+
+/* Remove orange border from circle button */
+.circle-line-wrap .circle-line-btn {
+  border: 2px solid #1967d2 !important;
+}
+
+/* Remove orange arrow color */
+.fa-arrow-right:before {
+  color: #1967d2 !important;
+}
+
+/* Job category block background - change to white */
+.job-cat-block-hpage-6 {
+  background-color: #fff !important;
+}
+
+/* Job category home 8 media background */
+.job-categories-home-8 .twm-media {
+  background-color: #1967d2 !important;
+}
+
+/* Companies section background */
+.twm-companies-wrap-h-page-7 .twm-companies-h-page-7 {
+  background-color: #fff !important;
+}
+
+/* Remove orange from hover states */
+.job-cat-block-hpage-6:hover .twm-content > a {
+  color: #1967d2 !important;
+}
+
+.job-cat-block-hpage-6:hover .twm-content .twm-jobs-available {
+  color: #1967d2 !important;
+}
+
+.job-cat-block-hpage-6:hover .twm-media [class*=flaticon-] {
+  color: #1967d2 !important;
+}
+
+.job-cat-block-hpage-6:hover .twm-media:after {
+  background-color: #f0f6fe !important;
+  border: 1px solid #1967d2 !important;
+}

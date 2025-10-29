@@ -1,0 +1,144 @@
+/* Index16 Job Categories Orange Theme - White Cards with Orange Background */
+
+/* Job categories section background */
+.twm-job-categories-hpage-6-area {
+  background-color: transparent !important;
+}
+
+/* Grid alignment - Center the category cards */
+.twm-job-cat-hpage-6-wrap .job-cat-block-hpage-6-section {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.twm-job-cat-hpage-6-wrap .job-cat-block-hpage-6-section .row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 1.5rem;
+  width: 100%;
+  align-items: stretch;
+}
+
+/* Adjust column width to fit all 5 cards in one line - equal width */
+.twm-job-cat-hpage-6-wrap .job-cat-block-hpage-6-section .row > [class*="col"] {
+  flex: 1 1 calc(20% - 0.3rem);
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Keep job category cards white with consistent height */
+.job-cat-block-hpage-6 {
+  background-color: #fff !important;
+  border: none !important;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1) !important;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 280px;
+}
+
+/* SVG Icon styling - orange with proper alignment */
+.job-cat-block-hpage-6 .twm-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  position: relative;
+}
+
+.job-cat-block-hpage-6 .twm-media .category-svg {
+  width: 80px;
+  height: 80px;
+  display: block;
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.08));
+  position: relative;
+  z-index: 2;
+}
+
+/* Override blue ::after pseudo-element background - remove it completely */
+.job-cat-block-hpage-6 .twm-media::after {
+  display: none !important;
+}
+
+/* Content area styling - ensure consistent layout */
+.job-cat-block-hpage-6 .twm-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+/* Job count styling - orange theme */
+.job-cat-block-hpage-6 .twm-content .twm-jobs-available {
+  background-color: rgba(253, 126, 20, 0.1) !important;
+  color: #fd7e14 !important;
+  margin: 0.75rem 0 !important;
+}
+
+.job-cat-block-hpage-6 .twm-content .twm-jobs-available span {
+  color: #fd7e14 !important;
+  font-weight: 600;
+}
+
+/* Category name styling */
+.job-cat-block-hpage-6 .twm-content > a {
+  color: #17171d !important;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Arrow button styling */
+.job-cat-block-hpage-6 .circle-line-wrap {
+  margin-top: auto;
+  padding-top: 0.75rem;
+}
+
+.job-cat-block-hpage-6 .circle-line-wrap .circle-line-btn {
+  border: 2px solid #fd7e14 !important;
+  background-color: transparent !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.job-cat-block-hpage-6 .circle-line-wrap .circle-line-btn .fa-arrow-right {
+  color: #fd7e14 !important;
+}
+
+/* Hover effects - Subtle lift without color change */
+.job-cat-block-hpage-6:hover {
+  background-color: #fff !important;
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.job-cat-block-hpage-6:hover .twm-media .category-svg {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+
+.job-cat-block-hpage-6:hover .twm-content > a {
+  color: #17171d !important;
+}
+
+.job-cat-block-hpage-6:hover .twm-content .twm-jobs-available {
+  background-color: rgba(253, 126, 20, 0.15) !important;
+  color: #fd7e14 !important;
+}
+
+.job-cat-block-hpage-6:hover .twm-content .twm-jobs-available span {
+  color: #fd7e14 !important;
+}
+
+.job-cat-block-hpage-6:hover .circle-line-wrap .circle-line-btn {
+  background-color: transparent !important;
+  border: 2px solid #fd7e14 !important;
+}
+
+.job-cat-block-hpage-6:hover .circle-line-wrap .circle-line-btn .fa-arrow-right {
+  color: #fd7e14 !important;
+}
