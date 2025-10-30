@@ -2034,15 +2034,22 @@ exports.updateSupportTicketStatus = async (req, res) => {
             message: notificationMessage,
             type: 'support_response',
             role: ticket.userType === 'guest' ? 'candidate' : ticket.userType,
-            relatedId: targetUserId,
             createdBy: req.user.id
           };
+          
+          // Use candidateId for candidate notifications, relatedId for others
+          if (ticket.userType === 'candidate' || ticket.userType === 'guest') {
+            notificationData.candidateId = targetUserId;
+          } else {
+            notificationData.relatedId = targetUserId;
+          }
           
           console.log('Creating support notification with full response:', {
             title: notificationTitle,
             messageLength: notificationMessage.length,
             hasResponse: !!(response && response.trim()),
-            status: status
+            status: status,
+            isCandidateNotif: ticket.userType === 'candidate' || ticket.userType === 'guest'
           });
           
           await createNotification(notificationData);

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { api } from '../../../../utils/api';
-import '../../../../mobile-card-scrolling.css';
 
 function AdminPlacementOfficersAllRequest() {
     const navigate = useNavigate();
@@ -155,7 +154,7 @@ function AdminPlacementOfficersAllRequest() {
 
                                                 <button
                                                     style={{
-                                                        backgroundColor: "#5781FF",
+                                                        backgroundColor: "#fd7e14",
                                                         color: "#fff",
                                                         border: "none",
                                                         padding: "5px 10px",

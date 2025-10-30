@@ -155,7 +155,7 @@ function EmpCandidatesPage() {
   return (
     <>
       <div className="wt-admin-right-page-header clearfix">
-        <h2>
+        <h2 style={{marginLeft: '25px'}}>
           {jobId && currentJob
             ? `Applicants for ${currentJob.title}`
             : "Applicants Details"}
@@ -173,7 +173,7 @@ function EmpCandidatesPage() {
         )}
       </div>
 
-      <div className="panel panel-default site-bg-white p-3">
+      <div className="panel panel-default site-bg-white p-3" style={{marginTop: '10px'}}>
         <div className="panel-heading wt-panel-heading mb-3 d-flex align-items-center justify-content-between">
           <h4 className="panel-tittle d-flex align-items-center m-0">
             <ListChecks

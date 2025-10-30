@@ -138,8 +138,9 @@ function SignInPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#login-candidate"
 												type="button"
+												style={{color: '#ffffff'}} onMouseEnter={(e) => e.target.style.color = '#ffffff'} onMouseLeave={(e) => e.target.style.color = '#ffffff'}
 											>
-												<i className="fas fa-user-tie" style={{color: 'white !important'}} />
+												<i className="fas fa-user-tie" style={{color: '#ffffff'}} />
 												Candidate
 											</button>
 										</li>
@@ -151,8 +152,9 @@ function SignInPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#login-Employer"
 												type="button"
+												style={{color: '#ffffff'}} onMouseEnter={(e) => e.target.style.color = '#ffffff'} onMouseLeave={(e) => e.target.style.color = '#ffffff'}
 											>
-												<i className="fas fa-building" style={{color: 'white'}} />
+												<i className="fas fa-building" style={{color: '#ffffff'}} />
 												Employer
 											</button>
 										</li>
@@ -163,8 +165,9 @@ function SignInPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#login-Placement"
 												type="button"
+												style={{color: '#ffffff'}} onMouseEnter={(e) => e.target.style.color = '#ffffff'} onMouseLeave={(e) => e.target.style.color = '#ffffff'}
 											>
-												<i className="fas fa-graduation-cap" style={{color: 'white'}} />
+												<i className="fas fa-graduation-cap" style={{color: '#ffffff'}} />
 												Placement Officer
 											</button>
 										</li>
@@ -216,29 +219,19 @@ function SignInPopup() {
 														/>
 														<button
 															type="button"
-															className="btn position-absolute"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
+															className="btn position-absolute password-eye-icon"
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
 															onClick={() => setShowCanPassword(!showCanPassword)}
 														>
-															<i className={showCanPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: 'black' }} />
+															<i className={showCanPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
 														</button>
 													</div>
 												</div>
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<div className=" form-check">
-															<input
-																type="checkbox"
-																className="form-check-input"
-																id="Password3"
-															/>
-															<label
-																className="form-check-label rem-forgot"
-																htmlFor="Password3"
-															>
-																<NavLink to={pubRoute(publicUser.pages.FORGOT)} onClick={() => navigate(pubRoute(publicUser.pages.FORGOT))}>Forgot Password</NavLink>
-															</label>
+														<div className="text-end">
+															<NavLink to={pubRoute(publicUser.pages.FORGOT)} onClick={() => navigate(pubRoute(publicUser.pages.FORGOT))}>Forgot Password</NavLink>
 														</div>
 													</div>
 												</div>
@@ -311,29 +304,19 @@ function SignInPopup() {
 														/>
 														<button
 															type="button"
-															className="btn position-absolute"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
+															className="btn position-absolute password-eye-icon"
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
 															onClick={() => setShowEmpPassword(!showEmpPassword)}
 														>
-															<i className={showEmpPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: 'black' }} />
+															<i className={showEmpPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
 														</button>
 													</div>
 												</div>
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<div className=" form-check">
-															<input
-																type="checkbox"
-																className="form-check-input"
-																id="Password4"
-															/>
-															<label
-																className="form-check-label rem-forgot"
-																htmlFor="Password4"
-															>
-																<a href="/forgot-password">Forgot Password</a>
-															</label>
+														<div className="text-end">
+															<a href="/forgot-password">Forgot Password</a>
 														</div>
 													</div>
 												</div>
@@ -406,29 +389,19 @@ function SignInPopup() {
 														/>
 														<button
 															type="button"
-															className="btn position-absolute"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent' }}
+															className="btn position-absolute password-eye-icon"
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
 															onClick={() => setShowPlacementPassword(!showPlacementPassword)}
 														>
-															<i className={showPlacementPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: 'black' }} />
+															<i className="fas fa-eye" style={{ color: '#fd7e14' }} />
 														</button>
 													</div>
 												</div>
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<div className=" form-check">
-															<input
-																type="checkbox"
-																className="form-check-input"
-																id="Password5"
-															/>
-															<label
-																className="form-check-label rem-forgot"
-																htmlFor="Password5"
-															>
-																<NavLink to={pubRoute(publicUser.pages.FORGOT)} onClick={() => navigate(pubRoute(publicUser.pages.FORGOT))}>Forgot Password</NavLink>
-															</label>
+														<div className="text-end">
+															<NavLink to={pubRoute(publicUser.pages.FORGOT)} onClick={() => navigate(pubRoute(publicUser.pages.FORGOT))}>Forgot Password</NavLink>
 														</div>
 													</div>
 												</div>

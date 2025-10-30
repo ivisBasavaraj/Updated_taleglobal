@@ -12,6 +12,9 @@ const employerProfileSchema = new mongoose.Schema({
   establishedSince: { type: String },
   teamSize: { type: String },
   description: { type: String },
+  location: { type: String }, // Primary office location
+  whyJoinUs: { type: String }, // Why candidates should join
+  googleMapsEmbed: { type: String }, // Google Maps embed code
   
   // Company Details
   legalEntityCode: { type: String },

@@ -303,13 +303,6 @@ function EmpDashboardPage() {
                                                 View Profile
                                             </button>
                                         </div>
-
-                                        {profileCompletion.missingFields.length > 0 && (
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', background: '#fef3c7', borderRadius: '0.5rem' }}>
-                                                <span style={{ color: '#f59e0b', fontSize: '1rem' }}>⚠️</span>
-                                                <p style={{ fontSize: '0.875rem', color: '#92400e', margin: 0 }}>Missing: {profileCompletion.missingFields.join(', ')}</p>
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
                             </div>

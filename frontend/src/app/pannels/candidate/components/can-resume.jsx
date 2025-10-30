@@ -57,11 +57,11 @@ function CanMyResumePage() {
 					<div className="panel panel-default mb-4">
 						<div className="panel-heading wt-panel-heading p-a20">
 							<h3 className="panel-tittle m-a0 text-center">
-								<i className="fa fa-file-text-o me-2" style={{color: '#ff6b35'}}></i>
+								<i className="fa fa-file-text-o me-2" style={{color: 'white'}}></i>
 								My Resume
 							</h3>
 							<p className="text-center text-muted mb-0">
-								<i className="fa fa-wrench me-1" style={{color: '#ff6b35'}}></i>
+								<i className="fa fa-wrench me-1" style={{color: 'white'}}></i>
 								Build and manage your professional resume
 							</p>
 						</div>

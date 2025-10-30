@@ -15,6 +15,9 @@ function EmpCompanyProfilePage() {
         teamSize: '',
 
         description: '',
+        location: '',
+        googleMapsEmbed: '',
+        whyJoinUs: '',
         
         // Company Details
         legalEntityCode: '',
@@ -724,6 +727,10 @@ function EmpCompanyProfilePage() {
             // Create a copy of formData excluding large Base64 files to prevent request size issues
             const profileData = { ...formData };
             
+            // Explicitly ensure whyJoinUs and googleMapsEmbed are included
+            profileData.whyJoinUs = formData.whyJoinUs || '';
+            profileData.googleMapsEmbed = formData.googleMapsEmbed || '';
+            
             // Remove Base64 encoded files from the request (these are uploaded separately)
             delete profileData.logo;
             delete profileData.coverImage;
@@ -735,6 +742,19 @@ function EmpCompanyProfilePage() {
             delete profileData.authorizationLetters;
             delete profileData.gallery;
             
+            // Log the data being sent (for debugging)
+            console.log('Sending profile data:', {
+                whyJoinUs: profileData.whyJoinUs?.substring(0, 50),
+                googleMapsEmbed: profileData.googleMapsEmbed?.substring(0, 50),
+                whyJoinUsLength: profileData.whyJoinUs?.length,
+                googleMapsEmbedLength: profileData.googleMapsEmbed?.length,
+                companyName: profileData.companyName,
+                description: profileData.description?.substring(0, 50)
+            });
+            console.log('Full whyJoinUs:', profileData.whyJoinUs);
+            console.log('Full googleMapsEmbed:', profileData.googleMapsEmbed);
+            console.log('All profile data keys:', Object.keys(profileData));
+            
             const response = await fetch('http://localhost:5000/api/employer/profile', {
                 method: 'PUT',
                 headers: {
@@ -745,7 +765,15 @@ function EmpCompanyProfilePage() {
             });
 
             if (response.ok) {
-                alert('Profile updated successfully!');
+                const responseData = await response.json();
+                let successMessage = 'Profile updated successfully!';
+                
+                // Check if whyJoinUs and googleMapsEmbed were saved
+                if (profileData.whyJoinUs || profileData.googleMapsEmbed) {
+                    successMessage += '\n\nGoogle Maps and Why Join Us sections have been saved.';
+                }
+                
+                alert(successMessage);
                 // Refresh profile data to get latest state
                 fetchProfile();
             } else {
@@ -771,10 +799,8 @@ function EmpCompanyProfilePage() {
     return (
         <div className="emp-company-profile orange-icons">
             <div className="wt-admin-right-page-header clearfix">
-                <h2>Company Details</h2>
-                <div className="progress-indicator">
-                    <div className="progress-bar" style={{width: '75%'}}></div>
-                </div>
+                <h2 style={{marginLeft: '25px'}}>Company Details</h2>
+                
                 <div className="alert alert-info mt-3" style={{fontSize: '14px'}}>
                     <i className="fas fa-info-circle me-2"></i>
                     <strong>Tip:</strong> Upload all files (logo, documents, etc.) individually first, then click "Save Profile" to save your text information.
@@ -998,6 +1024,68 @@ function EmpCompanyProfilePage() {
                                         value={formData.description}
                                         onChange={(e) => handleInputChange('description', e.target.value)}
                                         placeholder="Company description..."
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label><MapPin size={16} className="me-2" /> Primary Office Location</label>
+                                    <input
+                                        className="form-control"
+                                        type="text"
+                                        value={formData.location}
+                                        onChange={(e) => handleInputChange('location', e.target.value)}
+                                        placeholder="e.g., Bangalore, India"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label><MapPin size={16} className="me-2" /> Google Maps Embed Code</label>
+                                    <textarea
+                                        className="form-control"
+                                        rows={3}
+                                        value={formData.googleMapsEmbed || ''}
+                                        onChange={(e) => handleInputChange('googleMapsEmbed', e.target.value)}
+                                        placeholder='<iframe src="https://www.google.com/maps/embed?pb=..." width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>'
+                                    />
+                                    <small className="text-muted mt-1">Paste Google Maps embed iframe code here</small>
+                                    
+                                    {formData.googleMapsEmbed && (() => {
+                                        const srcMatch = formData.googleMapsEmbed.match(/src=["']([^"']+)["']/);
+                                        if (srcMatch) {
+                                            return (
+                                                <div className="mt-3">
+                                                    <iframe
+                                                        src={srcMatch[1]}
+                                                        width="100%"
+                                                        height="200"
+                                                        style={{border: '1px solid #ddd', borderRadius: '4px'}}
+                                                        allowFullScreen=""
+                                                        loading="lazy"
+                                                        referrerPolicy="no-referrer-when-downgrade"
+                                                        title="Company Location Preview"
+                                                    ></iframe>
+                                                    <p className="text-success mt-2">✓ Map preview loaded successfully</p>
+                                                </div>
+                                            );
+                                        }
+                                        return <p className="text-warning mt-2">Invalid embed code format</p>;
+                                    })()}
+                                </div>
+                            </div>
+
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label><Briefcase size={16} className="me-2" /> Why Join Us</label>
+                                    <textarea
+                                        className="form-control"
+                                        rows={3}
+                                        value={formData.whyJoinUs}
+                                        onChange={(e) => handleInputChange('whyJoinUs', e.target.value)}
+                                        placeholder="Highlight the benefits of working with your company..."
                                     />
                                 </div>
                             </div>

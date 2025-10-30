@@ -131,21 +131,57 @@ exports.updateProfile = async (req, res) => {
     const updateData = { ...req.body };
     delete updateData.employerCategory;
     
+    // Explicitly preserve text fields that should be saved
+    // Use $set operator to ensure fields are actually updated
+    const textFieldsToPreserve = ['whyJoinUs', 'googleMapsEmbed', 'description', 'location'];
+    const setOperations = {};
+    
+    textFieldsToPreserve.forEach(field => {
+      if (req.body[field] !== undefined) {
+        setOperations[field] = req.body[field];
+      }
+    });
+    
     // Remove any Base64 data that should not be in profile updates
     // (these should be uploaded via separate endpoints)
-    const fieldsToExclude = ['logo', 'coverImage', 'panCardImage', 'cinImage', 'gstImage', 'certificateOfIncorporation', 'companyIdCardPicture', 'authorizationLetters'];
+    const fieldsToExclude = ['logo', 'coverImage', 'panCardImage', 'cinImage', 'gstImage', 'certificateOfIncorporation', 'companyIdCardPicture', 'authorizationLetters', 'gallery'];
     fieldsToExclude.forEach(field => {
       if (updateData[field] && typeof updateData[field] === 'string' && updateData[field].startsWith('data:')) {
         console.log(`Excluding Base64 field: ${field}`);
         delete updateData[field];
       }
     });
+    
+    // Merge the text field set operations into updateData to ensure they're saved
+    Object.assign(updateData, setOperations);
+    
+    // Force include whyJoinUs and googleMapsEmbed even if empty strings
+    if (req.body.hasOwnProperty('whyJoinUs')) {
+      updateData.whyJoinUs = req.body.whyJoinUs || '';
+    }
+    if (req.body.hasOwnProperty('googleMapsEmbed')) {
+      updateData.googleMapsEmbed = req.body.googleMapsEmbed || '';
+    }
+
+    // Verify that text fields are included in updateData
+    console.log('Profile update - whyJoinUs:', updateData.whyJoinUs?.substring(0, 50));
+    console.log('Profile update - googleMapsEmbed:', updateData.googleMapsEmbed?.substring(0, 50));
+    console.log('Profile update - whyJoinUs length:', updateData.whyJoinUs?.length);
+    console.log('Profile update - googleMapsEmbed length:', updateData.googleMapsEmbed?.length);
+    console.log('Profile update - all updateData keys:', Object.keys(updateData));
+    console.log('Raw request body whyJoinUs:', req.body.whyJoinUs?.substring(0, 50));
+    console.log('Raw request body googleMapsEmbed:', req.body.googleMapsEmbed?.substring(0, 50));
 
     const profile = await EmployerProfile.findOneAndUpdate(
       { employerId: req.user._id },
       updateData,
-      { new: true, upsert: true }
+      { new: true, upsert: true, runValidators: false }
     ).populate('employerId', 'name email phone companyName');
+
+    // Verify fields were saved to database
+    console.log('Saved profile - whyJoinUs:', profile.whyJoinUs?.substring(0, 50));
+    console.log('Saved profile - googleMapsEmbed:', profile.googleMapsEmbed?.substring(0, 50));
+    console.log('Saved profile - location:', profile.location?.substring(0, 50));
 
     // Create notification for admin when profile is updated
     try {

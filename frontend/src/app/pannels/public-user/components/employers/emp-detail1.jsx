@@ -285,22 +285,11 @@ function EmployersDetail1Page() {
 												</p>
 
 												<h4 className="twm-s-title">Why Join Us</h4>
-												<ul className="description-list-2">
-													<li>
-														Establish and promote design guidelines, best practices
-														and standards.
-													</li>
+												<p>
+													{employer.whyJoinUs || 'No information available about why to join this company.'}
+												</p>
 
-													<li>
-														Accurately estimate design tickets during planning
-														sessions.
-													</li>
 
-													<li>
-														Partnering with product and engineering to translate
-														business and user goals.
-													</li>
-												</ul>
 											</div>
 
 											<div className="tab-pane fade" id="jobs" role="tabpanel">

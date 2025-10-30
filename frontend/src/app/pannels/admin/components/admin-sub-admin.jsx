@@ -232,7 +232,7 @@ function AdminSubAdmin() {
                                     <h4 className="fw-semibold text-dark mb-0">Sub Admins List</h4>
                                     <button 
                                         className="btn btn-primary rounded-pill px-4 py-2 fw-semibold"
-                                        style={{ backgroundColor: '#ff5a1f', border: 'none' }}
+                                        style={{ backgroundColor: '#fd7e14', border: 'none' }}
                                         onClick={() => {
                                             resetForm();
                                             setShowAddForm(true);
@@ -261,7 +261,7 @@ function AdminSubAdmin() {
                                                         <td className="py-3">
                                                             <div className="d-flex align-items-center">
                                                                 <div className="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" 
-                                                                     style={{ width: '40px', height: '40px', backgroundColor: '#ff5a1f' }}>
+                                                                     style={{ width: '40px', height: '40px', backgroundColor: '#fd7e14' }}>
                                                                     <i className="fa fa-user text-white"></i>
                                                                 </div>
                                                                 <span className="fw-medium">{admin.name}</span>
@@ -317,7 +317,7 @@ function AdminSubAdmin() {
                             <div>
                                 <div className="d-flex justify-content-between align-items-center mb-4">
                                     <h4 className="fw-semibold text-dark mb-0">
-                                        <i className={`fa ${showEditForm ? 'fa-edit' : 'fa-plus'} me-2`} style={{ color: '#ff5a1f' }}></i>
+                                        <i className={`fa ${showEditForm ? 'fa-edit' : 'fa-plus'} me-2`} style={{ color: '#fd7e14' }}></i>
                                         {showEditForm ? 'Edit Sub Admin' : 'Add New Sub Admin'}
                                     </h4>
                                     <button 
@@ -415,7 +415,7 @@ function AdminSubAdmin() {
                                             <label className="form-label fw-semibold text-dark mb-3">Permissions *</label>
                                             <div className="row g-3">
                                                 <div className="col-md-4">
-                                                    <div className="card border-2 h-100" style={{ cursor: 'pointer', borderColor: formData.permissions.includes('employers') ? '#ff5a1f' : '#dee2e6' }}>
+                                                    <div className="card border-2 h-100" style={{ cursor: 'pointer', borderColor: formData.permissions.includes('employers') ? '#fd7e14' : '#dee2e6' }}>
                                                         <div className="card-body text-center p-3">
                                                             <input
                                                                 className="form-check-input d-none"
@@ -425,7 +425,7 @@ function AdminSubAdmin() {
                                                                 onChange={() => handlePermissionChange('employers')}
                                                             />
                                                             <label className="form-check-label w-100 h-100 d-flex flex-column align-items-center justify-content-center" htmlFor="employers" style={{ cursor: 'pointer' }}>
-                                                                <i className="fa fa-building fa-2x mb-2" style={{ color: formData.permissions.includes('employers') ? '#ff5a1f' : '#6c757d' }}></i>
+                                                                <i className="fa fa-building fa-2x mb-2" style={{ color: formData.permissions.includes('employers') ? '#fd7e14' : '#6c757d' }}></i>
                                                                 <span className="fw-medium">Employers</span>
                                                                 <small className="text-muted">Manage employer accounts</small>
                                                             </label>
@@ -433,7 +433,7 @@ function AdminSubAdmin() {
                                                     </div>
                                                 </div>
                                                 <div className="col-md-4">
-                                                    <div className="card border-2 h-100" style={{ cursor: 'pointer', borderColor: formData.permissions.includes('placement_officers') ? '#ff5a1f' : '#dee2e6' }}>
+                                                    <div className="card border-2 h-100" style={{ cursor: 'pointer', borderColor: formData.permissions.includes('placement_officers') ? '#fd7e14' : '#dee2e6' }}>
                                                         <div className="card-body text-center p-3">
                                                             <input
                                                                 className="form-check-input d-none"
@@ -443,7 +443,7 @@ function AdminSubAdmin() {
                                                                 onChange={() => handlePermissionChange('placement_officers')}
                                                             />
                                                             <label className="form-check-label w-100 h-100 d-flex flex-column align-items-center justify-content-center" htmlFor="placement_officers" style={{ cursor: 'pointer' }}>
-                                                                <i className="fa fa-graduation-cap fa-2x mb-2" style={{ color: formData.permissions.includes('placement_officers') ? '#ff5a1f' : '#6c757d' }}></i>
+                                                                <i className="fa fa-graduation-cap fa-2x mb-2" style={{ color: formData.permissions.includes('placement_officers') ? '#fd7e14' : '#6c757d' }}></i>
                                                                 <span className="fw-medium">Placement Officers</span>
                                                                 <small className="text-muted">Manage placement officers</small>
                                                             </label>
@@ -451,7 +451,7 @@ function AdminSubAdmin() {
                                                     </div>
                                                 </div>
                                                 <div className="col-md-4">
-                                                    <div className="card border-2 h-100" style={{ cursor: 'pointer', borderColor: formData.permissions.includes('registered_candidates') ? '#ff5a1f' : '#dee2e6' }}>
+                                                    <div className="card border-2 h-100" style={{ cursor: 'pointer', borderColor: formData.permissions.includes('registered_candidates') ? '#fd7e14' : '#dee2e6' }}>
                                                         <div className="card-body text-center p-3">
                                                             <input
                                                                 className="form-check-input d-none"
@@ -461,7 +461,7 @@ function AdminSubAdmin() {
                                                                 onChange={() => handlePermissionChange('registered_candidates')}
                                                             />
                                                             <label className="form-check-label w-100 h-100 d-flex flex-column align-items-center justify-content-center" htmlFor="registered_candidates" style={{ cursor: 'pointer' }}>
-                                                                <i className="fa fa-users fa-2x mb-2" style={{ color: formData.permissions.includes('registered_candidates') ? '#ff5a1f' : '#6c757d' }}></i>
+                                                                <i className="fa fa-users fa-2x mb-2" style={{ color: formData.permissions.includes('registered_candidates') ? '#fd7e14' : '#6c757d' }}></i>
                                                                 <span className="fw-medium">Registered Candidates</span>
                                                                 <small className="text-muted">Manage candidate accounts</small>
                                                             </label>
@@ -544,7 +544,7 @@ function AdminSubAdmin() {
                                                 <button 
                                                     type="submit" 
                                                     className="btn btn-primary rounded-pill px-4 py-2 fw-semibold"
-                                                    style={{ backgroundColor: '#ff5a1f', border: 'none' }}
+                                                    style={{ backgroundColor: '#fd7e14', border: 'none' }}
                                                     disabled={loading}
                                                 >
                                                     {loading ? (

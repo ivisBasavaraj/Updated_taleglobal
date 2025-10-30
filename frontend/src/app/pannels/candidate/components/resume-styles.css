@@ -193,7 +193,7 @@ h5 {
     border-radius: 0 0 12px 12px;
 }
 
-/* Edit button styling improvements */
+/* Edit button styling improvements - Black edit icons */
 .panel-heading-with-btn button,
 .panel-heading-with-btn a {
     transition: none !important;
@@ -201,14 +201,41 @@ h5 {
 
 .panel-heading-with-btn button:hover,
 .panel-heading-with-btn a:hover {
-    color: #e8690a !important;
+    color: #333 !important;
     transition: none !important;
+}
+
+/* Edit icons - Black color without orange background */
+.panel-heading .btn-link.site-text-primary,
+.panel-heading .btn-link.site-text-primary i,
+.panel-heading .btn-link .fa-edit,
+.panel-heading .btn-link .fa-times {
+    color: #000 !important;
+    background: none !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    font-size: 18px !important;
+}
+
+.panel-heading .btn-link.site-text-primary:hover,
+.panel-heading .btn-link.site-text-primary:hover i,
+.panel-heading .btn-link .fa-edit:hover,
+.panel-heading .btn-link .fa-times:hover {
+    color: #333 !important;
+    background: none !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
 }
 
 /* Edit button focus states */
 .btn-link:focus {
-    box-shadow: 0 0 0 2px rgba(253, 126, 20, 0.25) !important;
-    outline: none;
+    box-shadow: none !important;
+    outline: none !important;
+    border: none !important;
 }
 
 /* Enhanced prevention of blinking on Add Employment button */

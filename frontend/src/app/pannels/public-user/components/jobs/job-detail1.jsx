@@ -291,6 +291,24 @@ function JobDetail1Page() {
 											</>
 										)}
 
+										{job.employerProfile && (
+											<>
+												{job.employerProfile.whyJoinUs && (
+													<>
+														<h4 className="twm-s-title">Why Join Us:</h4>
+														<p>{job.employerProfile.whyJoinUs}</p>
+													</>
+												)}
+
+												{job.employerProfile.location && (
+													<>
+														<h4 className="twm-s-title">Location:</h4>
+														<p><i className="feather-map-pin" style={{marginRight: '8px'}}></i>{job.employerProfile.location}</p>
+													</>
+												)}
+											</>
+										)}
+
 										{job.postedBy === 'Consultant' && job.employerProfile && (
 											<>
 												<h4 className="twm-s-title">About Consultant:</h4>
@@ -372,20 +390,27 @@ function JobDetail1Page() {
 											<p style={{color: '#6c757d', fontStyle: 'italic'}}>No specific skills mentioned</p>
 										)}
 
-										<h4 className="twm-s-title">Responsibilities:</h4>
-										<ul className="description-list-2">
-											<li>Establish and promote design guidelines, best practices and standards.</li>
-											<li>Accurately estimate design tickets during planning sessions.</li>
-											<li>Present and defend designs and key deliverables to peers and executive level stakeholders.</li>
-											<li>Execute all visual design stages from concept to final hand-off to engineering.</li>
-										</ul>
+										{job.responsibilities && job.responsibilities.length > 0 && (
+											<>
+												<h4 className="twm-s-title">Responsibilities:</h4>
+												<ul className="description-list-2">
+													{job.responsibilities.map((resp, index) => (
+														<li key={index}>{resp}</li>
+													))}
+												</ul>
+											</>
+										)}
 
-										<h4 className="twm-s-title">Benefits:</h4>
-										<ul className="description-list-2">
-											<li>Transportation Provided</li>
-											<li>Flexible Working</li>
-											<li>Health Insurance</li>
-										</ul>
+										{job.benefits && job.benefits.length > 0 && (
+											<>
+												<h4 className="twm-s-title">Benefits:</h4>
+												<ul className="description-list-2">
+													{job.benefits.map((benefit, index) => (
+														<li key={index}>{benefit}</li>
+													))}
+												</ul>
+											</>
+										)}
 
 										<SectionShareProfile />
 										{/* <SectionJobLocation /> */}

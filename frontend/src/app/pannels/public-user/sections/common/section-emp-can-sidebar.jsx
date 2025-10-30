@@ -13,7 +13,7 @@ function SectionEmployersCandidateSidebar({ type, employer }) {
 							</div>
 							
 							<div className="twm-s-map mb-5">
-								<SectionLocation />
+								<SectionLocation employer={employer} />
 							</div>
 						</>
 					) : (
@@ -22,7 +22,7 @@ function SectionEmployersCandidateSidebar({ type, employer }) {
 								<SectionProfile employer={employer} />
 							</div>
 							<div className="twm-s-info-wrap mb-5">
-								<SectionLocation />
+								<SectionLocation employer={employer} />
 							</div>
 						</>
 					)}

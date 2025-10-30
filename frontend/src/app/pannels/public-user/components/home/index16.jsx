@@ -19,7 +19,6 @@ import "../../../../../employer-how-it-works.css";
 import "../../../../../ux-improvements.css";
 import "../../../../../remove-orange-underlines.css";
 import "../../../../../home-spacing-color-fix.css";
-import "../../../../../force-light-mode.css";
 import "../../../../../job-categories-height-fix.css";
 
 function Home16Page() {

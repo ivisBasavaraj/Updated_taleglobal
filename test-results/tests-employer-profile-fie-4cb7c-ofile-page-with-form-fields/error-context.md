@@ -1,0 +1,110 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e13]:
+    - generic [ref=e14]:
+      - link [ref=e15] [cursor=pointer]:
+        - /url: /login
+      - heading "Welcome Back" [level=3] [ref=e16]
+      - paragraph [ref=e17]: Sign in to your account
+    - generic [ref=e18]:
+      - tablist [ref=e19]:
+        - listitem [ref=e20]:
+          - button " Candidate" [ref=e21] [cursor=pointer]:
+            - generic [ref=e22]: 
+            - text: Candidate
+        - listitem [ref=e23]:
+          - button " Employer" [ref=e24] [cursor=pointer]:
+            - generic [ref=e25]: 
+            - text: Employer
+        - listitem [ref=e26]:
+          - button " Placement Officer" [ref=e27] [cursor=pointer]:
+            - generic [ref=e28]: 
+            - text: Placement Officer
+      - generic [ref=e30]:
+        - textbox "Username" [ref=e32]
+        - textbox "Password" [ref=e34]
+        - generic [ref=e35]:
+          - generic [ref=e36]:
+            - checkbox "Remember me" [ref=e37]
+            - generic [ref=e38]: Remember me
+          - link "Forgot Password" [ref=e39] [cursor=pointer]:
+            - /url: /forgot-password
+        - button "Log in" [ref=e40] [cursor=pointer]
+      - link " Back to Home" [ref=e42] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e43]: 
+        - text: Back to Home
+  - contentinfo [ref=e44]:
+    - generic [ref=e45]:
+      - generic [ref=e47]:
+        - generic [ref=e49]:
+          - link [ref=e51] [cursor=pointer]:
+            - /url: /
+          - paragraph [ref=e52]: A smarter way to search, apply, and succeed. Explore thousands of opportunities tailored to your goals.
+          - list [ref=e53]:
+            - listitem [ref=e54]:
+              - paragraph [ref=e55]: "Address : Bangalore, 560092"
+            - listitem [ref=e56]:
+              - paragraph [ref=e57]:
+                - text: "Email :"
+                - link "example@metromindz.com" [ref=e58] [cursor=pointer]:
+                  - /url: mailto:example@metromindz.com
+            - listitem [ref=e59]:
+              - paragraph [ref=e60]:
+                - text: "Call :"
+                - link "(+91) 9876543210" [ref=e61] [cursor=pointer]:
+                  - /url: tel:+919876543210
+        - generic [ref=e63]:
+          - generic [ref=e65]:
+            - heading "Quick Links" [level=3] [ref=e66]
+            - list [ref=e67]:
+              - listitem [ref=e68]:
+                - link "Home" [ref=e69] [cursor=pointer]:
+                  - /url: /
+              - listitem [ref=e70]:
+                - link "Jobs" [ref=e71] [cursor=pointer]:
+                  - /url: /job-grid
+              - listitem [ref=e72]:
+                - link "Employers" [ref=e73] [cursor=pointer]:
+                  - /url: /emp-grid
+              - listitem [ref=e74]:
+                - link "Contact Us" [ref=e75] [cursor=pointer]:
+                  - /url: /contact-us
+          - generic [ref=e77]:
+            - heading "Helpful Links" [level=3] [ref=e78]
+            - list [ref=e79]:
+              - listitem [ref=e80]:
+                - link "Candidate Dashboard" [ref=e81] [cursor=pointer]:
+                  - /url: /login
+              - listitem [ref=e82]:
+                - link "Employers Dashboard" [ref=e83] [cursor=pointer]:
+                  - /url: /login
+              - listitem [ref=e84]:
+                - link "Terms & Conditions" [ref=e85] [cursor=pointer]:
+                  - /url: /terms-conditions
+              - listitem [ref=e86]:
+                - link "Privacy Policy" [ref=e87] [cursor=pointer]:
+                  - /url: /privacy-policy
+      - generic [ref=e89]:
+        - generic [ref=e90]: Copyright © 2025 by Tale Global. All Rights Reserved.
+        - list [ref=e91]:
+          - listitem [ref=e92]:
+            - link "Facebook" [ref=e93] [cursor=pointer]:
+              - /url: https://www.facebook.com/
+              - img "Facebook" [ref=e94]
+          - listitem [ref=e95]:
+            - link "Twitter" [ref=e96] [cursor=pointer]:
+              - /url: https://www.twitter.com/
+              - img "Twitter" [ref=e97]
+          - listitem [ref=e98]:
+            - link "Instagram" [ref=e99] [cursor=pointer]:
+              - /url: https://www.instagram.com/
+              - img "Instagram" [ref=e100]
+          - listitem [ref=e101]:
+            - link "YouTube" [ref=e102] [cursor=pointer]:
+              - /url: https://www.youtube.com/
+              - img "YouTube" [ref=e103]
+  - text:                
+```

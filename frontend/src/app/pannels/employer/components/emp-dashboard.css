@@ -19,7 +19,7 @@
 .emp-dashboard .dashboard-card-2 {
   border-radius: 12px !important;
   border: none !important;
-  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06) !important;
+  box-shadow: none !important;
 }
 
 /* Card titles */
@@ -40,6 +40,8 @@
   background: #ffffff !important;
   border-radius: 12px !important;
   border: 1px solid #eef2f7 !important;
+  box-shadow: none !important;
+  margin-bottom: 1rem !important;
 }
 
 /* CTA buttons */
@@ -83,7 +85,7 @@
 }
 .emp-dashboard table tbody tr {
   background: #ffffff !important;
-  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.05);
+  box-shadow: none;
 }
 .emp-dashboard table tbody tr td {
   border-top: none !important;
@@ -120,14 +122,14 @@
   .emp-dashboard .wt-panel-body,
   .emp-dashboard .dashboard-card-2 {
     border-radius: 8px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    box-shadow: none !important;
   }
   
   .emp-dashboard .panel:hover,
   .emp-dashboard .wt-panel-body:hover,
   .emp-dashboard .dashboard-card-2:hover {
     transform: none !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    box-shadow: none !important;
   }
 }
 
@@ -262,4 +264,19 @@
   .emp-dashboard .wt-admin-right-page-header h2 {
     font-size: 1.5rem !important;
   }
+}
+
+/* Remove background panel for stats cards */
+.emp-dashboard .col-xl-4 .panel,
+.emp-dashboard .col-lg-4 .panel {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Fix profile completion card height */
+.emp-dashboard .col-xl-8 > div,
+.emp-dashboard .col-lg-8 > div {
+  min-height: 400px !important;
+  height: 400px !important;
 }

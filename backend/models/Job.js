@@ -32,6 +32,8 @@ const jobSchema = new mongoose.Schema({
   requiredSkills: [String],
   experienceLevel: { type: String, enum: ['freshers', 'minimum', 'both', 'entry', 'mid', 'senior', 'executive'] },
   minExperience: { type: Number, default: 0 },
+  responsibilities: [String],
+  benefits: [String],
   interviewRoundsCount: { type: Number },
   interviewRoundTypes: {
     technical: { type: Boolean, default: false },

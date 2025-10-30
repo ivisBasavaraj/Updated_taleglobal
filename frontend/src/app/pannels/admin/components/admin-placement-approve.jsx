@@ -92,7 +92,7 @@ function AdminPlacementOfficersApproved() {
                                             <td>
                                                 <button
                                                     style={{
-                                                        backgroundColor: "#5781FF",
+                                                        backgroundColor: "#fd7e14",
                                                         color: "#fff",
                                                         border: "none",
                                                         padding: "5px 10px",

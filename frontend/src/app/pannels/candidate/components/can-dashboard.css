@@ -15,7 +15,7 @@
 .can-dashboard .dashboard-card-2 {
   border-radius: 12px !important;
   border: none !important;
-  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06) !important;
+  box-shadow: none !important;
 }
 
 .can-dashboard .dashboard-card-2:hover {
@@ -84,7 +84,7 @@
 }
 .can-dashboard table tbody tr {
   background: #ffffff !important;
-  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.05);
+  box-shadow: none;
 }
 .can-dashboard table tbody tr td {
   border-top: none !important;

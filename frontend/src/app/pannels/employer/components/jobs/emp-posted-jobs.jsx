@@ -175,7 +175,7 @@ export default function EmpPostedJobs() {
 	return (
 		<>
 			<div className="wt-admin-right-page-header clearfix">
-				<h2>Jobs Posted</h2>
+				<h2 style={{marginLeft: '25px'}}>Jobs Posted</h2>
 			</div>
 
 			<div className="panel panel-default site-bg-white p-3">
@@ -219,7 +219,7 @@ export default function EmpPostedJobs() {
 								style={{paddingLeft: '40px'}}
 							/>
 						</div>
-						<div className="btn-group" role="group">
+						<div className="d-flex gap-2">
 							<button 
 								type="button" 
 								className={`btn ${statusFilter === 'all' ? 'btn-primary' : 'btn-outline-primary'}`}

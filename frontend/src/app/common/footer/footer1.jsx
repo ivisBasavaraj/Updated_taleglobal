@@ -128,35 +128,10 @@ function Footer1() {
 								</div>
 
 								<ul className="social-icons">
-									<li>
-										<a href="https://www.facebook.com/" style={{color: '#f97316', fontSize: '18px', textDecoration: 'none', display: 'inline-block', width: '35px', height: '35px', lineHeight: '35px', textAlign: 'center', borderRadius: '50%', backgroundColor: 'rgba(249, 115, 22, 0.1)', transition: 'all 0.3s ease'}}>
-											<i className="fab fa-facebook-f"></i>
-										</a>
-									</li>
-
-									<li>
-										<a href="https://www.twitter.com/" style={{color: '#f97316', fontSize: '18px', textDecoration: 'none', display: 'inline-block', width: '35px', height: '35px', lineHeight: '35px', textAlign: 'center', borderRadius: '50%', backgroundColor: 'rgba(249, 115, 22, 0.1)', transition: 'all 0.3s ease'}}>
-											<i className="fab fa-twitter"></i>
-										</a>
-									</li>
-
-									<li>
-										<a href="https://www.instagram.com/" style={{color: '#f97316', fontSize: '18px', textDecoration: 'none', display: 'inline-block', width: '35px', height: '35px', lineHeight: '35px', textAlign: 'center', borderRadius: '50%', backgroundColor: 'rgba(249, 115, 22, 0.1)', transition: 'all 0.3s ease'}}>
-											<i className="fab fa-instagram"></i>
-										</a>
-									</li>
-
-									<li>
-										<a href="mailto:example@metromindz.com" style={{color: '#f97316', fontSize: '18px', textDecoration: 'none', display: 'inline-block', width: '35px', height: '35px', lineHeight: '35px', textAlign: 'center', borderRadius: '50%', backgroundColor: 'rgba(249, 115, 22, 0.1)', transition: 'all 0.3s ease'}}>
-											<i className="fas fa-envelope"></i>
-										</a>
-									</li>
-
-									<li>
-										<a href="https://www.youtube.com/" style={{color: '#f97316', fontSize: '18px', textDecoration: 'none', display: 'inline-block', width: '35px', height: '35px', lineHeight: '35px', textAlign: 'center', borderRadius: '50%', backgroundColor: 'rgba(249, 115, 22, 0.1)', transition: 'all 0.3s ease'}}>
-											<i className="fab fa-youtube"></i>
-										</a>
-									</li>
+									<li><a href="https://www.facebook.com/"><img src="/assets/socialmedia/icons8-facebook.svg" alt="Facebook" style={{width: '40px', height: '40px'}} /></a></li>
+									<li><a href="https://www.twitter.com/"><img src="/assets/socialmedia/icons8-twitter.svg" alt="Twitter" style={{width: '40px', height: '40px'}} /></a></li>
+									<li><a href="https://www.instagram.com/"><img src="/assets/socialmedia/icons8-instagram.svg" alt="Instagram" style={{width: '40px', height: '40px'}} /></a></li>
+									<li><a href="https://www.youtube.com/"><img src="/assets/socialmedia/icons8-youtube.svg" alt="YouTube" style={{width: '40px', height: '40px'}} /></a></li>
 								</ul>
 							</div>
 						</div>

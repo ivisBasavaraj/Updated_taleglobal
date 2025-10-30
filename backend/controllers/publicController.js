@@ -366,6 +366,9 @@ exports.getEmployerProfile = async (req, res) => {
         email: employer.email,
         phone: employer.phone,
         description: 'No company description available.',
+        whyJoinUs: 'No information available about why to join this company.',
+        location: 'Location not specified',
+        googleMapsEmbed: '',
         gallery: []
       };
     }

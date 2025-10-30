@@ -49,7 +49,7 @@
 
 /* Panel heading animations */
 .panel-heading {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ff6b35 0%, #e85a1f 100%);
   color: white;
   border-radius: 8px 8px 0 0;
   position: relative;
@@ -109,10 +109,10 @@
 }
 
 .form-control:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #ff6b35;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
   transform: translateY(-1px);
-  background-color: #fafbff;
+  background-color: #fff8f5;
 }
 
 .form-control:hover {
@@ -129,7 +129,7 @@
 .form-control:focus + .floating-label,
 .form-control:not(:placeholder-shown) + .floating-label {
   transform: translateY(-25px) scale(0.85);
-  color: #667eea;
+  color: #ff6b35;
 }
 
 .floating-label {
@@ -154,7 +154,7 @@ label {
 }
 
 .form-group:hover label {
-  color: #667eea;
+  color: #ff6b35;
 }
 
 /* Button animations */
@@ -213,8 +213,8 @@ input[type="file"] {
 }
 
 input[type="file"]:hover {
-  border-color: #667eea;
-  background-color: #f0f4ff;
+  border-color: #ff6b35;
+  background-color: #fff8f5;
   transform: scale(1.02);
 }
 
@@ -239,12 +239,12 @@ input[type="file"]:hover {
 }
 
 .file-upload-wrapper:hover::before {
-  color: #667eea;
+  color: #ff6b35;
   opacity: 1;
 }
 
 input[type="file"]:focus {
-  outline: 2px solid #667eea;
+  outline: 2px solid #ff6b35;
   outline-offset: 2px;
 }
 
@@ -387,7 +387,7 @@ input[type="file"]:focus {
 .document-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  border: 1px solid #667eea;
+  border: 1px solid #ff6b35;
 }
 
 @keyframes slideInUp {
@@ -747,6 +747,84 @@ html {
   content: ' *';
   color: #e53e3e;
   font-weight: bold;
+}
+
+/* Edit icons - Black color without orange background */
+.panel-heading .btn-link,
+.panel-heading .btn-link i,
+.panel-heading .fa-edit,
+.panel-heading .fa-times,
+.panel-heading .site-text-primary,
+.panel-heading .site-text-primary i {
+    color: #000 !important;
+    background: none !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    font-size: 18px !important;
+}
+
+.panel-heading .btn-link:hover,
+.panel-heading .btn-link:hover i,
+.panel-heading .fa-edit:hover,
+.panel-heading .fa-times:hover,
+.panel-heading .site-text-primary:hover,
+.panel-heading .site-text-primary:hover i {
+    color: #333 !important;
+    background: none !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* SVG icons - Orange color */
+.emp-company-profile svg {
+    color: #ff6b35 !important;
+    stroke: #ff6b35 !important;
+}
+
+/* Delete buttons - Black without orange */
+.btn-outline-danger,
+.btn-danger,
+.btn-outline-danger i,
+.btn-danger i,
+.fa-trash,
+.fa-times,
+.fas.fa-trash,
+.fas.fa-times {
+    color: #000 !important;
+    background: none !important;
+    background-color: transparent !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.btn-outline-danger:hover,
+.btn-danger:hover,
+.btn-outline-danger:hover i,
+.btn-danger:hover i {
+    color: #fff !important;
+    background-color: #000 !important;
+    border-color: #000 !important;
+    box-shadow: none !important;
+}
+
+/* Remove any orange background or circle from danger buttons */
+.btn-danger::before,
+.btn-danger::after,
+.btn-outline-danger::before,
+.btn-outline-danger::after {
+    display: none !important;
+    background: none !important;
+}
+
+/* Override Bootstrap default danger button styling */
+.btn-danger {
+    background-color: transparent !important;
+    border-color: #000 !important;
 }
 
 /* Mobile Touch Optimizations */
