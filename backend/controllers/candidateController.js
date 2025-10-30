@@ -5,6 +5,7 @@ const Job = require('../models/Job');
 const Application = require('../models/Application');
 const Message = require('../models/Message');
 const { createProfileCompletionNotification } = require('./notificationController');
+const { sendWelcomeEmail } = require('../utils/emailService');
 
 const generateToken = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
@@ -31,6 +32,13 @@ exports.registerCandidate = async (req, res) => {
     await CandidateProfile.create({ candidateId: candidate._id });
 
     const token = generateToken(candidate._id, 'candidate');
+
+    // Send welcome email
+    try {
+      await sendWelcomeEmail(email, name, 'candidate');
+    } catch (emailError) {
+      console.error('Welcome email failed:', emailError);
+    }
 
     res.status(201).json({
       success: true,

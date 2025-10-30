@@ -5,6 +5,7 @@ const Job = require('../models/Job');
 const Application = require('../models/Application');
 const Message = require('../models/Message');
 const Subscription = require('../models/Subscription');
+const { sendWelcomeEmail } = require('../utils/emailService');
 
 const generateToken = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
@@ -40,6 +41,13 @@ exports.registerEmployer = async (req, res) => {
     await Subscription.create({ employerId: employer._id });
 
     const token = generateToken(employer._id, 'employer');
+
+    // Send welcome email
+    try {
+      await sendWelcomeEmail(email, name, 'employer');
+    } catch (emailError) {
+      console.error('Welcome email failed:', emailError);
+    }
 
     res.status(201).json({
       success: true,
