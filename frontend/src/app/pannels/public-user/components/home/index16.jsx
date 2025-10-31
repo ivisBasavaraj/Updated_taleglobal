@@ -899,7 +899,7 @@ function Home16Page() {
 							</div>
 
 							<div className="text-center job-categories-btn">
-								<NavLink to={"#!"} className=" site-button">
+								<NavLink to={"#!"} className="site-button site-button-sm">
 									All Categories
 								</NavLink>
 							</div>
@@ -948,7 +948,7 @@ function Home16Page() {
 								>
 									{isFiltered && (
 										<button
-											className="site-button me-3"
+											className="site-button site-button-sm me-3"
 											onClick={() => {
 												setJobs(allJobs.slice(0, 6));
 												setFilteredJobs([]);
@@ -1083,7 +1083,7 @@ function Home16Page() {
 											</p>
 											{isFiltered && (
 												<button
-													className="site-button mt-3"
+													className="site-button site-button-sm mt-3"
 													onClick={() => {
 														setJobs(allJobs.slice(0, 6));
 														setFilteredJobs([]);
