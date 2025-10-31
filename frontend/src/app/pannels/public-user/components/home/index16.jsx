@@ -771,11 +771,16 @@ function Home16Page() {
             <div className="section-full p-t20 p-b20 site-bg-white animate-on-scroll">
                 <Container className="py-2">
                     {/* title="" START*/}
-                    <div className="section-head center wt-small-separator-outer mb-3">
-                        <div className="wt-small-separator site-text-primary">
-                            <div>Top Recruiters</div>
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                        <div className="text-left">
+                            <div className="wt-small-separator site-text-primary">
+                                <div>Top Recruiters</div>
+                            </div>
+                            <h2 className="wt-title mb-0">Discover your next career move</h2>
                         </div>
-                        <h2 className="wt-title">Discover your next career move</h2>
+                        <NavLink to="/emp-grid" className="site-button">
+                            View All
+                        </NavLink>
                     </div>
                     {/* title="" END*/}
 
@@ -889,11 +894,7 @@ function Home16Page() {
                                 </ul>
                             </div>
 
-                            <div className="text-center m-b30">
-                                <NavLink to="/emp-grid" className=" site-button">
-                                    View All
-                                </NavLink>
-                            </div>
+
                         </div>
                     </div>
                 </Container>

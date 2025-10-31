@@ -2897,6 +2897,24 @@ a.btn.active {
   pointer-events: none !important;
 }
 
+#myTab2 button.nav-link {
+  background-color: transparent !important;
+  color: #6c757d !important;
+}
+
+#myTab2 button.nav-link.active {
+  background-color: #FF6A00 !important;
+  color: #ffffff !important;
+}
+
+#myTab2 button.nav-link i {
+  color: #FF6A00 !important;
+}
+
+#myTab2 button.nav-link.active i {
+  color: #ffffff !important;
+}
+
 /* ============================================================================
  * END OF CONSOLIDATED MASTER STYLES
  * ============================================================================

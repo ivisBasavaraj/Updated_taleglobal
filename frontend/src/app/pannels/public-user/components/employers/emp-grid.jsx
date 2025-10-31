@@ -16,9 +16,10 @@ const EmployersGridPage = memo(() => {
     const [employers, setEmployers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [totalEmployers, setTotalEmployers] = useState(0);
-    const [sortBy, setSortBy] = useState("Most Recent");
+    const [sortBy, setSortBy] = useState("");
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [isFirstLoad, setIsFirstLoad] = useState(true);
+    const [establishedYears, setEstablishedYears] = useState([]);
     const navigate = useNavigate();
     const abortControllerRef = useRef(null);
     const debounceTimerRef = useRef(null);
@@ -84,9 +85,19 @@ const EmployersGridPage = memo(() => {
                 if (data.success) {
                     setEmployers(data.employers || []);
                     setTotalEmployers(data.totalCount || data.employers?.length || 0);
+                    
+                    // Extract unique established years
+                    const years = [...new Set(
+                        (data.employers || [])
+                            .map(emp => emp.establishedSince || emp.profile?.establishedSince || emp.profile?.foundedYear)
+                            .filter(year => year && year !== 'Not specified')
+                            .sort((a, b) => b - a)
+                    )];
+                    setEstablishedYears(years);
                 } else {
                     setEmployers([]);
                     setTotalEmployers(0);
+                    setEstablishedYears([]);
                 }
             } catch (error) {
                 if (error.name !== 'AbortError') {
@@ -214,6 +225,7 @@ const EmployersGridPage = memo(() => {
                                 _config={_filterConfig}
                                 onSortChange={handleSortChange}
                                 onItemsPerPageChange={handleItemsPerPageChange}
+                                establishedYears={establishedYears}
                             />
                         </div>
 

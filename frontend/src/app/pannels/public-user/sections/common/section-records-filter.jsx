@@ -1,5 +1,5 @@
 
-function SectionRecordsFilter({ _config, onSortChange, onItemsPerPageChange }) {
+function SectionRecordsFilter({ _config, onSortChange, onItemsPerPageChange, establishedYears = [] }) {
     const handleSortChange = (e) => {
         if (onSortChange) {
             onSortChange(e.target.value);
@@ -30,12 +30,10 @@ function SectionRecordsFilter({ _config, onSortChange, onItemsPerPageChange }) {
                 <form className="woocommerce-ordering twm-filter-select d-flex align-items-center gap-3" method="get">
                     <span className="woocommerce-result-count">Sort By</span>
                     <select className="wt-select-bar-2 form-select" onChange={handleSortChange}>
-                        <option value="Most Recent">Most Recent</option>
-                        <option value="Oldest">Oldest First</option>
-                        <option value="A-Z">Title A-Z</option>
-                        <option value="Z-A">Title Z-A</option>
-                        <option value="Salary High to Low">Salary High to Low</option>
-                        <option value="Salary Low to High">Salary Low to High</option>
+                        <option value="">All Years</option>
+                        {establishedYears.map(year => (
+                            <option key={year} value={year}>Established {year}</option>
+                        ))}
                     </select>
                     <select className="wt-select-bar-2 form-select" onChange={handleItemsPerPageChange}>
                         <option value="10">Show 10</option>
