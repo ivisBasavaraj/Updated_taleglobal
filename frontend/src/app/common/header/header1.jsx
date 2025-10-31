@@ -2,34 +2,57 @@
 import JobZImage from "../jobz-img";
 import { NavLink } from "react-router-dom";
 import { publicUser } from "../../../globals/route-names";
-import { useState, useCallback, memo, useEffect } from "react";
+import { useState, useCallback, memo } from "react";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const Header1 = memo(function Header1({ _config }) {
 
     const [menuActive, setMenuActive] = useState(false);
-    const [isEmployerLoggedIn, setIsEmployerLoggedIn] = useState(false);
-    const [employerData, setEmployerData] = useState(null);
-
-    useEffect(() => {
-        const token = localStorage.getItem('employerToken');
-        const employer = localStorage.getItem('employerData');
-        if (token && employer) {
-            setIsEmployerLoggedIn(true);
-            setEmployerData(JSON.parse(employer));
-        }
-    }, []);
+    const { user, userType, isAuthenticated } = useAuth();
 
     const closeMenu = useCallback(() => {
         setMenuActive(false);
     }, []);
 
-    const handleLogout = useCallback(() => {
-        localStorage.removeItem('employerToken');
-        localStorage.removeItem('employerData');
-        setIsEmployerLoggedIn(false);
-        setEmployerData(null);
-        window.location.href = '/';
+    const toggleMenu = useCallback(() => {
+        setMenuActive(prev => !prev);
     }, []);
+
+    const getDashboardRoute = () => {
+        switch (userType) {
+            case 'employer':
+                return '/employer/dashboard';
+            case 'candidate':
+                return '/candidate/dashboard';
+            case 'placement':
+                return '/placement/dashboard';
+            case 'admin':
+                return '/admin/dashboard';
+            case 'sub-admin':
+                return '/sub-admin/dashboard';
+            default:
+                return '/';
+        }
+    };
+
+    const getUserDisplayName = () => {
+        if (!user) return '';
+        
+        switch (userType) {
+            case 'employer':
+                return user.companyName || user.name || 'Dashboard';
+            case 'candidate':
+                return user.name || user.username || 'Profile';
+            case 'placement':
+                return user.name || 'Profile';
+            case 'admin':
+                return user.name || 'Admin';
+            case 'sub-admin':
+                return user.name || 'SubAdmin';
+            default:
+                return 'User';
+        }
+    };
 
     return (
         <>
@@ -109,21 +132,15 @@ const Header1 = memo(function Header1({ _config }) {
                             {/* Header Right Section*/}
                             <div className="extra-nav header-2-nav">
                                 <div className="extra-cell">
-                                    {isEmployerLoggedIn ? (
+                                    {isAuthenticated() ? (
                                         <div className="employer-nav-menu">
-                                            <div className="dropdown">
-                                                <button className="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                                    <i className="feather-user" /> {employerData?.companyName || 'Dashboard'}
-                                                </button>
-                                                <ul className="dropdown-menu">
-                                                    <li><NavLink className="dropdown-item" to="/employer/dashboard" onClick={closeMenu}><i className="feather-home" /> Dashboard</NavLink></li>
-                                                    <li><NavLink className="dropdown-item" to="/employer/profile" onClick={closeMenu}><i className="feather-user" /> Company Profile</NavLink></li>
-                                                    <li><NavLink className="dropdown-item" to="/employer/manage-jobs" onClick={closeMenu}><i className="feather-briefcase" /> Openings</NavLink></li>
-                                                    <li><NavLink className="dropdown-item" to="/employer/candidates-list" onClick={closeMenu}><i className="feather-users" /> Applicants</NavLink></li>
-                                                    <li><NavLink className="dropdown-item" to="/employer/support" onClick={closeMenu}><i className="feather-headphones" /> Support</NavLink></li>
-                                                    <li><hr className="dropdown-divider" /></li>
-                                                    <li><button className="dropdown-item" onClick={handleLogout}><i className="feather-log-out" /> Logout</button></li>
-                                                </ul>
+                                            <div className="dashboard-link">
+                                                <NavLink 
+                                                    className="btn btn-outline-primary" 
+                                                    to={getDashboardRoute()}
+                                                >
+                                                    <i className="feather-user" /> {getUserDisplayName()}
+                                                </NavLink>
                                             </div>
                                         </div>
                                     ) : (

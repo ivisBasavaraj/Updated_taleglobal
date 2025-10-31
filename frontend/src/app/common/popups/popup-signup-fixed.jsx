@@ -425,6 +425,7 @@ function SignUpPopup() {
 																	data-bs-target="#sign_up_popup2"
 																	data-bs-toggle="modal"
 																	data-bs-dismiss="modal"
+																	style={{width: '80px', maxWidth: '80px', padding: '5px 10px'}}
 																>
 																	Sign in
 																</button>
@@ -433,7 +434,7 @@ function SignUpPopup() {
 													</div>
 												</div>
 												<div className="col-md-12">
-													<button type="submit" className="site-button" style={{ width: "100%", maxWidth: "100%", margin: "0 auto", display: "flex", justifyContent: "center", alignItems: "center", padding: "10px 16px", borderRadius: "10px" }} disabled={loading || passwordError}>
+													<button type="submit" className="site-button" disabled={loading || passwordError} style={{width: '120px', maxWidth: '120px'}}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -578,6 +579,7 @@ function SignUpPopup() {
 																	data-bs-target="#sign_up_popup2"
 																	data-bs-toggle="modal"
 																	data-bs-dismiss="modal"
+																	style={{width: '80px', maxWidth: '80px', padding: '5px 10px'}}
 																>
 																	Sign in
 																</button>
@@ -587,7 +589,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" className="site-button" style={{ width: "80%", maxWidth: "80%", margin: "0 auto", display: "flex", justifyContent: "center", alignItems: "center", padding: "10px 16px", borderRadius: "10px" }} disabled={loading || passwordError}>
+													<button type="submit" className="site-button" disabled={loading || passwordError} style={{width: '120px', maxWidth: '120px'}}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -733,6 +735,7 @@ function SignUpPopup() {
 																	data-bs-target="#sign_up_popup2"
 																	data-bs-toggle="modal"
 																	data-bs-dismiss="modal"
+																	style={{width: '80px', maxWidth: '80px', padding: '5px 10px'}}
 																>
 																	Sign in
 																</button>
@@ -742,7 +745,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" className="site-button" style={{ width: "80%", maxWidth: "80%", margin: "0 auto", display: "flex", justifyContent: "center", alignItems: "center", padding: "10px 16px", borderRadius: "10px" }} disabled={loading || passwordError}>
+													<button type="submit" className="site-button" disabled={loading || passwordError} style={{width: '120px', maxWidth: '120px'}}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>

@@ -79,6 +79,22 @@ h1, h2, h3, h4, h5, h6 {
 .site-button,
 .site-button-link {
   background-color: #FF6A0014 !important;
+  padding: 10px 20px !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+}
+
+.twm-home16-banner-section .site-button,
+.job-categories-btn .site-button,
+.wt-separator-two-part-right .site-button,
+.twm-jobs-grid-wrap .site-button,
+.twm-right-section-panel .site-button,
+.twm-right-section-panel .site-button-link {
+  min-width: 180px !important;
+  max-width: 180px !important;
 }
 
 .site-button:hover,

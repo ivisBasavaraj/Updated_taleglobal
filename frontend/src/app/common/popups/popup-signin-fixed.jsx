@@ -103,35 +103,6 @@ function SignInPopup() {
         navigate(placementRoute(placement.DASHBOARD));
     }
 
-    const buttonStyle = {
-        backgroundColor: '#1967d2',
-        color: '#f0f6fe',
-        border: '1px solid #1967d2',
-        borderRadius: '10px',
-        padding: '10px 16px',
-        fontWeight: 600,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '8px',
-        transition: 'background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease',
-        width: '100%',
-        maxWidth: '100%',
-        margin: '0 auto'
-    };
-
-    const handleButtonEnter = (event) => {
-        event.currentTarget.style.backgroundColor = '#165bbf';
-        event.currentTarget.style.borderColor = '#165bbf';
-        event.currentTarget.style.color = '#f0f6fe';
-    };
-
-    const handleButtonLeave = (event) => {
-        event.currentTarget.style.backgroundColor = '#1967d2';
-        event.currentTarget.style.borderColor = '#1967d2';
-        event.currentTarget.style.color = '#f0f6fe';
-    };
-
     return (
 			<>
 				<div
@@ -143,7 +114,6 @@ function SignInPopup() {
 				>
 					<div className="modal-dialog modal-dialog-centered">
 						<div className="modal-content">
-							{/* <form> */}
 							<div className="modal-header">
 								<h2 className="modal-title" id="sign_up_popupLabel2">
 									Login
@@ -268,9 +238,8 @@ function SignInPopup() {
 												<div className="col-md-12">
 													<button
 														type="submit"
-														style={buttonStyle}
-								onMouseEnter={handleButtonEnter}
-								onMouseLeave={handleButtonLeave}
+														className="site-button"
+														style={{width: '120px', maxWidth: '120px'}}
 													>
 														Log in
 													</button>
@@ -282,6 +251,7 @@ function SignInPopup() {
 															data-bs-target="#sign_up_popup"
 															data-bs-toggle="modal"
 															data-bs-dismiss="modal"
+															style={{width: '80px', maxWidth: '80px', padding: '5px 10px'}}
 														>
 															Sign Up
 														</button>
@@ -355,9 +325,8 @@ function SignInPopup() {
 												<div className="col-md-12">
 													<button
 														type="submit"
-														style={buttonStyle}
-								onMouseEnter={handleButtonEnter}
-								onMouseLeave={handleButtonLeave}
+														className="site-button"
+														style={{width: '120px', maxWidth: '120px'}}
 													>
 														Log in
 													</button>
@@ -369,6 +338,7 @@ function SignInPopup() {
 															data-bs-target="#sign_up_popup"
 															data-bs-toggle="modal"
 															data-bs-dismiss="modal"
+															style={{width: '80px', maxWidth: '80px', padding: '5px 10px'}}
 														>
 															Sign Up
 														</button>
@@ -442,9 +412,8 @@ function SignInPopup() {
 												<div className="col-md-12">
 													<button
 														type="submit"
-														style={buttonStyle}
-								onMouseEnter={handleButtonEnter}
-								onMouseLeave={handleButtonLeave}
+														className="site-button"
+														style={{width: '120px', maxWidth: '120px'}}
 													>
 														Log in
 													</button>
@@ -456,6 +425,7 @@ function SignInPopup() {
 															data-bs-target="#sign_up_popup"
 															data-bs-toggle="modal"
 															data-bs-dismiss="modal"
+															style={{width: '80px', maxWidth: '80px', padding: '5px 10px'}}
 														>
 															Sign Up
 														</button>
@@ -466,7 +436,6 @@ function SignInPopup() {
 									</div>
 								</div>
 							</div>
-							{/* </form> */}
 						</div>
 					</div>
 				</div>

@@ -899,7 +899,7 @@ function Home16Page() {
 							</div>
 
 							<div className="text-center job-categories-btn">
-								<NavLink to={"#!"} className="site-button site-button-sm">
+								<NavLink to={"#!"} className="site-button">
 									All Categories
 								</NavLink>
 							</div>
@@ -1129,6 +1129,8 @@ function Home16Page() {
 									className="twm-column-5 m-b30"
 									style={{
 										"--cards-per-row": "6",
+										gap: "20px",
+										padding: "10px 0"
 									}}
 								>
 									<ul>

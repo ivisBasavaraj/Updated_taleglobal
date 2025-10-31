@@ -1,15 +1,57 @@
 import JobZImage from "../jobz-img";
 import { NavLink } from "react-router-dom";
 import { empRoute, employer, publicUser } from "../../../globals/route-names";
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useAuth } from "../../../contexts/AuthContext";
 
 function Header2({ _config }) {
 
     const [menuActive, setMenuActive] = useState(false);
+    const { user, userType, isAuthenticated } = useAuth();
 
-    function handleNavigationClick() {
+    const handleNavigationClick = useCallback(() => {
         setMenuActive(!menuActive);
-    }
+    }, [menuActive]);
+
+    const closeMenu = useCallback(() => {
+        setMenuActive(false);
+    }, []);
+
+    const getDashboardRoute = () => {
+        switch (userType) {
+            case 'employer':
+                return '/employer/dashboard';
+            case 'candidate':
+                return '/candidate/dashboard';
+            case 'placement':
+                return '/placement/dashboard';
+            case 'admin':
+                return '/admin/dashboard';
+            case 'sub-admin':
+                return '/sub-admin/dashboard';
+            default:
+                return '/';
+        }
+    };
+
+    const getUserDisplayName = () => {
+        if (!user) return '';
+        
+        switch (userType) {
+            case 'employer':
+                return user.companyName || user.name || 'Dashboard';
+            case 'candidate':
+                return user.name || user.username || 'Profile';
+            case 'placement':
+                return user.name || 'Profile';
+            case 'admin':
+                return user.name || 'Admin';
+            case 'sub-admin':
+                return user.name || 'SubAdmin';
+            default:
+                return 'User';
+        }
+    };
 
     return (
         <>
@@ -52,18 +94,31 @@ function Header2({ _config }) {
                                     </div>
                                 </div>
                                 <div className="extra-cell">
-                                    <div className="header-nav-btn-section">
-                                        <div className="twm-nav-btn-left">
-                                            <a className="twm-nav-sign-up" data-bs-toggle="modal" href="#sign_up_popup" role="button">
-                                                <i className="feather-log-in" /> Sign Up
-                                            </a>
+                                    {isAuthenticated() ? (
+                                        <div className="employer-nav-menu">
+                                            <div className="dashboard-link">
+                                                <NavLink 
+                                                    className="btn btn-outline-primary" 
+                                                    to={getDashboardRoute()}
+                                                >
+                                                    <i className="feather-user" /> {getUserDisplayName()}
+                                                </NavLink>
+                                            </div>
                                         </div>
-                                        <div className="twm-nav-btn-right">
-                                            <a className="twm-nav-post-a-job" data-bs-toggle="modal" href="#sign_up_popup2" role="button">
-                                                <i className="feather-log-in" /> Sign In
-                                            </a>
+                                    ) : (
+                                        <div className="header-nav-btn-section">
+                                            <div className="twm-nav-btn-left">
+                                                <a className="twm-nav-sign-up" data-bs-toggle="modal" href="#sign_up_popup" role="button">
+                                                    <i className="feather-log-in" /> Sign Up
+                                                </a>
+                                            </div>
+                                            <div className="twm-nav-btn-right">
+                                                <a className="twm-nav-post-a-job" data-bs-toggle="modal" href="#sign_up_popup2" role="button">
+                                                    <i className="feather-log-in" /> Sign In
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
                                 <div className="extra-cell">
                                     <a href="#"

@@ -161,7 +161,7 @@ function HomeJobsList() {
                     )}
                 </ul>
                 <div className="text-center m-b30">
-                    <NavLink to={publicUser.jobs.LIST} className="site-button">Browse All Jobs</NavLink>
+                    <NavLink to={publicUser.jobs.LIST} className="site-button">View All</NavLink>
                 </div>
             </div>
         </div>
@@ -545,7 +545,7 @@ function Home1Page() {
                             </div>
                         </div>
                         <div className="text-right job-categories-btn">
-                            <NavLink to={publicUser.jobs.GRID} className=" site-button">All Categories</NavLink>
+                            <NavLink to={publicUser.jobs.GRID} className=" site-button">View All</NavLink>
                         </div>
                     </div>
                 </div>

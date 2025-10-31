@@ -41,6 +41,7 @@
   background: #ffffff !important;
   border-radius: 12px !important;
   border: 1px solid #eef2f7 !important;
+  box-shadow: none !important;
 }
 
 /* CTA buttons */
@@ -150,8 +151,13 @@
   border: 1px solid #e5e7eb;
 }
 
-
-
+/* Remove background panel for stats cards */
+.can-dashboard .col-xl-4 .panel,
+.can-dashboard .col-lg-4 .panel {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
 
 
 /* Loading state */

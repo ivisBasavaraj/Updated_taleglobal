@@ -222,7 +222,7 @@ export default function EmpPostedJobs() {
 						<div className="d-flex gap-2">
 							<button 
 								type="button" 
-								className={`btn ${statusFilter === 'all' ? 'btn-primary' : 'btn-outline-primary'}`}
+								className={`btn ${statusFilter === 'all' ? 'btn-outline-primary' : 'btn-outline-primary'}`}
 								onClick={() => setStatusFilter('all')}
 							>
 								All
