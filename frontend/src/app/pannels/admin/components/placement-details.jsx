@@ -835,26 +835,26 @@ function PlacementDetails() {
                                                         {file.status === 'processed' ? (
                                                             <>
                                                                 <span style={{
-                                                                    background: 'linear-gradient(135deg, #28a745, #20c997)',
-                                                                    color: 'white',
+                                                                    background: 'rgba(40, 167, 69, 0.1)',
+                                                                    color: '#28a745',
                                                                     padding: '6px 12px',
                                                                     borderRadius: '20px',
                                                                     fontSize: '0.8rem',
                                                                     fontWeight: '500',
-                                                                    boxShadow: '0 2px 8px rgba(40, 167, 69, 0.3)'
+                                                                    border: '1px solid rgba(40, 167, 69, 0.2)'
                                                                 }}>
                                                                     <i className="fa fa-check-circle mr-2"></i>
                                                                     Processed - Login Ready
                                                                 </span>
                                                                 {file.candidatesCreated > 0 && (
                                                                     <span style={{
-                                                                        background: 'linear-gradient(135deg, #17a2b8, #138496)',
-                                                                        color: 'white',
+                                                                        background: 'rgba(23, 162, 184, 0.1)',
+                                                                        color: '#17a2b8',
                                                                         padding: '6px 12px',
                                                                         borderRadius: '20px',
                                                                         fontSize: '0.8rem',
                                                                         fontWeight: '500',
-                                                                        boxShadow: '0 2px 8px rgba(23, 162, 184, 0.3)'
+                                                                        border: '1px solid rgba(23, 162, 184, 0.2)'
                                                                     }}>
                                                                         <i className="fa fa-users mr-2"></i>
                                                                         {file.candidatesCreated} candidates can login
@@ -918,26 +918,26 @@ function PlacementDetails() {
                                                             </span>
                                                         )}
                                                         <span style={{
-                                                            background: 'linear-gradient(135deg, #6f42c1, #5a32a3)',
-                                                            color: 'white',
+                                                            background: 'rgba(111, 66, 193, 0.1)',
+                                                            color: '#6f42c1',
                                                             padding: '6px 12px',
                                                             borderRadius: '20px',
                                                             fontSize: '0.8rem',
                                                             fontWeight: '500',
-                                                            boxShadow: '0 2px 8px rgba(111, 66, 193, 0.3)'
+                                                            border: '1px solid rgba(111, 66, 193, 0.2)'
                                                         }}>
                                                             <i className="fa fa-credit-card mr-2"></i>
                                                             Credits: {file.credits || 0}
                                                         </span>
                                                         {file.status === 'processed' && (
                                                             <span style={{
-                                                                background: 'linear-gradient(135deg, #fd7e14, #e55a00)',
-                                                                color: 'white',
+                                                                background: 'rgba(253, 126, 20, 0.1)',
+                                                                color: '#fd7e14',
                                                                 padding: '6px 12px',
                                                                 borderRadius: '20px',
                                                                 fontSize: '0.8rem',
                                                                 fontWeight: '500',
-                                                                boxShadow: '0 2px 8px rgba(253, 126, 20, 0.3)'
+                                                                border: '1px solid rgba(253, 126, 20, 0.2)'
                                                             }}>
                                                                 <i className="fa fa-sign-in mr-2"></i>
                                                                 Ready for Login

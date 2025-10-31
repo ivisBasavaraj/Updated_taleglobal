@@ -2722,8 +2722,180 @@ a.site-button:hover {
 }
 
 /* ============================================================================
+ * ADDITIONAL BUTTON HOVER OVERRIDES - Remove Blue Effects
+ * ============================================================================ */
+
+/* Force remove all blue hover effects */
+button:hover,
+.btn:hover,
+.site-button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+a.btn:hover,
+*[class*="btn"]:hover,
+*[class*="button"]:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border-color: #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* Remove any blue focus effects */
+button:focus,
+.btn:focus,
+.site-button:focus,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+a.btn:focus {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border-color: #FF7A00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.25) !important;
+  outline: none !important;
+}
+
+/* Override Bootstrap's btn-primary blue hover */
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border-color: #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* Override any remaining blue button states */
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active,
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border-color: #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* Force override ALL possible button states including selection */
+button,
+.btn,
+.site-button,
+input[type="button"],
+input[type="submit"],
+a.btn,
+*[class*="btn"],
+*[class*="button"] {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border-color: #FF7A00 !important;
+}
+
+button:hover,
+button:focus,
+button:active,
+button.active,
+button:focus-visible,
+.btn:hover,
+.btn:focus,
+.btn:active,
+.btn.active,
+.btn:focus-visible,
+.site-button:hover,
+.site-button:focus,
+.site-button:active,
+.site-button.active,
+input[type="button"]:hover,
+input[type="button"]:focus,
+input[type="button"]:active,
+input[type="submit"]:hover,
+input[type="submit"]:focus,
+input[type="submit"]:active,
+a.btn:hover,
+a.btn:focus,
+a.btn:active,
+a.btn.active {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border-color: #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+  outline: none !important;
+}
+
+/* Override Bootstrap button variants completely */
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger,
+.btn-warning,
+.btn-info,
+.btn-light,
+.btn-dark {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border-color: #FF7A00 !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active,
+.btn-secondary.active,
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active,
+.btn-success.active,
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger.active,
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active,
+.btn-warning.active,
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active,
+.btn-info.active,
+.btn-light:hover,
+.btn-light:focus,
+.btn-light:active,
+.btn-light.active,
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:active,
+.btn-dark.active {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border-color: #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+  outline: none !important;
+}
+
+/* ============================================================================
  * END OF GLOBAL BUTTON OVERRIDE SECTION
  * ============================================================================ */
+
+/* ============================================================================
+ * SCROLL TO TOP BUTTON - HIDDEN
+ * ============================================================================ */
+
+/* Hide scroll-to-top button */
+.scroltop,
+.scroll-top,
+.back-to-top,
+[class*="scroll-top"],
+[class*="scroltop"],
+[class*="back-to-top"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
 
 /* ============================================================================
  * END OF CONSOLIDATED MASTER STYLES
