@@ -25,6 +25,15 @@ function AdminSupportTickets() {
     const [isMounted, setIsMounted] = useState(true);
     const modalContainerRef = useRef(null);
 
+    const formatDate = (value) => {
+        if (!value) return '--';
+        return new Date(value).toLocaleDateString(undefined, {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
+    };
+
     useEffect(() => {
         setIsMounted(true);
         return () => {
@@ -249,31 +258,43 @@ function AdminSupportTickets() {
 
     const getPriorityBadge = (priority) => {
         const variants = {
-            low: 'secondary',
-            medium: 'primary',
-            high: 'warning',
-            urgent: 'danger'
+            low: 'badge-soft-low',
+            medium: 'badge-soft-medium',
+            high: 'badge-soft-high',
+            urgent: 'badge-soft-urgent'
         };
-        return <Badge bg={variants[priority] || 'secondary'}>{priority?.toUpperCase()}</Badge>;
+        return (
+            <Badge bg="light" className={`badge-soft ${variants[priority] || ''}`}>
+                {priority ? priority.replace('-', ' ').toUpperCase() : 'N/A'}
+            </Badge>
+        );
     };
 
     const getStatusBadge = (status) => {
         const variants = {
-            new: 'success',
-            'in-progress': 'warning',
-            resolved: 'info',
-            closed: 'secondary'
+            new: 'badge-soft-status-new',
+            'in-progress': 'badge-soft-status-in-progress',
+            resolved: 'badge-soft-status-resolved',
+            closed: 'badge-soft-status-closed'
         };
-        return <Badge bg={variants[status] || 'secondary'}>{status?.replace('-', ' ').toUpperCase()}</Badge>;
+        return (
+            <Badge bg="light" className={`badge-soft ${variants[status] || ''}`}>
+                {status ? status.replace('-', ' ').toUpperCase() : 'N/A'}
+            </Badge>
+        );
     };
 
     const getUserTypeBadge = (userType) => {
         const variants = {
-            employer: 'primary',
-            candidate: 'success',
-            guest: 'secondary'
+            employer: 'badge-soft-user-employer',
+            candidate: 'badge-soft-user-candidate',
+            guest: 'badge-soft-user-guest'
         };
-        return <Badge bg={variants[userType] || 'secondary'}>{userType?.toUpperCase()}</Badge>;
+        return (
+            <Badge bg="light" className={`badge-soft ${variants[userType] || ''}`}>
+                {userType ? userType.toUpperCase() : 'N/A'}
+            </Badge>
+        );
     };
 
     const handleCloseModal = () => {
@@ -297,230 +318,181 @@ function AdminSupportTickets() {
             ) : (
                 <Container fluid>
                     <div className="support-header">
-                        <h2>🎫 Support Tickets Management</h2>
-                        <p>Manage and respond to customer support requests</p>
+                        <div>
+                            <h2>Support Tickets</h2>
+                            <p>Monitor incoming conversations and respond without leaving the dashboard.</p>
+                        </div>
+                        <div className="support-header__stats">
+                            <div className="support-header__stat">
+                                <span className="support-header__stat-value">{stats.total}</span>
+                                <span className="support-header__stat-label">Total tickets</span>
+                            </div>
+                            <div className="support-header__divider" />
+                            <div className="support-header__stat">
+                                <span className="support-header__stat-value">{stats.unread}</span>
+                                <span className="support-header__stat-label">Unread</span>
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Stats Cards */}
-                    <div className="row mb-4">
-                    <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
-                        <div className="panel panel-default dashboard-stats-card">
-                            <div className="panel-body wt-panel-body gradi-1">
-                                <div className="wt-card-wrap">
-                                    <div className="wt-card-icon">
-                                        <i className="fa fa-ticket-alt" />
-                                    </div>
-                                    <div className="wt-card-right counter">
-                                        {stats.total}
-                                    </div>
-                                    <div className="wt-card-bottom">
-                                        <h4 className="m-b0">Total</h4>
-                                    </div>
-                                </div>
-                            </div>
+                    <div className="stats-grid">
+                        <div className="stats-card stats-card--total">
+                            <span className="stats-card__label">Total</span>
+                            <span className="stats-card__value">{stats.total}</span>
+                        </div>
+                        <div className="stats-card stats-card--unread">
+                            <span className="stats-card__label">Unread</span>
+                            <span className="stats-card__value">{stats.unread}</span>
+                        </div>
+                        <div className="stats-card stats-card--new">
+                            <span className="stats-card__label">New</span>
+                            <span className="stats-card__value">{stats.new}</span>
+                        </div>
+                        <div className="stats-card stats-card--progress">
+                            <span className="stats-card__label">In progress</span>
+                            <span className="stats-card__value">{stats.inProgress}</span>
+                        </div>
+                        <div className="stats-card stats-card--resolved">
+                            <span className="stats-card__label">Resolved</span>
+                            <span className="stats-card__value">{stats.resolved}</span>
                         </div>
                     </div>
-                    <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
-                        <div className="panel panel-default dashboard-stats-card">
-                            <div className="panel-body wt-panel-body gradi-2">
-                                <div className="wt-card-wrap">
-                                    <div className="wt-card-icon">
-                                        <i className="fa fa-envelope" />
-                                    </div>
-                                    <div className="wt-card-right counter">
-                                        {stats.unread}
-                                    </div>
-                                    <div className="wt-card-bottom">
-                                        <h4 className="m-b0">Unread</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
-                        <div className="panel panel-default dashboard-stats-card">
-                            <div className="panel-body wt-panel-body gradi-3">
-                                <div className="wt-card-wrap">
-                                    <div className="wt-card-icon">
-                                        <i className="fa fa-plus-circle" />
-                                    </div>
-                                    <div className="wt-card-right counter">
-                                        {stats.new}
-                                    </div>
-                                    <div className="wt-card-bottom">
-                                        <h4 className="m-b0">New</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
-                        <div className="panel panel-default dashboard-stats-card">
-                            <div className="panel-body wt-panel-body gradi-4">
-                                <div className="wt-card-wrap">
-                                    <div className="wt-card-icon">
-                                        <i className="fa fa-clock" />
-                                    </div>
-                                    <div className="wt-card-right counter">
-                                        {stats.inProgress}
-                                    </div>
-                                    <div className="wt-card-bottom">
-                                        <h4 className="m-b0">Progress</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
-                        <div className="panel panel-default dashboard-stats-card">
-                            <div className="panel-body wt-panel-body gradi-1">
-                                <div className="wt-card-wrap">
-                                    <div className="wt-card-icon">
-                                        <i className="fa fa-check-circle" />
-                                    </div>
-                                    <div className="wt-card-right counter">
-                                        {stats.resolved}
-                                    </div>
-                                    <div className="wt-card-bottom">
-                                        <h4 className="m-b0">Resolved</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                {/* Filters */}
-                <div className="filters-section">
-                    <Row>
-                        <Col md={3} className="mb-3">
-                            <Form.Select 
-                                className="filter-select"
-                                value={filters.status} 
-                                onChange={(e) => setFilters({...filters, status: e.target.value})}
+                    <div className="filters-section">
+                        <div className="filters-section__header">
+                            <h6>Filter tickets</h6>
+                            <Button
+                                variant="link"
+                                className="clear-filters-btn"
+                                onClick={() => setFilters({ status: '', userType: '', priority: '' })}
                             >
-                                <option value="">📋 All Status</option>
-                                <option value="new">🆕 New</option>
-                                <option value="in-progress">⏳ In Progress</option>
-                                <option value="resolved">✅ Resolved</option>
-                                <option value="closed">🔒 Closed</option>
-                            </Form.Select>
-                        </Col>
-                        <Col md={3} className="mb-3">
-                            <Form.Select 
-                                className="filter-select"
-                                value={filters.userType} 
-                                onChange={(e) => setFilters({...filters, userType: e.target.value})}
-                            >
-                                <option value="">👥 All User Types</option>
-                                <option value="employer">🏢 Employer</option>
-                                <option value="candidate">👤 Candidate</option>
-                                <option value="guest">🌐 Guest</option>
-                            </Form.Select>
-                        </Col>
-                        <Col md={3} className="mb-3">
-                            <Form.Select 
-                                className="filter-select"
-                                value={filters.priority} 
-                                onChange={(e) => setFilters({...filters, priority: e.target.value})}
-                            >
-                                <option value="">⚡ All Priorities</option>
-                                <option value="low">🟢 Low</option>
-                                <option value="medium">🟡 Medium</option>
-                                <option value="high">🟠 High</option>
-                                <option value="urgent">🔴 Urgent</option>
-                            </Form.Select>
-                        </Col>
-                        <Col md={3} className="mb-3">
-                            <Button 
-                                className="clear-filters-btn w-100" 
-                                onClick={() => setFilters({status: '', userType: '', priority: ''})}
-                            >
-                                🗑️ Clear Filters
+                                Reset filters
                             </Button>
-                        </Col>
-                    </Row>
-                </div>
+                        </div>
+                        <Row className="g-3">
+                            <Col md={4}>
+                                <Form.Select
+                                    className="filter-select"
+                                    value={filters.status}
+                                    onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                                >
+                                    <option value="">All status</option>
+                                    <option value="new">New</option>
+                                    <option value="in-progress">In progress</option>
+                                    <option value="resolved">Resolved</option>
+                                    <option value="closed">Closed</option>
+                                </Form.Select>
+                            </Col>
+                            <Col md={4}>
+                                <Form.Select
+                                    className="filter-select"
+                                    value={filters.userType}
+                                    onChange={(e) => setFilters({ ...filters, userType: e.target.value })}
+                                >
+                                    <option value="">All user types</option>
+                                    <option value="employer">Employer</option>
+                                    <option value="candidate">Candidate</option>
+                                    <option value="guest">Guest</option>
+                                </Form.Select>
+                            </Col>
+                            <Col md={4}>
+                                <Form.Select
+                                    className="filter-select"
+                                    value={filters.priority}
+                                    onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
+                                >
+                                    <option value="">All priorities</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="urgent">Urgent</option>
+                                </Form.Select>
+                            </Col>
+                        </Row>
+                    </div>
 
                 {/* Tickets List */}
                 <Row>
                     <Col>
                         <Card className="tickets-card">
                             <div className="tickets-header">
-                                <h5>📋 Support Tickets ({tickets.length})</h5>
+                                <div>
+                                    <h5>Support Tickets ({tickets.length})</h5>
+                                    <span className="tickets-header__subtitle">Track ticket lifecycle and respond with clarity.</span>
+                                </div>
                             </div>
                             <Card.Body className="p-0">
                                 {tickets.length === 0 ? (
                                     <div className="empty-state">
-                                        <i>📭</i>
-                                        <p>No support tickets found.</p>
+                                        <h6>No tickets yet</h6>
+                                        <p>Customer support requests will appear here as soon as they are submitted.</p>
                                     </div>
                                 ) : (
                                     <div className="table-container">
                                         <table className="table tickets-table">
                                             <thead>
                                                 <tr>
-                                                    <th>📝 Subject</th>
-                                                    <th>👤 User</th>
-                                                    <th>🏷️ Type</th>
-                                                    <th>📂 Category</th>
-                                                    <th>⚡ Priority</th>
-                                                    <th>📊 Status</th>
-                                                    <th>📅 Created</th>
-                                                    <th>⚙️ Action</th>
+                                                    <th>Subject</th>
+                                                    <th>Requester</th>
+                                                    <th>User type</th>
+                                                    <th>Category</th>
+                                                    <th>Priority</th>
+                                                    <th>Status</th>
+                                                    <th>Created</th>
+                                                    <th className="text-end">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {tickets.map((ticket) => (
-                                                    <tr 
-                                                        key={ticket._id} 
-                                                        className={!ticket.isRead ? 'unread-ticket' : ''}
-                                                        style={{ cursor: 'pointer' }}
+                                                    <tr
+                                                        key={ticket._id}
+                                                        className={`tickets-row ${!ticket.isRead ? 'unread-ticket' : ''}`}
+                                                        onClick={() => handleTicketClick(ticket)}
                                                     >
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            <div className="ticket-subject">{ticket.subject}</div>
-                                                            {!ticket.isRead && <span className="new-badge">New</span>}
+                                                        <td>
+                                                            <div className="ticket-subject">
+                                                                {ticket.subject}
+                                                            </div>
+                                                            {!ticket.isRead && <span className="new-badge">Unread</span>}
                                                         </td>
-                                                        <td onClick={() => handleTicketClick(ticket)}>
+                                                        <td>
                                                             <div className="user-info">
                                                                 <div className="user-name">{ticket.actualUserName || ticket.name || 'N/A'}</div>
                                                                 <div className="user-email">{ticket.actualUserEmail || ticket.email || 'No email provided'}</div>
                                                             </div>
                                                         </td>
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            {getUserTypeBadge(ticket.userType)}
+                                                        <td>{getUserTypeBadge(ticket.userType)}</td>
+                                                        <td>
+                                                            <span className="category-badge">{ticket.category || 'General'}</span>
                                                         </td>
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            <span className="category-badge">{ticket.category}</span>
-                                                        </td>
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            {getPriorityBadge(ticket.priority)}
-                                                        </td>
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            {getStatusBadge(ticket.status)}
-                                                        </td>
-                                                        <td onClick={() => handleTicketClick(ticket)}>
-                                                            <div className="ticket-date">{new Date(ticket.createdAt).toLocaleDateString()}</div>
+                                                        <td>{getPriorityBadge(ticket.priority)}</td>
+                                                        <td>{getStatusBadge(ticket.status)}</td>
+                                                        <td>
+                                                            <div className="ticket-date">{formatDate(ticket.createdAt)}</div>
                                                         </td>
                                                         <td>
                                                             <div className="action-buttons">
-                                                                <Button 
+                                                                <Button
+                                                                    variant="light"
                                                                     className="view-btn"
-                                                                    size="sm" 
-                                                                    onClick={() => handleTicketClick(ticket)}
+                                                                    size="sm"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handleTicketClick(ticket);
+                                                                    }}
                                                                 >
-                                                                    👁️ View
+                                                                    View
                                                                 </Button>
-                                                                <Button 
-                                                                    className="delete-btn ms-1"
-                                                                    size="sm" 
+                                                                <Button
+                                                                    className="delete-btn"
+                                                                    size="sm"
                                                                     variant="outline-danger"
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
                                                                         handleDeleteTicket(ticket._id);
                                                                     }}
                                                                 >
-                                                                    🗑️
+                                                                    Delete
                                                                 </Button>
                                                             </div>
                                                         </td>
@@ -549,41 +521,41 @@ function AdminSupportTickets() {
                     size="lg"
                 >
                     <Modal.Header closeButton>
-                        <Modal.Title>🎫 Support Ticket Details</Modal.Title>
+                        <Modal.Title>Ticket details</Modal.Title>
                     </Modal.Header>
                 <Modal.Body>
                     {selectedTicket && (
                         <>
                             <Row className="mb-3">
                                 <Col md={6}>
-                                    <div className="detail-label">📝 Subject:</div>
+                                    <div className="detail-label">Subject</div>
                                     <div>{selectedTicket.subject}</div>
                                 </Col>
                                 <Col md={6}>
-                                    <div className="detail-label">⚡ Priority:</div>
+                                    <div className="detail-label">Priority</div>
                                     <div>{getPriorityBadge(selectedTicket.priority)}</div>
                                 </Col>
                             </Row>
                             <Row className="mb-3">
                                 <Col md={6}>
-                                    <div className="detail-label">👤 User:</div>
+                                    <div className="detail-label">Requester</div>
                                     <div>{selectedTicket.actualUserName || selectedTicket.name || 'N/A'}</div>
-                                    <small className="text-muted">({selectedTicket.actualUserEmail || selectedTicket.email || 'No email provided'})</small>
+                                    <small className="text-muted">{selectedTicket.actualUserEmail || selectedTicket.email || 'No email provided'}</small>
                                 </Col>
                                 <Col md={6}>
-                                    <div className="detail-label">🏷️ User Type:</div>
+                                    <div className="detail-label">User type</div>
                                     <div>{getUserTypeBadge(selectedTicket.userType)}</div>
                                 </Col>
                             </Row>
                             <Row className="mb-3">
                                 <Col md={12}>
-                                    <div className="detail-label">📂 Category:</div>
-                                    <div>{selectedTicket.category}</div>
+                                    <div className="detail-label">Category</div>
+                                    <div>{selectedTicket.category || 'General'}</div>
                                 </Col>
                             </Row>
                             <Row className="mb-3">
                                 <Col>
-                                    <div className="detail-label">💬 Message:</div>
+                                    <div className="detail-label">Message</div>
                                     <div className="message-box">
                                         {selectedTicket.message}
                                     </div>
@@ -592,7 +564,7 @@ function AdminSupportTickets() {
                             {selectedTicket.attachments && selectedTicket.attachments.length > 0 && (
                                 <Row className="mb-3">
                                     <Col>
-                                        <div className="detail-label">📎 Attachments:</div>
+                                        <div className="detail-label">Attachments</div>
                                         <ul className="attachment-list">
                                             {selectedTicket.attachments.map((attachment, index) => (
                                                 <li key={index} className="attachment-item">
@@ -600,7 +572,7 @@ function AdminSupportTickets() {
                                                         className="attachment-link"
                                                         onClick={(event) => handleAttachmentClick(event, selectedTicket._id, index, attachment.originalName)}
                                                     >
-                                                        📄 {attachment.originalName}
+                                                        {attachment.originalName}
                                                     </button>
                                                 </li>
                                             ))}
@@ -611,12 +583,12 @@ function AdminSupportTickets() {
                             <Row className="mb-3">
                                 <Col md={6}>
                                     <Form.Group>
-                                        <Form.Label className="detail-label">📊 Status:</Form.Label>
+                                        <Form.Label className="detail-label">Status</Form.Label>
                                         <Form.Select className="filter-select" value={status} onChange={(e) => setStatus(e.target.value)}>
-                                            <option value="new">🆕 New</option>
-                                            <option value="in-progress">⏳ In Progress</option>
-                                            <option value="resolved">✅ Resolved</option>
-                                            <option value="closed">🔒 Closed</option>
+                                            <option value="new">New</option>
+                                            <option value="in-progress">In progress</option>
+                                            <option value="resolved">Resolved</option>
+                                            <option value="closed">Closed</option>
                                         </Form.Select>
                                     </Form.Group>
                                 </Col>
@@ -624,14 +596,14 @@ function AdminSupportTickets() {
                             <Row className="mb-3">
                                 <Col>
                                     <Form.Group>
-                                        <Form.Label className="detail-label">💭 Admin Response:</Form.Label>
+                                        <Form.Label className="detail-label">Admin response</Form.Label>
                                         <Form.Control
                                             className="response-textarea"
                                             as="textarea"
                                             rows={4}
                                             value={response}
                                             onChange={(e) => setResponse(e.target.value)}
-                                            placeholder="Enter your response to the user..."
+                                            placeholder="Share the latest update or resolution for this request"
                                         />
                                     </Form.Group>
                                 </Col>
@@ -644,9 +616,10 @@ function AdminSupportTickets() {
                         className="close-btn" 
                         onClick={handleCloseModal}
                     >
-                        ❌ Close
+                        Close
                     </Button>
                     <Button 
+                        variant="outline-primary"
                         className="update-btn" 
                         onClick={handleUpdateTicket}
                         disabled={updating}
@@ -654,10 +627,10 @@ function AdminSupportTickets() {
                         {updating ? (
                             <>
                                 <Spinner animation="border" size="sm" className="me-2" />
-                                Updating...
+                                Saving
                             </>
                         ) : (
-                            '✅ Update Ticket'
+                            'Save changes'
                         )}
                     </Button>
                 </Modal.Footer>

@@ -539,9 +539,9 @@ function SectionCandicateBasicInfo() {
                     <div className="text-center mt-4">
                         <button 
                             type="submit" 
-                            className="btn btn-primary btn-lg px-5"
+                            className="btn btn-outline-primary btn-lg px-5"
                             disabled={saving || Object.keys(errors).length > 0}
-                            style={{backgroundColor: '#ff6b35', borderColor: '#ff6b35'}}
+                            style={{backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35'}}
                         >
                             <i className={`fa ${saving ? 'fa-spinner fa-spin' : 'fa-save'} me-2`}></i>
                             {saving ? 'Saving Profile...' : 'Save Profile'}

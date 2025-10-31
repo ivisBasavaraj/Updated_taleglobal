@@ -240,7 +240,7 @@ function SectionCanPersonalDetail({ profile }) {
                         </div>
 
                         <div className="text-left mt-4">
-                            <button type="button" onClick={handleSubmit} className="btn btn-primary" disabled={loading || Object.keys(errors).length > 0}>
+                            <button type="button" onClick={handleSubmit} className="btn btn-outline-primary" disabled={loading || Object.keys(errors).length > 0} style={{backgroundColor: 'transparent'}}>
                                 <i className="fa fa-save me-1"></i>
                                 {loading ? 'Saving...' : 'Save Changes'}
                             </button>

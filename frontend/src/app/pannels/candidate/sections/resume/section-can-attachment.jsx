@@ -83,9 +83,10 @@ function SectionCanAttachment({ profile }) {
                         )}
                         <button 
                             type="button" 
-                            className="btn btn-primary mb-3"
+                            className="btn btn-outline-primary mb-3"
                             onClick={handleSubmit}
                             disabled={uploading || !selectedFile}
+                            style={{backgroundColor: 'transparent'}}
                         >
                             <i className="fa fa-upload me-1"></i>
                             {uploading ? 'Uploading...' : 'Submit Resume'}

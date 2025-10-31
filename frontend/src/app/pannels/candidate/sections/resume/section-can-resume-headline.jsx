@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { api } from "../../../../../utils/api";
+import "../../../../../src/app/shared/shared-button.css";
 
 function SectionCanResumeHeadline({ profile }) {
     const [headline, setHeadline] = useState('');
@@ -78,7 +79,7 @@ function SectionCanResumeHeadline({ profile }) {
                             <div>
                                 <button 
                                     type="button"
-                                    className="btn btn-secondary btn-sm me-2"
+                                    className="shared-button btn-sm me-2"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
@@ -113,3 +114,4 @@ function SectionCanResumeHeadline({ profile }) {
     )
 }
 export default SectionCanResumeHeadline;
+

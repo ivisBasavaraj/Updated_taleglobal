@@ -2144,14 +2144,13 @@ ol li {
 
 /*====Button Effect====*/
 .site-button {
-  color: rgba(0, 0, 0, 0) !important;
-  transition: all 0.3s ease !important;
+  color: rgba(249, 129, 55, 0) !important;
   text-shadow: 0 0 0 #fff, 400px 0 0 #fff;
 }
 
 .site-button:hover {
   text-shadow: -400px 0 0 #fff, 0 0 0 #fff;
-  background-color: #171d28;
+  background-color: #fed5a6;
 }
 
 .mfp-video.video-play-btn {

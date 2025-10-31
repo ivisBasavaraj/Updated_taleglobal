@@ -231,8 +231,8 @@ function AdminSubAdmin() {
                                 <div className="d-flex justify-content-between align-items-center mb-4">
                                     <h4 className="fw-semibold text-dark mb-0">Sub Admins List</h4>
                                     <button 
-                                        className="btn btn-primary rounded-pill px-4 py-2 fw-semibold"
-                                        style={{ backgroundColor: '#fd7e14', border: 'none' }}
+                                        className="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold"
+                                        style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35' }}
                                         onClick={() => {
                                             resetForm();
                                             setShowAddForm(true);
@@ -284,6 +284,7 @@ function AdminSubAdmin() {
                                                                     className="btn btn-outline-primary btn-sm rounded-pill touch-friendly"
                                                                     onClick={() => handleEdit(admin)}
                                                                     title="Edit Sub Admin"
+                                                                    style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35' }}
                                                                 >
                                                                     <i className="fa fa-edit me-1"></i>
                                                                     Edit
@@ -543,8 +544,8 @@ function AdminSubAdmin() {
                                             <div className="d-flex gap-3 pt-3">
                                                 <button 
                                                     type="submit" 
-                                                    className="btn btn-primary rounded-pill px-4 py-2 fw-semibold"
-                                                    style={{ backgroundColor: '#fd7e14', border: 'none' }}
+                                                    className="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold"
+                                                    style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35' }}
                                                     disabled={loading}
                                                 >
                                                     {loading ? (

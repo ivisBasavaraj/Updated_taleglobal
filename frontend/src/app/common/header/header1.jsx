@@ -19,10 +19,6 @@ const Header1 = memo(function Header1({ _config }) {
         }
     }, []);
 
-    const handleNavigationClick = useCallback(() => {
-        setMenuActive(prev => !prev);
-    }, []);
-
     const closeMenu = useCallback(() => {
         setMenuActive(false);
     }, []);
@@ -37,7 +33,7 @@ const Header1 = memo(function Header1({ _config }) {
 
     return (
         <>
-            <header className={"site-header " + _config.style + " mobile-sider-drawer-menu " + (menuActive ? "active" : "") }>
+            <header className={"site-header " + _config.style + " " + (menuActive ? "active" : "") }>
                 <div className="sticky-header main-bar-wraper navbar-expand-lg">
                     <div className="main-bar">
                         <div className="container-fluid clearfix">
@@ -67,19 +63,6 @@ const Header1 = memo(function Header1({ _config }) {
                                     </NavLink>
                                 </div>
                             </div>
-                            {/* NAV Toggle Button */}
-                            <button id="mobile-side-drawer"
-                                data-target=".header-nav"
-                                data-toggle="collapse"
-                                type="button"
-                                className="navbar-toggler collapsed"
-                                onClick={handleNavigationClick}
-                            >
-                                <span className="sr-only">Toggle navigation</span>
-                                <span className="icon-bar icon-bar-first" />
-                                <span className="icon-bar icon-bar-two" />
-                                <span className="icon-bar icon-bar-three" />
-                            </button>
                             {/* MAIN Vav */}
                             <div className="nav-animation header-nav navbar-collapse d-flex justify-content-center" style={{display: 'flex !important'}}>
                                 <ul className="nav navbar-nav" style={{display: 'flex', listStyle: 'none', gap: '2rem'}}>

@@ -400,13 +400,19 @@ button,
 .site-button,
 .ant-btn {
   font-weight: 600 !important;
-  background-color: #fd7e14 !important;
-  color: #ffffff !important;
-  border-color: #fd7e14 !important;
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.3px !important;
+  text-transform: none !important;
   transition: all 0.3s ease;
   user-select: none;
   -webkit-user-select: none;
   position: relative;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 button:focus,
@@ -418,9 +424,10 @@ button:focus-visible,
 .ant-btn:focus,
 .ant-btn:focus-visible {
   outline: none !important;
-  border-color: #2563eb !important;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25) !important;
-  background-color: #ffffff !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.25) !important;
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
 }
 
 /* Hover states */
@@ -428,11 +435,10 @@ button:hover,
 .btn:hover,
 .site-button:hover,
 .ant-btn:hover {
-  background-color: #e8690a !important;
-  color: #ffffff !important;
-  border-color: #e8690a !important;
-  box-shadow: 0 6px 18px rgba(253, 126, 20, 0.3) !important;
-  transform: translateY(-2px);
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
 }
 
 /* Active states */
@@ -440,55 +446,240 @@ button:active,
 .btn:active,
 .site-button:active,
 .ant-btn:active {
-  background-color: #d1570a !important;
-  color: #ffffff !important;
-  border-color: #d1570a !important;
-  box-shadow: 0 2px 8px rgba(253, 126, 20, 0.4) !important;
-  transform: translateY(0);
+  background-color: rgba(255, 122, 0, 0.12) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: inset 0 2px 4px rgba(255, 122, 0, 0.2) !important;
 }
 
-/* Apply button styling (white with blue border) */
+/* Bootstrap Button Variants - All Orange Theme */
+/* Primary Button */
+.btn-primary,
+button.btn-primary {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+.btn-primary:hover,
+button.btn-primary:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+.btn-primary:focus,
+button.btn-primary:focus,
+.btn-primary:focus-visible,
+button.btn-primary:focus-visible {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.25) !important;
+}
+
+.btn-primary:active,
+button.btn-primary:active {
+  background-color: rgba(255, 122, 0, 0.12) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+.btn-primary:disabled,
+button.btn-primary:disabled {
+  background-color: rgba(255, 122, 0, 0.05) !important;
+  color: rgba(255, 122, 0, 0.5) !important;
+  border: 1px solid rgba(255, 122, 0, 0.3) !important;
+}
+
+/* Secondary Button - Orange Variant */
+.btn-secondary,
+button.btn-secondary {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+.btn-secondary:hover,
+button.btn-secondary:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* Success Button - Orange Variant */
+.btn-success,
+button.btn-success {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+.btn-success:hover,
+button.btn-success:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* Danger Button - Orange Variant */
+.btn-danger,
+button.btn-danger {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+.btn-danger:hover,
+button.btn-danger:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* Warning Button - Orange Variant */
+.btn-warning,
+button.btn-warning {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+.btn-warning:hover,
+button.btn-warning:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* Info Button - Orange Variant */
+.btn-info,
+button.btn-info {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+.btn-info:hover,
+button.btn-info:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* Light Button - Light Orange Background */
+.btn-light,
+button.btn-light {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+.btn-light:hover,
+button.btn-light:hover {
+  background-color: rgba(255, 122, 0, 0.12) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* Dark Button - Orange Variant */
+.btn-dark,
+button.btn-dark {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+.btn-dark:hover,
+button.btn-dark:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* Link Button */
+.btn-link {
+  color: #FF7A00 !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  text-decoration: none !important;
+  border: none !important;
+}
+
+.btn-link:hover {
+  color: #FF7A00 !important;
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  border-color: transparent !important;
+  text-decoration: underline !important;
+  border: none !important;
+}
+
+/* Small buttons */
+.btn-sm {
+  font-size: 12px !important;
+  padding: 6px 12px !important;
+}
+
+/* Large buttons */
+.btn-lg {
+  font-size: 18px !important;
+  padding: 12px 24px !important;
+}
+
+/* Apply button styling (orange theme) */
 .btn-apply,
 button.btn-apply,
 .site-button.btn-apply {
-  background-color: #ffffff !important;
-  color: #111827 !important;
-  border: 1px solid #2563eb !important;
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
   padding: 10px 22px !important;
   border-radius: 12px !important;
   font-weight: 600 !important;
-  text-shadow: none !important;
+  font-size: 16px !important;
+  letter-spacing: 0.3px !important;
 }
 
 .btn-apply:hover,
 button.btn-apply:hover,
 .site-button.btn-apply:hover {
-  background-color: #f8fafc !important;
-  color: #111827 !important;
-  text-shadow: none !important;
-  border-color: #2563eb !important;
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border-color: #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
 }
 
 /* Apply Now button styling */
 .apply-now-button,
 .apply-now-btn {
-  background-color: #fd7e14 !important;
-  border-color: #fd7e14 !important;
-  color: #ffffff !important;
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  border: 1px solid #FF7A00 !important;
+  color: #FF7A00 !important;
   transition: all 0.3s ease;
   padding: 10px 18px !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
   font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
   border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .apply-now-button:hover,
 .apply-now-btn:hover {
-  background-color: #e07c1a !important;
-  border-color: #e07c1a !important;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(253, 126, 20, 0.25);
-  color: #ffffff !important;
+  background-color: #FFF3E5 !important;
+  border: 1px solid #FF7A00 !important;
+  color: #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2);
 }
 
 /* Browse/View All type buttons */
@@ -500,11 +691,29 @@ button.btn-apply:hover,
 .twm-jobs-browse,
 .category-btn,
 .job-browse-btn {
-  background-color: #fd7e14 !important;
-  color: #ffffff !important;
-  border-color: #fd7e14 !important;
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
   text-decoration: none !important;
   transition: all 0.3s ease;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* Override header-specific button styles */
+.header-style-3 .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up,
+.header-full-width .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up,
+.header-style-light .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up,
+.header-style-3 .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job,
+.header-full-width .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job,
+.header-style-light .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.3px !important;
 }
 
 .twm-nav-sign-up:hover,
@@ -514,13 +723,18 @@ button.btn-apply:hover,
 .show-more-btn:hover,
 .twm-jobs-browse:hover,
 .category-btn:hover,
-.job-browse-btn:hover {
-  background-color: #e8690a !important;
-  color: #ffffff !important;
-  border-color: #e8690a !important;
+.job-browse-btn:hover,
+.header-style-3 .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up:hover,
+.header-full-width .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up:hover,
+.header-style-light .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up:hover,
+.header-style-3 .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job:hover,
+.header-full-width .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job:hover,
+.header-style-light .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
   text-decoration: none !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(253, 126, 20, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2);
 }
 
 /* Enhanced button hover effects */
@@ -905,7 +1119,6 @@ img[src*="logo-skin-8.png"] {
   .hero-body p,
   .hero-body .lead {
     color: #333 !important;
-    text-shadow: none !important;
   }
 
   .hero-body .text-white {
@@ -1205,8 +1418,7 @@ img[src*="logo-skin-8.png"] {
 }
 
 /* Tablet Responsive (768px - 991px) */
-@media (min-width: 768px) and (max-width: 991px) {
-  .twm-bnr-title-large {
+@media (min-width: 768pxlarge {
     font-size: 32px !important;
   }
 
@@ -1546,11 +1758,10 @@ img[src*="logo-skin-8.png"] {
   }
 
   /* Authorization Letters */
-  .emp-company-profile .col-md-6:has(input[type="file"]) {
+  /* .emp-company-profile .col-md-6:has(input[type="file") {
     flex: 0 0 100% !important;
     max-width: 100% !important;
-  }
-
+  } */
   /* JOB OPENINGS PAGE */
   .wt-admin-right-page-header {
     padding: 1rem !important;
@@ -2009,13 +2220,13 @@ img[src*="logo-skin-8.png"] {
 /* Orange backgrounds stay orange */
 [style*="background: #FF6A00"],
 [style*="background-color: #FF6A00"],
-[style*="backgroundColor: #FF6A00"] {
+[style*="backgroundColor: #FF6A00" {
   background-color: #FF6A00 !important;
 }
 
 /* Orange borders stay orange */
 [style*="border: 4px solid #FF6A00"],
-[style*="borderLeft: 4px solid #FF6A00"] {
+[style*="borderLeft: 4px solid #FF6A00" {
   border-color: #FF6A00 !important;
 }
 
@@ -2034,7 +2245,7 @@ img[src*="logo-skin-8.png"] {
   button,
   .btn,
   .site-button,
-  a[role="button"] {
+  a[role="button" {
     min-height: 44px;
     min-width: 44px;
   }
@@ -2136,6 +2347,383 @@ img[src*="logo-skin-8.png"] {
   color: #fd7e14 !important;
   background: transparent !important;
 }
+
+/* ============================================================================
+ * CRITICAL BUTTON OVERRIDE - Highest Priority Override Rules
+ * ============================================================================
+ * These rules must execute FIRST to ensure they override all previous styles
+ * from HTML-loaded CSS files (style.css, skin-*.css, bootstrap.css, etc.)
+ * ============================================================================ */
+
+/* CRITICAL: Force override of ALL button-like elements with intense specificity */
+html body .site-button,
+html body button,
+html body button.site-button,
+html body input[type="button"],
+html body input[type="submit"],
+html body [role="button"] {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.3px !important;
+}
+
+html body .site-button:hover,
+html body button:hover,
+html body button.site-button:hover,
+html body input[type="button"]:hover,
+html body input[type="submit"]:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* CRITICAL: Override header buttons regardless of wrapper depth */
+html body .header-nav-btn-section .site-button,
+html body .twm-nav-sign-up,
+html body .twm-nav-post-a-job {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.3px !important;
+}
+
+html body .header-nav-btn-section .site-button:hover,
+html body .twm-nav-sign-up:hover,
+html body .twm-nav-post-a-job:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* ============================================================================
+ * GLOBAL BUTTON OVERRIDE SECTION - Force Orange Theme Everywhere
+ * ============================================================================
+ * This section applies the orange button theme globally across ALL buttons
+ * regardless of skin files, component-specific styles, or CSS cascade order.
+ * All selectors use !important to ensure universal application.
+ * ============================================================================ */
+
+/* ============================================================================
+ * UNIVERSAL BUTTON OVERRIDES - All Possible Button Selectors
+ * ============================================================================ */
+
+/* Override ALL button elements and classes with the orange theme */
+*[class*="btn"],
+*[class*="button"],
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+a.btn,
+a[class*="btn"],
+a[class*="button"],
+.btn,
+.button,
+.site-button,
+.twm-nav-sign-up,
+.twm-nav-post-a-job,
+.browse-btn,
+.view-all-btn,
+.show-more-btn,
+.apply-btn,
+.apply-now-btn,
+.apply-now-button,
+.category-btn,
+.job-browse-btn,
+.twm-jobs-browse,
+.read-more-btn,
+.read-more,
+.explore-btn,
+.twm-read-more,
+[role="button"] {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.3px !important;
+  text-transform: none !important;
+}
+
+/* Hover states - apply to all button types */
+*[class*="btn"]:hover,
+*[class*="button"]:hover,
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+a.btn:hover,
+a[class*="btn"]:hover,
+a[class*="button"]:hover,
+.btn:hover,
+.button:hover,
+.site-button:hover,
+.twm-nav-sign-up:hover,
+.twm-nav-post-a-job:hover,
+.browse-btn:hover,
+.view-all-btn:hover,
+.show-more-btn:hover,
+.apply-btn:hover,
+.apply-now-btn:hover,
+.apply-now-button:hover,
+.category-btn:hover,
+.job-browse-btn:hover,
+.twm-jobs-browse:hover,
+.read-more-btn:hover,
+.read-more:hover,
+.explore-btn:hover,
+.twm-read-more:hover,
+[role="button"]:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* Focus/Active states */
+*[class*="btn"]:focus,
+*[class*="btn"]:focus-visible,
+*[class*="btn"]:active,
+*[class*="button"]:focus,
+*[class*="button"]:focus-visible,
+*[class*="button"]:active,
+button:focus,
+button:focus-visible,
+button:active,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+a.btn:focus,
+a[class*="btn"]:focus,
+a[class*="button"]:focus,
+.btn:focus,
+.btn:focus-visible,
+.btn:active,
+.button:focus,
+.site-button:focus,
+.site-button:active,
+.twm-nav-sign-up:focus,
+.twm-nav-post-a-job:focus,
+.browse-btn:focus,
+.view-all-btn:focus,
+.apply-btn:focus,
+.apply-now-btn:focus,
+.apply-now-button:focus,
+.category-btn:focus,
+.job-browse-btn:focus,
+[role="button"]:focus,
+[role="button"]:active {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.25) !important;
+  outline: none !important;
+}
+
+/* ============================================================================
+ * SPECIFICITY OVERRIDES FOR SKIN FILES AND THEME VARIANTS
+ * ============================================================================ */
+
+/* Override site-button from all skin files */
+.site-button,
+button.site-button,
+a.site-button,
+div.site-button {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.3px !important;
+}
+
+.site-button:hover,
+button.site-button:hover,
+a.site-button:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+.site-button.white,
+.site-button.outline-primary,
+.site-button.secondary {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+.site-button.white:hover,
+.site-button.outline-primary:hover,
+.site-button.secondary:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+/* Override button icon colors */
+.site-button i,
+.btn i,
+button i,
+a.btn i,
+.apply-now-btn i,
+.apply-now-button i {
+  color: #FF7A00 !important;
+}
+
+/* ============================================================================
+ * HEADER AND NAVIGATION BUTTON OVERRIDES
+ * ============================================================================ */
+
+/* All header styles - Sign Up and Post a Job buttons */
+.header-style-3 .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up,
+.header-style-3 .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job,
+.header-full-width .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up,
+.header-full-width .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job,
+.header-style-light .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up,
+.header-style-light .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job,
+.header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up,
+.header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.3px !important;
+}
+
+.header-style-3 .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up:hover,
+.header-style-3 .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job:hover,
+.header-full-width .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up:hover,
+.header-full-width .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job:hover,
+.header-style-light .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up:hover,
+.header-style-light .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job:hover,
+.header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up:hover,
+.header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* ============================================================================
+ * SECTION-SPECIFIC BUTTON OVERRIDES
+ * ============================================================================ */
+
+/* Hero/Explore section buttons */
+.twm-explore-content .twm-read-more .site-button,
+.twm-explore-content-2 .twm-explore-top-section .twm-read-more .site-button,
+.twm-explore-content-outer-3 .twm-explore-content-3 .twm-upload-file .site-button {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.3px !important;
+}
+
+.twm-explore-content .twm-read-more .site-button:hover,
+.twm-explore-content-2 .twm-explore-top-section .twm-read-more .site-button:hover,
+.twm-explore-content-outer-3 .twm-explore-content-3 .twm-upload-file .site-button:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* Browse All Cards section */
+.twm-explore-content .twm-upload-file .site-button {
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  font-weight: 600 !important;
+}
+
+.twm-explore-content .twm-upload-file .site-button:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+.twm-explore-content .twm-upload-file .site-button i {
+  color: #FF7A00 !important;
+}
+
+/* Profile and Dashboard buttons */
+.twm-profile-card .site-button-link,
+.profile-card .site-button {
+  color: #FF7A00 !important;
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+.twm-profile-card .site-button-link:hover,
+.profile-card .site-button:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+}
+
+/* ============================================================================
+ * UTILITY AND STATE-BASED BUTTON OVERRIDES
+ * ============================================================================ */
+
+/* Disabled buttons */
+button:disabled,
+.btn:disabled,
+.site-button:disabled,
+button[disabled],
+.btn[disabled],
+input:disabled,
+input[disabled] {
+  background-color: rgba(255, 122, 0, 0.05) !important;
+  color: rgba(255, 122, 0, 0.5) !important;
+  border: 1px solid rgba(255, 122, 0, 0.3) !important;
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+/* Link style buttons */
+a[class*="btn"],
+a[class*="button"],
+a.site-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: rgba(255, 122, 0, 0.08) !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.3px !important;
+  padding: 10px 20px !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease !important;
+}
+
+a[class*="btn"]:hover,
+a[class*="button"]:hover,
+a.site-button:hover {
+  background-color: #FFF3E5 !important;
+  color: #FF7A00 !important;
+  border: 1px solid #FF7A00 !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+}
+
+/* ============================================================================
+ * END OF GLOBAL BUTTON OVERRIDE SECTION
+ * ============================================================================ */
 
 /* ============================================================================
  * END OF CONSOLIDATED MASTER STYLES

@@ -34,12 +34,12 @@ h5 {
 
 /* Loading spinner */
 .fa-spinner {
-    color: #ff6b35;
+    color: #FF6A00;
 }
 
 /* Form label icons */
 .form-label i, label i {
-    color: #ff6b35;
+    color: #FF6A00;
     margin-right: 4px;
 }
 
@@ -83,6 +83,15 @@ h5 {
     margin-right: 6px;
 }
 
+.twm-right-section-panel .btn:not(.btn-link) {
+    background-color: #FF6A0014 !important;
+}
+
+.twm-right-section-panel .btn:not(.btn-link):hover,
+.twm-right-section-panel .btn:not(.btn-link):focus {
+    background-color: #FF6A0014 !important;
+}
+
 /* File upload section styling */
 .dashboard-cover-pic {
     border: 2px dashed #ebeaf1;
@@ -104,31 +113,31 @@ h5 {
 }
 
 /* Icon colors for different sections - All Orange */
-.fa-newspaper-o { color: #ff6b35; }
-.fa-user-circle { color: #ff6b35; }
-.fa-cogs { color: #ff6b35; }
-.fa-id-card { color: #ff6b35; }
-.fa-paperclip { color: #ff6b35; }
-.fa-graduation-cap { color: #ff6b35; }
-.fa-file-text-o { color: #ff6b35; }
-.fa-calendar { color: #ff6b35; }
-.fa-venus-mars { color: #ff6b35; }
-.fa-male { color: #ff6b35; }
-.fa-female { color: #ff6b35; }
-.fa-home { color: #ff6b35; }
-.fa-map-marker { color: #ff6b35; }
-.fa-envelope { color: #ff6b35; }
-.fa-file-text { color: #ff6b35; }
-.fa-upload { color: #ff6b35; }
-.fa-plus { color: #ff6b35; }
-.fa-save { color: #ff6b35; }
-.fa-tag { color: #ff6b35; }
-.fa-spinner { color: #ff6b35; }
+.fa-newspaper-o { color: #FF6A00; }
+.fa-user-circle { color: #FF6A00; }
+.fa-cogs { color: #FF6A00; }
+.fa-id-card { color: #FF6A00; }
+.fa-paperclip { color: #FF6A00; }
+.fa-graduation-cap { color: #FF6A00; }
+.fa-file-text-o { color: #FF6A00; }
+.fa-calendar { color: #FF6A00; }
+.fa-venus-mars { color: #FF6A00; }
+.fa-male { color: #FF6A00; }
+.fa-female { color: #FF6A00; }
+.fa-home { color: #FF6A00; }
+.fa-map-marker { color: #FF6A00; }
+.fa-envelope { color: #FF6A00; }
+.fa-file-text { color: #FF6A00; }
+.fa-upload { color: #FF6A00; }
+.fa-plus { color: #FF6A00; }
+.fa-save { color: #FF6A00; }
+.fa-tag { color: #FF6A00; }
+.fa-spinner { color: #FF6A00; }
 
 /* Status icons */
-.text-success i { color: #ff6b35; }
-.text-info i { color: #ff6b35; }
-.text-muted i { color: #ff6b35; }
+.text-success i { color: #FF6A00; }
+.text-info i { color: #FF6A00; }
+.text-muted i { color: #FF6A00; }
 
 /* Modal fixes to prevent blinking and display issues */
 .modal {

@@ -236,6 +236,7 @@ function CanStatusPage() {
 					className="btn btn-sm btn-outline-primary refresh-btn"
 					onClick={fetchApplications}
 					disabled={loading}
+					style={{backgroundColor: 'transparent'}}
 				>
 					<i className="fa fa-refresh me-1" />
 					{loading ? 'Refreshing...' : 'Refresh Now'}
@@ -294,7 +295,7 @@ function CanStatusPage() {
 														<i className="fa fa-search fa-3x mb-3" style={{color: '#ff6b35'}}></i>
 														<h5 style={{color: '#232323'}}>No Applications Yet</h5>
 														<p className="text-muted mb-3">Start applying to jobs to see your application status here</p>
-														<button className="btn btn-primary" onClick={() => window.location.href = '/jobs'}>
+														<button className="btn btn-outline-primary" onClick={() => window.location.href = '/jobs'} style={{backgroundColor: 'transparent'}}>
 															<i className="fa fa-search me-2"></i>
 															Browse Jobs
 														</button>
@@ -436,7 +437,7 @@ function CanStatusPage() {
 																			<button
 																				key={roundIndex}
 																				className="btn btn-sm btn-outline-primary"
-																				style={{fontSize: '10px', padding: '2px 6px', margin: '1px'}}
+																				style={{fontSize: '10px', padding: '2px 6px', margin: '1px', backgroundColor: 'transparent'}}
 																				onClick={() => handleViewRoundDetails(roundKey, roundDetails)}
 																				title={`View ${round} details`}
 																			>

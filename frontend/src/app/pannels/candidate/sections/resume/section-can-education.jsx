@@ -418,8 +418,9 @@ function SectionCanEducation({ profile, onUpdate }) {
                                     <td>
                                         <button 
                                             type="button" 
-                                            className={`btn btn-sm ${editMode.tenth ? 'btn-success' : 'btn-primary'}`}
+                                            className={`btn btn-sm ${editMode.tenth ? 'btn-outline-success' : 'btn-outline-primary'}`}
                                             onClick={() => toggleEdit('tenth')}
+                                            style={{backgroundColor: 'transparent'}}
                                         >
                                             {editMode.tenth ? 'Save' : 'Edit'}
                                         </button>
@@ -518,8 +519,9 @@ function SectionCanEducation({ profile, onUpdate }) {
                                     <td>
                                         <button 
                                             type="button" 
-                                            className={`btn btn-sm ${editMode.diploma ? 'btn-success' : 'btn-primary'}`}
+                                            className={`btn btn-sm ${editMode.diploma ? 'btn-outline-success' : 'btn-outline-primary'}`}
                                             onClick={() => toggleEdit('diploma')}
+                                            style={{backgroundColor: 'transparent'}}
                                         >
                                             {editMode.diploma ? 'Save' : 'Edit'}
                                         </button>
@@ -618,8 +620,9 @@ function SectionCanEducation({ profile, onUpdate }) {
                                     <td>
                                         <button 
                                             type="button" 
-                                            className={`btn btn-sm ${editMode.degree ? 'btn-success' : 'btn-primary'}`}
+                                            className={`btn btn-sm ${editMode.degree ? 'btn-outline-success' : 'btn-outline-primary'}`}
                                             onClick={() => toggleEdit('degree')}
+                                            style={{backgroundColor: 'transparent'}}
                                         >
                                             {editMode.degree ? 'Save' : 'Edit'}
                                         </button>
@@ -635,6 +638,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                                                 className="btn btn-sm btn-outline-danger ms-2"
                                                 onClick={() => removeRow(index)}
                                                 title="Remove"
+                                                style={{backgroundColor: 'transparent'}}
                                             >
                                                 ×
                                             </button>
@@ -729,8 +733,9 @@ function SectionCanEducation({ profile, onUpdate }) {
                                         <td>
                                             <button 
                                                 type="button" 
-                                                className={`btn btn-sm ${additionalEditMode[index] ? 'btn-success' : 'btn-primary'}`}
+                                                className={`btn btn-sm ${additionalEditMode[index] ? 'btn-outline-success' : 'btn-outline-primary'}`}
                                                 onClick={() => toggleEdit(null, index)}
+                                                style={{backgroundColor: 'transparent'}}
                                             >
                                                 {additionalEditMode[index] ? 'Save' : 'Edit'}
                                             </button>
@@ -741,19 +746,21 @@ function SectionCanEducation({ profile, onUpdate }) {
                             </tbody>
                         </table>
                     </div>
-                    <div className="mt-3">
+                    <div className="mt-3 d-flex gap-3 align-items-center">
                         <button 
                             type="button" 
-                            className="btn btn-success me-2" 
+                            className="btn btn-outline-success" 
                             onClick={addNewRow}
+                            style={{height: '38px', backgroundColor: 'transparent'}}
                         >
                             Add New
                         </button>
                         <button 
                             type="button" 
-                            className="btn btn-primary" 
+                            className="btn btn-outline-primary" 
                             onClick={handleSave} 
                             disabled={loading}
+                            style={{height: '38px', backgroundColor: 'transparent'}}
                         >
                             {loading ? 'Saving...' : 'Save All Education Details'}
                         </button>

@@ -148,49 +148,29 @@ function AdminEmployersAllRequest() {
                                                 </span>
                                             </td>
                                             <td>
-                                                <button
-                                                    style={{
-                                                        backgroundColor: "green",
-                                                        color: "#fff",
-                                                        border: "none",
-                                                        padding: "5px 10px",
-                                                        borderRadius: "4px",
-                                                        cursor: "pointer",
-                                                    }}
-                                                    onClick={() => handleApprove(employer._id)}
-                                                >
-                                                    Approve
-                                                </button>
-                                                
-                                                <button
-                                                    style={{
-                                                        backgroundColor: "#dc3545",
-                                                        color: "#fff",
-                                                        border: "none",
-                                                        padding: "5px 10px",
-                                                        borderRadius: "4px",
-                                                        cursor: "pointer",
-                                                    }}
-                                                    className="ms-3"
-                                                    onClick={() => handleReject(employer._id)}
-                                                >
-                                                    Reject
-                                                </button>
-
-                                                <button
-                                                    style={{
-                                                        backgroundColor: "#fd7e14",
-                                                        color: "#fff",
-                                                        border: "none",
-                                                        padding: "5px 10px",
-                                                        borderRadius: "4px",
-                                                        cursor: "pointer",
-                                                    }}
-                                                    className="ms-3"
-                                                    onClick={() => navigate(`/admin/employer-details/${employer._id}`)}
-                                                >
-                                                    View Details
-                                                </button>
+                                                <div className="action-buttons">
+                                                    <button
+                                                        type="button"
+                                                        className="action-btn btn-approve"
+                                                        onClick={() => handleApprove(employer._id)}
+                                                    >
+                                                        Approve
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="action-btn btn-reject"
+                                                        onClick={() => handleReject(employer._id)}
+                                                    >
+                                                        Reject
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="action-btn btn-view"
+                                                        onClick={() => navigate(`/admin/employer-details/${employer._id}`)}
+                                                    >
+                                                        View Details
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))
