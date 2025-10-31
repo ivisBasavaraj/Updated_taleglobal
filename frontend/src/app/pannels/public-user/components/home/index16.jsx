@@ -1129,7 +1129,7 @@ function Home16Page() {
 									className="twm-column-5 m-b30"
 									style={{
 										"--cards-per-row": "6",
-										gap: "20px",
+										gap: "20px 40px",
 										padding: "10px 0"
 									}}
 								>
@@ -1183,7 +1183,7 @@ function Home16Page() {
 												};
 
 												return (
-													<li key={recruiter._id}>
+													<li key={recruiter._id} style={{marginBottom: '30px'}}>
 														<div className="twm-recruiters5-box hover-card">
 															<div className="twm-rec-top">
 																<div className="twm-rec-media">

@@ -298,17 +298,19 @@
 }
 
 .btn-view {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
+    background: transparent;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
 }
 
 .btn-view:hover {
-    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
-    color: white;
+    background: #f8f9fa;
+    color: #495057;
+    border: 1px solid #adb5bd;
 }
 
 .btn-view i {
-    color: white !important;
+    color: #000000 !important;
 }
 
 .loading-container {

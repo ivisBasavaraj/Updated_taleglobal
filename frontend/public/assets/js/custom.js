@@ -10,7 +10,16 @@ All JavaScript fuctions Start
 
 	//  selectpicker function by = bootstrap-select.min.js ========================== //
 	function select_picker_select() {
-		jQuery('.selectpicker').selectpicker();
+		// Check if selectpicker plugin is loaded
+		if (typeof jQuery !== 'undefined' && jQuery.fn.selectpicker) {
+			try {
+				jQuery('.selectpicker').selectpicker();
+			} catch (err) {
+				console.warn('selectpicker initialization failed:', err);
+			}
+		} else {
+			console.warn('bootstrap-select library not loaded');
+		}
 	}
 
 	//  Home 1 Banner Carousel function by = owl.carousel.js ========================== //

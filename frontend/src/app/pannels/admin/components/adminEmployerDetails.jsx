@@ -226,7 +226,7 @@ function EmployerDetails() {
                 </p>
             </div>
             
-            <button className="back-button" onClick={() => navigate(-1)} data-aos="fade-right">
+            <button className="btn btn-outline-primary" onClick={() => navigate(-1)} data-aos="fade-right" style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35', marginBottom: '20px' }}>
                 <i className="fa fa-arrow-left"></i>
                 Back to Management
             </button>
@@ -330,12 +330,13 @@ function EmployerDetails() {
                             <h6><i className="fa fa-image"></i>Logo</h6>
                             {profile.logo ? (
                                 <button 
-                                    className="action-btn btn-view-image"
+                                    className="btn btn-outline-primary btn-sm"
                                     onClick={() => {
                                         const imageUrl = profile.logo.startsWith('data:') ? profile.logo : `data:image/jpeg;base64,${profile.logo}`;
                                         setCurrentImage(imageUrl);
                                         setShowImageModal(true);
                                     }}
+                                    style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35' }}
                                 >
                                     <i className="fa fa-eye"></i>
                                     View Image
@@ -348,12 +349,13 @@ function EmployerDetails() {
                             <h6><i className="fa fa-images"></i>Cover Image</h6>
                             {profile.coverImage ? (
                                 <button 
-                                    className="action-btn btn-view-image"
+                                    className="btn btn-outline-primary btn-sm"
                                     onClick={() => {
                                         const imageUrl = profile.coverImage.startsWith('data:') ? profile.coverImage : `data:image/jpeg;base64,${profile.coverImage}`;
                                         setCurrentImage(imageUrl);
                                         setShowImageModal(true);
                                     }}
+                                    style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35' }}
                                 >
                                     <i className="fa fa-eye"></i>
                                     View Image
@@ -416,14 +418,14 @@ function EmployerDetails() {
                                 <td>
                                     {profile.panCardImage && (
                                         <div className="action-buttons-container">
-                                            <button className="action-btn btn-download" onClick={() => downloadDocument(id, 'panCardImage')}>
-                                                <i className="fa fa-download"></i>Download
+                                            <button className="btn btn-outline-primary btn-sm" onClick={() => downloadDocument(id, 'panCardImage')} style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35', marginRight: '5px' }}>
+                                                <i className="fa fa-download"></i> Download
                                             </button>
-                                            <button className="action-btn btn-approve" onClick={() => updateDocumentStatus(id, 'panCardVerified', 'approved')}>
-                                                <i className="fa fa-check"></i>Approve
+                                            <button className="btn btn-outline-success btn-sm" onClick={() => updateDocumentStatus(id, 'panCardVerified', 'approved')} style={{ marginRight: '5px' }}>
+                                                <i className="fa fa-check"></i> Approve
                                             </button>
-                                            <button className="action-btn btn-reject" onClick={() => updateDocumentStatus(id, 'panCardVerified', 'rejected')}>
-                                                <i className="fa fa-times"></i>Reject
+                                            <button className="btn btn-outline-danger btn-sm" onClick={() => updateDocumentStatus(id, 'panCardVerified', 'rejected')}>
+                                                <i className="fa fa-times"></i> Reject
                                             </button>
                                         </div>
                                     )}
@@ -452,14 +454,14 @@ function EmployerDetails() {
                                 <td>
                                     {profile.cinImage && (
                                         <div className="action-buttons-container">
-                                            <button className="action-btn btn-download" onClick={() => downloadDocument(id, 'cinImage')}>
-                                                <i className="fa fa-download"></i>Download
+                                            <button className="btn btn-outline-primary btn-sm" onClick={() => downloadDocument(id, 'cinImage')} style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35', marginRight: '5px' }}>
+                                                <i className="fa fa-download"></i> Download
                                             </button>
-                                            <button className="action-btn btn-approve" onClick={() => updateDocumentStatus(id, 'cinVerified', 'approved')}>
-                                                <i className="fa fa-check"></i>Approve
+                                            <button className="btn btn-outline-success btn-sm" onClick={() => updateDocumentStatus(id, 'cinVerified', 'approved')} style={{ marginRight: '5px' }}>
+                                                <i className="fa fa-check"></i> Approve
                                             </button>
-                                            <button className="action-btn btn-reject" onClick={() => updateDocumentStatus(id, 'cinVerified', 'rejected')}>
-                                                <i className="fa fa-times"></i>Reject
+                                            <button className="btn btn-outline-danger btn-sm" onClick={() => updateDocumentStatus(id, 'cinVerified', 'rejected')}>
+                                                <i className="fa fa-times"></i> Reject
                                             </button>
                                         </div>
                                     )}
@@ -488,14 +490,14 @@ function EmployerDetails() {
                                 <td>
                                     {profile.gstImage && (
                                         <div className="action-buttons-container">
-                                            <button className="action-btn btn-download" onClick={() => downloadDocument(id, 'gstImage')}>
-                                                <i className="fa fa-download"></i>Download
+                                            <button className="btn btn-outline-primary btn-sm" onClick={() => downloadDocument(id, 'gstImage')} style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35', marginRight: '5px' }}>
+                                                <i className="fa fa-download"></i> Download
                                             </button>
-                                            <button className="action-btn btn-approve" onClick={() => updateDocumentStatus(id, 'gstVerified', 'approved')}>
-                                                <i className="fa fa-check"></i>Approve
+                                            <button className="btn btn-outline-success btn-sm" onClick={() => updateDocumentStatus(id, 'gstVerified', 'approved')} style={{ marginRight: '5px' }}>
+                                                <i className="fa fa-check"></i> Approve
                                             </button>
-                                            <button className="action-btn btn-reject" onClick={() => updateDocumentStatus(id, 'gstVerified', 'rejected')}>
-                                                <i className="fa fa-times"></i>Reject
+                                            <button className="btn btn-outline-danger btn-sm" onClick={() => updateDocumentStatus(id, 'gstVerified', 'rejected')}>
+                                                <i className="fa fa-times"></i> Reject
                                             </button>
                                         </div>
                                     )}
@@ -524,14 +526,14 @@ function EmployerDetails() {
                                 <td>
                                     {profile.certificateOfIncorporation && (
                                         <div className="action-buttons-container">
-                                            <button className="action-btn btn-download" onClick={() => downloadDocument(id, 'certificateOfIncorporation')}>
-                                                <i className="fa fa-download"></i>Download
+                                            <button className="btn btn-outline-primary btn-sm" onClick={() => downloadDocument(id, 'certificateOfIncorporation')} style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35', marginRight: '5px' }}>
+                                                <i className="fa fa-download"></i> Download
                                             </button>
-                                            <button className="action-btn btn-approve" onClick={() => updateDocumentStatus(id, 'incorporationVerified', 'approved')}>
-                                                <i className="fa fa-check"></i>Approve
+                                            <button className="btn btn-outline-success btn-sm" onClick={() => updateDocumentStatus(id, 'incorporationVerified', 'approved')} style={{ marginRight: '5px' }}>
+                                                <i className="fa fa-check"></i> Approve
                                             </button>
-                                            <button className="action-btn btn-reject" onClick={() => updateDocumentStatus(id, 'incorporationVerified', 'rejected')}>
-                                                <i className="fa fa-times"></i>Reject
+                                            <button className="btn btn-outline-danger btn-sm" onClick={() => updateDocumentStatus(id, 'incorporationVerified', 'rejected')}>
+                                                <i className="fa fa-times"></i> Reject
                                             </button>
                                         </div>
                                     )}
@@ -566,8 +568,9 @@ function EmployerDetails() {
                         </div>
                         <div className="job-count-actions">
                             <button 
-                                className="action-btn btn-view-details"
+                                className="btn btn-outline-primary"
                                 onClick={() => navigate(`/emp-detail/${profile.employerId._id}`)}
+                                style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35' }}
                             >
                                 <i className="fa fa-eye"></i>
                                 View Details
@@ -653,26 +656,28 @@ function EmployerDetails() {
                                             <div className="action-buttons-container">
                                                 {doc.fileData.startsWith('data:image') && (
                                                     <button 
-                                                        className="action-btn btn-view-image"
+                                                        className="btn btn-outline-primary btn-sm"
                                                         onClick={() => {
                                                             setCurrentImage(doc.fileData);
                                                             setShowImageModal(true);
                                                         }}
+                                                        style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35', marginRight: '5px' }}
                                                     >
                                                         <i className="fa fa-eye"></i>
                                                     </button>
                                                 )}
                                                 {doc.status !== 'approved' && (
                                                     <button 
-                                                        className="action-btn btn-approve"
+                                                        className="btn btn-outline-success btn-sm"
                                                         onClick={() => handleApproveAuthorizationLetter(doc._id)}
+                                                        style={{ marginRight: '5px' }}
                                                     >
                                                         <i className="fa fa-check"></i>
                                                     </button>
                                                 )}
                                                 {doc.status !== 'rejected' && (
                                                     <button 
-                                                        className="action-btn btn-reject"
+                                                        className="btn btn-outline-danger btn-sm"
                                                         onClick={() => handleRejectAuthorizationLetter(doc._id)}
                                                     >
                                                         <i className="fa fa-times"></i>

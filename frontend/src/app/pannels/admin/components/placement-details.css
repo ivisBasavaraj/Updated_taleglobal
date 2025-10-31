@@ -128,6 +128,41 @@
     border-color: #d39e00;
 }
 
+.btn-success {
+    background-color: transparent;
+    border-color: #dee2e6;
+    color: #6c757d;
+}
+
+.btn-success:hover {
+    background-color: #f8f9fa;
+    border-color: #adb5bd;
+    color: #495057;
+}
+
+/* Actions section specific styling - Override Bootstrap */
+.container-fluid .modern-card .btn.btn-success,
+.modern-card .btn.btn-success {
+    background-color: #ffeaa7 !important;
+    background-image: none !important;
+    border-color: #fdcb6e !important;
+    color: #2d3436 !important;
+    box-shadow: none !important;
+}
+
+.container-fluid .modern-card .btn.btn-success:hover,
+.modern-card .btn.btn-success:hover,
+.container-fluid .modern-card .btn.btn-success:focus,
+.modern-card .btn.btn-success:focus,
+.container-fluid .modern-card .btn.btn-success:active,
+.modern-card .btn.btn-success:active {
+    background-color: #fdcb6e !important;
+    background-image: none !important;
+    border-color: #e17055 !important;
+    color: #2d3436 !important;
+    box-shadow: none !important;
+}
+
 .modal {
     z-index: 1050;
 }

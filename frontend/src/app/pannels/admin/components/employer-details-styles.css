@@ -1,6 +1,6 @@
 /* Employer Details Styles */
 .employer-details-container {
-    background: #f8f9fa;
+    background: #fff8f0;
     min-height: 100vh;
     padding: 20px;
 }
@@ -32,6 +32,7 @@
     font-weight: 700;
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    color: white;
 }
 
 .employer-details-header h2 i {
@@ -246,19 +247,19 @@
 }
 
 .status-badge {
-    padding: 10px 18px;
-    border-radius: 30px;
+    padding: 6px 12px;
+    border-radius: 4px;
     font-size: 0.75rem;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.5px;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
+    gap: 4px;
+    border: 1px solid;
+    transition: all 0.15s ease-in-out;
     white-space: nowrap;
+    background-color: transparent;
 }
 
 .status-badge:hover {
@@ -267,29 +268,33 @@
 }
 
 .badge-uploaded {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    background: linear-gradient(135deg, #ff8c00 0%, #ff7700 100%);
     color: white;
+    border-color: #ff7700;
 }
 
 .badge-not-uploaded {
-    background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+    background: linear-gradient(135deg, #ffb366 0%, #ff9933 100%);
     color: white;
+    border-color: #ff9933;
 }
 
 .badge-approved {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    background: linear-gradient(135deg, #ff9c00 0%, #ff8c00 100%);
     color: white;
+    border-color: #ff8c00;
 }
 
 .badge-rejected {
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    background: linear-gradient(135deg, #ffa500 0%, #ff9500 100%);
     color: white;
+    border-color: #ff9500;
 }
 
 .badge-pending {
-    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+    background: linear-gradient(135deg, #ffb84d 0%, #ff9c00 100%);
     color: white !important;
-    border-color: #95a5a6;
+    border-color: #ff9c00;
 }
 
 .badge-pending i {
@@ -302,30 +307,6 @@
 
 .status-badge.badge-pending * {
     color: white !important;
-}
-
-.badge-uploaded {
-    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
-    color: white;
-    border-color: #27ae60;
-}
-
-.badge-not-uploaded {
-    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-    color: white;
-    border-color: #f39c12;
-}
-
-.badge-approved {
-    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
-    color: white;
-    border-color: #27ae60;
-}
-
-.badge-rejected {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-    color: white;
-    border-color: #e74c3c;
 }
 
 .action-btn {
