@@ -630,7 +630,7 @@ function Home16Page() {
 										</div>
 										<div style={{flex: '1'}}>
 											<h4 className="twm-title" style={{marginBottom: '10px', fontSize: '18px'}}>4. Get Hired</h4>
-											<p style={{marginBottom: '0', fontSize: '14px', lineHeight: '1.5'}}>Interviews and discussion rounds scheduled by company.</p>
+											<p style={{marginBottom: '0', fontSize: '14px', lineHeight: '1.5'}}>Interviews and discussion rounds scheduled by the company team.</p>
 										</div>
 									</div>
 								</Col>
@@ -706,7 +706,7 @@ function Home16Page() {
 										</div>
 										<div>
 											<h4 className="twm-title">3. Build Your Team</h4>
-											<p>Successfully onboard new hires and build your dream team. Access analytics and insights to improve your hiring process continuously.</p>
+											<p>Successfully onboard new hires and build your dream team. Access analytics and insights to improve your hiring process continuously. Implement smarter recruitment strategies.</p>
 										</div>
 									</div>
 								</Col>
