@@ -46,6 +46,15 @@ function Home16Page() {
         updateSkinStyle("8", false, false)
         loadScript("js/custom.js")
         fetchHomeData();
+        
+        // Initialize navbar transparency
+        setTimeout(() => {
+            const navbars = document.querySelectorAll('header, .site-header, .navbar, .twm-header-style-1, .header-fixed, .main-header');
+            navbars.forEach(navbar => {
+                navbar.classList.add('navbar-transparent');
+                navbar.style.cssText = 'background: transparent !important; background-color: transparent !important; box-shadow: none !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; transition: all 0.3s ease !important;';
+            });
+        }, 100);
 
         // Add smooth scrolling behavior
         document.documentElement.style.scrollBehavior = 'smooth';
@@ -1059,3 +1068,36 @@ function Home16Page() {
 }
 
 export default Home16Page;
+
+const navbarStyle = document.createElement('style');
+navbarStyle.textContent = `
+    .navbar-transparent,
+    .navbar-transparent * {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+    .navbar-scrolled {
+        background: #fff !important;
+        background-color: #fff !important;
+    }
+`;
+document.head.appendChild(navbarStyle);
+
+const handleNavbarScroll = () => {
+    const navbars = document.querySelectorAll('header, .site-header, .navbar, .twm-header-style-1, .header-fixed, .main-header');
+    
+    navbars.forEach(navbar => {
+        if (window.scrollY > 50) {
+            navbar.classList.remove('navbar-transparent');
+            navbar.classList.add('navbar-scrolled');
+            navbar.style.cssText = 'background: #fff !important; background-color: #fff !important; box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important; position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; transition: all 0.3s ease !important;';
+        } else {
+            navbar.classList.remove('navbar-scrolled');
+            navbar.classList.add('navbar-transparent');
+            navbar.style.cssText = 'background: transparent !important; background-color: transparent !important; box-shadow: none !important; position: absolute !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; transition: all 0.3s ease !important;';
+        }
+    });
+};
+
+window.addEventListener('scroll', handleNavbarScroll);
+setTimeout(handleNavbarScroll, 100);
