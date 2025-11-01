@@ -196,8 +196,9 @@ const Header1 = memo(function Header1({ _config }) {
                                         id="twm-side-navigation"
                                         onClick={toggleMenu}
                                         aria-label="Toggle menu"
+                                        style={{color: '#ffffff'}}
                                     >
-                                        <span className="fa fa-bars"></span>
+                                        <span className="fa fa-bars" style={{color: '#ffffff'}}></span>
                                     </a>
                                 </div>
                             </div>
