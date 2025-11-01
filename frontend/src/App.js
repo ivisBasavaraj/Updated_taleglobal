@@ -9,6 +9,7 @@ import "aos/dist/aos.css";
 import forceLightMode from "./utils/forceLightMode";
 // CONSOLIDATED MASTER STYLES - All CSS in one file to eliminate cascade conflicts
 import "./consolidated-master-styles.css";
+import "./global-icon-color.css";
 
 function App() {
 

@@ -5,6 +5,7 @@
     overflow: hidden !important;
     padding: 0 !important;
     position: relative;
+    background: #ffffff !important;
 }
  
 .scroll-wrapper > .scroll-content {
@@ -96,9 +97,9 @@
  
 .scrollbar-macosx > .scroll-element .scroll-element_track { display: none; }
 .scrollbar-macosx > .scroll-element .scroll-bar {
-    background-color: #6C6E71;
+    background-color: #ffffff;
     display: block;
- 
+
     filter: alpha(opacity=0);
     opacity: 0;
     border-radius: 7px;

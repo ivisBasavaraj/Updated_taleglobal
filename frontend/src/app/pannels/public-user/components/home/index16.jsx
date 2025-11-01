@@ -555,7 +555,7 @@ function Home16Page() {
                         </div>
 
                         <div className="text-center job-categories-btn">
-                            <NavLink to={"#!"} className="site-button">
+                            <NavLink to="/job-grid" className="site-button">
                                 All Categories
                             </NavLink>
                         </div>

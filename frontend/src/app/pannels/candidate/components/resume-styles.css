@@ -552,16 +552,30 @@ body.modal-open {
     .panel-heading .panel-tittle {
         font-size: 16px;
     }
-    
+
     .panel-heading .panel-tittle i {
         font-size: 16px;
     }
-    
+
     .twm-right-section-panel {
         padding: 10px;
     }
-    
+
     .panel-body {
         padding: 15px;
+    }
+
+    /* Button adjustments for mobile */
+    .btn {
+        padding: 8px 12px !important;
+        font-size: 13px !important;
+        min-width: 60px !important;
+        height: auto !important;
+    }
+
+    .btn-sm {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+        min-width: 50px !important;
     }
 }

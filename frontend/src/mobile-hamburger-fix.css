@@ -1,0 +1,263 @@
+/* Fix Multiple Hamburger Menus and Sidebar on Mobile */
+
+@media (max-width: 991px) {
+  /* Hide all hamburger buttons except the first one */
+  .page-wraper .mobile-menu-toggle:not(:first-of-type) {
+    display: none !important;
+  }
+  
+  /* Hamburger button styling */
+  .page-wraper > .mobile-menu-toggle:first-child {
+    display: flex !important;
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 10001;
+    width: 44px;
+    height: 44px;
+    background: #fd7e14 !important;
+    border: none !important;
+    border-radius: 8px;
+    color: white !important;
+    font-size: 18px;
+  }
+  
+  .page-wraper > .mobile-menu-toggle:first-child i,
+  .page-wraper > .mobile-menu-toggle:first-child .fa,
+  .page-wraper > .mobile-menu-toggle:first-child .fas {
+    color: white !important;
+  }
+  
+  .page-wraper > .mobile-menu-toggle:first-child:hover,
+  .page-wraper > .mobile-menu-toggle:first-child:active,
+  .page-wraper > .mobile-menu-toggle:first-child:focus {
+    color: white !important;
+  }
+  
+  .page-wraper > .mobile-menu-toggle:first-child:hover i,
+  .page-wraper > .mobile-menu-toggle:first-child:active i,
+  .page-wraper > .mobile-menu-toggle:first-child:focus i {
+    color: white !important;
+  }
+  
+  /* Hide sidebar by default on mobile */
+  #sidebar-admin-wraper {
+    position: fixed !important;
+    left: -280px !important;
+    top: 0 !important;
+    width: 280px !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    transition: left 0.3s ease !important;
+    background: white !important;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1) !important;
+    transform: translateX(0) !important;
+  }
+  
+  /* Force hide when not active */
+  #sidebar-admin-wraper:not(.active) {
+    left: -280px !important;
+    display: block !important;
+  }
+  
+  /* Show sidebar when active */
+  #sidebar-admin-wraper.active {
+    left: 0 !important;
+    display: block !important;
+  }
+  
+  /* Remove margin from content */
+  #content {
+    margin-left: 0 !important;
+  }
+  
+  /* Fix header to be full width when sidebar hidden */
+  #header-admin-wrap,
+  #header-admin {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    z-index: 999 !important;
+  }
+  
+  #header-admin .container {
+    max-width: 100% !important;
+    padding-left: 15px !important;
+    padding-right: 60px !important;
+  }
+  
+  .header-right {
+    margin-right: 0 !important;
+  }
+  
+  #content {
+    padding-top: 70px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  #header-admin .container {
+    padding-right: 55px !important;
+  }
+}
+
+@media (max-width: 575px) {
+  #header-admin .container {
+    padding-right: 50px !important;
+    padding-left: 10px !important;
+  }
+  
+  .header-left .nav-btn-wrap {
+    display: none !important;
+  }
+}
+
+/* Fix button text overflow and make buttons same size on mobile */
+@media (max-width: 991px) {
+  .site-button,
+  .btn,
+  button {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  
+  /* Make form buttons in panels same width, but not skill buttons */
+  .panel-body > .site-button,
+  .panel-body > .btn,
+  .panel-body > button,
+  .panel-body .form-group .site-button,
+  .panel-body .form-group .btn,
+  .panel-body .form-group button {
+    width: 100% !important;
+    display: block !important;
+    margin-bottom: 10px !important;
+  }
+  
+  /* Keep skill buttons inline */
+  .panel-body .tagcloud a,
+  .panel-body .skill-tag,
+  .panel-body .badge {
+    width: auto !important;
+    display: inline-block !important;
+  }
+  
+  /* Fix panel heading buttons alignment - keep horizontal */
+  .panel-heading {
+    padding: 10px 15px !important;
+  }
+  
+  .panel-heading .d-flex,
+  .panel-heading .justify-content-between {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+  
+  .panel-heading .panel-tittle {
+    flex: 1 !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+  }
+  
+  .panel-heading .site-button,
+  .panel-heading .btn,
+  .panel-heading button {
+    width: auto !important;
+    flex-shrink: 0 !important;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .site-button,
+  .btn,
+  button {
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+  }
+  
+  .panel-heading .panel-tittle {
+    font-size: 13px !important;
+  }
+  
+  .panel-heading .site-button,
+  .panel-heading .btn,
+  .panel-heading button {
+    font-size: 11px !important;
+    padding: 5px 10px !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .site-button,
+  .btn,
+  button {
+    font-size: 12px !important;
+    padding: 6px 10px !important;
+  }
+}
+
+/* Fix password eye icon overflow and prevent movement on mobile */
+@media (max-width: 991px) {
+  .password-eye-icon {
+    position: absolute !important;
+    right: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 10 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  .password-eye-icon:hover,
+  .password-eye-icon:active,
+  .password-eye-icon:focus {
+    transform: translateY(-50%) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  
+  .password-eye-icon i {
+    font-size: 14px !important;
+  }
+  
+  input[type="password"],
+  .password-input {
+    padding-right: 45px !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .password-eye-icon {
+    width: 28px !important;
+    height: 28px !important;
+    right: 8px !important;
+  }
+  
+  .password-eye-icon:hover,
+  .password-eye-icon:active,
+  .password-eye-icon:focus {
+    transform: translateY(-50%) !important;
+  }
+  
+  .password-eye-icon i {
+    font-size: 12px !important;
+  }
+}

@@ -30,16 +30,22 @@ body.modal-open {
     box-shadow: 0 4px 24px rgba(0,0,0,0.25) !important;
     transform: translateX(-100%) !important;
     transition: transform 0.3s ease !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
   }
   
-  /* Show sidebar when not active (React state logic is inverted) */
+  /* Mobile sidebar toggle rules - ensure proper hiding */
   #sidebar-admin-wraper:not(.active) {
-    transform: translateX(0) !important;
-  }
-  
-  /* Hide sidebar when active */
-  #sidebar-admin-wraper.active {
     transform: translateX(-100%) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  #sidebar-admin-wraper.active {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
   
   /* Ensure content is not affected */

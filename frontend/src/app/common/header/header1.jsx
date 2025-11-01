@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { publicUser } from "../../../globals/route-names";
 import { useState, useCallback, memo } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
+import "../../../header-responsive.css";
 
 const Header1 = memo(function Header1({ _config }) {
 
@@ -15,7 +16,16 @@ const Header1 = memo(function Header1({ _config }) {
     }, []);
 
     const toggleMenu = useCallback(() => {
-        setMenuActive(prev => !prev);
+        setMenuActive(prev => {
+            const newState = !prev;
+            // Prevent body scroll when menu is open
+            if (newState) {
+                document.body.classList.add('mobile-menu-open');
+            } else {
+                document.body.classList.remove('mobile-menu-open');
+            }
+            return newState;
+        });
     }, []);
 
     const getDashboardRoute = () => {
@@ -56,7 +66,7 @@ const Header1 = memo(function Header1({ _config }) {
 
     return (
         <>
-            <header className={"site-header " + _config.style + " " + (menuActive ? "active" : "") }>
+            <header className={"site-header " + _config.style + " " + (menuActive ? "active" : "") + (isAuthenticated() ? " authenticated-user" : "") }>
                 <div className="sticky-header main-bar-wraper navbar-expand-lg">
                     <div className="main-bar">
                         <div className="container-fluid clearfix">
@@ -127,6 +137,28 @@ const Header1 = memo(function Header1({ _config }) {
                                     </li>
 
                                 </ul>
+
+                                {/* Mobile Auth Section */}
+                                <div className="mobile-auth-section">
+                                    {isAuthenticated() ? (
+                                        <NavLink 
+                                            className="btn btn-outline-primary" 
+                                            to={getDashboardRoute()}
+                                            onClick={closeMenu}
+                                        >
+                                            <i className="feather-user" /> {getUserDisplayName()}
+                                        </NavLink>
+                                    ) : (
+                                        <>
+                                            <a className="btn btn-outline-primary" data-bs-toggle="modal" href="#sign_up_popup" role="button" onClick={closeMenu}>
+                                                <i className="feather-log-in" /> Sign Up
+                                            </a>
+                                            <a className="btn btn-primary" data-bs-toggle="modal" href="#sign_up_popup2" role="button" onClick={closeMenu}>
+                                                <i className="feather-log-in" /> Sign In
+                                            </a>
+                                        </>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Header Right Section*/}
@@ -135,8 +167,8 @@ const Header1 = memo(function Header1({ _config }) {
                                     {isAuthenticated() ? (
                                         <div className="employer-nav-menu">
                                             <div className="dashboard-link">
-                                                <NavLink 
-                                                    className="btn btn-outline-primary" 
+                                                <NavLink
+                                                    className="btn btn-outline-primary"
                                                     to={getDashboardRoute()}
                                                 >
                                                     <i className="feather-user" /> {getUserDisplayName()}
@@ -158,6 +190,16 @@ const Header1 = memo(function Header1({ _config }) {
                                         </div>
                                     )}
                                 </div>
+                                <div className="extra-cell">
+                                    <a href="#"
+                                        className={"vnav-btn " + _config.nav_button_style + (menuActive ? ' active' : '')}
+                                        id="twm-side-navigation"
+                                        onClick={toggleMenu}
+                                        aria-label="Toggle menu"
+                                    >
+                                        <span className="fa fa-bars"></span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -173,6 +215,34 @@ const Header1 = memo(function Header1({ _config }) {
                                 </button>
                             </span>
                         </form>
+                    </div>
+                </div>
+
+                <div className={"twm-side-navigation-menu " + (menuActive ? 'active' : '')}>
+                    <div className="nav-sidebar-wrap  scrollbar-macosx">
+                        <a href="#" className="vnav-close" onClick={toggleMenu} />
+                        <ul className="nav ">
+                            <li><NavLink to="/" onClick={closeMenu}>Home</NavLink></li>
+                            <li><NavLink to="/job-grid" onClick={closeMenu}>Jobs</NavLink></li>
+                            <li><NavLink to="/emp-grid" onClick={closeMenu}>Employers</NavLink></li>
+                            <li><NavLink to="/contact-us" onClick={closeMenu}>Contact Us</NavLink></li>
+                        </ul>
+
+                        {/* Auth buttons for mobile menu */}
+                        {!isAuthenticated() && (
+                            <div className="header-nav-btn-section">
+                                <div className="twm-nav-btn-left">
+                                    <a className="twm-nav-sign-up" data-bs-toggle="modal" href="#sign_up_popup" role="button" onClick={closeMenu}>
+                                        <i className="feather-log-in" /> Sign Up
+                                    </a>
+                                </div>
+                                <div className="twm-nav-btn-right">
+                                    <a className="twm-nav-post-a-job" data-bs-toggle="modal" href="#sign_up_popup2" role="button" onClick={closeMenu}>
+                                        <i className="feather-log-in" /> Sign In
+                                    </a>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </header>

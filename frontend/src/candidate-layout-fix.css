@@ -83,12 +83,18 @@
   box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
   cursor: pointer !important;
   transition: all 0.3s ease !important;
-  display: none !important;
 }
 
 .mobile-menu-toggle:hover {
   transform: translateY(-1px) !important;
   box-shadow: 0 6px 20px rgba(0,0,0,0.3) !important;
+}
+
+/* Adjust button position when sidebar is active */
+@media (max-width: 991px) {
+  .mobile-menu-toggle.sidebar-open {
+    left: 295px !important;
+  }
 }
 
 /* Sidebar overlay improvements */
@@ -98,7 +104,7 @@
   left: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  background: rgba(0, 0, 0, 0.3) !important;
+  background: rgba(0, 0, 0, 0.15) !important;
   z-index: 9998 !important;
   backdrop-filter: blur(1px) !important;
   opacity: 0 !important;

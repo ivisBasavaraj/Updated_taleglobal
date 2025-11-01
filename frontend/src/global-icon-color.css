@@ -1,0 +1,45 @@
+/* Global Font Awesome Icon Color - Dark Orange */
+
+/* All icons - default dark orange with highest priority */
+* i,
+*[class^="fa"],
+*[class*=" fa"],
+*[class^="feather"],
+*[class*=" feather"],
+.feather-map-pin,
+.feather-briefcase,
+.feather-clock,
+.feather-dollar-sign,
+.feather-users,
+.feather-user {
+  color: #fd7e14 !important;
+}
+
+/* Specific feather icons */
+i.feather-map-pin,
+i.feather-briefcase,
+i.feather-clock,
+i.feather-dollar-sign,
+i.feather-users,
+i.feather-user {
+  color: #fd7e14 !important;
+  stroke: #fd7e14 !important;
+}
+
+/* Button icons - keep white for contrast on colored buttons */
+.btn i,
+.site-button i,
+button i,
+a.btn i,
+a.site-button i,
+.apply-now-btn i,
+.search-btn i,
+.hero-cta i,
+.twm-nav-sign-up i,
+.twm-nav-post-a-job i,
+.btn-primary i,
+.btn-outline-primary i,
+.circle-line-btn i {
+  color: white !important;
+  stroke: white !important;
+}

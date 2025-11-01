@@ -7,6 +7,7 @@ import CanSidebarSection from "../app/pannels/candidate/common/can-sidebar";
 import CandidateRoutes from "../routing/candidate-routes";
 import "../candidate-layout-fix.css";
 import "../admin-orange-underline-fix.css";
+import "../mobile-hamburger-fix.css";
 
 function CandidateLayout() {
 
@@ -34,14 +35,21 @@ function CandidateLayout() {
     }
 
     const handleMobileMenuToggle = () => {
-        setSidebarActive(!sidebarActive);
-    }
-
-    const handleOverlayClick = () => {
-        if (isMobile) {
-            setSidebarActive(false);
+        const newState = !sidebarActive;
+        setSidebarActive(newState);
+        if (newState) {
+            document.body.classList.add('sidebar-open');
+        } else {
+            document.body.classList.remove('sidebar-open');
         }
     }
+
+    const closeSidebar = () => {
+        setSidebarActive(false);
+        document.body.classList.remove('sidebar-open');
+    }
+
+
 
     const contentClasses = [
         !isMobile && !sidebarActive ? "sidebar-hidden" : "",
@@ -53,24 +61,24 @@ function CandidateLayout() {
             <div className="page-wraper">
 
                 {isMobile && (
-                    <button 
-                        className="mobile-menu-toggle"
+                    <button
+                        className={`mobile-menu-toggle ${sidebarActive ? "sidebar-open" : ""}`}
                         onClick={handleMobileMenuToggle}
                         aria-label="Toggle Menu"
                     >
-                        <i className="fas fa-bars"></i>
+                        <i className={sidebarActive ? "fas fa-times" : "fas fa-bars"}></i>
                     </button>
                 )}
 
-                {isMobile && sidebarActive && (
+                {isMobile && (
                     <div 
-                        className="sidebar-overlay active"
-                        onClick={handleOverlayClick}
+                        className={`sidebar-overlay ${sidebarActive ? "active" : ""}`}
+                        onClick={closeSidebar}
                     ></div>
                 )}
 
                 <CanHeaderSection onClick={handleSidebarCollapse} sidebarActive={sidebarActive} isMobile={isMobile} />
-                <CanSidebarSection sidebarActive={sidebarActive} isMobile={isMobile} />
+                <CanSidebarSection sidebarActive={sidebarActive} isMobile={isMobile} onLinkClick={isMobile ? closeSidebar : undefined} />
 
                 <div id="content" className={contentClasses}>
                     <div className="content-admin-main">
