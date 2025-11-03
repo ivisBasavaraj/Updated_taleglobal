@@ -598,9 +598,11 @@ function PlacementDetails() {
                                 <i className={`fa ${placement.status === 'approved' ? 'fa-check-circle' : 'fa-clock-o'}`}></i>
                             </div>
                             <div>
-                                <label className="text-muted mb-1">Status</label>
+                                <label className="text-muted mb-1">
+                                    <i className="fa fa-info-circle mr-1" style={{color: '#fd7e14'}}></i>Status
+                                </label>
                                 <p className="mb-0 font-weight-bold" style={{
-                                    color: placement.status === 'approved' ? '#28a745' : 
+                                    color: placement.status === 'approved' ? '#28a745' :
                                            placement.status === 'rejected' ? '#dc3545' : '#ffc107'
                                 }}>
                                     {placement.status || 'Pending'}
@@ -614,7 +616,9 @@ function PlacementDetails() {
                                 <i className="fa fa-files-o"></i>
                             </div>
                             <div>
-                                <label className="text-muted mb-1">Files Uploaded</label>
+                                <label className="text-muted mb-1">
+                                    <i className="fa fa-upload mr-1" style={{color: '#fd7e14'}}></i>Files Uploaded
+                                </label>
                                 <p className="mb-0 font-weight-bold">{placement.fileHistory?.length || 0}</p>
                             </div>
                         </div>

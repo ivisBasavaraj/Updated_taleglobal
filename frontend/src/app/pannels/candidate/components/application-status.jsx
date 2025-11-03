@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadScript } from "../../../../globals/constants";
 import { api } from "../../../../utils/api";
+import { pubRoute, publicUser } from "../../../../globals/route-names";
 import CanPostedJobs from "./can-posted-jobs";
 import PopupInterviewRoundDetails from "../../../common/popups/popup-interview-round-details";
 import "./status-styles.css";
@@ -295,7 +296,7 @@ function CanStatusPage() {
 														<i className="fa fa-search fa-3x mb-3" style={{color: '#ff6b35'}}></i>
 														<h5 style={{color: '#232323'}}>No Applications Yet</h5>
 														<p className="text-muted mb-3">Start applying to jobs to see your application status here</p>
-														<button className="btn btn-outline-primary" onClick={() => window.location.href = '/jobs'} style={{backgroundColor: 'transparent'}}>
+														<button className="btn btn-outline-primary" onClick={() => navigate(pubRoute(publicUser.jobs.GRID))} style={{backgroundColor: 'transparent'}}>
 															<i className="fa fa-search me-2"></i>
 															Browse Jobs
 														</button>

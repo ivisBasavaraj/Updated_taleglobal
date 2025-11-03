@@ -567,13 +567,13 @@ function EmployerDetails() {
                             </div>
                         </div>
                         <div className="job-count-actions">
-                            <button 
-                                className="btn btn-outline-primary"
+                            <button
+                                className="btn btn-outline-light"
                                 onClick={() => navigate(`/emp-detail/${profile.employerId._id}`)}
-                                style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35' }}
+                                style={{ borderColor: 'white', color: 'white' }}
                             >
-                                <i className="fa fa-eye"></i>
-                                View Details
+                                <i className="fa fa-arrow-left"></i>
+                                Back
                             </button>
                         </div>
                     </div>

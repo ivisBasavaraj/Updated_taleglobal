@@ -1,5 +1,6 @@
 import { useEffect, useState, memo } from "react";
 import { api } from "../../../../../utils/api";
+import { showModal, hideModal, initializeModal } from "../../../../../utils/modalUtils";
 
 function SectionCanEmployment({ profile }) {
     const modalId = 'EmploymentModal';
@@ -14,6 +15,7 @@ function SectionCanEmployment({ profile }) {
     const [totalExperience, setTotalExperience] = useState('');
     const [loading, setLoading] = useState(false);
     const [employment, setEmployment] = useState([]);
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         if (profile?.employment) {
@@ -24,21 +26,107 @@ function SectionCanEmployment({ profile }) {
         }
     }, [profile]);
 
+    // Initialize modal on component mount
+    useEffect(() => {
+        const modalElement = document.getElementById(modalId);
+        if (modalElement) {
+            initializeModal(modalElement);
+        }
+    }, [modalId]);
+
 
 
     const handleInputChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
+
+        // Clear error for this field when user starts typing
+        if (errors[field]) {
+            setErrors(prev => ({ ...prev, [field]: null }));
+        }
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        // Designation validation
+        if (!formData.designation || !formData.designation.trim()) {
+            newErrors.designation = 'Designation is required';
+        } else if (formData.designation.trim().length < 2) {
+            newErrors.designation = 'Designation must be at least 2 characters long';
+        } else if (formData.designation.trim().length > 100) {
+            newErrors.designation = 'Designation cannot exceed 100 characters';
+        } else if (!/^[a-zA-Z\s\-\.]+$/.test(formData.designation.trim())) {
+            newErrors.designation = 'Designation can only contain letters, spaces, hyphens, and periods';
+        }
+
+        // Organization validation
+        if (!formData.organization || !formData.organization.trim()) {
+            newErrors.organization = 'Organization name is required';
+        } else if (formData.organization.trim().length < 2) {
+            newErrors.organization = 'Organization name must be at least 2 characters long';
+        } else if (formData.organization.trim().length > 100) {
+            newErrors.organization = 'Organization name cannot exceed 100 characters';
+        }
+
+        // Start date validation
+        if (!formData.startDate) {
+            newErrors.startDate = 'Start date is required';
+        } else {
+            const startDate = new Date(formData.startDate);
+            const today = new Date();
+            const minDate = new Date('1950-01-01');
+
+            if (startDate > today) {
+                newErrors.startDate = 'Start date cannot be in the future';
+            } else if (startDate < minDate) {
+                newErrors.startDate = 'Start date seems too old. Please check the year.';
+            }
+        }
+
+        // End date validation (only if not current job)
+        if (!formData.isCurrent && !formData.endDate) {
+            newErrors.endDate = 'End date is required for past employment';
+        } else if (!formData.isCurrent && formData.endDate) {
+            const endDate = new Date(formData.endDate);
+            const startDate = new Date(formData.startDate);
+            const today = new Date();
+
+            if (endDate > today) {
+                newErrors.endDate = 'End date cannot be in the future';
+            } else if (startDate && endDate < startDate) {
+                newErrors.endDate = 'End date cannot be before start date';
+            }
+        }
+
+        // Description validation
+        if (formData.description && formData.description.trim()) {
+            if (formData.description.trim().length < 10) {
+                newErrors.description = 'Job description should be at least 10 characters long';
+            } else if (formData.description.trim().length > 1000) {
+                newErrors.description = 'Job description cannot exceed 1000 characters';
+            }
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSave = async () => {
-        if (!formData.designation || !formData.organization) {
-            alert('Please fill in designation and organization');
+        // Validate form before saving
+        if (!validateForm()) {
+            const firstError = Object.values(errors)[0];
+            alert(`Please fix the following error:\n${firstError}`);
             return;
         }
-        
+
         setLoading(true);
         try {
-            const newEmployment = [...employment, formData];
+            const newEmployment = [...employment, {
+                ...formData,
+                designation: formData.designation.trim(),
+                organization: formData.organization.trim(),
+                description: formData.description ? formData.description.trim() : ''
+            }];
             const updateData = { employment: newEmployment };
             if (totalExperience) {
                 updateData.totalExperience = totalExperience;
@@ -47,11 +135,14 @@ function SectionCanEmployment({ profile }) {
             if (response.success) {
                 setEmployment(newEmployment);
                 setFormData({ designation: '', organization: '', isCurrent: false, startDate: '', endDate: '', description: '' });
+                setErrors({});
                 alert('Employment added successfully!');
-                document.querySelector('[data-bs-dismiss="modal"]').click();
+                hideModal(modalId);
+            } else {
+                alert('Failed to save employment. Please try again.');
             }
         } catch (error) {
-            alert('Failed to save employment');
+            alert('Failed to save employment. Please check your connection and try again.');
         } finally {
             setLoading(false);
         }
@@ -60,44 +151,17 @@ function SectionCanEmployment({ profile }) {
         <>
             <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn">
                 <h4 className="panel-tittle m-a0">Employment</h4>
-                <button 
-                    type="button" 
-                    data-bs-toggle="modal" 
-                    data-bs-target={`#${modalId}`}
-                    title="Edit" 
+                <button
+                    type="button"
+                    title="Edit"
                     className="btn btn-link site-text-primary p-0 border-0"
-                    style={{
-                        background: 'none', 
-                        textDecoration: 'none', 
-                        cursor: 'pointer', 
-                        outline: 'none', 
-                        transition: 'none',
-                        transform: 'none',
-                        animation: 'none',
-                        willChange: 'auto',
-                        backfaceVisibility: 'hidden',
-                        WebkitBackfaceVisibility: 'hidden'
-                    }}
+                    onClick={() => showModal(modalId)}
                 >
-                    <span className="fa fa-edit" style={{
-                        transition: 'none',
-                        transform: 'none',
-                        animation: 'none'
-                    }} />
+                    <span className="fa fa-edit" />
                 </button>
             </div>
-            <div className="panel-body wt-panel-body p-a20" style={{
-                transition: 'none', 
-                animation: 'none',
-                transform: 'none',
-                willChange: 'auto'
-            }}>
-                <div className="twm-panel-inner" style={{
-                    transition: 'none', 
-                    transform: 'none',
-                    animation: 'none',
-                    willChange: 'auto'
-                }}>
+            <div className="panel-body wt-panel-body p-a20">
+                <div className="twm-panel-inner">
                     {totalExperience && (
                         <div className="mb-3" style={{background: '#f8f9fa', padding: '12px', borderRadius: '6px', border: '1px solid #e9ecef'}}>
                             <p><b>Total Experience: {totalExperience}</b></p>
@@ -118,7 +182,11 @@ function SectionCanEmployment({ profile }) {
                 </div>
             </div>
             {/*Employment */}
-            <div className="modal fade twm-saved-jobs-view" id={modalId} tabIndex={-1} style={{display: 'none'}}>
+            <div
+                className="modal fade twm-saved-jobs-view"
+                id={modalId}
+                tabIndex={-1}
+            >
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <form onSubmit={(e) => e.preventDefault()}>
@@ -146,34 +214,36 @@ function SectionCanEmployment({ profile }) {
                                     </div>
                                     <div className="col-xl-12 col-lg-12">
                                         <div className="form-group">
-                                            <label>Your Designation</label>
+                                            <label>Your Designation *</label>
                                             <div className="ls-inputicon-box">
-                                                <input 
-                                                    className="form-control" 
-                                                    type="text" 
-                                                    placeholder="Enter Your Designation" 
+                                                <input
+                                                    className={`form-control ${errors.designation ? 'is-invalid' : ''}`}
+                                                    type="text"
+                                                    placeholder="Enter Your Designation"
                                                     value={formData.designation}
                                                     onChange={(e) => handleInputChange('designation', e.target.value)}
                                                     style={{paddingLeft: '40px'}}
                                                 />
                                                 <i className="fs-input-icon fa fa-address-card" />
                                             </div>
+                                            {errors.designation && <div className="invalid-feedback d-block">{errors.designation}</div>}
                                         </div>
                                     </div>
                                     <div className="col-xl-12 col-lg-12">
                                         <div className="form-group">
-                                            <label>Your Organization</label>
+                                            <label>Your Organization *</label>
                                             <div className="ls-inputicon-box">
-                                                <input 
-                                                    className="form-control" 
-                                                    type="text" 
-                                                    placeholder="Enter Your Organization" 
+                                                <input
+                                                    className={`form-control ${errors.organization ? 'is-invalid' : ''}`}
+                                                    type="text"
+                                                    placeholder="Enter Your Organization"
                                                     value={formData.organization}
                                                     onChange={(e) => handleInputChange('organization', e.target.value)}
                                                     style={{paddingLeft: '40px'}}
                                                 />
                                                 <i className="fs-input-icon fa fa-building" />
                                             </div>
+                                            {errors.organization && <div className="invalid-feedback d-block">{errors.organization}</div>}
                                         </div>
                                     </div>
                                     <div className="col-xl-12 col-lg-12">
@@ -212,27 +282,28 @@ function SectionCanEmployment({ profile }) {
                                     {/*Start Date*/}
                                     <div className="col-md-6">
                                         <div className="form-group">
-                                            <label>Started Working From</label>
+                                            <label>Started Working From *</label>
                                             <div className="ls-inputicon-box">
-                                                <input 
-                                                    className="form-control" 
-                                                    type="date" 
+                                                <input
+                                                    className={`form-control ${errors.startDate ? 'is-invalid' : ''}`}
+                                                    type="date"
                                                     value={formData.startDate}
                                                     onChange={(e) => handleInputChange('startDate', e.target.value)}
                                                     style={{paddingLeft: '40px'}}
                                                 />
                                                 <i className="fs-input-icon far fa-calendar" />
                                             </div>
+                                            {errors.startDate && <div className="invalid-feedback d-block">{errors.startDate}</div>}
                                         </div>
                                     </div>
                                     {/*End Date*/}
                                     <div className="col-md-6">
                                         <div className="form-group">
-                                            <label>Worked Till</label>
+                                            <label>Worked Till {!formData.isCurrent && '*'}</label>
                                             <div className="ls-inputicon-box">
-                                                <input 
-                                                    className="form-control" 
-                                                    type="date" 
+                                                <input
+                                                    className={`form-control ${errors.endDate ? 'is-invalid' : ''}`}
+                                                    type="date"
                                                     value={formData.endDate}
                                                     onChange={(e) => handleInputChange('endDate', e.target.value)}
                                                     disabled={formData.isCurrent}
@@ -240,18 +311,21 @@ function SectionCanEmployment({ profile }) {
                                                 />
                                                 <i className="fs-input-icon far fa-calendar" />
                                             </div>
+                                            {errors.endDate && <div className="invalid-feedback d-block">{errors.endDate}</div>}
                                         </div>
                                     </div>
                                     <div className="col-md-12">
                                         <div className="form-group mb-0">
                                             <label>Describe your Job Profile</label>
-                                            <textarea 
-                                                className="form-control" 
-                                                rows={3} 
-                                                placeholder="Describe your Job" 
+                                            <textarea
+                                                className={`form-control ${errors.description ? 'is-invalid' : ''}`}
+                                                rows={3}
+                                                placeholder="Describe your Job"
                                                 value={formData.description}
                                                 onChange={(e) => handleInputChange('description', e.target.value)}
                                             />
+                                            {errors.description && <div className="invalid-feedback d-block">{errors.description}</div>}
+                                            <small className="text-muted">Optional: {formData.description.length}/1000 characters</small>
                                         </div>
                                     </div>
                                 </div>

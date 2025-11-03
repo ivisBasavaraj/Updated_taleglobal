@@ -103,6 +103,13 @@ function SignInPopup() {
         navigate(placementRoute(placement.DASHBOARD));
     }
 
+    const handleForgotPassword = () => {
+        const modal = document.getElementById('sign_up_popup2');
+        const bootstrapModal = window.bootstrap?.Modal?.getInstance(modal);
+        bootstrapModal?.hide();
+        navigate(pubRoute(publicUser.pages.FORGOT));
+    }
+
     const buttonStyle = {
         backgroundColor: '#1967d2',
         color: '#f0f6fe',
@@ -167,9 +174,8 @@ function SignInPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#login-candidate"
 												type="button"
-												style={{color: '#ffffff'}} onMouseEnter={(e) => e.target.style.color = '#ffffff'} onMouseLeave={(e) => e.target.style.color = '#ffffff'}
 											>
-												<i className="fas fa-user-tie" style={{color: '#ffffff'}} />
+												<i className="fas fa-user-tie" />
 												Candidate
 											</button>
 										</li>
@@ -181,9 +187,8 @@ function SignInPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#login-Employer"
 												type="button"
-												style={{color: '#ffffff'}} onMouseEnter={(e) => e.target.style.color = '#ffffff'} onMouseLeave={(e) => e.target.style.color = '#ffffff'}
 											>
-												<i className="fas fa-building" style={{color: '#ffffff'}} />
+												<i className="fas fa-building" />
 												Employer
 											</button>
 										</li>
@@ -194,9 +199,8 @@ function SignInPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#login-Placement"
 												type="button"
-												style={{color: '#ffffff'}} onMouseEnter={(e) => e.target.style.color = '#ffffff'} onMouseLeave={(e) => e.target.style.color = '#ffffff'}
 											>
-												<i className="fas fa-graduation-cap" style={{color: '#ffffff'}} />
+												<i className="fas fa-graduation-cap" />
 												Placement Officer
 											</button>
 										</li>
@@ -260,7 +264,7 @@ function SignInPopup() {
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<div className="text-end">
-															<NavLink to={pubRoute(publicUser.pages.FORGOT)} onClick={() => navigate(pubRoute(publicUser.pages.FORGOT))}>Forgot Password</NavLink>
+															<a onClick={handleForgotPassword} style={{cursor: 'pointer'}}>Forgot Password</a>
 														</div>
 													</div>
 												</div>
@@ -347,7 +351,7 @@ function SignInPopup() {
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<div className="text-end">
-															<a href="/forgot-password">Forgot Password</a>
+															<a onClick={handleForgotPassword} style={{cursor: 'pointer'}}>Forgot Password</a>
 														</div>
 													</div>
 												</div>
@@ -434,7 +438,7 @@ function SignInPopup() {
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<div className="text-end">
-															<NavLink to={pubRoute(publicUser.pages.FORGOT)} onClick={() => navigate(pubRoute(publicUser.pages.FORGOT))}>Forgot Password</NavLink>
+															<a onClick={handleForgotPassword} style={{cursor: 'pointer'}}>Forgot Password</a>
 														</div>
 													</div>
 												</div>

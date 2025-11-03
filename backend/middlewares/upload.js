@@ -29,6 +29,12 @@ const fileFilter = (req, file, cb) => {
     } else {
       cb(new Error('Only Excel (.xls, .xlsx) and CSV files are allowed for student data'), false);
     }
+  } else if (file.fieldname === 'marksheet') {
+    if (file.mimetype === 'application/pdf' || file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only PDF and image files allowed for marksheet'), false);
+    }
   } else {
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);

@@ -11602,6 +11602,52 @@ ol.comment-list li.comment .comment-respond .comment-form p {
   border-color: #d8483d;
 }
 
+/* Nav tabs styling for sign up/sign in popups */
+.twm-sign-up .nav-link {
+  color: #fd7e14 !important;
+}
+.twm-sign-up .nav-link i {
+  color: #fd7e14 !important;
+}
+.twm-sign-up .nav-link.active {
+  color: #ffffff !important;
+}
+.twm-sign-up .nav-link.active i {
+  color: #ffffff !important;
+}
+.twm-sign-up .nav-link:hover,
+.twm-sign-up .nav-link:focus {
+  color: #fd7e14 !important;
+}
+.twm-sign-up .nav-link:hover i,
+.twm-sign-up .nav-link:focus i {
+  color: #fd7e14 !important;
+}
+.twm-sign-up .nav-link.active:hover,
+.twm-sign-up .nav-link.active:focus {
+  color: #ffffff !important;
+}
+.twm-sign-up .nav-link.active:hover i,
+.twm-sign-up .nav-link.active:focus i {
+  color: #ffffff !important;
+}
+
+/* Custom checkbox styling for better visibility */
+.twm-sign-up .form-check-input {
+  width: 18px !important;
+  height: 18px !important;
+  border: 2px solid #fd7e14 !important;
+  background-color: transparent !important;
+  border-radius: 3px !important;
+  cursor: pointer !important;
+}
+
+.twm-sign-up .form-check-input:checked {
+  background-color: #fd7e14 !important;
+  border-color: #fd7e14 !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+}
+
 /*============================================================================================
 	DashBoard Css Start
 =============================================================================================*/

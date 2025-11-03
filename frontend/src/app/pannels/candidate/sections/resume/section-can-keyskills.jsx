@@ -148,8 +148,8 @@ function SectionCanKeySkills({ profile }) {
                                 autoFocus
                             />
                             <button 
-                                className="btn btn-sm btn-success"
-                                style={{padding: '6px 16px', fontSize: '13px', height: '36px', minWidth: '70px', lineHeight: '1.2'}}
+                                className="btn btn-sm"
+                                style={{backgroundColor: '#ff9966', color: 'white', border: 'none', padding: '6px 16px', fontSize: '13px', height: '36px', minWidth: '70px', lineHeight: '1.2'}}
                                 onClick={handleAddCustom}
                                 disabled={!customSkill.trim() || loading}
                             >
@@ -173,17 +173,17 @@ function SectionCanKeySkills({ profile }) {
                 {skills.length > 0 ? (
                     <div className="d-flex flex-wrap gap-2">
                         {skills.map((skill, index) => (
-                            <span key={index} className="badge bg-white border d-flex align-items-center" style={{fontSize: '13px', padding: '6px 10px', borderRadius: '15px', color: '#333'}}>
+                            <span key={index} className="badge bg-white d-flex align-items-center" style={{fontSize: '13px', padding: '6px 10px', borderRadius: '15px', color: '#333', border: '1px solid #ddd !important'}}>
                                 <i className="fa fa-tag me-2" style={{color: '#0056b3', fontSize: '11px'}}></i>
                                 {skill}
                                 <button 
                                     className="btn btn-sm ms-2 p-0"
-                                    style={{background: 'none', border: 'none', color: '#dc3545', fontSize: '11px', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}
+                                    style={{background: 'none !important', border: 'none !important', color: '#000 !important', fontSize: '11px', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'none !important', outline: 'none !important'}}
                                     onClick={() => removeSkill(skill)}
                                     disabled={loading}
                                     title="Remove skill"
                                 >
-                                    <i className="fa fa-times"></i>
+                                    <i className="fa fa-times" style={{color: '#000 !important'}}></i>
                                 </button>
                             </span>
                         ))}

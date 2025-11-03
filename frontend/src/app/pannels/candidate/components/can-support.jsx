@@ -166,7 +166,24 @@ function CanSupport() {
                                     <p>Thank you for contacting our support team. We have received your ticket and will respond within 24 hours.</p>
                                     <button 
                                         onClick={() => setIsSubmitted(false)} 
-                                        className="site-button mt-3"
+                                        className="mt-3"
+                                        style={{
+                                            backgroundColor: '#FFF3E5',
+                                            color: '#FF7A00',
+                                            border: '1px solid #FF7A00',
+                                            padding: '10px 20px',
+                                            borderRadius: '5px',
+                                            fontWeight: '600',
+                                            cursor: 'pointer'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.target.style.backgroundColor = '#FFF3E5';
+                                            e.target.style.color = '#FF7A00';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.target.style.backgroundColor = '#FFF3E5';
+                                            e.target.style.color = '#FF7A00';
+                                        }}
                                     >
                                         Submit Another Ticket
                                     </button>

@@ -270,7 +270,7 @@ function EmpCandidateReviewPage () {
 						<div className="card-header bg-light">
 							<h5 className="mb-0 d-flex align-items-center gap-2">
 								<User size={20} style={{ color: "#f97316" }} />
-								Personal Information
+								Basic Information
 							</h5>
 						</div>
 						<div className="card-body">
@@ -329,8 +329,6 @@ function EmpCandidateReviewPage () {
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.dateOfBirth ? formatDate(candidate.dateOfBirth) : 'Not provided'}</p>
 									</div>
-								</div>
-								<div className="col-md-6">
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
 											<User size={16} style={{ color: "#f97316" }} />
@@ -338,19 +336,45 @@ function EmpCandidateReviewPage () {
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.gender || 'Not provided'}</p>
 									</div>
+								</div>
+								<div className="col-md-6">
+									<h6 className="text-primary mb-3"><i className="fa fa-users mr-2"></i>Family Information</h6>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
 											<User size={16} style={{ color: "#f97316" }} />
-											<strong>Father's Name</strong>
+											<strong>Father's/Husband's Name</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.fatherName || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
+											<User size={16} style={{ color: "#f97316" }} />
+											<strong>Mother's Name</strong>
+										</div>
+										<p className="text-muted mb-0 ms-4">{candidate.motherName || 'Not provided'}</p>
+									</div>
+
+									<h6 className="text-primary mb-3 mt-4"><i className="fa fa-map-marker-alt mr-2"></i>Address Information</h6>
+									<div className="info-item mb-3">
+										<div className="d-flex align-items-center gap-2 mb-1">
 											<MapPin size={16} style={{ color: "#f97316" }} />
-											<strong>Address</strong>
+											<strong>Residential Address</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.residentialAddress || 'Not provided'}</p>
+									</div>
+									<div className="info-item mb-3">
+										<div className="d-flex align-items-center gap-2 mb-1">
+											<MapPin size={16} style={{ color: "#f97316" }} />
+											<strong>Permanent Address</strong>
+										</div>
+										<p className="text-muted mb-0 ms-4">{candidate.permanentAddress || 'Not provided'}</p>
+									</div>
+									<div className="info-item mb-3">
+										<div className="d-flex align-items-center gap-2 mb-1">
+											<MapPin size={16} style={{ color: "#f97316" }} />
+											<strong>Correspondence Address</strong>
+										</div>
+										<p className="text-muted mb-0 ms-4">{candidate.correspondenceAddress || 'Not provided'}</p>
 									</div>
 								</div>
 							</div>
@@ -446,7 +470,7 @@ function EmpCandidateReviewPage () {
 							</div>
 							<div className="card-body text-center">
 								<button
-									className="btn btn-primary"
+									className="btn twm-bg-orange"
 									onClick={() => downloadDocument(candidate.resume, 'resume.pdf')}
 								>
 									<Download size={16} className="me-1" />Download Resume

@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import './support.css';
+import CountryCodeSelector from '../../../../../components/CountryCodeSelector';
 
 function SupportPage() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         phone: '',
+        phoneCountryCode: '+91',
         userType: 'guest',
         subject: '',
         category: 'general',
@@ -86,7 +88,11 @@ function SupportPage() {
         try {
             const submitData = new FormData();
             Object.keys(formData).forEach(key => {
-                submitData.append(key, formData[key]);
+                if (key === 'phone') {
+                    submitData.append(key, `${formData.phoneCountryCode}${formData.phone.trim()}`);
+                } else {
+                    submitData.append(key, formData[key]);
+                }
             });
             
             files.forEach(file => {
@@ -101,7 +107,7 @@ function SupportPage() {
             if (response.ok) {
                 setIsSubmitted(true);
                 setFormData({
-                    name: '', email: '', phone: '', userType: 'guest',
+                    name: '', email: '', phone: '', phoneCountryCode: '+91', userType: 'guest',
                     subject: '', category: 'general', priority: 'medium', message: ''
                 });
                 setFiles([]);
@@ -194,14 +200,24 @@ function SupportPage() {
                                             
                                             <div className="col-lg-6 col-md-6">
                                                 <div className="form-group mb-3">
-                                                    <input 
-                                                        name="phone" 
-                                                        type="tel" 
-                                                        className="form-control"
-                                                        placeholder="Phone Number" 
-                                                        value={formData.phone}
-                                                        onChange={handleChange}
-                                                    />
+                                                    <div className="input-group">
+                                                        <CountryCodeSelector
+                                                            value={formData.phoneCountryCode}
+                                                            onChange={(value) => {
+                                                                setFormData(prev => ({ ...prev, phoneCountryCode: value }));
+                                                            }}
+                                                        />
+                                                        <input
+                                                            name="phone"
+                                                            type="tel"
+                                                            className="form-control"
+                                                            placeholder="Phone Number"
+                                                            value={formData.phone}
+                                                            onChange={handleChange}
+                                                            maxLength="15"
+                                                            style={{ borderRadius: '0 0.375rem 0.375rem 0' }}
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                             

@@ -28,7 +28,7 @@ function SectionNotifications() {
 			const response = await fetch('http://localhost:5000/api/notifications/candidate', {
 				headers: { 'Authorization': `Bearer ${token}` }
 			});
-			
+
 			if (response.ok) {
 				const data = await response.json();
 				if (data.success) {
@@ -37,8 +37,14 @@ function SectionNotifications() {
 				}
 			}
 		} catch (error) {
-			
+
 		}
+	};
+
+	const closeNotification = (notificationId) => {
+		// Remove the notification from the local state
+		setNotifications(prev => prev.filter(n => n._id !== notificationId));
+		setUnreadCount(prev => Math.max(0, prev - 1));
 	};
 
 	return (
@@ -88,18 +94,49 @@ function SectionNotifications() {
 											<i className={iconData.icon} style={{ color: iconData.color, fontSize: '14px' }}></i>
 										</div>
 										<div className="notification-content flex-grow-1">
-											<h6 className="notification-title mb-1" style={{ fontSize: '12px', fontWeight: '600', color: '#1f2937', lineHeight: '1.3' }}>
-												{notification.title}
-											</h6>
-											<p className="notification-message mb-1" style={{ fontSize: '11px', color: '#6b7280', lineHeight: '1.3', margin: '0' }}>
-												{notification.message.length > 50 ? notification.message.substring(0, 50) + '...' : notification.message}
-											</p>
-											<small className="notification-time" style={{ fontSize: '10px', color: '#9ca3af' }}>
-												{new Date(notification.createdAt).toLocaleDateString('en-US', { 
-													month: 'short', 
-													day: 'numeric' 
-												})}
-											</small>
+											<div className="d-flex justify-content-between align-items-start">
+												<div className="flex-grow-1">
+													<h6 className="notification-title mb-1" style={{ fontSize: '12px', fontWeight: '600', color: '#1f2937', lineHeight: '1.3' }}>
+														{notification.title}
+													</h6>
+													<p className="notification-message mb-1" style={{ fontSize: '11px', color: '#6b7280', lineHeight: '1.3', margin: '0' }}>
+														{notification.message.length > 50 ? notification.message.substring(0, 50) + '...' : notification.message}
+													</p>
+													<small className="notification-time" style={{ fontSize: '10px', color: '#9ca3af' }}>
+														{new Date(notification.createdAt).toLocaleDateString('en-US', {
+															month: 'short',
+															day: 'numeric'
+														})}
+													</small>
+												</div>
+												<button
+													className="btn btn-sm p-0 ms-2"
+													style={{
+														background: '#fed7aa !important',
+														border: 'none !important',
+														color: 'black',
+														fontSize: '12px',
+														lineHeight: '1',
+														cursor: 'pointer',
+														flexShrink: 0,
+														borderRadius: '2px',
+														padding: '2px 4px'
+													}}
+													onClick={(e) => {
+														e.stopPropagation();
+														closeNotification(notification._id);
+													}}
+													onMouseEnter={(e) => {
+														e.target.style.setProperty('background-color', '#fdba74', 'important');
+													}}
+													onMouseLeave={(e) => {
+														e.target.style.setProperty('background-color', '#fed7aa', 'important');
+													}}
+													title="Close notification"
+												>
+													<i className="fa fa-times" style={{ color: 'black !important' }}></i>
+												</button>
+											</div>
 										</div>
 										{!notification.isRead && (
 											<div className="notification-dot" style={{

@@ -1,10 +1,13 @@
 import { useState } from 'react';
 
+import CountryCodeSelector from '../../../../../components/CountryCodeSelector';
+
 function ContactUsPage() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         phone: '',
+        phoneCountryCode: '+91',
         subject: '',
         message: ''
     });
@@ -23,8 +26,8 @@ function ContactUsPage() {
         }
         if (!formData.phone.trim()) {
             newErrors.phone = 'Phone is required';
-        } else if (!/^[\d\s\+\-\(\)]{10,}$/.test(formData.phone.replace(/\s/g, ''))) {
-            newErrors.phone = 'Phone number is invalid';
+        } else if (!/^\d{7,15}$/.test(formData.phone.replace(/\s/g, ''))) {
+            newErrors.phone = 'Phone number must be 7-15 digits';
         }
         if (!formData.message.trim()) newErrors.message = 'Message is required';
         
@@ -47,15 +50,20 @@ function ContactUsPage() {
         
         setIsSubmitting(true);
         try {
+            const submitData = {
+                ...formData,
+                phone: `${formData.phoneCountryCode}${formData.phone.trim()}`
+            };
+
             const response = await fetch('/api/public/contact', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(submitData)
             });
             
             if (response.ok) {
                 setIsSubmitted(true);
-                setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+                setFormData({ name: '', email: '', phone: '', phoneCountryCode: '+91', subject: '', message: '' });
             } else {
                 const data = await response.json();
                 setErrors({ submit: data.message || 'Failed to submit form' });
@@ -147,14 +155,27 @@ function ContactUsPage() {
                                                 </div>
                                                 <div className="col-lg-6 col-md-6">
                                                     <div className="form-group mb-3">
-                                                        <input 
-                                                            name="phone" 
-                                                            type="tel" 
-                                                            className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-                                                            placeholder="Phone" 
-                                                            value={formData.phone}
-                                                            onChange={handleChange}
-                                                        />
+                                                        <div className="input-group">
+                                                            <CountryCodeSelector
+                                                                value={formData.phoneCountryCode}
+                                                                onChange={(value) => {
+                                                                    setFormData(prev => ({ ...prev, phoneCountryCode: value }));
+                                                                    if (errors.phone) {
+                                                                        setErrors(prev => ({ ...prev, phone: '' }));
+                                                                    }
+                                                                }}
+                                                            />
+                                                            <input
+                                                                name="phone"
+                                                                type="tel"
+                                                                className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+                                                                placeholder="Phone"
+                                                                value={formData.phone}
+                                                                onChange={handleChange}
+                                                                maxLength="15"
+                                                                style={{ borderRadius: '0 0.375rem 0.375rem 0' }}
+                                                            />
+                                                        </div>
                                                         {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
                                                     </div>
                                                 </div>

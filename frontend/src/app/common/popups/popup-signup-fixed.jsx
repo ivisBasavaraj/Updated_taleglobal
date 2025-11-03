@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
+import CountryCodeSelector from '../../../components/CountryCodeSelector';
+
 function SignUpPopup() {
     const [candidateData, setCandidateData] = useState({
         username: '',
         email: '',
         mobile: '',
+        mobileCountryCode: '+91',
         password: '',
         confirmPassword: ''
     });
@@ -13,6 +16,7 @@ function SignUpPopup() {
         name: '',
         email: '',
         mobile: '',
+        mobileCountryCode: '+91',
         password: '',
         confirmPassword: '',
         employerCategory: ''
@@ -22,6 +26,7 @@ function SignUpPopup() {
         name: '',
         email: '',
         phone: '',
+        phoneCountryCode: '+91',
         password: '',
         confirmPassword: '',
         collegeName: ''
@@ -38,9 +43,9 @@ function SignUpPopup() {
     const [showPlacementConfirmPassword, setShowPlacementConfirmPassword] = useState(false);
 
     useEffect(() => {
-        setCandidateData({ username: '', email: '', mobile: '', password: '', confirmPassword: '' });
-        setEmployerData({ name: '', email: '', mobile: '', password: '', confirmPassword: '', employerCategory: '' });
-        setPlacementData({ name: '', email: '', phone: '', password: '', confirmPassword: '', collegeName: '' });
+        setCandidateData({ username: '', email: '', mobile: '', mobileCountryCode: '+91', password: '', confirmPassword: '' });
+        setEmployerData({ name: '', email: '', mobile: '', mobileCountryCode: '+91', password: '', confirmPassword: '', employerCategory: '' });
+        setPlacementData({ name: '', email: '', phone: '', phoneCountryCode: '+91', password: '', confirmPassword: '', collegeName: '' });
     }, []);
 
     const handleCandidateChange = (e) => {
@@ -108,7 +113,7 @@ function SignUpPopup() {
                 body: JSON.stringify({
                     name: candidateData.username,
                     email: candidateData.email,
-                    phone: candidateData.mobile,
+                    phone: candidateData.mobileCountryCode + candidateData.mobile,
                     password: candidateData.password,
                     confirmPassword: candidateData.confirmPassword
                 })
@@ -116,7 +121,7 @@ function SignUpPopup() {
             
             const data = await response.json();
             if (data.success) {
-                setCandidateData({ username: '', email: '', mobile: '', password: '', confirmPassword: '' });
+                setCandidateData({ username: '', email: '', mobile: '', mobileCountryCode: '+91', password: '', confirmPassword: '' });
                 // Close signup modal and open login modal
                 const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
                 if (signupModal) signupModal.hide();
@@ -154,7 +159,7 @@ function SignUpPopup() {
                 body: JSON.stringify({
                     name: employerData.name,
                     email: employerData.email,
-                    phone: employerData.mobile,
+                    phone: employerData.mobileCountryCode + employerData.mobile,
                     password: employerData.password,
                     confirmPassword: employerData.confirmPassword,
                     companyName: employerData.name,
@@ -165,7 +170,7 @@ function SignUpPopup() {
             
             const data = await response.json();
             if (data.success) {
-                setEmployerData({ name: '', email: '', mobile: '', password: '', confirmPassword: '', employerCategory: '' });
+                setEmployerData({ name: '', email: '', mobile: '', mobileCountryCode: '+91', password: '', confirmPassword: '', employerCategory: '' });
                 // Close signup modal and open login modal
                 const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
                 if (signupModal) signupModal.hide();
@@ -203,7 +208,7 @@ function SignUpPopup() {
                 body: JSON.stringify({
                     name: placementData.name,
                     email: placementData.email,
-                    phone: placementData.phone,
+                    phone: placementData.phoneCountryCode + placementData.phone,
                     password: placementData.password,
                     confirmPassword: placementData.confirmPassword,
                     collegeName: placementData.collegeName
@@ -212,7 +217,7 @@ function SignUpPopup() {
             
             const data = await response.json();
             if (data.success) {
-                setPlacementData({ name: '', email: '', phone: '', password: '', confirmPassword: '', collegeName: '' });
+                setPlacementData({ name: '', email: '', phone: '', phoneCountryCode: '+91', password: '', confirmPassword: '', collegeName: '' });
                 // Close signup modal and open login modal
                 const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
                 if (signupModal) signupModal.hide();
@@ -342,15 +347,22 @@ function SignUpPopup() {
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<input
-															name="mobile"
-															type="tel"
-															className="form-control"
-															placeholder="Mobile No.*"
-															value={candidateData.mobile}
-															onChange={handleCandidateChange}
-															required
-														/>
+														<div className="input-group">
+															<CountryCodeSelector
+																value={candidateData.mobileCountryCode}
+																onChange={(value) => handleCandidateChange({ target: { name: 'mobileCountryCode', value } })}
+															/>
+															<input
+																name="mobile"
+																type="tel"
+																className="form-control"
+																placeholder="Mobile No.*"
+																value={candidateData.mobile}
+																onChange={handleCandidateChange}
+																required
+																style={{ borderRadius: '0 0.375rem 0.375rem 0' }}
+															/>
+														</div>
 													</div>
 												</div>
 
@@ -496,15 +508,21 @@ function SignUpPopup() {
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<input
-															name="mobile"
-															type="tel"
-															className="form-control"
-															placeholder="Mobile No.*"
-															value={employerData.mobile}
-															onChange={handleEmployerChange}
-															required
-														/>
+														<div className="input-group">
+															<CountryCodeSelector
+																value={employerData.mobileCountryCode}
+																onChange={(value) => handleEmployerChange({ target: { name: 'mobileCountryCode', value } })}
+															/>
+															<input
+																name="mobile"
+																type="tel"
+																className="form-control"
+																placeholder="Mobile No.*"
+																value={employerData.mobile}
+																onChange={handleEmployerChange}
+																required
+															/>
+														</div>
 													</div>
 												</div>
 
@@ -636,15 +654,21 @@ function SignUpPopup() {
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<input
-															name="phone"
-															type="tel"
-															className="form-control"
-															placeholder="Phone Number*"
-															value={placementData.phone}
-															onChange={handlePlacementChange}
-															required
-														/>
+														<div className="input-group">
+															<CountryCodeSelector
+																value={placementData.phoneCountryCode}
+																onChange={(value) => handlePlacementChange({ target: { name: 'phoneCountryCode', value } })}
+															/>
+															<input
+																name="phone"
+																type="tel"
+																className="form-control"
+																placeholder="Phone Number*"
+																value={placementData.phone}
+																onChange={handlePlacementChange}
+																required
+															/>
+														</div>
 													</div>
 												</div>
 

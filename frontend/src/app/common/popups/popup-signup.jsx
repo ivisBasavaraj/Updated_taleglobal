@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { pubRoute, publicUser } from '../../../globals/route-names';
 
 function SignUpPopup() {
     const [candidateData, setCandidateData] = useState({
@@ -30,6 +31,7 @@ function SignUpPopup() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [fieldErrors, setFieldErrors] = useState({});
     const [showCandidatePassword, setShowCandidatePassword] = useState(false);
     const [showCandidateConfirmPassword, setShowCandidateConfirmPassword] = useState(false);
     const [showEmployerPassword, setShowEmployerPassword] = useState(false);
@@ -41,16 +43,116 @@ function SignUpPopup() {
         setCandidateData({ username: '', email: '', mobile: '', password: '', confirmPassword: '' });
         setEmployerData({ name: '', email: '', mobile: '', password: '', confirmPassword: '', employerCategory: '' });
         setPlacementData({ name: '', email: '', phone: '', password: '', confirmPassword: '', collegeName: '' });
+        setFieldErrors({});
+        setError('');
+        setPasswordError('');
     }, []);
+
+    // Validation functions
+    const validateField = (field, value, formType) => {
+        const errors = { ...fieldErrors };
+
+        switch (field) {
+            case 'username':
+            case 'name':
+                if (!value || !value.trim()) {
+                    errors[field] = 'Name is required';
+                } else if (value.trim().length < 2) {
+                    errors[field] = 'Name must be at least 2 characters long';
+                } else if (!/^[a-zA-Z\s]+$/.test(value.trim())) {
+                    errors[field] = 'Name can only contain letters and spaces';
+                } else {
+                    delete errors[field];
+                }
+                break;
+
+            case 'email':
+                if (!value || !value.trim()) {
+                    errors.email = 'Email is required';
+                } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
+                    errors.email = 'Please enter a valid email address';
+                } else {
+                    delete errors.email;
+                }
+                break;
+
+            case 'mobile':
+            case 'phone':
+                if (!value || !value.trim()) {
+                    errors[field] = 'Phone number is required';
+                } else if (!/^[6-9]\d{9}$/.test(value.trim())) {
+                    errors[field] = 'Please enter a valid 10-digit mobile number starting with 6-9';
+                } else {
+                    delete errors[field];
+                }
+                break;
+
+            case 'password':
+                if (!value) {
+                    errors.password = 'Password is required';
+                } else if (value.length < 8) {
+                    errors.password = 'Password must be at least 8 characters long';
+                } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/.test(value)) {
+                    errors.password = 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character';
+                } else {
+                    delete errors.password;
+                }
+                break;
+
+            case 'confirmPassword':
+                // This is handled separately in the change handlers
+                break;
+
+            case 'employerCategory':
+                if (!value) {
+                    errors.employerCategory = 'Please select an employer category';
+                } else {
+                    delete errors.employerCategory;
+                }
+                break;
+
+            case 'collegeName':
+                if (!value || !value.trim()) {
+                    errors.collegeName = 'College name is required';
+                } else if (value.trim().length < 3) {
+                    errors.collegeName = 'College name must be at least 3 characters long';
+                } else {
+                    delete errors.collegeName;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        setFieldErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const validateForm = (formData, formType) => {
+        const errors = {};
+
+        // Validate all required fields
+        Object.keys(formData).forEach(field => {
+            if (formData[field] !== undefined) {
+                validateField(field, formData[field], formType);
+            }
+        });
+
+        return Object.keys(fieldErrors).length === 0;
+    };
 
     const handleCandidateChange = (e) => {
         const { name, value } = e.target;
         setCandidateData({ ...candidateData, [name]: value });
-        
+
+        // Validate the field
+        validateField(name, value, 'candidate');
+
         if (name === 'confirmPassword' || name === 'password') {
             const password = name === 'password' ? value : candidateData.password;
             const confirmPassword = name === 'confirmPassword' ? value : candidateData.confirmPassword;
-            
+
             if (confirmPassword && password !== confirmPassword) {
                 setPasswordError('Passwords do not match');
             } else {
@@ -62,11 +164,14 @@ function SignUpPopup() {
     const handleEmployerChange = (e) => {
         const { name, value } = e.target;
         setEmployerData({ ...employerData, [name]: value });
-        
+
+        // Validate the field
+        validateField(name, value, 'employer');
+
         if (name === 'confirmPassword' || name === 'password') {
             const password = name === 'password' ? value : employerData.password;
             const confirmPassword = name === 'confirmPassword' ? value : employerData.confirmPassword;
-            
+
             if (confirmPassword && password !== confirmPassword) {
                 setPasswordError('Passwords do not match');
             } else {
@@ -78,11 +183,14 @@ function SignUpPopup() {
     const handlePlacementChange = (e) => {
         const { name, value } = e.target;
         setPlacementData({ ...placementData, [name]: value });
-        
+
+        // Validate the field
+        validateField(name, value, 'placement');
+
         if (name === 'confirmPassword' || name === 'password') {
             const password = name === 'password' ? value : placementData.password;
             const confirmPassword = name === 'confirmPassword' ? value : placementData.confirmPassword;
-            
+
             if (confirmPassword && password !== confirmPassword) {
                 setPasswordError('Passwords do not match');
             } else {
@@ -93,6 +201,15 @@ function SignUpPopup() {
 
     const handleCandidateSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate all fields
+        const isFormValid = validateForm(candidateData, 'candidate');
+
+        if (!isFormValid || Object.keys(fieldErrors).length > 0) {
+            setError('Please correct the errors below and try again.');
+            return;
+        }
+
         if (candidateData.password !== candidateData.confirmPassword) {
             setError('Passwords do not match');
             return;
@@ -115,8 +232,11 @@ function SignUpPopup() {
             });
             
             const data = await response.json();
-            if (data.success) {
+
+            if (response.ok && data.success) {
                 setCandidateData({ username: '', email: '', mobile: '', password: '', confirmPassword: '' });
+                setFieldErrors({});
+                setPasswordError('');
                 // Close signup modal and open login modal
                 const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
                 if (signupModal) signupModal.hide();
@@ -125,13 +245,33 @@ function SignUpPopup() {
                     loginModal.show();
                 }, 300);
             } else {
-                setError(data.message || 'Registration failed');
-                
-                
+                // Handle specific server error messages
+                if (data.message) {
+                    if (data.message.includes('email') || data.message.includes('Email')) {
+                        setError('This email address is already registered. Please use a different email or try logging in.');
+                    } else if (data.message.includes('phone') || data.message.includes('mobile')) {
+                        setError('This phone number is already registered. Please use a different number.');
+                    } else if (data.message.includes('password')) {
+                        setError('Password does not meet security requirements. Please ensure it contains uppercase, lowercase, number, and special character.');
+                    } else {
+                        setError(data.message);
+                    }
+                } else if (response.status === 400) {
+                    setError('Invalid registration data. Please check all fields and try again.');
+                } else if (response.status === 409) {
+                    setError('Account already exists with this information. Please try logging in instead.');
+                } else if (response.status === 500) {
+                    setError('Server error occurred. Please try again later.');
+                } else {
+                    setError('Registration failed. Please check your information and try again.');
+                }
             }
         } catch (error) {
-            setError('Registration failed. Please try again.');
-            
+            if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                setError('Network error. Please check your internet connection and try again.');
+            } else {
+                setError('An unexpected error occurred. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
@@ -139,6 +279,15 @@ function SignUpPopup() {
 
     const handleEmployerSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate all fields
+        const isFormValid = validateForm(employerData, 'employer');
+
+        if (!isFormValid || Object.keys(fieldErrors).length > 0) {
+            setError('Please correct the errors below and try again.');
+            return;
+        }
+
         if (employerData.password !== employerData.confirmPassword) {
             setError('Passwords do not match');
             return;
@@ -164,8 +313,11 @@ function SignUpPopup() {
             });
             
             const data = await response.json();
-            if (data.success) {
+
+            if (response.ok && data.success) {
                 setEmployerData({ name: '', email: '', mobile: '', password: '', confirmPassword: '', employerCategory: '' });
+                setFieldErrors({});
+                setPasswordError('');
                 // Close signup modal and open login modal
                 const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
                 if (signupModal) signupModal.hide();
@@ -174,13 +326,33 @@ function SignUpPopup() {
                     loginModal.show();
                 }, 300);
             } else {
-                setError(data.message || 'Registration failed');
-                
-                
+                // Handle specific server error messages
+                if (data.message) {
+                    if (data.message.includes('email') || data.message.includes('Email')) {
+                        setError('This email address is already registered. Please use a different email or try logging in.');
+                    } else if (data.message.includes('phone') || data.message.includes('mobile')) {
+                        setError('This phone number is already registered. Please use a different number.');
+                    } else if (data.message.includes('password')) {
+                        setError('Password does not meet security requirements. Please ensure it contains uppercase, lowercase, number, and special character.');
+                    } else {
+                        setError(data.message);
+                    }
+                } else if (response.status === 400) {
+                    setError('Invalid registration data. Please check all fields and try again.');
+                } else if (response.status === 409) {
+                    setError('Account already exists with this information. Please try logging in instead.');
+                } else if (response.status === 500) {
+                    setError('Server error occurred. Please try again later.');
+                } else {
+                    setError('Registration failed. Please check your information and try again.');
+                }
             }
         } catch (error) {
-            setError('Registration failed. Please try again.');
-            
+            if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                setError('Network error. Please check your internet connection and try again.');
+            } else {
+                setError('An unexpected error occurred. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
@@ -188,6 +360,15 @@ function SignUpPopup() {
 
     const handlePlacementSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate all fields
+        const isFormValid = validateForm(placementData, 'placement');
+
+        if (!isFormValid || Object.keys(fieldErrors).length > 0) {
+            setError('Please correct the errors below and try again.');
+            return;
+        }
+
         if (placementData.password !== placementData.confirmPassword) {
             setError('Passwords do not match');
             return;
@@ -211,8 +392,11 @@ function SignUpPopup() {
             });
             
             const data = await response.json();
-            if (data.success) {
+
+            if (response.ok && data.success) {
                 setPlacementData({ name: '', email: '', phone: '', password: '', confirmPassword: '', collegeName: '' });
+                setFieldErrors({});
+                setPasswordError('');
                 // Close signup modal and open login modal
                 const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
                 if (signupModal) signupModal.hide();
@@ -221,10 +405,33 @@ function SignUpPopup() {
                     loginModal.show();
                 }, 300);
             } else {
-                setError(data.message || 'Registration failed');
+                // Handle specific server error messages
+                if (data.message) {
+                    if (data.message.includes('email') || data.message.includes('Email')) {
+                        setError('This email address is already registered. Please use a different email or try logging in.');
+                    } else if (data.message.includes('phone') || data.message.includes('mobile')) {
+                        setError('This phone number is already registered. Please use a different number.');
+                    } else if (data.message.includes('password')) {
+                        setError('Password does not meet security requirements. Please ensure it contains uppercase, lowercase, number, and special character.');
+                    } else {
+                        setError(data.message);
+                    }
+                } else if (response.status === 400) {
+                    setError('Invalid registration data. Please check all fields and try again.');
+                } else if (response.status === 409) {
+                    setError('Account already exists with this information. Please try logging in instead.');
+                } else if (response.status === 500) {
+                    setError('Server error occurred. Please try again later.');
+                } else {
+                    setError('Registration failed. Please check your information and try again.');
+                }
             }
         } catch (error) {
-            setError('Registration failed. Please try again.');
+            if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                setError('Network error. Please check your internet connection and try again.');
+            } else {
+                setError('An unexpected error occurred. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
@@ -265,9 +472,8 @@ function SignUpPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#sign-candidate"
 												type="button"
-												style={{color: '#ffffff'}} onMouseEnter={(e) => e.target.style.color = '#ffffff'} onMouseLeave={(e) => e.target.style.color = '#ffffff'}
 											>
-												<i className="fas fa-user-tie" style={{color: '#ffffff'}} />
+												<i className="fas fa-user-tie" />
 												Candidate
 											</button>
 										</li>
@@ -278,9 +484,8 @@ function SignUpPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#sign-Employer"
 												type="button"
-												style={{color: '#ffffff'}} onMouseEnter={(e) => e.target.style.color = '#ffffff'} onMouseLeave={(e) => e.target.style.color = '#ffffff'}
 											>
-												<i className="fas fa-building" style={{color: '#ffffff'}} />
+												<i className="fas fa-building" />
 												Employer
 											</button>
 										</li>
@@ -291,9 +496,8 @@ function SignUpPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#sign-Placement"
 												type="button"
-												style={{color: '#ffffff'}} onMouseEnter={(e) => e.target.style.color = '#ffffff'} onMouseLeave={(e) => e.target.style.color = '#ffffff'}
 											>
-												<i className="fas fa-graduation-cap" style={{color: '#ffffff'}} />
+												<i className="fas fa-graduation-cap" />
 												Placement Officer
 											</button>
 										</li>
@@ -316,13 +520,16 @@ function SignUpPopup() {
 														<input
 															name="username"
 															type="text"
-															className="form-control"
+															className={`form-control ${fieldErrors.username ? 'is-invalid' : ''}`}
 															placeholder="Name*"
 															value={candidateData.username}
 															autoComplete="new-password"
 															onChange={handleCandidateChange}
 															required
 														/>
+														{fieldErrors.username && (
+															<div className="invalid-feedback d-block">{fieldErrors.username}</div>
+														)}
 													</div>
 												</div>
 												<div className="col-lg-12">
@@ -330,13 +537,16 @@ function SignUpPopup() {
 														<input
 															name="email"
 															type="email"
-															className="form-control"
+															className={`form-control ${fieldErrors.email ? 'is-invalid' : ''}`}
 															placeholder="Email*"
 															value={candidateData.email}
 															autoComplete="new-password"
 															onChange={handleCandidateChange}
 															required
 														/>
+														{fieldErrors.email && (
+															<div className="invalid-feedback d-block">{fieldErrors.email}</div>
+														)}
 													</div>
 												</div>
 
@@ -345,12 +555,15 @@ function SignUpPopup() {
 														<input
 															name="mobile"
 															type="tel"
-															className="form-control"
+															className={`form-control ${fieldErrors.mobile ? 'is-invalid' : ''}`}
 															placeholder="Mobile No.*"
 															value={candidateData.mobile}
 															onChange={handleCandidateChange}
 															required
 														/>
+														{fieldErrors.mobile && (
+															<div className="invalid-feedback d-block">{fieldErrors.mobile}</div>
+														)}
 													</div>
 												</div>
 
@@ -359,7 +572,7 @@ function SignUpPopup() {
 														<input
 															name="password"
 															type={showCandidatePassword ? "text" : "password"}
-															className="form-control"
+															className={`form-control ${fieldErrors.password ? 'is-invalid' : ''}`}
 															placeholder="Password*"
 															value={candidateData.password}
 															autoComplete="new-password"
@@ -374,6 +587,9 @@ function SignUpPopup() {
 														>
 															<i className={showCandidatePassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
 														</button>
+														{fieldErrors.password && (
+															<div className="invalid-feedback d-block">{fieldErrors.password}</div>
+														)}
 													</div>
 												</div>
 
@@ -382,7 +598,7 @@ function SignUpPopup() {
 														<input
 															name="confirmPassword"
 															type={showCandidateConfirmPassword ? "text" : "password"}
-															className="form-control"
+															className={`form-control ${fieldErrors.confirmPassword ? 'is-invalid' : ''}`}
 															placeholder="Confirm Password*"
 															value={candidateData.confirmPassword}
 															autoComplete="new-password"
@@ -397,7 +613,10 @@ function SignUpPopup() {
 														>
 															<i className={showCandidateConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
 														</button>
-														{passwordError && <small className="text-danger">{passwordError}</small>}
+														{passwordError && <small className="text-danger d-block">{passwordError}</small>}
+														{fieldErrors.confirmPassword && (
+															<div className="invalid-feedback d-block">{fieldErrors.confirmPassword}</div>
+														)}
 													</div>
 												</div>
 												
@@ -415,7 +634,7 @@ function SignUpPopup() {
 																htmlFor="agree1"
 															>
 																I agree to the{" "}
-																<a href="#">Terms and conditions</a>
+																<a href={pubRoute(publicUser.pages.TERMS)} target="_blank" rel="noopener noreferrer">Terms and conditions</a>
 															</label>
 															<p>
 																Already registered?
@@ -453,7 +672,7 @@ function SignUpPopup() {
 													<div className="form-group mb-3">
 														<select
 															name="employerCategory"
-															className="form-control"
+															className={`form-control ${fieldErrors.employerCategory ? 'is-invalid' : ''}`}
 															value={employerData.employerCategory}
 															onChange={handleEmployerChange}
 															required
@@ -462,6 +681,9 @@ function SignUpPopup() {
 															<option value="company">Company</option>
 															<option value="consultancy">Consultancy</option>
 														</select>
+														{fieldErrors.employerCategory && (
+															<div className="invalid-feedback d-block">{fieldErrors.employerCategory}</div>
+														)}
 													</div>
 												</div>
 												<div className="col-lg-12">
@@ -469,13 +691,16 @@ function SignUpPopup() {
 														<input
 															name="name"
 															type="text"
-															className="form-control"
+															className={`form-control ${fieldErrors.name ? 'is-invalid' : ''}`}
 															placeholder="Company Name*"
 															value={employerData.name}
 															autoComplete="new-password"
 															onChange={handleEmployerChange}
 															required
 														/>
+														{fieldErrors.name && (
+															<div className="invalid-feedback d-block">{fieldErrors.name}</div>
+														)}
 													</div>
 												</div>
 												<div className="col-lg-12">
@@ -483,13 +708,16 @@ function SignUpPopup() {
 														<input
 															name="email"
 															type="email"
-															className="form-control"
+															className={`form-control ${fieldErrors.email ? 'is-invalid' : ''}`}
 															placeholder="Email*"
 															value={employerData.email}
 															autoComplete="new-password"
 															onChange={handleEmployerChange}
 															required
 														/>
+														{fieldErrors.email && (
+															<div className="invalid-feedback d-block">{fieldErrors.email}</div>
+														)}
 													</div>
 												</div>
 
@@ -498,12 +726,15 @@ function SignUpPopup() {
 														<input
 															name="mobile"
 															type="tel"
-															className="form-control"
+															className={`form-control ${fieldErrors.mobile ? 'is-invalid' : ''}`}
 															placeholder="Mobile No.*"
 															value={employerData.mobile}
 															onChange={handleEmployerChange}
 															required
 														/>
+														{fieldErrors.mobile && (
+															<div className="invalid-feedback d-block">{fieldErrors.mobile}</div>
+														)}
 													</div>
 												</div>
 
@@ -512,7 +743,7 @@ function SignUpPopup() {
 														<input
 															name="password"
 															type={showEmployerPassword ? "text" : "password"}
-															className="form-control"
+															className={`form-control ${fieldErrors.password ? 'is-invalid' : ''}`}
 															placeholder="Password*"
 															value={employerData.password}
 															autoComplete="new-password"
@@ -527,6 +758,9 @@ function SignUpPopup() {
 														>
 															<i className={showEmployerPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
 														</button>
+														{fieldErrors.password && (
+															<div className="invalid-feedback d-block">{fieldErrors.password}</div>
+														)}
 													</div>
 												</div>
 
@@ -535,7 +769,7 @@ function SignUpPopup() {
 														<input
 															name="confirmPassword"
 															type={showEmployerConfirmPassword ? "text" : "password"}
-															className="form-control"
+															className={`form-control ${fieldErrors.confirmPassword ? 'is-invalid' : ''}`}
 															placeholder="Confirm Password*"
 															value={employerData.confirmPassword}
 															autoComplete="new-password"
@@ -550,7 +784,10 @@ function SignUpPopup() {
 														>
 															<i className={showEmployerConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
 														</button>
-														{passwordError && <small className="text-danger">{passwordError}</small>}
+														{passwordError && <small className="text-danger d-block">{passwordError}</small>}
+														{fieldErrors.confirmPassword && (
+															<div className="invalid-feedback d-block">{fieldErrors.confirmPassword}</div>
+														)}
 													</div>
 												</div>
 
@@ -568,7 +805,7 @@ function SignUpPopup() {
 																htmlFor="agree2"
 															>
 																I agree to the{" "}
-																<a href="#">Terms and conditions</a>
+																<a href={pubRoute(publicUser.pages.TERMS)} target="_blank" rel="noopener noreferrer">Terms and conditions</a>
 															</label>
 															<p>
 																Already registered?
@@ -608,13 +845,16 @@ function SignUpPopup() {
 														<input
 															name="name"
 															type="text"
-															className="form-control"
+															className={`form-control ${fieldErrors.name ? 'is-invalid' : ''}`}
 															placeholder="Name*"
 															value={placementData.name}
 															autoComplete="new-password"
 															onChange={handlePlacementChange}
 															required
 														/>
+														{fieldErrors.name && (
+															<div className="invalid-feedback d-block">{fieldErrors.name}</div>
+														)}
 													</div>
 												</div>
 												<div className="col-lg-12">
@@ -622,13 +862,16 @@ function SignUpPopup() {
 														<input
 															name="email"
 															type="email"
-															className="form-control"
+															className={`form-control ${fieldErrors.email ? 'is-invalid' : ''}`}
 															placeholder="Email*"
 															value={placementData.email}
 															autoComplete="new-password"
 															onChange={handlePlacementChange}
 															required
 														/>
+														{fieldErrors.email && (
+															<div className="invalid-feedback d-block">{fieldErrors.email}</div>
+														)}
 													</div>
 												</div>
 
@@ -637,12 +880,15 @@ function SignUpPopup() {
 														<input
 															name="phone"
 															type="tel"
-															className="form-control"
+															className={`form-control ${fieldErrors.phone ? 'is-invalid' : ''}`}
 															placeholder="Phone Number*"
 															value={placementData.phone}
 															onChange={handlePlacementChange}
 															required
 														/>
+														{fieldErrors.phone && (
+															<div className="invalid-feedback d-block">{fieldErrors.phone}</div>
+														)}
 													</div>
 												</div>
 
@@ -651,12 +897,15 @@ function SignUpPopup() {
 														<input
 															name="collegeName"
 															type="text"
-															className="form-control"
+															className={`form-control ${fieldErrors.collegeName ? 'is-invalid' : ''}`}
 															placeholder="College Name*"
 															value={placementData.collegeName}
 															onChange={handlePlacementChange}
 															required
 														/>
+														{fieldErrors.collegeName && (
+															<div className="invalid-feedback d-block">{fieldErrors.collegeName}</div>
+														)}
 													</div>
 												</div>
 
@@ -665,7 +914,7 @@ function SignUpPopup() {
 														<input
 															name="password"
 															type={showPlacementPassword ? "text" : "password"}
-															className="form-control"
+															className={`form-control ${fieldErrors.password ? 'is-invalid' : ''}`}
 															placeholder="Password*"
 															value={placementData.password}
 															autoComplete="new-password"
@@ -678,8 +927,11 @@ function SignUpPopup() {
 															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
 															onClick={() => setShowPlacementPassword(!showPlacementPassword)}
 														>
-															<i className="fas fa-eye" style={{ color: '#fd7e14' }} />
+															<i className={showPlacementPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
 														</button>
+														{fieldErrors.password && (
+															<div className="invalid-feedback d-block">{fieldErrors.password}</div>
+														)}
 													</div>
 												</div>
 
@@ -688,7 +940,7 @@ function SignUpPopup() {
 														<input
 															name="confirmPassword"
 															type={showPlacementConfirmPassword ? "text" : "password"}
-															className="form-control"
+															className={`form-control ${fieldErrors.confirmPassword ? 'is-invalid' : ''}`}
 															placeholder="Confirm Password*"
 															value={placementData.confirmPassword}
 															autoComplete="new-password"
@@ -701,9 +953,12 @@ function SignUpPopup() {
 															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
 															onClick={() => setShowPlacementConfirmPassword(!showPlacementConfirmPassword)}
 														>
-															<i className="fas fa-eye" style={{ color: '#fd7e14' }} />
+															<i className={showPlacementConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
 														</button>
-														{passwordError && <small className="text-danger">{passwordError}</small>}
+														{passwordError && <small className="text-danger d-block">{passwordError}</small>}
+														{fieldErrors.confirmPassword && (
+															<div className="invalid-feedback d-block">{fieldErrors.confirmPassword}</div>
+														)}
 													</div>
 												</div>
 
@@ -723,7 +978,7 @@ function SignUpPopup() {
 																htmlFor="agree3"
 															>
 																I agree to the{" "}
-																<a href="#">Terms and conditions</a>
+																<a href={pubRoute(publicUser.pages.TERMS)} target="_blank" rel="noopener noreferrer">Terms and conditions</a>
 															</label>
 															<p>
 																Already registered?

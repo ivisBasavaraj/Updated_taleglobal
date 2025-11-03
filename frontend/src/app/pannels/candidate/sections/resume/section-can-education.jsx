@@ -15,6 +15,8 @@ function SectionCanEducation({ profile, onUpdate }) {
         degree: true
     });
     const [additionalEditMode, setAdditionalEditMode] = useState([]);
+    const [errors, setErrors] = useState({});
+    const [additionalErrors, setAdditionalErrors] = useState([]);
 
     useEffect(() => {
         if (profile && profile.education) {
@@ -68,9 +70,71 @@ function SectionCanEducation({ profile, onUpdate }) {
         return 'F';
     };
 
+    const validateEducationField = (level, field, value, index = null) => {
+        const fieldKey = index !== null ? `${level}_${index}_${field}` : `${level}_${field}`;
+        const newErrors = index !== null ? { ...additionalErrors[index] } : { ...errors };
+
+        let error = null;
+
+        switch (field) {
+            case 'schoolName':
+                if (value && value.trim()) {
+                    if (value.trim().length < 2) {
+                        error = 'School/College name must be at least 2 characters long';
+                    } else if (value.trim().length > 100) {
+                        error = 'School/College name cannot exceed 100 characters';
+                    }
+                }
+                break;
+            case 'specialization':
+                if (value && value.trim().length > 100) {
+                    error = 'Specialization cannot exceed 100 characters';
+                }
+                break;
+            case 'location':
+                if (value && value.trim()) {
+                    if (value.trim().length < 2) {
+                        error = 'Location must be at least 2 characters long';
+                    } else if (value.trim().length > 50) {
+                        error = 'Location cannot exceed 50 characters';
+                    }
+                }
+                break;
+            case 'passoutYear':
+                if (value && value.trim()) {
+                    const year = parseInt(value);
+                    const currentYear = new Date().getFullYear();
+                    if (!isNaN(year) && (year < 1950 || year > currentYear + 10)) {
+                        error = `Passout year must be between 1950 and ${currentYear + 10}`;
+                    }
+                }
+                break;
+            case 'percentage':
+                if (value) {
+                    const percentage = parseFloat(value);
+                    if (isNaN(percentage) || percentage < 0 || percentage > 100) {
+                        error = 'Percentage must be between 0 and 100';
+                    }
+                }
+                break;
+        }
+
+        if (index !== null) {
+            newErrors[field] = error;
+            const updatedAdditionalErrors = [...additionalErrors];
+            updatedAdditionalErrors[index] = newErrors;
+            setAdditionalErrors(updatedAdditionalErrors);
+        } else {
+            newErrors[field] = error;
+            setErrors(newErrors);
+        }
+
+        return !error;
+    };
+
     const handleInputChange = (e, level, index = null) => {
         const { name, value, files } = e.target;
-        
+
         if (index !== null) {
             const updatedRows = [...additionalRows];
             if (name === 'marksheet') {
@@ -87,6 +151,12 @@ function SectionCanEducation({ profile, onUpdate }) {
                         updatedRows[index].cgpa = convertPercentageToCGPA(percentageValue);
                         updatedRows[index].grade = convertPercentageToGrade(percentageValue);
                     }
+                }
+                // Clear error when user starts typing
+                if (additionalErrors[index] && additionalErrors[index][name]) {
+                    const updatedErrors = [...additionalErrors];
+                    updatedErrors[index] = { ...updatedErrors[index], [name]: null };
+                    setAdditionalErrors(updatedErrors);
                 }
             }
             setAdditionalRows(updatedRows);
@@ -106,6 +176,10 @@ function SectionCanEducation({ profile, onUpdate }) {
                         updatedData[level].cgpa = convertPercentageToCGPA(percentageValue);
                         updatedData[level].grade = convertPercentageToGrade(percentageValue);
                     }
+                }
+                // Clear error when user starts typing
+                if (errors[name]) {
+                    setErrors(prev => ({ ...prev, [name]: null }));
                 }
             }
             setEducationData(updatedData);
@@ -128,6 +202,20 @@ function SectionCanEducation({ profile, onUpdate }) {
         };
         setAdditionalRows([...additionalRows, newRow]);
         setAdditionalEditMode([...additionalEditMode, true]);
+
+        // Scroll to the newly added row after a short delay to allow DOM update
+        setTimeout(() => {
+            const tableBody = document.querySelector('.table tbody');
+            if (tableBody) {
+                const lastRow = tableBody.lastElementChild;
+                if (lastRow) {
+                    lastRow.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            }
+        }, 100);
     };
 
     const removeRow = (index) => {
@@ -160,6 +248,31 @@ function SectionCanEducation({ profile, onUpdate }) {
     };
 
     const uploadMarksheet = async (file, level, index = null) => {
+        // File validation
+        if (!file) {
+            alert('Please select a file to upload.');
+            return;
+        }
+
+        // Check file size (80KB minimum, 15MB maximum)
+        const minSize = 80 * 1024; // 80KB in bytes
+        const maxSize = 15 * 1024 * 1024; // 15MB in bytes
+        if (file.size < minSize) {
+            alert('File size must be at least 80KB. Please choose a larger file.');
+            return;
+        }
+        if (file.size > maxSize) {
+            alert('File size must be less than 15MB. Please choose a smaller file.');
+            return;
+        }
+
+        // Check file type
+        const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Only PDF, JPG, JPEG, and PNG files are allowed.');
+            return;
+        }
+
         try {
             const formData = new FormData();
             formData.append('marksheet', file);
@@ -203,7 +316,6 @@ function SectionCanEducation({ profile, onUpdate }) {
             if (response.ok) {
                 const result = await response.json();
                 
-                
                 // Update local state with the uploaded marksheet
                 if (index !== null) {
                     const updatedRows = [...additionalRows];
@@ -215,27 +327,140 @@ function SectionCanEducation({ profile, onUpdate }) {
                     setEducationData(updatedData);
                 }
                 
-                alert('Marksheet uploaded successfully!');
-            } else {
+                // Show success message with better visibility
+                const successMsg = document.createElement('div');
+                successMsg.innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert"><i class="fa fa-check-circle"></i> Marksheet uploaded successfully!<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>';
+                document.querySelector('.panel-body').prepend(successMsg.firstChild);
                 
-                alert('Failed to upload marksheet');
+                // Auto-hide after 3 seconds
+                setTimeout(() => {
+                    const alertEl = document.querySelector('.alert-success');
+                    if (alertEl) alertEl.remove();
+                }, 3000);
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                const errorMessage = errorData.message || `Upload failed with status: ${response.status}`;
+                alert(`Failed to upload marksheet: ${errorMessage}`);
             }
         } catch (error) {
-            
-            alert('Error uploading marksheet');
+            console.error('Upload error:', error);
+            alert(`Error uploading marksheet: ${error.message || 'Network error. Please check your connection and try again.'}`);
         }
     };
 
+    const validateAllFields = () => {
+        let hasErrors = false;
+        const newErrors = {};
+        const newAdditionalErrors = [];
+
+        // Validate main education fields - all required for saving
+        ['tenth', 'diploma', 'degree'].forEach(level => {
+            // Check if any field has data for this level
+            const hasAnyData = educationData[level].schoolName || educationData[level].location || educationData[level].passoutYear || educationData[level].percentage;
+            
+            if (hasAnyData) {
+                // If any field has data, all required fields must be filled
+                ['schoolName', 'location', 'passoutYear'].forEach(field => {
+                    const value = educationData[level][field];
+                    if (!value || !value.trim()) {
+                        const fieldNames = {schoolName: 'School/College name', location: 'Location', passoutYear: 'Passout year'};
+                        const levelNames = {tenth: '10th School', diploma: 'Diploma/PUC', degree: 'Degree'};
+                        newErrors[`${level}_${field}`] = `${levelNames[level]} - ${fieldNames[field]} is required`;
+                        hasErrors = true;
+                    } else if (!validateEducationField(level, field, value)) {
+                        hasErrors = true;
+                    }
+                });
+            }
+
+            // Validate specialization (optional but length check)
+            if (educationData[level].specialization && educationData[level].specialization.trim().length > 100) {
+                if (!validateEducationField(level, 'specialization', educationData[level].specialization)) {
+                    hasErrors = true;
+                }
+            }
+
+            // Validate percentage if provided
+            if (educationData[level].percentage && !validateEducationField(level, 'percentage', educationData[level].percentage)) {
+                hasErrors = true;
+            }
+        });
+
+        // Validate additional rows - all required for saving if any field has data
+        additionalRows.forEach((row, index) => {
+            const rowErrors = {};
+            const hasAnyData = row.schoolName || row.location || row.passoutYear || row.percentage;
+            
+            if (hasAnyData) {
+                ['schoolName', 'location', 'passoutYear'].forEach(field => {
+                    if (!row[field] || !row[field].trim()) {
+                        const fieldNames = {schoolName: 'School/College name', location: 'Location', passoutYear: 'Passout year'};
+                        rowErrors[field] = `Additional Education Row ${index + 1} - ${fieldNames[field]} is required`;
+                        hasErrors = true;
+                    } else if (!validateEducationField('additional', field, row[field], index)) {
+                        hasErrors = true;
+                    }
+                });
+                
+                const updatedAdditionalErrors = [...additionalErrors];
+                updatedAdditionalErrors[index] = rowErrors;
+                setAdditionalErrors(updatedAdditionalErrors);
+            }
+
+            if (row.specialization && row.specialization.trim().length > 100) {
+                if (!validateEducationField('additional', 'specialization', row.specialization, index)) {
+                    hasErrors = true;
+                }
+            }
+
+            if (row.percentage && !validateEducationField('additional', 'percentage', row.percentage, index)) {
+                hasErrors = true;
+            }
+
+            newAdditionalErrors.push(rowErrors);
+        });
+
+        // Set errors in state
+        setErrors(newErrors);
+        setAdditionalErrors(newAdditionalErrors);
+        
+        // Return validation result with errors
+        const allErrors = [];
+        Object.values(newErrors).forEach(error => {
+            if (error) allErrors.push(error);
+        });
+        newAdditionalErrors.forEach((rowErrors) => {
+            if (rowErrors) {
+                Object.values(rowErrors).forEach(error => {
+                    if (error) allErrors.push(error);
+                });
+            }
+        });
+        
+        return { isValid: !hasErrors, errors: allErrors };
+    };
+
     const handleSave = async () => {
+        // Validate all fields before saving
+        const validationResult = validateAllFields();
+        if (!validationResult.isValid) {
+            if (validationResult.errors.length > 0) {
+                alert(`Please fix the following errors:\n\n${validationResult.errors.join('\n')}`);
+            } else {
+                alert('Please fill in all required fields before saving.');
+            }
+            return;
+        }
+
         try {
             setLoading(true);
             const token = localStorage.getItem('candidateToken');
-            
+
             const educationArray = [
                 {
-                    degreeName: educationData.tenth.schoolName,
-                    specialization: educationData.tenth.specialization,
-                    collegeName: educationData.tenth.location,
+                    degreeName: educationData.tenth.schoolName?.trim(),
+                    specialization: educationData.tenth.specialization?.trim(),
+                    collegeName: educationData.tenth.location?.trim(),
                     passYear: educationData.tenth.passoutYear,
                     percentage: educationData.tenth.percentage,
                     cgpa: educationData.tenth.cgpa,
@@ -243,9 +468,9 @@ function SectionCanEducation({ profile, onUpdate }) {
                     marksheet: educationData.tenth.marksheetBase64
                 },
                 {
-                    degreeName: educationData.diploma.schoolName,
-                    specialization: educationData.diploma.specialization,
-                    collegeName: educationData.diploma.location,
+                    degreeName: educationData.diploma.schoolName?.trim(),
+                    specialization: educationData.diploma.specialization?.trim(),
+                    collegeName: educationData.diploma.location?.trim(),
                     passYear: educationData.diploma.passoutYear,
                     percentage: educationData.diploma.percentage,
                     cgpa: educationData.diploma.cgpa,
@@ -253,9 +478,9 @@ function SectionCanEducation({ profile, onUpdate }) {
                     marksheet: educationData.diploma.marksheetBase64
                 },
                 {
-                    degreeName: educationData.degree.schoolName,
-                    specialization: educationData.degree.specialization,
-                    collegeName: educationData.degree.location,
+                    degreeName: educationData.degree.schoolName?.trim(),
+                    specialization: educationData.degree.specialization?.trim(),
+                    collegeName: educationData.degree.location?.trim(),
                     passYear: educationData.degree.passoutYear,
                     percentage: educationData.degree.percentage,
                     cgpa: educationData.degree.cgpa,
@@ -263,9 +488,9 @@ function SectionCanEducation({ profile, onUpdate }) {
                     marksheet: educationData.degree.marksheetBase64
                 },
                 ...additionalRows.map(row => ({
-                    degreeName: row.schoolName,
-                    specialization: row.specialization,
-                    collegeName: row.location,
+                    degreeName: row.schoolName?.trim(),
+                    specialization: row.specialization?.trim(),
+                    collegeName: row.location?.trim(),
                     passYear: row.passoutYear,
                     percentage: row.percentage,
                     cgpa: row.cgpa,
@@ -275,16 +500,15 @@ function SectionCanEducation({ profile, onUpdate }) {
             ];
 
             const response = await api.updateCandidateProfile({ education: educationArray });
-            
+
             if (response.success) {
                 window.dispatchEvent(new CustomEvent('profileUpdated'));
                 alert('Education details saved successfully!');
             } else {
-                alert('Failed to save education details');
+                alert('Failed to save education details. Please try again.');
             }
         } catch (error) {
-            
-            alert('Failed to save education details');
+            alert('Failed to save education details. Please check your connection and try again.');
         } finally {
             setLoading(false);
         }
@@ -329,60 +553,65 @@ function SectionCanEducation({ profile, onUpdate }) {
                                 <tr>
                                     <td><strong>10th School</strong></td>
                                     <td>
-                                        <input 
-                                            className="form-control"
-                                            name="schoolName" 
-                                            type="text" 
+                                        <input
+                                            className={`form-control ${errors.schoolName ? 'is-invalid' : ''}`}
+                                            name="schoolName"
+                                            type="text"
                                             placeholder="Enter 10th School Name"
                                             value={educationData.tenth.schoolName}
                                             onChange={(e) => handleInputChange(e, 'tenth')}
                                             disabled={!editMode.tenth}
                                         />
+                                        {errors.schoolName && <div className="invalid-feedback d-block" style={{fontSize: '10px'}}>{errors.schoolName}</div>}
                                     </td>
                                     <td>
-                                        <input 
-                                            className="form-control"
-                                            name="specialization" 
-                                            type="text" 
-                                            placeholder="Enter Specialization" 
+                                        <input
+                                            className={`form-control ${errors.specialization ? 'is-invalid' : ''}`}
+                                            name="specialization"
+                                            type="text"
+                                            placeholder="Enter Specialization"
                                             value={educationData.tenth.specialization}
                                             onChange={(e) => handleInputChange(e, 'tenth')}
                                             disabled={!editMode.tenth}
                                         />
+                                        {errors.specialization && <div className="invalid-feedback d-block" style={{fontSize: '10px'}}>{errors.specialization}</div>}
                                     </td>
                                     <td>
-                                        <input 
-                                            className="form-control"
-                                            name="location" 
-                                            type="text" 
-                                            placeholder="Enter Location" 
+                                        <input
+                                            className={`form-control ${errors.location ? 'is-invalid' : ''}`}
+                                            name="location"
+                                            type="text"
+                                            placeholder="Enter Location"
                                             value={educationData.tenth.location}
                                             onChange={(e) => handleInputChange(e, 'tenth')}
                                             disabled={!editMode.tenth}
                                         />
+                                        {errors.location && <div className="invalid-feedback d-block" style={{fontSize: '10px'}}>{errors.location}</div>}
                                     </td>
 
                                     <td>
-                                        <input 
-                                            className="form-control"
-                                            name="passoutYear" 
-                                            type="number" 
-                                            placeholder="2024" 
+                                        <input
+                                            className={`form-control ${errors.passoutYear ? 'is-invalid' : ''}`}
+                                            name="passoutYear"
+                                            type="text"
+                                            placeholder="2024"
                                             value={educationData.tenth.passoutYear}
                                             onChange={(e) => handleInputChange(e, 'tenth')}
                                             disabled={!editMode.tenth}
                                         />
+                                        {errors.passoutYear && <div className="invalid-feedback d-block" style={{fontSize: '10px'}}>{errors.passoutYear}</div>}
                                     </td>
                                     <td>
-                                        <input 
-                                            className="form-control"
-                                            name="percentage" 
-                                            type="number" 
+                                        <input
+                                            className={`form-control ${errors.percentage ? 'is-invalid' : ''}`}
+                                            name="percentage"
+                                            type="number"
                                             placeholder="90"
                                             value={educationData.tenth.percentage}
                                             onChange={(e) => handleInputChange(e, 'tenth')}
                                             disabled={!editMode.tenth}
                                         />
+                                        {errors.percentage && <div className="invalid-feedback d-block" style={{fontSize: '10px'}}>{errors.percentage}</div>}
                                     </td>
                                     <td>
                                         <input 
@@ -467,7 +696,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                                         <input 
                                             className="form-control"
                                             name="passoutYear" 
-                                            type="number" 
+                                            type="text" 
                                             placeholder="2024" 
                                             value={educationData.diploma.passoutYear}
                                             onChange={(e) => handleInputChange(e, 'diploma')}
@@ -568,7 +797,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                                         <input 
                                             className="form-control"
                                             name="passoutYear" 
-                                            type="number" 
+                                            type="text" 
                                             placeholder="2024" 
                                             value={educationData.degree.passoutYear}
                                             onChange={(e) => handleInputChange(e, 'degree')}
@@ -681,7 +910,7 @@ function SectionCanEducation({ profile, onUpdate }) {
                                             <input 
                                                 className="form-control"
                                                 name="passoutYear" 
-                                                type="number" 
+                                                type="text" 
                                                 placeholder="2024" 
                                                 value={row.passoutYear}
                                                 onChange={(e) => handleInputChange(e, null, index)}
@@ -747,11 +976,16 @@ function SectionCanEducation({ profile, onUpdate }) {
                         </table>
                     </div>
                     <div className="mt-3 d-flex gap-3 align-items-center">
-                        <button 
-                            type="button" 
-                            className="btn btn-outline-success" 
+                        <button
+                            type="button"
+                            className="btn btn-outline-success"
                             onClick={addNewRow}
-                            style={{height: '38px', backgroundColor: 'transparent'}}
+                            style={{
+                                height: '38px',
+                                backgroundColor: '#fed7aa !important',
+                                borderColor: '#fed7aa !important',
+                                color: '#000 !important'
+                            }}
                         >
                             Add New
                         </button>

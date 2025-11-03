@@ -1,6 +1,7 @@
 import { Briefcase, Building, Calendar, FileText, Globe, Hash, IdCard, Image as ImageIcon, Mail, MapPin, Phone, Upload, User as UserIcon, Users as UsersIcon, Images } from "lucide-react";
 import { useEffect, useState } from "react";
 import { loadScript } from "../../../../globals/constants";
+import CountryCodeSelector from "../../../../components/CountryCodeSelector";
 import './emp-company-profile.css';
 
 function EmpCompanyProfilePage() {
@@ -9,6 +10,7 @@ function EmpCompanyProfilePage() {
         employerCategory: '',
         companyName: '',
         phone: '',
+        phoneCountryCode: '+91',
         email: '',
         website: '',
         establishedSince: '',
@@ -18,20 +20,21 @@ function EmpCompanyProfilePage() {
         location: '',
         googleMapsEmbed: '',
         whyJoinUs: '',
-        
+
         // Company Details
         legalEntityCode: '',
         corporateAddress: '',
         branchLocations: '',
         officialEmail: '',
         officialMobile: '',
+        officialMobileCountryCode: '+91',
         companyType: '',
         cin: '',
         gstNumber: '',
         industrySector: '',
         panNumber: '',
         agreeTerms: '',
-        
+
         // Primary Contact
         contactFullName: '',
         contactMiddleName: '',
@@ -39,8 +42,10 @@ function EmpCompanyProfilePage() {
         contactDesignation: '',
         contactOfficialEmail: '',
         contactMobile: '',
+        contactMobileCountryCode: '+91',
         companyIdCardPicture: '',
         alternateContact: '',
+        alternateContactCountryCode: '+91',
         
         // Images
         logo: '',
@@ -83,8 +88,59 @@ function EmpCompanyProfilePage() {
                 return;
             }
             if (data.success && data.profile) {
-                setFormData(prev => ({ ...prev, ...data.profile }));
-                
+                const profileData = { ...data.profile };
+
+                // Split phone numbers into country code and number parts
+                if (profileData.phone) {
+                    const phoneMatch = profileData.phone.match(/^(\+\d+)(.*)$/);
+                    if (phoneMatch) {
+                        profileData.phoneCountryCode = phoneMatch[1];
+                        profileData.phone = phoneMatch[2];
+                    } else {
+                        profileData.phoneCountryCode = '+91';
+                    }
+                } else {
+                    profileData.phoneCountryCode = '+91';
+                }
+
+                if (profileData.officialMobile) {
+                    const officialMatch = profileData.officialMobile.match(/^(\+\d+)(.*)$/);
+                    if (officialMatch) {
+                        profileData.officialMobileCountryCode = officialMatch[1];
+                        profileData.officialMobile = officialMatch[2];
+                    } else {
+                        profileData.officialMobileCountryCode = '+91';
+                    }
+                } else {
+                    profileData.officialMobileCountryCode = '+91';
+                }
+
+                if (profileData.contactMobile) {
+                    const contactMatch = profileData.contactMobile.match(/^(\+\d+)(.*)$/);
+                    if (contactMatch) {
+                        profileData.contactMobileCountryCode = contactMatch[1];
+                        profileData.contactMobile = contactMatch[2];
+                    } else {
+                        profileData.contactMobileCountryCode = '+91';
+                    }
+                } else {
+                    profileData.contactMobileCountryCode = '+91';
+                }
+
+                if (profileData.alternateContact) {
+                    const alternateMatch = profileData.alternateContact.match(/^(\+\d+)(.*)$/);
+                    if (alternateMatch) {
+                        profileData.alternateContactCountryCode = alternateMatch[1];
+                        profileData.alternateContact = alternateMatch[2];
+                    } else {
+                        profileData.alternateContactCountryCode = '+91';
+                    }
+                } else {
+                    profileData.alternateContactCountryCode = '+91';
+                }
+
+                setFormData(prev => ({ ...prev, ...profileData }));
+
                 // Populate authSections from existing authorization letters
                 if (data.profile.authorizationLetters && data.profile.authorizationLetters.length > 0) {
                     const existingSections = data.profile.authorizationLetters.map((letter, index) => ({
@@ -126,11 +182,8 @@ function EmpCompanyProfilePage() {
             case 'alternateContact':
                 if (value) {
                     const cleanNumber = value.replace(/[\s\-\(\)]/g, '');
-                    const isValidWithCountryCode = cleanNumber.startsWith('+91') && /^\+91[6-9]\d{9}$/.test(cleanNumber);
-                    const isValidWithoutCountryCode = /^[6-9]\d{9}$/.test(cleanNumber);
-                    
-                    if (!isValidWithCountryCode && !isValidWithoutCountryCode) {
-                        newErrors[field] = 'Please enter a valid phone number with +91 or 10-digit Indian mobile number';
+                    if (cleanNumber.length < 7 || cleanNumber.length > 15) {
+                        newErrors[field] = 'Phone number must be between 7-15 digits';
                     } else {
                         delete newErrors[field];
                     }
@@ -192,11 +245,8 @@ function EmpCompanyProfilePage() {
             newErrors.phone = 'Phone number is required';
         } else {
             const cleanNumber = formData.phone.replace(/[\s\-\(\)]/g, '');
-            const isValidWithCountryCode = cleanNumber.startsWith('+91') && /^\+91[6-9]\d{9}$/.test(cleanNumber);
-            const isValidWithoutCountryCode = /^[6-9]\d{9}$/.test(cleanNumber);
-            
-            if (!isValidWithCountryCode && !isValidWithoutCountryCode) {
-                newErrors.phone = 'Phone number must be valid Indian mobile number with +91 or 10 digits starting with 6-9';
+            if (cleanNumber.length < 7 || cleanNumber.length > 15) {
+                newErrors.phone = 'Phone number must be between 7-15 digits';
             }
         }
         
@@ -223,8 +273,11 @@ function EmpCompanyProfilePage() {
             newErrors.officialEmail = 'Please enter a valid official email address';
         }
         
-        if (formData.officialMobile && !/^[+]?[0-9\s\-\(\)]{10,15}$/.test(formData.officialMobile.replace(/\s/g, ''))) {
-            newErrors.officialMobile = 'Please enter a valid mobile number';
+        if (formData.officialMobile) {
+            const cleanNumber = formData.officialMobile.replace(/[\s\-\(\)]/g, '');
+            if (cleanNumber.length < 7 || cleanNumber.length > 15) {
+                newErrors.officialMobile = 'Official mobile number must be between 7-15 digits';
+            }
         }
         
         if (formData.cin && !/^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/.test(formData.cin)) {
@@ -265,19 +318,19 @@ function EmpCompanyProfilePage() {
         }
         
         if (!formData.contactMobile?.trim()) {
-            newErrors.contactMobile = 'Mobile number is required';
+            newErrors.contactMobile = 'Contact mobile number is required';
         } else {
             const cleanNumber = formData.contactMobile.replace(/[\s\-\(\)]/g, '');
-            const isValidWithCountryCode = cleanNumber.startsWith('+91') && /^\+91[6-9]\d{9}$/.test(cleanNumber);
-            const isValidWithoutCountryCode = /^[6-9]\d{9}$/.test(cleanNumber);
-            
-            if (!isValidWithCountryCode && !isValidWithoutCountryCode) {
-                newErrors.contactMobile = 'Mobile number must be valid Indian mobile number with +91 or 10 digits starting with 6-9';
+            if (cleanNumber.length < 7 || cleanNumber.length > 15) {
+                newErrors.contactMobile = 'Contact mobile number must be between 7-15 digits';
             }
         }
         
-        if (formData.alternateContact && !/^[+]?[0-9\s\-\(\)]{10,15}$/.test(formData.alternateContact.replace(/\s/g, ''))) {
-            newErrors.alternateContact = 'Please enter a valid alternate contact number';
+        if (formData.alternateContact) {
+            const cleanNumber = formData.alternateContact.replace(/[\s\-\(\)]/g, '');
+            if (cleanNumber.length < 7 || cleanNumber.length > 15) {
+                newErrors.alternateContact = 'Alternate contact number must be between 7-15 digits';
+            }
         }
         
         setErrors(newErrors);
@@ -726,11 +779,17 @@ function EmpCompanyProfilePage() {
             
             // Create a copy of formData excluding large Base64 files to prevent request size issues
             const profileData = { ...formData };
-            
+
+            // Combine country codes with phone numbers
+            profileData.phone = formData.phoneCountryCode + formData.phone;
+            profileData.officialMobile = formData.officialMobileCountryCode + formData.officialMobile;
+            profileData.contactMobile = formData.contactMobileCountryCode + formData.contactMobile;
+            profileData.alternateContact = formData.alternateContactCountryCode + formData.alternateContact;
+
             // Explicitly ensure whyJoinUs and googleMapsEmbed are included
             profileData.whyJoinUs = formData.whyJoinUs || '';
             profileData.googleMapsEmbed = formData.googleMapsEmbed || '';
-            
+
             // Remove Base64 encoded files from the request (these are uploaded separately)
             delete profileData.logo;
             delete profileData.coverImage;
@@ -920,7 +979,10 @@ function EmpCompanyProfilePage() {
                                 <div className="form-group">
                                     <label className="required-field"><Phone size={16} className="me-2" /> Phone</label>
                                     <div className="input-group">
-                                        <span className="input-group-text" style={{backgroundColor: '#fd7e14', color: 'white', border: '1px solid #fd7e14'}}>+91</span>
+                                        <CountryCodeSelector
+                                            value={formData.phoneCountryCode}
+                                            onChange={(value) => handleInputChange('phoneCountryCode', value)}
+                                        />
                                         <input
                                             className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
                                             type="text"
@@ -1167,7 +1229,10 @@ function EmpCompanyProfilePage() {
                                 <div className="form-group">
                                     <label><Phone size={16} className="me-2" /> Official Mobile Number</label>
                                     <div className="input-group">
-                                        <span className="input-group-text" style={{backgroundColor: '#fd7e14', color: 'white', border: '1px solid #fd7e14'}}>+91</span>
+                                        <CountryCodeSelector
+                                            value={formData.officialMobileCountryCode}
+                                            onChange={(value) => handleInputChange('officialMobileCountryCode', value)}
+                                        />
                                         <input
                                             className={`form-control ${errors.officialMobile ? 'is-invalid' : ''}`}
                                             type="text"
@@ -1570,7 +1635,10 @@ function EmpCompanyProfilePage() {
                                 <div className="form-group">
                                     <label className="required-field"><Phone size={16} className="me-2" /> Mobile Number</label>
                                     <div className="input-group">
-                                        <span className="input-group-text" style={{backgroundColor: '#fd7e14', color: 'white', border: '1px solid #fd7e14'}}>+91</span>
+                                        <CountryCodeSelector
+                                            value={formData.contactMobileCountryCode}
+                                            onChange={(value) => handleInputChange('contactMobileCountryCode', value)}
+                                        />
                                         <input
                                             className={`form-control ${errors.contactMobile ? 'is-invalid' : ''}`}
                                             type="tel"
@@ -1618,7 +1686,10 @@ function EmpCompanyProfilePage() {
                                 <div className="form-group">
                                     <label><Phone size={16} className="me-2" /> Alternate Contact (Optional)</label>
                                     <div className="input-group">
-                                        <span className="input-group-text" style={{backgroundColor: '#fd7e14', color: 'white', border: '1px solid #fd7e14'}}>+91</span>
+                                        <CountryCodeSelector
+                                            value={formData.alternateContactCountryCode}
+                                            onChange={(value) => handleInputChange('alternateContactCountryCode', value)}
+                                        />
                                         <input
                                             className={`form-control ${errors.alternateContact ? 'is-invalid' : ''}`}
                                             type="tel"
