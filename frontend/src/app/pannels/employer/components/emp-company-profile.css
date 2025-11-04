@@ -785,7 +785,7 @@ html {
     stroke: #ff6b35 !important;
 }
 
-/* Delete buttons - Black without orange */
+/* Delete buttons - Orange color */
 .btn-outline-danger,
 .btn-danger,
 .btn-outline-danger i,
@@ -793,11 +793,13 @@ html {
 .fa-trash,
 .fa-times,
 .fas.fa-trash,
-.fas.fa-times {
-    color: #000 !important;
+.fas.fa-times,
+.gallery-item .btn-danger,
+.gallery-item .btn-danger i {
+    color: #ff6b35 !important;
     background: none !important;
     background-color: transparent !important;
-    border: 1px solid #000 !important;
+    border: none !important;
     box-shadow: none !important;
     outline: none !important;
 }
@@ -805,10 +807,12 @@ html {
 .btn-outline-danger:hover,
 .btn-danger:hover,
 .btn-outline-danger:hover i,
-.btn-danger:hover i {
+.btn-danger:hover i,
+.gallery-item .btn-danger:hover,
+.gallery-item .btn-danger:hover i {
     color: #fff !important;
-    background-color: #000 !important;
-    border-color: #000 !important;
+    background-color: #ff6b35 !important;
+    border: none !important;
     box-shadow: none !important;
 }
 
@@ -824,7 +828,7 @@ html {
 /* Override Bootstrap default danger button styling */
 .btn-danger {
     background-color: transparent !important;
-    border-color: #000 !important;
+    border: none !important;
 }
 
 /* Mobile Touch Optimizations */

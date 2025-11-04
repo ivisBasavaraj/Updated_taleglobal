@@ -24,6 +24,11 @@ router.post('/login', [
   body('password').notEmpty().withMessage('Password is required')
 ], handleValidationErrors, candidateController.loginCandidate);
 
+// Email Check Route (Public - before auth middleware)
+router.post('/check-email', [
+  body('email').isEmail().withMessage('Valid email is required')
+], handleValidationErrors, candidateController.checkEmail);
+
 // Password Reset Routes (Public - before auth middleware)
 router.post('/password/reset', [
   body('email').isEmail().withMessage('Valid email is required')

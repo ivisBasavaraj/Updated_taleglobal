@@ -580,6 +580,21 @@ exports.getMessages = async (req, res) => {
   }
 };
 
+// Email Check Controller
+exports.checkEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const candidate = await Candidate.findOne({ email });
+    
+    res.json({ 
+      success: true, 
+      exists: !!candidate 
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // Password Management Controllers
 exports.resetPassword = async (req, res) => {
   try {

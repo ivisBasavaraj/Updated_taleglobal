@@ -29,6 +29,27 @@ function ForgotPassword() {
       return;
     }
 
+    // Check if email is registered
+    try {
+      const response = await fetch('http://localhost:5000/api/candidate/check-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      
+      const result = await response.json();
+      
+      if (!result.exists) {
+        setMessage('This email is not registered. Please use a registered email address.');
+        setLoading(false);
+        return;
+      }
+    } catch (error) {
+      setMessage('Unable to verify email. Please try again.');
+      setLoading(false);
+      return;
+    }
+
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedOTP(otpCode);
 
