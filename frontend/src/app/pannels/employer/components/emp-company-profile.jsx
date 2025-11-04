@@ -1175,18 +1175,7 @@ function EmpCompanyProfilePage() {
 
                     <div className="panel-body wt-panel-body p-a20 m-b30">
                         <div className="row">
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label><Hash size={16} className="me-2" /> Legal Entity Code (if any)</label>
-                                    <input
-                                        className="form-control"
-                                        type="text"
-                                        value={formData.legalEntityCode}
-                                        onChange={(e) => handleInputChange('legalEntityCode', e.target.value)}
-                                        placeholder="Enter legal entity code"
-                                    />
-                                </div>
-                            </div>
+
 
                             <div className="col-md-6">
                                 <div className="form-group">

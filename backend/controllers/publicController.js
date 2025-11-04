@@ -70,14 +70,14 @@ exports.getJobs = async (req, res) => {
     };
     const sortCriteria = sortMap[sortBy] || { createdAt: -1 };
 
-    // Simplified query for better performance
+    // Optimized query for better performance
     const jobs = await Job.find(query)
       .populate({
         path: 'employerId',
         select: 'companyName employerType',
         match: { status: 'active', isApproved: true }
       })
-      .select('title location jobType vacancies category ctc description requiredSkills createdAt employerId')
+      .select('title location jobType vacancies category ctc createdAt employerId companyName companyLogo')
       .sort(sortCriteria)
       .limit(parseInt(limit))
       .skip((parseInt(page) - 1) * parseInt(limit))
@@ -86,20 +86,25 @@ exports.getJobs = async (req, res) => {
     const totalJobs = await Job.countDocuments(query);
     const filteredJobs = jobs.filter(job => job.employerId);
 
-    // Add employer profiles in parallel
+    // Optimize employer profile fetching with batch query
     const EmployerProfile = require('../models/EmployerProfile');
-    const jobsWithProfiles = await Promise.all(
-      filteredJobs.map(async (job) => {
-        const profile = await EmployerProfile.findOne({ employerId: job.employerId._id })
-          .select('logo companyName')
-          .lean();
-        return {
-          ...job,
-          employerProfile: profile,
-          postedBy: job.employerId.employerType === 'consultant' ? 'Consultant' : 'Company'
-        };
-      })
-    );
+    const employerIds = filteredJobs.map(job => job.employerId._id);
+    const profiles = await EmployerProfile.find({ employerId: { $in: employerIds } })
+      .select('employerId logo companyName')
+      .lean();
+    
+    // Create profile lookup map
+    const profileMap = new Map();
+    profiles.forEach(profile => {
+      profileMap.set(profile.employerId.toString(), profile);
+    });
+    
+    // Add profiles to jobs
+    const jobsWithProfiles = filteredJobs.map(job => ({
+      ...job,
+      employerProfile: profileMap.get(job.employerId._id.toString()),
+      postedBy: job.employerId.employerType === 'consultant' ? 'Consultant' : 'Company'
+    }));
     
     const response = {
       success: true,
@@ -112,8 +117,8 @@ exports.getJobs = async (req, res) => {
       hasPrevPage: parseInt(page) > 1
     };
     
-    // Cache for 3 minutes for faster updates
-    cache.set(cacheKey, response, 180000);
+    // Cache for 30 seconds for faster updates
+    cache.set(cacheKey, response, 30000);
     
     res.json(response);
   } catch (error) {
@@ -182,7 +187,7 @@ exports.getJobById = async (req, res) => {
     };
 
     const response = { success: true, job: jobWithProfile };
-    cache.set(cacheKey, response, 600000); // Cache for 10 minutes
+    cache.set(cacheKey, response, 60000); // Cache for 1 minute
     
     res.json(response);
   } catch (error) {
@@ -482,7 +487,7 @@ exports.getEmployers = async (req, res) => {
       hasPrevPage: parseInt(page) > 1
     };
     
-    cache.set(cacheKey, response, 180000);
+    cache.set(cacheKey, response, 30000);
     res.json(response);
   } catch (error) {
     console.error('Error in getEmployers:', error);

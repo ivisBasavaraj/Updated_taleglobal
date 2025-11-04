@@ -34,7 +34,7 @@ class RequestCache {
         this.cache.set(cacheKey, {
           data: this.compressData(data),
           timestamp: Date.now(),
-          ttl: options.ttl || 180000, // 3 minutes default
+          ttl: options.ttl || 30000, // 30 seconds default
           size: JSON.stringify(data).length
         });
         

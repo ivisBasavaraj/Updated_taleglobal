@@ -2916,6 +2916,18 @@ a.btn.active {
 }
 
 /* ============================================================================
+ * EMPLOYER DASHBOARD BACKGROUND OVERRIDE
+ * ============================================================================ */
+
+/* Force employer dashboard background color */
+.emp-dashboard,
+.emp-dashboard .twm-right-section-panel,
+.content-admin-main,
+#content {
+  background: #f7f7f7 !important;
+}
+
+/* ============================================================================
  * END OF CONSOLIDATED MASTER STYLES
  * ============================================================================
  */

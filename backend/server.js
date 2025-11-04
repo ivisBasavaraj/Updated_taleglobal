@@ -16,6 +16,7 @@ const employerRoutes = require('./routes/employer');
 const adminRoutes = require('./routes/admin');
 const placementRoutes = require('./routes/placement');
 const holidaysRoutes = require('./routes/holidays');
+const cacheRoutes = require('./routes/cache');
 
 const app = express();
 
@@ -81,6 +82,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/placement', placementRoutes);
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api', holidaysRoutes);
+app.use('/api/cache', cacheRoutes);
 
 // Health Check Route
 app.get('/health', (req, res) => {

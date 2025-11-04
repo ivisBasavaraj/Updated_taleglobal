@@ -8,6 +8,7 @@ import SectionShareProfile from "../../sections/common/section-share-profile";
 import SectionJobsSidebar2 from "../../sections/jobs/sidebar/section-jobs-sidebar2";
 import "./job-detail.css";
 import "../../../../../performance-optimizations.css";
+import "../../../../../sidebar-fix.css";
 
 function JobDetail1Page() {
     const { id, param1 } = useParams();
@@ -428,13 +429,7 @@ function JobDetail1Page() {
 				</div>
 				<ApplyJobPopup />
 				
-				{/* Floating Apply Button */}
-				{!hasApplied && !isEnded && (
-					<div className="floating-apply-btn" onClick={handleApplyClick}>
-						<i className="feather-send"></i>
-						<span>Quick Apply</span>
-					</div>
-				)}
+
 
 
 			</>

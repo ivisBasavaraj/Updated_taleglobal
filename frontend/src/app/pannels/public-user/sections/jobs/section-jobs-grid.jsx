@@ -69,7 +69,7 @@ const SectionJobsGrid = memo(({ filters, onTotalChange }) => {
 
                 const url = `http://localhost:5000/api/public/jobs?${params.toString()}`;
                 const data = await requestCache.get(url, {
-                    ttl: 180000, // 3 minutes cache for faster updates
+                    ttl: 30000, // 30 seconds cache for faster updates
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'

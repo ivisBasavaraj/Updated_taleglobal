@@ -114,19 +114,37 @@ function EmpDashboardPage() {
                 width: '100%',
                 margin: 0,
                 padding: 0,
-                background: '#f8fafc',
+                background: '#f7f7f7',
                 minHeight: '100vh'
             }}>
                 {/* Header */}
                 <div className="wt-admin-right-page-header clearfix" style={{ background: 'white', borderBottom: '1px solid #e5e7eb', padding: '2rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <div>
-                            <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Welcome back, {employer.companyName}</h2>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                                <MapPin size={16} style={{ color: '#f97316' }} />
-                                <span style={{ color: '#f97316', fontSize: '0.875rem', fontWeight: '500' }}>Bangalore</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            <div style={{
+                                width: '60px',
+                                height: '60px',
+                                borderRadius: '50%',
+                                background: employer.logo ? `url(${employer.logo})` : '#f97316',
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'white',
+                                fontSize: '1.5rem',
+                                fontWeight: 'bold'
+                            }}>
+                                {!employer.logo && (employer.companyName ? employer.companyName.charAt(0).toUpperCase() : 'C')}
                             </div>
-                            <p style={{ color: '#6b7280', margin: 0 }}>Here's an overview of your job postings and applications</p>
+                            <div>
+                                <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Welcome, {employer.companyName}</h2>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                                    <MapPin size={16} style={{ color: '#f97316' }} />
+                                    <span style={{ color: '#f97316', fontSize: '0.875rem', fontWeight: '500' }}>Bangalore</span>
+                                </div>
+                                <p style={{ color: '#6b7280', margin: 0 }}>Here's an overview of your job postings and applications</p>
+                            </div>
                         </div>
 
                     </div>
@@ -191,9 +209,9 @@ function EmpDashboardPage() {
                     </div>
 
                     {/* Profile Completion and Recent Activity */}
-                    <div className="row" style={{ margin: '0' }}>
+                    <div className="row" style={{ margin: '0', marginTop: '-1rem' }}>
                         {/* Profile Completion Section */}
-                        <div className="col-xl-8 col-lg-8 col-md-12 mb-4">
+                        <div className="col-xl-8 col-lg-8 col-md-12 mb-2">
                             <div style={{
                                 background: 'white',
                                 borderRadius: '0.75rem',
@@ -315,11 +333,13 @@ function EmpDashboardPage() {
                                 borderRadius: '0.75rem',
                                 border: '1px solid #e5e7eb',
                                 padding: isMobile ? '1rem' : '1.5rem',
-                                height: '100%'
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column'
                             }}>
                                 <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#111827', marginBottom: '1rem' }}>Notifications</h3>
                                 
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: '1' }}>
                                     {notifications.length > 0 ? notifications.slice(0, 5).map((notification, index) => (
                                         <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: notification.isRead ? '#f9fafb' : '#fef3c7', borderRadius: '0.5rem' }}>
                                             <div style={{ width: '2rem', height: '2rem', background: (notification.type === 'profile_approved' || notification.title?.includes('Approved')) ? '#dcfce7' : '#fecaca', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -342,7 +362,7 @@ function EmpDashboardPage() {
                                     onClick={() => window.location.href = '/employer/manage-jobs'}
                                     style={{
                                         width: '100%',
-                                        marginTop: '1rem',
+                                        marginTop: 'auto',
                                         padding: '0.5rem',
                                         background: 'transparent',
                                         color: '#f97316',

@@ -14,7 +14,7 @@
     width: calc(100% - 280px) !important;
     min-height: 100vh;
     transition: margin-left 0.3s ease, width 0.3s ease;
-    background: #f8fafc;
+    background: #f7f7f7;
     padding-top: 90px;
   }
 
@@ -78,7 +78,7 @@
   #content {
     margin-left: 0 !important;
     min-height: 100vh;
-    background: #f8fafc;
+    background: #f7f7f7;
     padding-top: 90px;
   }
 
@@ -117,7 +117,7 @@
   width: 100%;
   min-height: 100vh;
   padding: 0;
-  background: #f8fafc;
+  background: #f7f7f7;
 }
 
 /* Dashboard panel fixes */
@@ -125,7 +125,7 @@
   width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
-  background: #f8fafc !important;
+  background: #f7f7f7 !important;
   min-height: 100vh !important;
 }
 

@@ -4,7 +4,7 @@ const router = express.Router();
 const placementController = require('../controllers/placementController');
 const handleValidationErrors = require('../middlewares/validation');
 const { upload } = require('../middlewares/upload');
-const auth = require('../middlewares/auth');
+const { auth } = require('../middlewares/auth');
 
 // Registration route without file upload
 router.post('/register', [

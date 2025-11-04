@@ -6,6 +6,7 @@ const Application = require('../models/Application');
 const Message = require('../models/Message');
 const Subscription = require('../models/Subscription');
 const { sendWelcomeEmail } = require('../utils/emailService');
+const { cacheInvalidation } = require('../utils/cacheInvalidation');
 
 const generateToken = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
@@ -471,6 +472,9 @@ exports.createJob = async (req, res) => {
     const job = await Job.create(jobData);
     console.log('Job created:', JSON.stringify(job, null, 2));
 
+    // Clear job-related caches immediately
+    cacheInvalidation.clearJobCaches();
+
     // Create notification for all candidates when job is posted
     try {
       const { createNotification } = require('./notificationController');
@@ -562,6 +566,9 @@ exports.updateJob = async (req, res) => {
       { new: true }
     );
 
+    // Clear job-related caches immediately
+    cacheInvalidation.clearJobCaches();
+
     // Create notification if interview rounds are newly scheduled or updated
     if (hasScheduledRounds && !wasScheduled) {
       try {
@@ -611,6 +618,9 @@ exports.deleteJob = async (req, res) => {
     if (!job) {
       return res.status(404).json({ success: false, message: 'Job not found' });
     }
+
+    // Clear job-related caches immediately
+    cacheInvalidation.clearJobCaches();
 
     res.json({ success: true, message: 'Job deleted successfully' });
   } catch (error) {

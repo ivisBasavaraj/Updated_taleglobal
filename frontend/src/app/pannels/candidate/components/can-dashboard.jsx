@@ -42,9 +42,9 @@ function CanDashboardPage() {
   return (
     <>
       <div className="twm-right-section-panel site-bg-gray can-dashboard">
-        {/* Header */}
-        <div className="wt-admin-right-page-header clearfix" style={{ background: 'white', borderBottom: '1px solid #e5e7eb', padding: '2rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Welcome Card */}
+        <div style={{ padding: '2rem 2rem 0 2rem' }}>
+          <div style={{ background: 'white', borderRadius: '12px', padding: '2rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', marginBottom: '2rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               {candidate.profilePicture ? (
                 <img 
@@ -73,19 +73,19 @@ function CanDashboardPage() {
                 </div>
               )}
               <div>
-                <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Welcome back, {candidate.name}</h2>
+                <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Welcome, {candidate.name}</h2>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
                   <MapPin size={16} style={{ color: '#f97316' }} />
                   <span style={{ color: '#f97316', fontSize: '0.875rem', fontWeight: '500' }}>{candidate.location}</span>
                 </div>
-                <p style={{ color: '#6b7280', margin: 0 }}>Here's an overview of your job applications and profile</p>
+                <p style={{ color: '#6b7280', margin: 0 }}>Here&apos;s an overview of your job applications and profile</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div style={{ padding: '2rem' }}>
+        <div style={{ padding: '0 2rem 2rem 2rem' }}>
           <SectionCandidateOverview />
 
           {/* Profile Completion and Notifications */}

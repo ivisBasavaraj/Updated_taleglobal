@@ -100,7 +100,7 @@ function EmployerLayout() {
                         width: '100%',
                         minHeight: '100vh',
                         padding: '0',
-                        background: '#f8fafc'
+                        background: '#f7f7f7'
                     }}>
                         <EmployerRoutes />
                     </div>

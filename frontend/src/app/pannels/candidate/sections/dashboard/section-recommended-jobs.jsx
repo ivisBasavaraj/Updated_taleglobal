@@ -14,14 +14,19 @@ function SectionRecommendedJobs() {
 
     const fetchRecommendedJobs = async () => {
         try {
+            console.log('Fetching recommended jobs...');
             const response = await api.getRecommendedJobs();
+            console.log('Recommended jobs response:', response);
+            
             if (response.success) {
                 setJobs(response.jobs || []);
+                console.log('Set jobs:', response.jobs?.length || 0);
             } else {
-                setError('Failed to fetch recommended jobs');
+                console.error('API returned error:', response.message);
+                setError(response.message || 'Failed to fetch recommended jobs');
             }
         } catch (error) {
-            
+            console.error('Error fetching recommended jobs:', error);
             setError('Unable to load recommended jobs');
         } finally {
             setLoading(false);

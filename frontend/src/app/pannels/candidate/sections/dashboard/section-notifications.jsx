@@ -49,12 +49,12 @@ function SectionNotifications() {
 
 	return (
 		<div className="panel panel-default mb-4" data-aos="fade-up" style={{ borderRadius: '8px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', maxHeight: '400px' }}>
-			<div className="panel-heading" style={{ background: 'linear-gradient(135deg, #ff5a1f 0%, #ff8c42 100%)', color: 'black', borderRadius: '8px 8px 0 0', padding: '12px 16px' }}>
+			<div className="panel-heading" style={{ background: 'white', color: 'black', borderRadius: '8px 8px 0 0', padding: '12px 16px', border: '1px solid #e5e7eb', borderBottom: '1px solid #e5e7eb' }}>
 				<div className="d-flex align-items-center justify-content-between">
-					<h5 className="panel-title mb-0" style={{ fontSize: '14px', fontWeight: 'bold', color: 'black' }}>
-						<i className="feather-bell me-2" style={{ fontSize: '14px', color: 'black' }}></i><span style={{ color: '#000000', fontWeight: 'bold' }}>Notifications</span>
+					<h5 className="panel-title mb-0" style={{ fontSize: '14px', fontWeight: 'bold', color: '#374151' }}>
+						<i className="feather-bell me-2" style={{ fontSize: '14px', color: '#374151' }}></i><span style={{ color: '#374151', fontWeight: 'bold' }}>Notifications</span>
 					</h5>
-					<span className="badge" style={{ background: 'rgba(0,0,0,0.2)', color: 'black', fontSize: '10px', padding: '2px 6px', fontWeight: 'bold' }}>
+					<span className="badge" style={{ background: '#f3f4f6', color: '#374151', fontSize: '10px', padding: '2px 6px', fontWeight: 'bold', border: '1px solid #d1d5db' }}>
 						{notifications.length}
 					</span>
 				</div>
@@ -152,7 +152,7 @@ function SectionNotifications() {
 							);
 						})}
 						{notifications.length > 3 && (
-							<div className="text-center" style={{ padding: '8px 12px', borderTop: '1px solid #f1f5f9' }}>
+							<div style={{ padding: '8px 12px', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 								<button 
 									className="btn btn-sm" 
 									onClick={() => setShowAll(!showAll)}

@@ -526,54 +526,52 @@ export default function EmpPostJob({ onNext }) {
 		fontSize: 16,
 	};
 	const sectionHeader = {
-		margin: "32px 0 20px 0",
-		fontSize: 18,
-		color: "#1d1d1d",
-		fontWeight: 600,
-		paddingBottom: 12,
-		borderBottom: "2px solid #f3f4f6",
+		margin: "40px 0 24px 0",
+		fontSize: 20,
+		color: "#1f2937",
+		fontWeight: 700,
+		paddingBottom: 16,
 		display: "flex",
 		alignItems: "center",
-		gap: 10,
+		gap: 12,
+		letterSpacing: "-0.025em",
 	};
 
 	return (
 		<div style={page}>
-			{/* Fixed Back to Jobs Button */}
-			<NavLink to={empRoute(employer.MANAGE_JOBS)} style={{textDecoration: 'none'}}>
-				<button
-					style={{
-						position: 'fixed',
-						bottom: '20px',
-						left: isMobile ? '20px' : '300px',
-						zIndex: 1000,
-						background: "#374151",
-						color: "#ffffff",
-						border: "2px solid #9ca3af",
-						padding: "10px 20px",
-						borderRadius: 8,
-						cursor: "pointer",
-						fontSize: 14,
-						fontWeight: 600,
-						transition: "all 0.2s ease",
-						boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-						display: 'flex',
-						alignItems: 'center',
-						gap: 8,
-					}}
-					onMouseEnter={(e) => {
-						e.currentTarget.style.background = '#4b5563';
-						e.currentTarget.style.borderColor = '#6b7280';
-					}}
-					onMouseLeave={(e) => {
-						e.currentTarget.style.background = '#374151';
-						e.currentTarget.style.borderColor = '#9ca3af';
-					}}
-				>
-					<i className="fa fa-arrow-left"></i>
-					Back to Jobs
-				</button>
-			</NavLink>
+			{/* Back to Jobs Button */}
+			<div style={{marginBottom: 16}}>
+				<NavLink to={empRoute(employer.MANAGE_JOBS)} style={{textDecoration: 'none'}}>
+					<button
+						style={{
+							background: "#374151",
+							color: "#ffffff",
+							border: "2px solid #9ca3af",
+							padding: "10px 20px",
+							borderRadius: 8,
+							cursor: "pointer",
+							fontSize: 14,
+							fontWeight: 600,
+							transition: "all 0.2s ease",
+							boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+							display: 'flex',
+							alignItems: 'center',
+							gap: 8,
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.background = '#4b5563';
+							e.currentTarget.style.borderColor = '#6b7280';
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.background = '#374151';
+							e.currentTarget.style.borderColor = '#9ca3af';
+						}}
+					>
+						<i className="fa fa-arrow-left"></i>
+						Back to Jobs
+					</button>
+				</NavLink>
+			</div>
 
 			{/* Header */}
 			<div style={{marginBottom: 24}}>
@@ -972,9 +970,9 @@ export default function EmpPostJob({ onNext }) {
 						)}
 					</div>
 
-					{/* Experience & Rounds */}
+					{/* Experience Level */}
 					<div style={{
-						padding: 12,
+						padding: 20,
 						background: '#fff',
 						border: '2px solid #e5e7eb',
 						borderRadius: 12,
@@ -991,81 +989,76 @@ export default function EmpPostJob({ onNext }) {
 							Experience Level
 						</label>
 						<div style={{
-							display: 'flex',
-							flexDirection: isMobile ? 'column' : 'row',
-							gap: isMobile ? 8 : 12,
-							marginBottom: 8,
-							flexWrap: 'wrap'
+							display: 'grid',
+							gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+							gap: 16,
+							marginBottom: 16
 						}}>
-							<label style={{
-								display: 'flex',
-								alignItems: 'center',
-								gap: 8,
-								padding: 12,
-								border: formData.experienceLevel === "freshers" ? '2px solid #ff6b35' : '2px solid #e5e7eb',
-								borderRadius: 8,
-								background: formData.experienceLevel === "freshers" ? '#fff5f2' : '#f9fafb',
-								cursor: 'pointer',
-								transition: 'all 0.2s ease',
-								fontWeight: 500,
-								flex: isMobile ? '1' : '0 0 auto',
-								minWidth: isMobile ? 'auto' : '120px'
-							}}>
-								<input
-									type="radio"
-									name="experience"
-									checked={formData.experienceLevel === "freshers"}
-									onChange={() => update({ experienceLevel: "freshers", minExperience: "" })}
-									style={{cursor: 'pointer'}}
-								/>
-								Fresher
-							</label>
+							<div 
+								style={{
+									padding: 16,
+									border: formData.experienceLevel === "freshers" ? '3px solid #ff6b35' : '2px solid #d1d5db',
+									borderRadius: 12,
+									background: formData.experienceLevel === "freshers" ? '#fff5f2' : '#ffffff',
+									cursor: 'pointer',
+									transition: 'all 0.2s ease',
+									boxShadow: formData.experienceLevel === "freshers" ? '0 4px 12px rgba(255,107,53,0.2)' : '0 2px 4px rgba(0,0,0,0.1)',
+									textAlign: 'center'
+								}}
+								onClick={() => update({ experienceLevel: "freshers", minExperience: "" })}
+							>
 
-							<label style={{
-								display: 'flex',
-								alignItems: 'center',
-								gap: 8,
-								padding: 12,
-								border: formData.experienceLevel === "minimum" ? '2px solid #ff6b35' : '2px solid #e5e7eb',
-								borderRadius: 8,
-								background: formData.experienceLevel === "minimum" ? '#fff5f2' : '#f9fafb',
-								cursor: 'pointer',
-								transition: 'all 0.2s ease',
-								fontWeight: 500,
-								flex: isMobile ? '1' : '0 0 auto',
-								minWidth: isMobile ? 'auto' : '120px'
-							}}>
-								<input
-									type="radio"
-									name="experience"
-									checked={formData.experienceLevel === "minimum"}
-									onChange={() => update({ experienceLevel: "minimum" })}
-									style={{cursor: 'pointer'}}
-								/>
-								Experienced
-							</label>
+								<h4 style={{
+									margin: 0,
+									fontSize: 16,
+									fontWeight: 600,
+									color: formData.experienceLevel === "freshers" ? '#1f2937' : '#6b7280'
+								}}>Fresher</h4>
+							</div>
 
-							<label style={{
-								display: 'flex',
-								alignItems: 'center',
-								gap: 8,
-								padding: 12,
-								border: formData.experienceLevel === "both" ? '2px solid #ff6b35' : '2px solid #e5e7eb',
-								borderRadius: 8,
-								background: formData.experienceLevel === "both" ? '#fff5f2' : '#f9fafb',
-								cursor: 'pointer',
-								transition: 'all 0.2s ease',
-								fontWeight: 500
-							}}>
-								<input
-									type="radio"
-									name="both"
-									checked={formData.experienceLevel === "both"}
-									onChange={() => update({ experienceLevel: "both", minExperience: "" })}
-									style={{cursor: 'pointer'}}
-								/>
-								Both
-							</label>
+							<div 
+								style={{
+									padding: 16,
+									border: formData.experienceLevel === "minimum" ? '3px solid #ff6b35' : '2px solid #d1d5db',
+									borderRadius: 12,
+									background: formData.experienceLevel === "minimum" ? '#fff5f2' : '#ffffff',
+									cursor: 'pointer',
+									transition: 'all 0.2s ease',
+									boxShadow: formData.experienceLevel === "minimum" ? '0 4px 12px rgba(255,107,53,0.2)' : '0 2px 4px rgba(0,0,0,0.1)',
+									textAlign: 'center'
+								}}
+								onClick={() => update({ experienceLevel: "minimum" })}
+							>
+
+								<h4 style={{
+									margin: 0,
+									fontSize: 16,
+									fontWeight: 600,
+									color: formData.experienceLevel === "minimum" ? '#1f2937' : '#6b7280'
+								}}>Experienced</h4>
+							</div>
+
+							<div 
+								style={{
+									padding: 16,
+									border: formData.experienceLevel === "both" ? '3px solid #ff6b35' : '2px solid #d1d5db',
+									borderRadius: 12,
+									background: formData.experienceLevel === "both" ? '#fff5f2' : '#ffffff',
+									cursor: 'pointer',
+									transition: 'all 0.2s ease',
+									boxShadow: formData.experienceLevel === "both" ? '0 4px 12px rgba(255,107,53,0.2)' : '0 2px 4px rgba(0,0,0,0.1)',
+									textAlign: 'center'
+								}}
+								onClick={() => update({ experienceLevel: "both", minExperience: "" })}
+							>
+
+								<h4 style={{
+									margin: 0,
+									fontSize: 16,
+									fontWeight: 600,
+									color: formData.experienceLevel === "both" ? '#1f2937' : '#6b7280'
+								}}>Both</h4>
+							</div>
 						</div>
 
 						{formData.experienceLevel === "minimum" && (
@@ -1148,9 +1141,7 @@ export default function EmpPostJob({ onNext }) {
 								gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
 								gap: isMobile ? 8 : 12,
 								padding: 16,
-								background: '#f9fafb',
 								borderRadius: 8,
-								border: '1px solid #e5e7eb',
 							}}
 						>
 							<label style={{ 
@@ -1468,9 +1459,6 @@ export default function EmpPostJob({ onNext }) {
 							flexDirection: "column",
 							gap: 10,
 							padding: 12,
-							background: '#f9fafb',
-							borderRadius: 8,
-							border: '1px solid #e5e7eb',
 						}}>
 							<label style={{ 
 								display: "flex", 

@@ -2,7 +2,7 @@ const express = require('express');
 const { body } = require('express-validator');
 const router = express.Router();
 const candidateController = require('../controllers/candidateController');
-const auth = require('../middlewares/auth');
+const { auth } = require('../middlewares/auth');
 const { upload } = require('../middlewares/upload');
 const handleValidationErrors = require('../middlewares/validation');
 

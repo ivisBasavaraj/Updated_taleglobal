@@ -1,7 +1,7 @@
 /* Employer Dashboard scoped styles */
 .emp-dashboard {
   /* page background */
-  background: #f8fafc; /* light slate */
+  background: #f7f7f7; /* light gray */
   min-height: 100vh !important;
   width: 100% !important;
 }
@@ -175,7 +175,7 @@
   width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
-  background: #f8fafc !important;
+  background: #f7f7f7 !important;
 }
 
 /* Responsive paddings */
@@ -277,6 +277,7 @@
 /* Fix profile completion card height */
 .emp-dashboard .col-xl-8 > div,
 .emp-dashboard .col-lg-8 > div {
-  min-height: 400px !important;
-  height: 400px !important;
+  min-height: 350px !important;
+  height: auto !important;
+  margin-bottom: 0.5rem !important;
 }

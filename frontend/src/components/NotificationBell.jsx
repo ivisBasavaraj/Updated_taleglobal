@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import './NotificationBell.css';
 
 const NotificationBell = ({ userRole }) => {
   const [notifications, setNotifications] = useState([]);
@@ -7,6 +8,7 @@ const NotificationBell = ({ userRole }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [animateBell, setAnimateBell] = useState(false);
   const [animateBadge, setAnimateBadge] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -16,6 +18,22 @@ const NotificationBell = ({ userRole }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     if (unreadCount > 0) {
@@ -95,7 +113,7 @@ const NotificationBell = ({ userRole }) => {
   };
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
+    <div ref={dropdownRef} style={{ position: 'relative', display: 'inline-block' }}>
       <div 
         onClick={() => userRole && setIsOpen(!isOpen)}
         style={{
@@ -129,7 +147,7 @@ const NotificationBell = ({ userRole }) => {
       </div>
 
       {userRole && isOpen && (
-        <div style={{
+        <div className="notification-dropdown" style={{
           position: isMobile ? 'fixed' : 'absolute',
           top: isMobile ? '60px' : '100%',
           right: isMobile ? '10px' : '0',
@@ -154,28 +172,51 @@ const NotificationBell = ({ userRole }) => {
             alignItems: 'center'
           }}>
             <h4 style={{ margin: 0, fontSize: '16px' }}>Notifications</h4>
-            {unreadCount > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {unreadCount > 0 && (
+                <button 
+                  onClick={markAllAsRead}
+                  className="mark-all-read-btn"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#007bff',
+                    cursor: 'pointer',
+                    fontSize: '12px'
+                  }}
+                >
+                  Mark all as read
+                </button>
+              )}
               <button 
-                onClick={markAllAsRead}
+                onClick={() => setIsOpen(false)}
+                className="notification-close-btn"
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#007bff',
+                  color: '#666',
                   cursor: 'pointer',
-                  fontSize: '12px'
+                  fontSize: '16px',
+                  padding: '4px',
+                  borderRadius: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
+                title="Close notifications"
               >
-                Mark all as read
+                ×
               </button>
-            )}
+            </div>
           </div>
           
-          <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+          <div className="notification-dropdown-content" style={{ maxHeight: '300px', overflowY: 'auto' }}>
             {notifications.length > 0 ? (
               notifications.map((notification) => (
                 <div
                   key={notification._id}
                   onClick={() => !notification.isRead && markAsRead(notification._id)}
+                  className="notification-item"
                   style={{
                     padding: '12px 16px',
                     borderBottom: '1px solid #f0f0f0',
