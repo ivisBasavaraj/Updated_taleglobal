@@ -793,9 +793,7 @@ html {
 .fa-trash,
 .fa-times,
 .fas.fa-trash,
-.fas.fa-times,
-.gallery-item .btn-danger,
-.gallery-item .btn-danger i {
+.fas.fa-times {
     color: #ff6b35 !important;
     background: none !important;
     background-color: transparent !important;
@@ -807,9 +805,7 @@ html {
 .btn-outline-danger:hover,
 .btn-danger:hover,
 .btn-outline-danger:hover i,
-.btn-danger:hover i,
-.gallery-item .btn-danger:hover,
-.gallery-item .btn-danger:hover i {
+.btn-danger:hover i {
     color: #fff !important;
     background-color: #ff6b35 !important;
     border: none !important;

@@ -69,6 +69,12 @@
     border: 1px solid rgba(255, 156, 0, 0.1);
 }
 
+/* Remove background from job details grid */
+.job-details-grid {
+    background: transparent !important;
+    border-radius: 0 !important;
+}
+
 .twm-job-self-wrap:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
@@ -318,13 +324,14 @@
 
 /* Consultant info styling */
 .consultant-info {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    border: 1px solid #dee2e6;
+    background: linear-gradient(135deg, #ff9c00, #ff8c00);
+    border: 1px solid #ff7a00;
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 24px;
     animation: scaleIn 0.6s ease-out 0.5s both;
     transition: all 0.3s ease;
+    color: white;
 }
 
 .consultant-info:hover {
@@ -333,25 +340,25 @@
 }
 
 .consultant-info h5 {
-    color: #2c3e50;
+    color: white;
     font-weight: 700;
     margin-bottom: 12px;
 }
 
 .consultant-info p {
-    color: #6c757d;
+    color: rgba(255, 255, 255, 0.9);
     line-height: 1.6;
     margin-bottom: 8px;
 }
 
 .consultant-info a {
-    color: #ff9c00;
-    text-decoration: none;
+    color: white;
+    text-decoration: underline;
     transition: color 0.3s ease;
 }
 
 .consultant-info a:hover {
-    color: #ff8c00;
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: underline;
 }
 
@@ -725,4 +732,48 @@ a.site-text-primary:hover {
         box-shadow: none;
         border: 1px solid #ddd;
     }
+}
+
+/* HIGHEST PRIORITY OVERRIDE FOR CONSULTANT INFO */
+html body .cabdidate-de-info .consultant-info,
+html body div.consultant-info,
+html body .consultant-info {
+    background: #ff9c00 !important;
+    background-color: #ff9c00 !important;
+    background-image: linear-gradient(135deg, #ff9c00, #ff8c00) !important;
+    border: 1px solid #ff7a00 !important;
+    color: white !important;
+}
+
+html body .consultant-info h5,
+html body .consultant-info p,
+html body .consultant-info strong {
+    color: white !important;
+}
+
+html body .consultant-info a {
+    color: white !important;
+    text-decoration: underline !important;
+}
+/* FORCE ORANGE BACKGROUND - OVERRIDE ALL BLUE GRADIENTS */
+div[style*="padding: 20px"],
+div[style*="marginBottom: 20px"],
+.cabdidate-de-info > div:nth-child(n) {
+    background: #ff9c00 !important;
+    background-color: #ff9c00 !important;
+    background-image: linear-gradient(135deg, #ff9c00, #ff8c00) !important;
+}
+
+/* Target the specific div that has the blue gradient */
+div[style*="linear-gradient(135deg, rgb(102, 126, 234)"] {
+    background: #ff9c00 !important;
+    background-color: #ff9c00 !important;
+    background-image: linear-gradient(135deg, #ff9c00, #ff8c00) !important;
+}
+.force-orange-bg {
+    background: #ff9c00 !important;
+    background-color: #ff9c00 !important;
+    background-image: linear-gradient(135deg, #ff9c00, #ff8c00) !important;
+    border: 1px solid #ff7a00 !important;
+    color: white !important;
 }

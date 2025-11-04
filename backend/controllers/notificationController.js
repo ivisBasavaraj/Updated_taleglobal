@@ -171,6 +171,21 @@ exports.createProfileCompletionNotification = async (candidateId, completionPerc
   }
 };
 
+// Dismiss notification
+exports.dismissNotification = async (req, res) => {
+  try {
+    const notification = await Notification.findByIdAndDelete(req.params.id);
+    
+    if (!notification) {
+      return res.status(404).json({ success: false, message: 'Notification not found' });
+    }
+    
+    res.json({ success: true, message: 'Notification dismissed' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // Test notification creation
 exports.testNotification = async (req, res) => {
   try {

@@ -41,10 +41,29 @@ function SectionNotifications() {
 		}
 	};
 
-	const closeNotification = (notificationId) => {
-		// Remove the notification from the local state
-		setNotifications(prev => prev.filter(n => n._id !== notificationId));
-		setUnreadCount(prev => Math.max(0, prev - 1));
+	const closeNotification = async (notificationId) => {
+		try {
+			const token = localStorage.getItem('candidateToken');
+			if (!token) return;
+
+			// Call API to dismiss notification on backend
+			await fetch(`http://localhost:5000/api/notifications/${notificationId}/dismiss`, {
+				method: 'PUT',
+				headers: { 
+					'Authorization': `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				}
+			});
+
+			// Remove the notification from the local state
+			setNotifications(prev => prev.filter(n => n._id !== notificationId));
+			setUnreadCount(prev => Math.max(0, prev - 1));
+		} catch (error) {
+			console.error('Error dismissing notification:', error);
+			// Still remove from local state even if API call fails
+			setNotifications(prev => prev.filter(n => n._id !== notificationId));
+			setUnreadCount(prev => Math.max(0, prev - 1));
+		}
 	};
 
 	return (

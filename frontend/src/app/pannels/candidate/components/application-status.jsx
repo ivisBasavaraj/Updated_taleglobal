@@ -353,7 +353,7 @@ function CanStatusPage() {
 															</span>
 														</td>
 														<td className="px-4 py-3">
-															<div className="d-flex flex-wrap gap-2">
+															<div className="interview-progress-wrapper">
 																{interviewRounds.length > 0 ? (
 																	interviewRounds.map((round, roundIndex) => {
 																		const roundStatus = getRoundStatus(app, roundIndex);
@@ -368,40 +368,11 @@ function CanStatusPage() {
 																		const roundKey = roundTypeMap[round];
 																		const roundDetails = app.jobId?.interviewRoundDetails?.[roundKey];
 																		return (
-																			<div key={roundIndex} className="mb-2" style={{minWidth: '160px'}}>
-																				<div className="card border-0 shadow-sm" style={{fontSize: '11px'}}>
-																					<div className="card-body p-2">
-																						<div className="text-muted fw-medium mb-1">{round}</div>
-																						<span className={`badge ${roundStatus.class}`} style={{fontSize: '10px', padding: '4px 8px'}}>
-																							{roundStatus?.text || 'Pending'}
-																						</span>
-																						{/* Show interview dates and time */}
-																						{roundDetails && (
-																							<div className="mt-1" style={{fontSize: '9px', lineHeight: '1.2'}}>
-																								{roundDetails.fromDate && (
-																									<div className="text-primary">
-																										<i className="fa fa-calendar me-1"></i>
-																										{new Date(roundDetails.fromDate).toLocaleDateString()}
-																										{roundDetails.toDate && roundDetails.fromDate !== roundDetails.toDate && (
-																											<span> - {new Date(roundDetails.toDate).toLocaleDateString()}</span>
-																										)}
-																									</div>
-																								)}
-																								{roundDetails.time && (
-																									<div className="text-success">
-																										<i className="fa fa-clock me-1"></i>
-																										{roundDetails.time}
-																									</div>
-																								)}
-																							</div>
-																						)}
-																						{roundStatus.feedback && (
-																							<div className="text-muted mt-1" style={{fontSize: '9px', lineHeight: '1.2'}}>
-																								{roundStatus.feedback}
-																							</div>
-																						)}
-																					</div>
-																				</div>
+																			<div key={roundIndex} className="interview-round-item">
+																				<div className="round-name">{round}</div>
+																				<span className={`badge ${roundStatus.class}`}>
+																					{roundStatus?.text || 'Pending'}
+																				</span>
 																			</div>
 																		);
 																	})
@@ -422,7 +393,7 @@ function CanStatusPage() {
 															</span>
 														</td>
 														<td className="px-4 py-3">
-															<div className="d-flex flex-wrap gap-1">
+															<div className="view-details-wrapper">
 																{interviewRounds.length > 0 ? (
 																	interviewRounds.map((round, roundIndex) => {
 																		const roundTypeMap = {
@@ -437,8 +408,8 @@ function CanStatusPage() {
 																		return (
 																			<button
 																				key={roundIndex}
-																				className="btn btn-sm btn-outline-primary"
-																				style={{fontSize: '10px', padding: '2px 6px', margin: '1px', backgroundColor: 'transparent'}}
+																				className="btn btn-sm btn-outline-primary view-details-btn"
+																				style={{fontSize: '10px', padding: '2px 6px', margin: '1px', backgroundColor: 'transparent', whiteSpace: 'nowrap'}}
 																				onClick={() => handleViewRoundDetails(roundKey, roundDetails)}
 																				title={`View ${round} details`}
 																			>

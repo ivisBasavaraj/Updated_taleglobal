@@ -113,6 +113,20 @@ function JobDetail1Page() {
             fetchJobDetails();
         }
         
+        // Force orange background on consultant info
+        const forceOrangeBackground = () => {
+            const consultantDivs = document.querySelectorAll('div[style*="padding: 20px"]');
+            consultantDivs.forEach(div => {
+                div.style.setProperty('background', '#ff9c00', 'important');
+                div.style.setProperty('background-color', '#ff9c00', 'important');
+                div.style.setProperty('background-image', 'linear-gradient(135deg, #ff9c00, #ff8c00)', 'important');
+                div.style.setProperty('color', 'white', 'important');
+            });
+        };
+        
+        setTimeout(forceOrangeBackground, 100);
+        setTimeout(forceOrangeBackground, 500);
+        
         let ticking = false;
         const throttledScroll = () => {
             if (!ticking) {
@@ -313,7 +327,7 @@ function JobDetail1Page() {
 										{job.postedBy === 'Consultant' && job.employerProfile && (
 											<>
 												<h4 className="twm-s-title">About Consultant:</h4>
-												<div className="consultant-info" style={{background: '#f8f9fa', padding: '20px', borderRadius: '8px', marginBottom: '20px'}}>
+												<div style={{padding: '20px', marginBottom: '20px', background: '#ff9c00 !important', backgroundColor: '#ff9c00 !important', backgroundImage: 'linear-gradient(135deg, #ff9c00, #ff8c00) !important', border: '1px solid #ff7a00', borderRadius: '12px', color: 'white'}} className="force-orange-bg">
 													<div className="row">
 														<div className="col-md-3">
 															{job.employerProfile.logo && (
@@ -344,7 +358,7 @@ function JobDetail1Page() {
 
 
 										
-										<div className="job-details-grid" style={{background: '#f8f9fa', padding: '24px', borderRadius: '12px', marginBottom: '24px'}}>
+										<div className="job-details-grid">
 											<div className="row">
 												<div className="col-md-6">
 													<div className="detail-item" style={{marginBottom: '15px'}}>

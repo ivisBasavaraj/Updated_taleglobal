@@ -311,28 +311,28 @@ function EmpCandidateReviewPage () {
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
 											<Mail size={16} style={{ color: "#f97316" }} />
-											<strong>Email</strong>
+											<strong>Email:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.email}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
 											<Phone size={16} style={{ color: "#f97316" }} />
-											<strong>Mobile</strong>
+											<strong>Mobile:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.phone || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
 											<Calendar size={16} style={{ color: "#f97316" }} />
-											<strong>Date of Birth</strong>
+											<strong>Date of Birth:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.dateOfBirth ? formatDate(candidate.dateOfBirth) : 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
 											<User size={16} style={{ color: "#f97316" }} />
-											<strong>Gender</strong>
+											<strong>Gender:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.gender || 'Not provided'}</p>
 									</div>
@@ -342,14 +342,14 @@ function EmpCandidateReviewPage () {
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
 											<User size={16} style={{ color: "#f97316" }} />
-											<strong>Father's/Husband's Name</strong>
+											<strong>Father's/Husband's Name:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.fatherName || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
 											<User size={16} style={{ color: "#f97316" }} />
-											<strong>Mother's Name</strong>
+											<strong>Mother's Name:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.motherName || 'Not provided'}</p>
 									</div>
@@ -358,21 +358,21 @@ function EmpCandidateReviewPage () {
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
 											<MapPin size={16} style={{ color: "#f97316" }} />
-											<strong>Residential Address</strong>
+											<strong>Residential Address:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.residentialAddress || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
 											<MapPin size={16} style={{ color: "#f97316" }} />
-											<strong>Permanent Address</strong>
+											<strong>Permanent Address:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.permanentAddress || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
 											<MapPin size={16} style={{ color: "#f97316" }} />
-											<strong>Correspondence Address</strong>
+											<strong>Correspondence Address:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.correspondenceAddress || 'Not provided'}</p>
 									</div>
@@ -550,10 +550,10 @@ function EmpCandidateReviewPage () {
 							</div>
 
 							<div className="d-grid gap-2">
-								<button className="btn btn-success" onClick={saveReview}>
+								<button className="btn btn-secondary" onClick={saveReview}>
 									<Save size={16} className="me-1" />Save Review
 								</button>
-								<button className="btn btn-primary" onClick={shortlistCandidate}>
+								<button className="btn btn-secondary" onClick={shortlistCandidate}>
 									<Check size={16} className="me-1" />Shortlist
 								</button>
 								<button className="btn btn-danger" onClick={rejectCandidate}>

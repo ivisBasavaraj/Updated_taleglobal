@@ -330,3 +330,16 @@ html, body {
     font-size: 0.875rem !important;
   }
 }
+
+/* Skills badges styling - Light orange with black text */
+.badge.bg-secondary {
+  background-color: #FF9C0020 !important;
+  color: #000 !important;
+  border: 1px solid #FF9C0040 !important;
+}
+
+.emp-candidate-review .badge.bg-secondary {
+  background-color: #FF9C0020 !important;
+  color: #000 !important;
+  border: 1px solid #FF9C0040 !important;
+}
