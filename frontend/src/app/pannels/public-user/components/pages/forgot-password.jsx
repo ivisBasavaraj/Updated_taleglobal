@@ -126,7 +126,15 @@ function ForgotPassword() {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+          <button type="submit" className="w-100" disabled={loading} style={{
+            backgroundColor: '#FFF3E5',
+            color: '#FF7A00',
+            border: '1px solid #FF7A00',
+            padding: '10px 20px',
+            borderRadius: '5px',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}>
             {loading ? 'Sending OTP...' : 'Send OTP'}
           </button>
         </form>
@@ -154,7 +162,15 @@ function ForgotPassword() {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+          <button type="submit" className="w-100" disabled={loading} style={{
+            backgroundColor: '#FFF3E5',
+            color: '#FF7A00',
+            border: '1px solid #FF7A00',
+            padding: '10px 20px',
+            borderRadius: '5px',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}>
             {loading ? 'Resetting Password...' : 'Reset Password'}
           </button>
         </form>

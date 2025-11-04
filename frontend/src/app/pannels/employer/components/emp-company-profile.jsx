@@ -206,22 +206,34 @@ function EmpCompanyProfilePage() {
                 }
                 break;
             case 'cin':
+                // Convert to uppercase
+                value = value.toUpperCase();
+                setFormData(prev => ({ ...prev, [field]: value }));
+                
                 if (value && !/^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/.test(value)) {
-                    newErrors[field] = 'Please enter a valid CIN (21 characters)';
+                    newErrors[field] = 'Invalid CIN format. Must be 21 characters (e.g., U12345AB1234ABC123456)';
                 } else {
                     delete newErrors[field];
                 }
                 break;
             case 'gstNumber':
+                // Convert to uppercase
+                value = value.toUpperCase();
+                setFormData(prev => ({ ...prev, [field]: value }));
+                
                 if (value && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(value)) {
-                    newErrors[field] = 'Please enter a valid GST number (15 characters)';
+                    newErrors[field] = 'Invalid GST format. Must be 15 characters (e.g., 12ABCDE1234F1Z5)';
                 } else {
                     delete newErrors[field];
                 }
                 break;
             case 'panNumber':
+                // Convert to uppercase
+                value = value.toUpperCase();
+                setFormData(prev => ({ ...prev, [field]: value }));
+                
                 if (value && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value)) {
-                    newErrors[field] = 'Please enter a valid PAN number (10 characters)';
+                    newErrors[field] = 'Invalid PAN format. Must be 10 characters (e.g., ABCDE1234F)';
                 } else {
                     delete newErrors[field];
                 }
@@ -281,15 +293,15 @@ function EmpCompanyProfilePage() {
         }
         
         if (formData.cin && !/^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/.test(formData.cin)) {
-            newErrors.cin = 'Please enter a valid CIN (21 characters)';
+            newErrors.cin = 'Invalid CIN format. Must be 21 characters (e.g., U12345AB1234ABC123456)';
         }
         
         if (formData.gstNumber && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(formData.gstNumber)) {
-            newErrors.gstNumber = 'Please enter a valid GST number (15 characters)';
+            newErrors.gstNumber = 'Invalid GST format. Must be 15 characters (e.g., 12ABCDE1234F1Z5)';
         }
         
         if (formData.panNumber && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(formData.panNumber)) {
-            newErrors.panNumber = 'Please enter a valid PAN number (10 characters)';
+            newErrors.panNumber = 'Invalid PAN format. Must be 10 characters (e.g., ABCDE1234F)';
         }
         
         // Primary Contact Validation

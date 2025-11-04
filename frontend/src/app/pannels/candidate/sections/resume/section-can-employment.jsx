@@ -1,6 +1,5 @@
 import { useEffect, useState, memo } from "react";
 import { api } from "../../../../../utils/api";
-import { showModal, hideModal, initializeModal } from "../../../../../utils/modalUtils";
 
 function SectionCanEmployment({ profile }) {
     const modalId = 'EmploymentModal';
@@ -25,14 +24,6 @@ function SectionCanEmployment({ profile }) {
             setTotalExperience(profile.totalExperience);
         }
     }, [profile]);
-
-    // Initialize modal on component mount
-    useEffect(() => {
-        const modalElement = document.getElementById(modalId);
-        if (modalElement) {
-            initializeModal(modalElement);
-        }
-    }, [modalId]);
 
 
 
@@ -137,7 +128,12 @@ function SectionCanEmployment({ profile }) {
                 setFormData({ designation: '', organization: '', isCurrent: false, startDate: '', endDate: '', description: '' });
                 setErrors({});
                 alert('Employment added successfully!');
-                hideModal(modalId);
+                if (window.$ && window.$.fn.modal) {
+                    window.$(`#${modalId}`).modal('hide');
+                    // Clean up backdrop
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach(bd => bd.remove());
+                }
             } else {
                 alert('Failed to save employment. Please try again.');
             }
@@ -155,7 +151,29 @@ function SectionCanEmployment({ profile }) {
                     type="button"
                     title="Edit"
                     className="btn btn-link site-text-primary p-0 border-0"
-                    onClick={() => showModal(modalId)}
+                    onClick={() => {
+                        if (window.$ && window.$.fn.modal) {
+                            // Add backdrop manually since modal-fix.js removes it
+                            const backdrop = document.createElement('div');
+                            backdrop.className = 'modal-backdrop show';
+                            backdrop.style.zIndex = '1040';
+                            document.body.appendChild(backdrop);
+
+                            // Show modal
+                            window.$(`#${modalId}`).modal({
+                                backdrop: false, // Don't let Bootstrap create another backdrop
+                                keyboard: true,
+                                focus: true,
+                                show: true
+                            });
+
+                            // Clean up backdrop when modal is hidden
+                            window.$(`#${modalId}`).on('hidden.bs.modal', function() {
+                                const backdrops = document.querySelectorAll('.modal-backdrop');
+                                backdrops.forEach(bd => bd.remove());
+                            });
+                        }
+                    }}
                 >
                     <span className="fa fa-edit" />
                 </button>

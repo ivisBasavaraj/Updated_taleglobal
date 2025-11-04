@@ -219,12 +219,7 @@ function EmpSupport() {
                             <h4 className="panel-tittle m-a0">Get Support</h4>
                         </div>
                         <div className="panel-body wt-panel-body p-a20 m-b30">
-                            {/* Debug info - remove in production */}
-                            {formData.name && (
-                                <div className="alert alert-info mb-3">
-                                    <small>Auto-filled: {formData.name} ({formData.email})</small>
-                                </div>
-                            )}
+
                             
                             <form onSubmit={handleSubmit}>
                                 {errors.submit && (

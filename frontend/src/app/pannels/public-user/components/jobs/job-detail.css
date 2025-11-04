@@ -182,9 +182,9 @@
 }
 
 .site-button {
-    background: linear-gradient(135deg, #87CEEB, #6BB6FF);
+    background: #FF7A0014 !important;
     border: none;
-    color: white;
+    color: black !important;
     padding: 14px 32px;
     border-radius: 8px;
     font-weight: 600;
@@ -192,7 +192,7 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 16px rgba(135, 206, 235, 0.3);
+    box-shadow: 0 4px 16px rgba(255, 122, 0, 0.1);
     position: relative;
     overflow: hidden;
 }
@@ -214,8 +214,9 @@
 
 .site-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(135, 206, 235, 0.4);
-    background: linear-gradient(135deg, #6BB6FF, #4A90E2);
+    box-shadow: 0 6px 20px rgba(255, 122, 0, 0.4);
+    background: #FF7A00 !important;
+    color: white !important;
 }
 
 .site-button.disabled {
@@ -572,13 +573,13 @@ a.site-text-primary:hover {
 /* Floating action buttons */
 .floating-apply-btn {
     position: fixed;
-    bottom: 30px;
+    bottom: 100px;
     right: 30px;
-    background: linear-gradient(135deg, #87CEEB, #6BB6FF);
+    background: linear-gradient(135deg, #ffb366, #ff9c00) !important;
     color: white;
     padding: 16px 24px;
     border-radius: 50px;
-    box-shadow: 0 8px 32px rgba(135, 206, 235, 0.4);
+    box-shadow: 0 8px 32px rgba(255, 156, 0, 0.4);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -592,12 +593,17 @@ a.site-text-primary:hover {
 
 .floating-apply-btn:hover {
     transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 12px 40px rgba(135, 206, 235, 0.5);
-    background: linear-gradient(135deg, #6BB6FF, #4A90E2);
+    box-shadow: 0 12px 40px rgba(255, 156, 0, 0.5);
+    background: linear-gradient(135deg, #ff9c00, #ff8c00) !important;
 }
 
 .floating-apply-btn i {
     font-size: 20px;
+    color: black !important;
+}
+
+.floating-apply-btn {
+    color: black !important;
 }
 
 .back-to-top {
@@ -606,14 +612,14 @@ a.site-text-primary:hover {
     right: 30px;
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #6c757d, #5a6268);
-    color: white;
+    background: linear-gradient(135deg, #ffb366, #ff9c00);
+    color: black;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(108, 117, 125, 0.3);
+    box-shadow: 0 4px 16px rgba(255, 156, 0, 0.3);
     transition: all 0.3s ease;
     z-index: 999;
     animation: slideInRight 0.6s ease-out 1.2s both;
@@ -621,12 +627,13 @@ a.site-text-primary:hover {
 
 .back-to-top:hover {
     transform: translateY(-2px);
-    background: linear-gradient(135deg, #5a6268, #495057);
-    box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+    background: linear-gradient(135deg, #ff9c00, #ff8c00);
+    box-shadow: 0 6px 20px rgba(255, 156, 0, 0.4);
 }
 
 .back-to-top i {
     font-size: 20px;
+    color: black !important;
 }
 
 @keyframes slideInRight {

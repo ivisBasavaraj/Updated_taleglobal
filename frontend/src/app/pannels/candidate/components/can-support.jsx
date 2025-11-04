@@ -162,8 +162,8 @@ function CanSupport() {
                                     <div className="success-icon mb-3">
                                         <i className="fa fa-check-circle" style={{fontSize: '4rem', color: '#28a745'}}></i>
                                     </div>
-                                    <h3 className="text-success">✓ Support Ticket Submitted!</h3>
                                     <p>Thank you for contacting our support team. We have received your ticket and will respond within 24 hours.</p>
+                                    <h3 className="text-success" style={{display: 'block', margin: '10px auto', textAlign: 'center'}}>✓ Support Ticket Submitted!</h3>
                                     <button 
                                         onClick={() => setIsSubmitted(false)} 
                                         className="mt-3"
@@ -174,7 +174,9 @@ function CanSupport() {
                                             padding: '10px 20px',
                                             borderRadius: '5px',
                                             fontWeight: '600',
-                                            cursor: 'pointer'
+                                            cursor: 'pointer',
+                                            display: 'block',
+                                            margin: '10px auto 0 auto'
                                         }}
                                         onMouseEnter={(e) => {
                                             e.target.style.backgroundColor = '#FFF3E5';
@@ -207,7 +209,7 @@ function CanSupport() {
                         <div className="panel-body wt-panel-body p-a20 m-b30">
                             <form onSubmit={handleSubmit}>
                                 {errors.submit && (
-                                    <div className="alert alert-danger mb-3">{errors.submit}</div>
+                                    <div className="alert alert-danger mb-3" style={{position: 'sticky', top: '10px', zIndex: '1000'}}>{errors.submit}</div>
                                 )}
                                 
                                 <div className="row">

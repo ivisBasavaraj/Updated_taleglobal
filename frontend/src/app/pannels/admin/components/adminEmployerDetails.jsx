@@ -216,7 +216,7 @@ function EmployerDetails() {
     return (
         <div className="employer-details-container">
             <div className="employer-details-header" data-aos="fade-down">
-                <h2>
+                <h2 style={{ color: 'white !important' }}>
                     <i className="fa fa-building me-3"></i>
                     Employer Profile Details
                 </h2>

@@ -200,7 +200,10 @@ export default function EmpPostedJobs() {
                                 <button type="button" className="site-button" disabled>
                                     Post Job
                                 </button>
-                                <p className="text-warning mt-2 mb-0">Account verification in progress</p>
+                                <div className="alert alert-warning mt-2 mb-0 d-flex align-items-center" style={{fontSize: '14px', padding: '8px 12px'}}>
+                                    <i className="fas fa-clock me-2" style={{color: '#856404'}}></i>
+                                    <strong>Account verification in progress</strong>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -262,7 +265,13 @@ export default function EmpPostedJobs() {
 									) : (
 										<div>
 											<button className="site-button" disabled>Post Your First Job</button>
-											<p className="text-warning mt-2">Your account verification is pending. Job posting will be available after admin approval.</p>
+											<div className="alert alert-warning mt-3 d-flex align-items-center" style={{maxWidth: '500px', margin: '16px auto'}}>
+												<i className="fas fa-exclamation-triangle me-2" style={{color: '#856404'}}></i>
+												<div>
+													<strong>Account verification pending</strong><br/>
+													<small>Job posting will be available after admin approval.</small>
+												</div>
+											</div>
 										</div>
 									)}
 								</div>
@@ -294,7 +303,7 @@ export default function EmpPostedJobs() {
 												<span className={`badge ${getStatusBadge(job.status)} text-capitalize`}>
 													{job.status}
 												</span>
-												<div className="btn-group" role="group">
+												<div className="d-flex gap-2">
 													<button
 														className="btn btn-outline-primary btn-sm"
 														onClick={() => navigate(`/employer/emp-job-review/${job._id}`)}
@@ -316,7 +325,6 @@ export default function EmpPostedJobs() {
 													>
 														{job.status === 'active' ? <Pause size={16} /> : <Play size={16} /> }
 													</button>
-
 												</div>
 											</div>
 										</div>

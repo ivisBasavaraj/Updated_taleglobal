@@ -539,6 +539,42 @@ export default function EmpPostJob({ onNext }) {
 
 	return (
 		<div style={page}>
+			{/* Fixed Back to Jobs Button */}
+			<NavLink to={empRoute(employer.MANAGE_JOBS)} style={{textDecoration: 'none'}}>
+				<button
+					style={{
+						position: 'fixed',
+						bottom: '20px',
+						left: isMobile ? '20px' : '300px',
+						zIndex: 1000,
+						background: "#374151",
+						color: "#ffffff",
+						border: "2px solid #9ca3af",
+						padding: "10px 20px",
+						borderRadius: 8,
+						cursor: "pointer",
+						fontSize: 14,
+						fontWeight: 600,
+						transition: "all 0.2s ease",
+						boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+						display: 'flex',
+						alignItems: 'center',
+						gap: 8,
+					}}
+					onMouseEnter={(e) => {
+						e.currentTarget.style.background = '#4b5563';
+						e.currentTarget.style.borderColor = '#6b7280';
+					}}
+					onMouseLeave={(e) => {
+						e.currentTarget.style.background = '#374151';
+						e.currentTarget.style.borderColor = '#9ca3af';
+					}}
+				>
+					<i className="fa fa-arrow-left"></i>
+					Back to Jobs
+				</button>
+			</NavLink>
+
 			{/* Header */}
 			<div style={{marginBottom: 24}}>
 				<h1 style={heading}>
@@ -938,7 +974,7 @@ export default function EmpPostJob({ onNext }) {
 
 					{/* Experience & Rounds */}
 					<div style={{
-						padding: 20,
+						padding: 12,
 						background: '#fff',
 						border: '2px solid #e5e7eb',
 						borderRadius: 12,
@@ -955,10 +991,11 @@ export default function EmpPostJob({ onNext }) {
 							Experience Level
 						</label>
 						<div style={{
-							display: 'grid',
-							gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+							display: 'flex',
+							flexDirection: isMobile ? 'column' : 'row',
 							gap: isMobile ? 8 : 12,
-							marginBottom: 16
+							marginBottom: 8,
+							flexWrap: 'wrap'
 						}}>
 							<label style={{
 								display: 'flex',
@@ -970,7 +1007,9 @@ export default function EmpPostJob({ onNext }) {
 								background: formData.experienceLevel === "freshers" ? '#fff5f2' : '#f9fafb',
 								cursor: 'pointer',
 								transition: 'all 0.2s ease',
-								fontWeight: 500
+								fontWeight: 500,
+								flex: isMobile ? '1' : '0 0 auto',
+								minWidth: isMobile ? 'auto' : '120px'
 							}}>
 								<input
 									type="radio"
@@ -992,7 +1031,9 @@ export default function EmpPostJob({ onNext }) {
 								background: formData.experienceLevel === "minimum" ? '#fff5f2' : '#f9fafb',
 								cursor: 'pointer',
 								transition: 'all 0.2s ease',
-								fontWeight: 500
+								fontWeight: 500,
+								flex: isMobile ? '1' : '0 0 auto',
+								minWidth: isMobile ? 'auto' : '120px'
 							}}>
 								<input
 									type="radio"
@@ -1508,66 +1549,40 @@ export default function EmpPostJob({ onNext }) {
 				<div style={{ 
 					display: "flex", 
 					flexDirection: isMobile ? "column" : "row",
-					justifyContent: "space-between", 
+					justifyContent: "flex-end", 
 					marginTop: isMobile ? 24 : 32,
 					paddingTop: isMobile ? 16 : 24,
 					borderTop: '2px solid #f3f4f6',
 					gap: 16,
 				}}>
-					<NavLink to={empRoute(employer.MANAGE_JOBS)} style={{textDecoration: 'none'}}>
-						<button
-							style={{
-								background: "#fff",
-								color: "#374151",
-								border: "2px solid #d1d5db",
-								padding: "12px 28px",
-								borderRadius: 8,
-								cursor: "pointer",
-								fontSize: 15,
-								fontWeight: 600,
-								transition: "all 0.2s ease",
-								display: 'flex',
-								alignItems: 'center',
-								gap: 8,
-							}}
-							onMouseEnter={(e) => {
-								e.currentTarget.style.background = '#f9fafb';
-								e.currentTarget.style.borderColor = '#9ca3af';
-							}}
-							onMouseLeave={(e) => {
-								e.currentTarget.style.background = '#fff';
-								e.currentTarget.style.borderColor = '#d1d5db';
-							}}
-						>
-							<i className="fa fa-arrow-left"></i>
-							Back to Jobs
-						</button>
-					</NavLink>
-					
 					<button
 						onClick={submitNext}
 						style={{
-							background: "linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%)",
-							color: "#fff",
-							border: "none",
+							background: "transparent",
+							color: "#ff6b35",
+							border: "2px solid #ff6b35",
 							padding: "12px 32px",
 							borderRadius: 8,
 							cursor: "pointer",
 							fontSize: 15,
 							fontWeight: 600,
 							transition: "all 0.2s ease",
-							boxShadow: "0 4px 12px rgba(255,107,53,0.3)",
+							boxShadow: "0 4px 12px rgba(255,107,53,0.1)",
 							display: 'flex',
 							alignItems: 'center',
 							gap: 8,
 						}}
 						onMouseEnter={(e) => {
+							e.currentTarget.style.background = '#ff6b35';
+							e.currentTarget.style.color = '#fff';
 							e.currentTarget.style.transform = 'translateY(-2px)';
 							e.currentTarget.style.boxShadow = '0 6px 16px rgba(255,107,53,0.4)';
 						}}
 						onMouseLeave={(e) => {
+							e.currentTarget.style.background = 'transparent';
+							e.currentTarget.style.color = '#ff6b35';
 							e.currentTarget.style.transform = 'translateY(0)';
-							e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,107,53,0.3)';
+							e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,107,53,0.1)';
 						}}
 					>
 						{isEditMode ? (

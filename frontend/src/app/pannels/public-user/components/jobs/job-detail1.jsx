@@ -270,9 +270,9 @@ function JobDetail1Page() {
 															</div>
 														)}
 
-														<div className="twm-job-self-bottom">
+														<div className="twm-job-self-bottom" style={{marginTop: '40px', paddingTop: '20px', textAlign: 'right', paddingRight: '20px'}}>
 															<button
-																className={`site-button ${(hasApplied || isEnded) ? 'disabled' : ''}`}
+																className={`btn btn-outline-primary ${(hasApplied || isEnded) ? 'disabled' : ''}`}
 																onClick={handleApplyClick}
 																disabled={hasApplied}
 															>
@@ -346,37 +346,37 @@ function JobDetail1Page() {
 										<div className="job-details-grid" style={{background: '#f8f9fa', padding: '24px', borderRadius: '12px', marginBottom: '24px'}}>
 											<div className="row">
 												<div className="col-md-6">
-													<div className="detail-item">
-														<h5><i className="feather-briefcase" style={{marginRight: '8px'}}></i>Job Type:</h5>
-														<p>{job.jobType}</p>
+													<div className="detail-item" style={{marginBottom: '15px'}}>
+														<h5 style={{display: 'inline'}}><i className="feather-briefcase" style={{marginRight: '8px'}}></i>Job Type: </h5>
+														<span>{job.jobType}</span>
 													</div>
 												</div>
 												<div className="col-md-6">
-													<div className="detail-item">
-														<h5><i className="feather-check-circle" style={{marginRight: '8px'}}></i>Backlogs Allowed:</h5>
-														<p><span className={`badge ${job.backlogsAllowed ? 'badge-success' : 'badge-danger'}`}>{job.backlogsAllowed ? 'Yes' : 'No'}</span></p>
+													<div className="detail-item" style={{marginBottom: '15px'}}>
+														<h5 style={{display: 'inline'}}><i className="feather-check-circle" style={{marginRight: '8px'}}></i>Backlogs Allowed: </h5>
+														<span className={`badge ${job.backlogsAllowed ? 'badge-success' : 'badge-danger'}`}>{job.backlogsAllowed ? 'Yes' : 'No'}</span>
 													</div>
 												</div>
 												{job.lastDateOfApplication && (
 													<div className="col-md-6">
-														<div className="detail-item">
-															<h5><i className="feather-calendar" style={{marginRight: '8px'}}></i>Last Date to Apply:</h5>
-															<p style={{color: '#dc3545', fontWeight: '600'}}>{new Date(job.lastDateOfApplication).toLocaleDateString()}</p>
+														<div className="detail-item" style={{marginBottom: '15px'}}>
+															<h5 style={{display: 'inline'}}><i className="feather-calendar" style={{marginRight: '8px'}}></i>Last Date to Apply: </h5>
+															<span style={{color: '#dc3545', fontWeight: '600'}}>{new Date(job.lastDateOfApplication).toLocaleDateString()}</span>
 														</div>
 													</div>
 												)}
 												{job.employerProfile?.website && (
 													<div className="col-md-6">
-														<div className="detail-item">
-															<h5><i className="feather-globe" style={{marginRight: '8px'}}></i>Website:</h5>
-															<p><a href={job.employerProfile.website} target="_blank" rel="noopener noreferrer">{job.employerProfile.website}</a></p>
+														<div className="detail-item" style={{marginBottom: '15px'}}>
+															<h5 style={{display: 'inline'}}><i className="feather-globe" style={{marginRight: '8px'}}></i>Website: </h5>
+															<a href={job.employerProfile.website} target="_blank" rel="noopener noreferrer">{job.employerProfile.website}</a>
 														</div>
 													</div>
 												)}
 											</div>
 										</div>
 
-										<h4 className="twm-s-title">Required Skills:</h4>
+										<h4 className="twm-s-title" style={{marginTop: '32px'}}>Required Skills:</h4>
 										{job.requiredSkills && job.requiredSkills.length > 0 ? (
 											<div className="skills-container">
 												{job.requiredSkills.map((skill, index) => (
@@ -435,11 +435,7 @@ function JobDetail1Page() {
 						<span>Quick Apply</span>
 					</div>
 				)}
-				
-				{/* Back to top button */}
-				<div className="back-to-top" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-					<i className="feather-arrow-up"></i>
-				</div>
+
 
 			</>
 		);

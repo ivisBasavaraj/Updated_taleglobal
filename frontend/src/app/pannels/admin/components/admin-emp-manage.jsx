@@ -10,6 +10,7 @@ function AdminEmployersAllRequest() {
     const [employers, setEmployers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [actionLoading, setActionLoading] = useState({});
 
     useEffect(() => {
         AOS.init({

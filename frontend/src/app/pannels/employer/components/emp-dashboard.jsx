@@ -322,8 +322,8 @@ function EmpDashboardPage() {
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                     {notifications.length > 0 ? notifications.slice(0, 5).map((notification, index) => (
                                         <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: notification.isRead ? '#f9fafb' : '#fef3c7', borderRadius: '0.5rem' }}>
-                                            <div style={{ width: '2rem', height: '2rem', background: notification.type === 'profile_approved' ? '#dcfce7' : '#fecaca', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                <span style={{ fontSize: '1rem' }}>{notification.type === 'profile_approved' ? '✅' : '❌'}</span>
+                                            <div style={{ width: '2rem', height: '2rem', background: (notification.type === 'profile_approved' || notification.title?.includes('Approved')) ? '#dcfce7' : '#fecaca', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                <span style={{ fontSize: '1rem' }}>{(notification.type === 'profile_approved' || notification.title?.includes('Approved')) ? '✅' : '❌'}</span>
                                             </div>
                                             <div style={{ flex: '1' }}>
                                                 <p style={{ fontSize: '0.875rem', fontWeight: '500', color: '#111827', margin: 0 }}>{notification.title}</p>

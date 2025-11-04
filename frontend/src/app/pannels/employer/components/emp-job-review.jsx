@@ -105,12 +105,25 @@ function EmpJobReviewPage() {
                                 </div>
 
                                 <div className="mt-2">
-                                    <h5 className="mb-1">Salary</h5>
-                                    <p className="mb-0 text-muted">{typeof jobDetails.salary === 'object' ?
-                                        (jobDetails.salary.min && jobDetails.salary.max ?
-                                            `${jobDetails.salary.currency === 'USD' ? '$' : '₹'}${jobDetails.salary.min} - ${jobDetails.salary.currency === 'USD' ? '$' : '₹'}${jobDetails.salary.max}` :
-                                            jobDetails.salary.currency ? `${jobDetails.salary.currency === 'USD' ? '$' : '₹'}${jobDetails.salary.min || jobDetails.salary.max || ''}` : 'N/A') :
-                                        jobDetails.salary || 'N/A'}</p>
+                                    <h5 className="mb-1">CTC (Annual)</h5>
+                                    <p className="mb-0 text-muted">
+                                        {jobDetails.ctc && (jobDetails.ctc.min > 0 || jobDetails.ctc.max > 0) ? 
+                                            (jobDetails.ctc.min === jobDetails.ctc.max ? 
+                                                `₹${(jobDetails.ctc.min/100000).toFixed(1)} LPA` : 
+                                                `₹${(jobDetails.ctc.min/100000).toFixed(1)} - ${(jobDetails.ctc.max/100000).toFixed(1)} LPA`) : 
+                                            'CTC not specified'}
+                                    </p>
+                                </div>
+
+                                <div className="mt-2">
+                                    <h5 className="mb-1">Net Salary (Monthly)</h5>
+                                    <p className="mb-0 text-muted">
+                                        {jobDetails.netSalary && (jobDetails.netSalary.min > 0 || jobDetails.netSalary.max > 0) ? 
+                                            (jobDetails.netSalary.min === jobDetails.netSalary.max ? 
+                                                `₹${(jobDetails.netSalary.min/1000).toFixed(0)}K` : 
+                                                `₹${(jobDetails.netSalary.min/1000).toFixed(0)}K - ${(jobDetails.netSalary.max/1000).toFixed(0)}K`) : 
+                                            'Net salary not specified'}
+                                    </p>
                                 </div>
 
                                 <div className="mt-2">

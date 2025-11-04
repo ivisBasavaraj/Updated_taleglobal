@@ -133,7 +133,7 @@ function SectionRecommendedJobs() {
                                 cursor: 'pointer'
                             }}
                         >
-                            <div className="d-flex justify-content-between align-items-start">
+                            <div className="d-flex justify-content-between align-items-start mb-2">
                                 <div className="flex-grow-1">
                                     <h6 className="mb-1" style={{ 
                                         color: '#111827', 
@@ -142,97 +142,8 @@ function SectionRecommendedJobs() {
                                     }}>
                                         {job.title}
                                     </h6>
-                                    <p className="mb-2" style={{ 
-                                        color: '#6b7280', 
-                                        fontSize: '0.875rem',
-                                        fontWeight: '500'
-                                    }}>
-                                        {job.employerId?.companyName || 'Company Name'}
-                                    </p>
-                                    
-                                    <div className="d-flex flex-wrap gap-2 mb-2">
-                                        <div className="d-flex align-items-center" style={{ fontSize: '0.8rem', color: '#6b7280' }}>
-                                            <MapPin size={12} className="me-1" />
-                                            {job.location}
-                                        </div>
-                                        <div className="d-flex align-items-center" style={{ fontSize: '0.8rem', color: '#6b7280' }}>
-                                            <Clock size={12} className="me-1" />
-                                            {getTimeAgo(job.createdAt)}
-                                        </div>
-                                        {job.vacancies && (
-                                            <div className="d-flex align-items-center" style={{ fontSize: '0.8rem', color: '#6b7280' }}>
-                                                <Users size={12} className="me-1" />
-                                                {job.vacancies} positions
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {(job.salary || job.ctc || job.netSalary) && (
-                                        <div className="d-flex align-items-center mb-2" style={{ fontSize: '0.8rem', color: '#059669' }}>
-                                            {formatSalary(job)}
-                                        </div>
-                                    )}
-
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        {job.requiredSkills && job.requiredSkills.length > 0 && (
-                                            <div className="d-flex flex-wrap gap-1">
-                                                {job.requiredSkills.slice(0, 3).map((skill, skillIndex) => {
-                                                    const isMatching = job.matchingSkills && job.matchingSkills.includes(skill);
-                                                    return (
-                                                        <span 
-                                                            key={skillIndex}
-                                                            className="badge"
-                                                            style={{
-                                                                backgroundColor: isMatching ? '#dcfdf7' : '#eff6ff',
-                                                                color: isMatching ? '#065f46' : '#1d4ed8',
-                                                                fontSize: '0.7rem',
-                                                                fontWeight: '500',
-                                                                padding: '0.25rem 0.5rem',
-                                                                border: isMatching ? '1px solid #10b981' : 'none'
-                                                            }}
-                                                        >
-                                                            {skill}
-                                                            {isMatching && <i className="fa fa-check ms-1" style={{ fontSize: '0.6rem' }}></i>}
-                                                        </span>
-                                                    );
-                                                })}
-                                                {job.requiredSkills.length > 3 && (
-                                                    <span 
-                                                        className="badge"
-                                                        style={{
-                                                            backgroundColor: '#f3f4f6',
-                                                            color: '#6b7280',
-                                                            fontSize: '0.7rem',
-                                                            fontWeight: '500',
-                                                            padding: '0.25rem 0.5rem'
-                                                        }}
-                                                    >
-                                                        +{job.requiredSkills.length - 3} more
-                                                    </span>
-                                                )}
-                                            </div>
-                                        )}
-                                        
-                                        {job.matchScore && (
-                                            <div className="text-end ms-2">
-                                                <span 
-                                                    className="badge"
-                                                    style={{
-                                                        backgroundColor: job.matchScore >= 70 ? '#dcfdf7' : job.matchScore >= 40 ? '#fef3c7' : '#fee2e2',
-                                                        color: job.matchScore >= 70 ? '#065f46' : job.matchScore >= 40 ? '#92400e' : '#991b1b',
-                                                        fontSize: '0.7rem',
-                                                        fontWeight: '600',
-                                                        padding: '0.25rem 0.5rem'
-                                                    }}
-                                                >
-                                                    {job.matchScore}% match
-                                                </span>
-                                            </div>
-                                        )}
-                                    </div>
                                 </div>
-                                
-                                <div className="text-end ms-3">
+                                <div className="d-flex align-items-center gap-2">
                                     <span 
                                         className="badge"
                                         style={{
@@ -245,7 +156,92 @@ function SectionRecommendedJobs() {
                                     >
                                         {job.jobType?.replace('-', ' ') || 'Full Time'}
                                     </span>
+                                    {job.matchScore && (
+                                        <span 
+                                            className="badge"
+                                            style={{
+                                                backgroundColor: job.matchScore >= 70 ? '#dcfdf7' : job.matchScore >= 40 ? '#fef3c7' : '#fee2e2',
+                                                color: job.matchScore >= 70 ? '#065f46' : job.matchScore >= 40 ? '#92400e' : '#991b1b',
+                                                fontSize: '0.7rem',
+                                                fontWeight: '600',
+                                                padding: '0.25rem 0.5rem'
+                                            }}
+                                        >
+                                            {job.matchScore}% match
+                                        </span>
+                                    )}
                                 </div>
+                            </div>
+                            <div className="flex-grow-1">
+                                <p className="mb-2" style={{ 
+                                    color: '#6b7280', 
+                                    fontSize: '0.875rem',
+                                    fontWeight: '500'
+                                }}>
+                                    {job.employerId?.companyName || 'Company Name'}
+                                </p>
+                                
+                                <div className="d-flex flex-wrap gap-2 mb-2">
+                                    <div className="d-flex align-items-center" style={{ fontSize: '0.8rem', color: '#6b7280' }}>
+                                        <MapPin size={12} className="me-1" />
+                                        {job.location}
+                                    </div>
+                                    <div className="d-flex align-items-center" style={{ fontSize: '0.8rem', color: '#6b7280' }}>
+                                        <Clock size={12} className="me-1" />
+                                        {getTimeAgo(job.createdAt)}
+                                    </div>
+                                    {job.vacancies && (
+                                        <div className="d-flex align-items-center" style={{ fontSize: '0.8rem', color: '#6b7280' }}>
+                                            <Users size={12} className="me-1" />
+                                            {job.vacancies} positions
+                                        </div>
+                                    )}
+                                </div>
+
+                                {(job.salary || job.ctc || job.netSalary) && (
+                                    <div className="d-flex align-items-center mb-2" style={{ fontSize: '0.8rem', color: '#059669' }}>
+                                        {formatSalary(job)}
+                                    </div>
+                                )}
+
+                                {job.requiredSkills && job.requiredSkills.length > 0 && (
+                                    <div className="d-flex flex-wrap gap-1">
+                                        {job.requiredSkills.slice(0, 3).map((skill, skillIndex) => {
+                                            const isMatching = job.matchingSkills && job.matchingSkills.includes(skill);
+                                            return (
+                                                <span 
+                                                    key={skillIndex}
+                                                    className="badge"
+                                                    style={{
+                                                        backgroundColor: isMatching ? '#dcfdf7' : '#eff6ff',
+                                                        color: isMatching ? '#065f46' : '#1d4ed8',
+                                                        fontSize: '0.7rem',
+                                                        fontWeight: '500',
+                                                        padding: '0.25rem 0.5rem',
+                                                        border: isMatching ? '1px solid #10b981' : 'none'
+                                                    }}
+                                                >
+                                                    {skill}
+                                                    {isMatching && <i className="fa fa-check ms-1" style={{ fontSize: '0.6rem' }}></i>}
+                                                </span>
+                                            );
+                                        })}
+                                        {job.requiredSkills.length > 3 && (
+                                            <span 
+                                                className="badge"
+                                                style={{
+                                                    backgroundColor: '#f3f4f6',
+                                                    color: '#6b7280',
+                                                    fontSize: '0.7rem',
+                                                    fontWeight: '500',
+                                                    padding: '0.25rem 0.5rem'
+                                                }}
+                                            >
+                                                +{job.requiredSkills.length - 3} more
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}
@@ -261,7 +257,7 @@ function SectionRecommendedJobs() {
                                 color: '#6b7280',
                                 border: '1px solid #d1d5db'
                             }}
-                            onClick={() => window.location.href = '/candidate/jobs'}
+                            onClick={() => window.location.href = '/job-grid'}
                         >
                             View All Jobs
                         </button>

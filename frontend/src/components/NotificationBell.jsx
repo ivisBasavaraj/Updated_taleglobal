@@ -135,14 +135,16 @@ const NotificationBell = ({ userRole }) => {
           right: isMobile ? '10px' : '0',
           width: isMobile ? 'calc(100vw - 20px)' : '300px',
           maxWidth: isMobile ? '360px' : '300px',
-          background: 'white',
+          background: '#ffffff',
           border: '1px solid #ddd',
           borderRadius: '8px',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          zIndex: 99999,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
+          zIndex: 999999,
           left: isMobile ? '10px' : 'auto',
           transform: 'none',
-          marginTop: '0'
+          marginTop: '0',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)'
         }}>
           <div style={{
             padding: '12px 16px',
