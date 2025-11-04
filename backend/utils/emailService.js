@@ -18,12 +18,12 @@ const sendWelcomeEmail = async (email, name, userType) => {
   const welcomeTemplate = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
       <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <h1 style="color: #333; text-align: center; margin-bottom: 30px;">Welcome to JobZZ Portal!</h1>
+        <h1 style="color: #333; text-align: center; margin-bottom: 30px;">Welcome to tale-global</h1>
         
         <p style="color: #666; font-size: 16px; line-height: 1.6;">Dear ${name},</p>
         
         <p style="color: #666; font-size: 16px; line-height: 1.6;">
-          Welcome to JobZZ Portal! We're excited to have you join our community of ${userType === 'employer' ? 'employers' : 'job seekers'}.
+          Welcome to tale-global! We're excited to have you join our community of ${userType === 'employer' ? 'employers' : userType === 'placement' ? 'placement officers' : 'job seekers'}.
         </p>
         
         <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
@@ -34,6 +34,11 @@ const sendWelcomeEmail = async (email, name, userType) => {
               <li>Access to qualified candidates</li>
               <li>Advanced application management</li>
               <li>Interview scheduling tools</li>
+            ` : userType === 'placement' ? `
+              <li>Upload student data files</li>
+              <li>Manage student registrations</li>
+              <li>Track placement activities</li>
+              <li>Monitor student applications</li>
             ` : `
               <li>Browse thousands of job opportunities</li>
               <li>Create a comprehensive profile</li>
@@ -53,7 +58,7 @@ const sendWelcomeEmail = async (email, name, userType) => {
         
         <p style="color: #999; font-size: 14px; text-align: center; margin-top: 30px;">
           Best regards,<br>
-          The JobZZ Portal Team
+          The tale-global Team
         </p>
       </div>
     </div>
@@ -62,7 +67,7 @@ const sendWelcomeEmail = async (email, name, userType) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: 'Welcome to JobZZ Portal!',
+    subject: 'Welcome to tale-global',
     html: welcomeTemplate
   };
 

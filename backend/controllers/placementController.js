@@ -4,6 +4,7 @@ const Placement = require('../models/Placement');
 const Candidate = require('../models/Candidate');
 const CandidateProfile = require('../models/CandidateProfile');
 const { createNotification } = require('./notificationController');
+const { sendWelcomeEmail } = require('../utils/emailService');
 const XLSX = require('xlsx');
 const { base64ToBuffer } = require('../utils/base64Helper');
 const { emitCreditUpdate, emitBulkCreditUpdate } = require('../utils/websocket');
@@ -50,6 +51,13 @@ exports.registerPlacement = async (req, res) => {
       });
     } catch (notifError) {
       console.error('Failed to create registration notification:', notifError);
+    }
+
+    // Send welcome email to placement officer
+    try {
+      await sendWelcomeEmail(placement.email, placement.name, 'placement');
+    } catch (emailError) {
+      console.error('Welcome email failed for placement officer:', emailError);
     }
 
     res.status(201).json({

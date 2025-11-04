@@ -443,16 +443,7 @@ function PlacementDashboard() {
         );
     }
 
-    if (loading && !profileLoaded) {
-        return (
-            <div className="container-fluid p-4" style={{background: '#f8f9fa', minHeight: '100vh'}}>
-                <div className="text-center py-5">
-                    <div className="spinner-border text-primary mb-3" role="status"></div>
-                    <h4>Loading Dashboard...</h4>
-                </div>
-            </div>
-        );
-    }
+    // Remove the loading check that blocks the dashboard from showing
 
     if (!authLoading && (!isAuthenticated() || userType !== 'placement')) {
         return (
@@ -597,7 +588,7 @@ function PlacementDashboard() {
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center" style={{gap: '1rem'}}>
                             <div>
                                 <span className="text-uppercase text-muted" style={{letterSpacing: '2px', fontSize: '0.75rem'}}>Placement Officer</span>
-                                <h3 className="mb-1" style={{color: '#1f2937', fontWeight: 700}}>{placementData?.name || 'Loading...'}</h3>
+                                <h3 className="mb-1" style={{color: '#1f2937', fontWeight: 700}}>{placementData?.name || user?.name || JSON.parse(localStorage.getItem('placementUser') || '{}')?.name || 'Name not available'}</h3>
                                 <div className="d-flex align-items-center flex-wrap" style={{gap: '1rem'}}>
 
                                     <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
@@ -608,7 +599,7 @@ function PlacementDashboard() {
                                 <div className="mt-3" style={{display: 'grid', gap: '0.35rem'}}>
                                     <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
                                         <i className="fa fa-envelope mr-2" style={{color: '#ff8c00'}}></i>
-                                        {placementData?.email || 'Loading...'}
+                                        {placementData?.email || user?.email || JSON.parse(localStorage.getItem('placementUser') || '{}')?.email || 'Email not available'}
                                     </span>
                                     <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
                                         <i className="fa fa-phone mr-2" style={{color: '#ff8c00'}}></i>
