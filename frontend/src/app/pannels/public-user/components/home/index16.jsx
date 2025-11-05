@@ -767,14 +767,14 @@ function Home16Page() {
             <div className="section-full p-t20 p-b20 site-bg-white animate-on-scroll">
                 <Container className="py-2">
                     {/* title="" START*/}
-                    <div className="recruiters-header-section">
+                    <div className="recruiters-header-section" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px'}}>
                         <div className="text-left">
                             <div className="wt-small-separator site-text-primary">
                                 <div>Top Recruiters</div>
                             </div>
                             <h2 className="wt-title mb-0">Discover your next career move</h2>
                         </div>
-                        <NavLink to="/emp-grid" className="site-button recruiters-view-all-btn">
+                        <NavLink to="/emp-grid" className="site-button" style={{padding: '0.5rem 1rem', fontSize: '14px', display: 'inline-flex', width: 'auto', whiteSpace: 'nowrap'}}>
                             View All
                         </NavLink>
                     </div>

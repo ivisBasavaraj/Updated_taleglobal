@@ -403,16 +403,31 @@ button,
   background-color: rgba(255, 122, 0, 0.08) !important;
   color: #FF7A00 !important;
   border: 1px solid #FF7A00 !important;
-  font-size: 16px !important;
-  letter-spacing: 0.3px !important;
+  font-size: 14px !important;
+  letter-spacing: 0.2px !important;
   text-transform: none !important;
   transition: all 0.3s ease;
   user-select: none;
   -webkit-user-select: none;
   position: relative;
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  padding: 8px 14px !important;
+  max-width: fit-content !important;
+  white-space: nowrap !important;
+}
+
+/* Mobile: restore normal button size */
+@media (max-width: 767px) {
+  button,
+  .btn,
+  .site-button,
+  .ant-btn {
+    font-size: 16px !important;
+    padding: 10px 20px !important;
+    max-width: none !important;
+  }
 }
 
 button:focus,
@@ -698,8 +713,34 @@ button.btn-apply:hover,
   text-decoration: none !important;
   transition: all 0.3s ease;
   font-weight: 600 !important;
-  font-size: 16px !important;
-  letter-spacing: 0.3px !important;
+  font-size: 13px !important;
+  letter-spacing: 0.2px !important;
+  padding: 6px 12px !important;
+  max-width: 120px !important;
+  white-space: nowrap !important;
+}
+
+/* View all button alignment */
+.view-all-btn,
+.twm-jobs-browse {
+  float: right !important;
+  margin-left: auto !important;
+}
+
+/* Keep mobile buttons normal size */
+@media (max-width: 767px) {
+  .twm-nav-sign-up,
+  .twm-nav-post-a-job,
+  .browse-btn,
+  .view-all-btn,
+  .show-more-btn,
+  .twm-jobs-browse,
+  .category-btn,
+  .job-browse-btn {
+    font-size: 14px !important;
+    padding: 8px 16px !important;
+    max-width: none !important;
+  }
 }
 
 /* Override header-specific button styles */
@@ -1065,6 +1106,28 @@ img[src*="logo-skin-8.png"] {
 .header,
 .main-bar {
   z-index: 1030 !important;
+}
+
+/* Remove extra shadow from header */
+.site-header,
+.site-header .sticky-header,
+.site-header .main-bar-wraper,
+.site-header .main-bar {
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+}
+
+.site-header::before,
+.site-header::after,
+.sticky-header::before,
+.sticky-header::after,
+.main-bar-wraper::before,
+.main-bar-wraper::after,
+.main-bar::before,
+.main-bar::after {
+  display: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
 }
 
 /* Employer sidebar */
