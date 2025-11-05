@@ -97,7 +97,7 @@
 }
 
 .btn-signup:hover {
-  background: #757575;
+  background: #9E9E9E;
   transform: translateY(-1px);
 }
 
@@ -110,7 +110,7 @@
   background: #ff9c00;
   color: white;
   transform: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: none;
 }
 
 /* Hero Content */

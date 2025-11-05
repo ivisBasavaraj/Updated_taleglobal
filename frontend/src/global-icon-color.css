@@ -181,20 +181,20 @@ svg.feather {
 }
 
 /* ============================================================================
- * SECTION 4: BUTTON & CTA ICON EXCEPTIONS - WHITE TEXT FOR CONTRAST
+ * SECTION 4: BUTTON & CTA ICON EXCEPTIONS - DARK ORANGE FOR ALL ICONS
  * ============================================================================ */
 
-/* Primary buttons - white icons for contrast */
+/* Primary buttons - orange icons */
 .btn-primary i,
 .btn-primary [class^="fa"],
 .btn-primary [class^="feather"],
 .btn-primary svg {
-  color: white !important;
-  fill: white !important;
-  stroke: white !important;
+  color: #fd7e14 !important;
+  fill: #fd7e14 !important;
+  stroke: #fd7e14 !important;
 }
 
-/* Secondary/Outline buttons - white icons */
+/* Secondary/Outline buttons - orange icons */
 .btn-secondary i,
 .btn-outline-primary i,
 .btn-outline-primary [class^="fa"],
@@ -205,9 +205,9 @@ svg.feather {
 .btn.site-button i,
 .site-button [class^="fa"],
 .site-button [class^="feather"] {
-  color: white !important;
-  fill: white !important;
-  stroke: white !important;
+  color: #fd7e14 !important;
+  fill: #fd7e14 !important;
+  stroke: #fd7e14 !important;
 }
 
 /* Navigation buttons */
@@ -223,12 +223,12 @@ a.btn [class^="feather"],
 a.site-button i,
 a.site-button [class^="fa"],
 a.site-button [class^="feather"] {
-  color: white !important;
-  fill: white !important;
-  stroke: white !important;
+  color: #fd7e14 !important;
+  fill: #fd7e14 !important;
+  stroke: #fd7e14 !important;
 }
 
-/* Specific button classes - white icons */
+/* Specific button classes - orange icons */
 .apply-now-btn i,
 .apply-now-btn [class^="fa"],
 .search-btn i,
@@ -251,9 +251,9 @@ a.site-button [class^="feather"] {
 .secondary-button [class^="fa"],
 .cta-button i,
 .cta-button [class^="fa"] {
-  color: white !important;
-  fill: white !important;
-  stroke: white !important;
+  color: #fd7e14 !important;
+  fill: #fd7e14 !important;
+  stroke: #fd7e14 !important;
 }
 
 /* ============================================================================

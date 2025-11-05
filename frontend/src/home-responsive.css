@@ -476,7 +476,8 @@
   }
   
   .job-categories-btn .site-button {
-    width: 100% !important;
+    width: auto !important;
+    display: inline-flex !important;
   }
   
   /* Jobs Grid Section */
