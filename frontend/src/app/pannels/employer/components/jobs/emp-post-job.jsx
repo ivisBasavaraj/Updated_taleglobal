@@ -597,10 +597,10 @@ export default function EmpPostJob({ onNext }) {
 						<>
 							<div style={fullRow}>
 								<div style={{
-									background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+									background: 'linear-gradient(135deg, #ee9f27 0%, #ffffff 100%)',
 									padding: '16px 20px',
 									borderRadius: 10,
-									color: '#fff',
+									color: '#333',
 									marginBottom: 8,
 								}}>
 									<h4 style={{ margin: 0, fontSize: 16, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 10 }}>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { api } from "../../../../../utils/api";
-import "../../../../../src/app/shared/shared-button.css";
 
 function SectionCanResumeHeadline({ profile }) {
     const [headline, setHeadline] = useState('');

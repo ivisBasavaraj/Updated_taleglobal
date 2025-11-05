@@ -234,27 +234,28 @@ function EmpCandidateReviewPage () {
 	}
 
 	return (
-		<div className="container-fluid py-3 emp-candidate-review">
+		<div className="container-fluid py-4" style={{backgroundColor: '#f8f9fa', minHeight: '100vh'}}>
 			{/* Header Section */}
 			<div className="row mb-4">
 				<div className="col-12">
-					<div className="d-flex justify-content-between align-items-center bg-white p-4 rounded shadow-sm">
+					<div className="d-flex justify-content-between align-items-center bg-white p-4 rounded-3 shadow-sm border-0" style={{background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)'}}>
 						<div className="d-flex align-items-center gap-3">
 							<button
-								className="btn btn-outline-secondary"
+								className="btn btn-outline-primary rounded-circle d-flex align-items-center justify-content-center"
+								style={{width: '40px', height: '40px', borderColor: '#ffb366', color: '#ffb366'}}
 								onClick={() => navigate(-1)}
 							>
-								<ArrowLeft size={16} />
+								<ArrowLeft size={18} />
 							</button>
 							<div>
-								<h3 className="mb-0 d-flex align-items-center gap-2">
-									<UserCircle2 size={24} style={{ color: "#f97316" }} />
+								<h2 className="mb-1 d-flex align-items-center gap-2 fw-bold" style={{color: '#2c3e50'}}>
+									<UserCircle2 size={28} style={{ color: "#ffb366" }} />
 									Candidate Review
-								</h3>
-								<p className="text-muted mb-0">Comprehensive candidate evaluation</p>
+								</h2>
+								<p className="text-muted mb-0 fs-6">Comprehensive candidate evaluation & assessment</p>
 							</div>
 						</div>
-						<span className={`badge ${getStatusBadge(application.status)} text-capitalize fs-6 px-3 py-2`}>
+						<span className={`badge ${getStatusBadge(application.status)} text-capitalize fs-6 px-4 py-2 rounded-pill`} style={{fontSize: '0.9rem !important'}}>
 							{application.status}
 						</span>
 					</div>
@@ -262,76 +263,76 @@ function EmpCandidateReviewPage () {
 			</div>
 
 			{/* Main Content */}
-			<div className="row">
+			<div className="row g-4">
 				{/* Left Column - Candidate Profile */}
 				<div className="col-lg-8">
 					{/* Personal Information Card */}
-					<div className="card shadow-sm mb-4">
-						<div className="card-header bg-light">
-							<h5 className="mb-0 d-flex align-items-center gap-2">
-								<User size={20} style={{ color: "#f97316" }} />
+					<div className="card border-0 shadow-sm mb-4" style={{borderRadius: '15px'}}>
+						<div className="card-header border-0" style={{background: 'linear-gradient(135deg, #ffb366 0%, #ffffff 100%)', borderRadius: '15px 15px 0 0'}}>
+							<h5 className="mb-0 d-flex align-items-center gap-2 text-white fw-semibold">
+								<User size={22} />
 								Basic Information
 							</h5>
 						</div>
-						<div className="card-body">
+						<div className="card-body p-4">
 							<div className="row align-items-center mb-4">
 								<div className="col-auto">
 									<div
-										className="rounded-circle overflow-hidden border"
-										style={{ width: "80px", height: "80px" }}
+										className="rounded-circle overflow-hidden shadow-sm"
+										style={{ width: "100px", height: "100px", border: '4px solid #ffb366' }}
 									>
 										{candidate.profilePicture ? (
 											<img
 												src={candidate.profilePicture}
 												alt={candidate.name}
-												style={{ width: "80px", height: "80px", objectFit: "cover" }}
+												style={{ width: "100px", height: "100px", objectFit: "cover" }}
 											/>
 										) : (
-											<div className="d-flex align-items-center justify-content-center h-100 bg-light">
-												<User size={40} className="text-muted" />
+											<div className="d-flex align-items-center justify-content-center h-100" style={{background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)'}}>
+												<User size={50} style={{color: '#ffb366'}} />
 											</div>
 										)}
 									</div>
 								</div>
 								<div className="col">
-									<h4 className="mb-1">{candidate.name}</h4>
-									<p className="text-muted mb-2 d-flex align-items-center gap-1">
-										<Briefcase size={16} />
+									<h3 className="mb-2 fw-bold" style={{color: '#2c3e50'}}>{candidate.name}</h3>
+									<p className="mb-2 d-flex align-items-center gap-2" style={{color: '#ffb366', fontWeight: '500'}}>
+										<Briefcase size={18} />
 										Applied for: {application.jobId?.title || 'Unknown Job'}
 									</p>
-									<p className="text-muted mb-0 d-flex align-items-center gap-1">
+									<p className="text-muted mb-0 d-flex align-items-center gap-2">
 										<Calendar size={16} />
 										Applied on: {formatDate(application.createdAt)}
 									</p>
 								</div>
 							</div>
 
-							<div className="row">
+							<div className="row g-4">
 								<div className="col-md-6">
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<Mail size={16} style={{ color: "#f97316" }} />
+											<Mail size={16} style={{ color: "#ffb366" }} />
 											<strong>Email:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.email}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<Phone size={16} style={{ color: "#f97316" }} />
+											<Phone size={16} style={{ color: "#ffb366" }} />
 											<strong>Mobile:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.phone || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<Calendar size={16} style={{ color: "#f97316" }} />
+											<Calendar size={16} style={{ color: "#ffb366" }} />
 											<strong>Date of Birth:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.dateOfBirth ? formatDate(candidate.dateOfBirth) : 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<User size={16} style={{ color: "#f97316" }} />
+											<User size={16} style={{ color: "#ffb366" }} />
 											<strong>Gender:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.gender || 'Not provided'}</p>
@@ -341,14 +342,14 @@ function EmpCandidateReviewPage () {
 									<h6 className="text-primary mb-3"><i className="fa fa-users mr-2"></i>Family Information</h6>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<User size={16} style={{ color: "#f97316" }} />
+											<User size={16} style={{ color: "#ffb366" }} />
 											<strong>Father's/Husband's Name:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.fatherName || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<User size={16} style={{ color: "#f97316" }} />
+											<User size={16} style={{ color: "#ffb366" }} />
 											<strong>Mother's Name:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.motherName || 'Not provided'}</p>
@@ -357,21 +358,21 @@ function EmpCandidateReviewPage () {
 									<h6 className="text-primary mb-3 mt-4"><i className="fa fa-map-marker-alt mr-2"></i>Address Information</h6>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<MapPin size={16} style={{ color: "#f97316" }} />
+											<MapPin size={16} style={{ color: "#ffb366" }} />
 											<strong>Residential Address:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.residentialAddress || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<MapPin size={16} style={{ color: "#f97316" }} />
+											<MapPin size={16} style={{ color: "#ffb366" }} />
 											<strong>Permanent Address:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.permanentAddress || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<MapPin size={16} style={{ color: "#f97316" }} />
+											<MapPin size={16} style={{ color: "#ffb366" }} />
 											<strong>Correspondence Address:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.correspondenceAddress || 'Not provided'}</p>
@@ -383,10 +384,10 @@ function EmpCandidateReviewPage () {
 
 					{/* Education Card */}
 					{candidate.education && candidate.education.length > 0 && (
-						<div className="card shadow-sm mb-4">
-							<div className="card-header bg-light">
-								<h5 className="mb-0 d-flex align-items-center gap-2">
-									<GraduationCap size={20} style={{ color: "#f97316" }} />
+						<div className="card border-0 shadow-sm mb-4" style={{borderRadius: '15px'}}>
+							<div className="card-header border-0" style={{background: 'linear-gradient(135deg, #ffb366 0%, #ffffff 100%)', borderRadius: '15px 15px 0 0'}}>
+								<h5 className="mb-0 d-flex align-items-center gap-2 text-white fw-semibold">
+									<GraduationCap size={22} />
 									Education Details
 								</h5>
 							</div>
@@ -406,12 +407,14 @@ function EmpCandidateReviewPage () {
 													<div className="d-flex gap-2">
 														<button
 															className="btn btn-outline-primary btn-sm"
+															style={{color: 'white', backgroundColor: '#ffb366', borderColor: '#ffb366'}}
 															onClick={() => viewDocument(edu.marksheet)}
 														>
 															<Eye size={14} className="me-1" />View
 														</button>
 														<button
 															className="btn btn-outline-secondary btn-sm"
+															style={{color: 'white', backgroundColor: '#ffb366', borderColor: '#ffb366'}}
 															onClick={() => downloadDocument(edu.marksheet, `marksheet_${index}.pdf`)}
 														>
 															<Download size={14} className="me-1" />Download
@@ -428,20 +431,20 @@ function EmpCandidateReviewPage () {
 
 					{/* Skills & Summary */}
 					{(candidate.skills?.length > 0 || candidate.profileSummary) && (
-						<div className="card shadow-sm mb-4">
-							<div className="card-header bg-light">
-								<h5 className="mb-0 d-flex align-items-center gap-2">
-									<Award size={20} style={{ color: "#f97316" }} />
+						<div className="card border-0 shadow-sm mb-4" style={{borderRadius: '15px'}}>
+							<div className="card-header border-0" style={{background: 'linear-gradient(135deg, #ffb366 0%, #ffffff 100%)', borderRadius: '15px 15px 0 0'}}>
+								<h5 className="mb-0 d-flex align-items-center gap-2 text-white fw-semibold">
+									<Award size={22} />
 									Skills & Summary
 								</h5>
 							</div>
-							<div className="card-body">
+							<div className="card-body p-4">
 								{candidate.skills && candidate.skills.length > 0 && (
-									<div className="mb-3">
-										<h6>Key Skills</h6>
+									<div className="mb-4">
+										<h6 className="fw-bold mb-3" style={{color: '#2c3e50'}}>Key Skills</h6>
 										<div className="d-flex flex-wrap gap-2">
 											{candidate.skills.map((skill, index) => (
-												<span key={index} className="badge bg-secondary">{skill}</span>
+												<span key={index} className="badge px-3 py-2 rounded-pill" style={{backgroundColor: '#ffb366', color: 'white', fontSize: '0.85rem', fontWeight: '500'}}>{skill}</span>
 											))}
 										</div>
 									</div>
@@ -461,19 +464,20 @@ function EmpCandidateReviewPage () {
 				<div className="col-lg-4">
 					{/* Resume Card */}
 					{candidate.resume && (
-						<div className="card shadow-sm mb-4">
-							<div className="card-header bg-light">
-								<h5 className="mb-0 d-flex align-items-center gap-2">
-									<FileText size={20} style={{ color: "#f97316" }} />
+						<div className="card border-0 shadow-sm mb-4" style={{borderRadius: '15px'}}>
+							<div className="card-header border-0" style={{background: 'linear-gradient(135deg, #ffb366 0%, #ffffff 100%)', borderRadius: '15px 15px 0 0'}}>
+								<h5 className="mb-0 d-flex align-items-center gap-2 text-white fw-semibold">
+									<FileText size={22} />
 									Resume
 								</h5>
 							</div>
-							<div className="card-body text-center">
+							<div className="card-body text-center p-4">
 								<button
-									className="btn twm-bg-orange"
+									className="btn btn-lg rounded-pill px-4 py-2 fw-semibold"
+									style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}}
 									onClick={() => downloadDocument(candidate.resume, 'resume.pdf')}
 								>
-									<Download size={16} className="me-1" />Download Resume
+									<Download size={18} className="me-2" />Download Resume
 								</button>
 							</div>
 						</div>
@@ -520,44 +524,46 @@ function EmpCandidateReviewPage () {
 					)}
 
 					{/* Review & Actions */}
-					<div className="card shadow-sm">
-						<div className="card-header bg-light">
-							<h5 className="mb-0">Review & Actions</h5>
+					<div className="card border-0 shadow-sm" style={{borderRadius: '15px'}}>
+						<div className="card-header border-0" style={{background: 'linear-gradient(135deg, #ffb366 0%, #ffffff 100%)', borderRadius: '15px 15px 0 0'}}>
+							<h5 className="mb-0 text-white fw-semibold">Review & Actions</h5>
 						</div>
-						<div className="card-body">
-							<div className="mb-3">
-								<label className="form-label">Overall Remarks</label>
+						<div className="card-body p-4">
+							<div className="mb-4">
+								<label className="form-label fw-semibold" style={{color: '#2c3e50'}}>Overall Remarks</label>
 								<textarea
-									className="form-control"
-									rows="3"
-									placeholder="Enter your remarks..."
+									className="form-control border-2 rounded-3"
+									rows="4"
+									placeholder="Enter your detailed remarks and feedback..."
 									value={remarks}
 									onChange={(e) => setRemarks(e.target.value)}
+									style={{borderColor: '#ffb366', fontSize: '0.95rem'}}
 								/>
 							</div>
 
-							<div className="form-check mb-3">
+							<div className="form-check mb-4 p-3 rounded-3" style={{backgroundColor: '#f8f9fa', border: '2px solid #e9ecef'}}>
 								<input
 									className="form-check-input"
 									type="checkbox"
 									id="candidateSelection"
 									checked={isSelected}
 									onChange={(e) => setIsSelected(e.target.checked)}
+									style={{transform: 'scale(1.2)', accentColor: '#ffb366'}}
 								/>
-								<label className="form-check-label" htmlFor="candidateSelection">
+								<label className="form-check-label fw-semibold ms-2" htmlFor="candidateSelection" style={{color: '#2c3e50'}}>
 									Select for further process
 								</label>
 							</div>
 
-							<div className="d-grid gap-2">
-								<button className="btn btn-secondary" onClick={saveReview}>
-									<Save size={16} className="me-1" />Save Review
+							<div className="d-grid gap-3">
+								<button className="btn btn-lg rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}} onClick={saveReview}>
+									<Save size={18} className="me-2" />Save Review
 								</button>
-								<button className="btn btn-secondary" onClick={shortlistCandidate}>
-									<Check size={16} className="me-1" />Shortlist
+								<button className="btn btn-lg rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}} onClick={shortlistCandidate}>
+									<Check size={18} className="me-2" />Shortlist Candidate
 								</button>
-								<button className="btn btn-danger" onClick={rejectCandidate}>
-									<X size={16} className="me-1" />Reject
+								<button className="btn btn-lg rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}} onClick={rejectCandidate}>
+									<X size={18} className="me-2" />Reject Candidate
 								</button>
 							</div>
 						</div>

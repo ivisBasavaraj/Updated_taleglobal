@@ -1,4 +1,5 @@
 import { useEffect, useState, memo } from "react";
+import { createPortal } from "react-dom";
 import { api } from "../../../../../utils/api";
 
 function SectionCanEmployment({ profile }) {
@@ -151,29 +152,8 @@ function SectionCanEmployment({ profile }) {
                     type="button"
                     title="Edit"
                     className="btn btn-link site-text-primary p-0 border-0"
-                    onClick={() => {
-                        if (window.$ && window.$.fn.modal) {
-                            // Add backdrop manually since modal-fix.js removes it
-                            const backdrop = document.createElement('div');
-                            backdrop.className = 'modal-backdrop show';
-                            backdrop.style.zIndex = '1040';
-                            document.body.appendChild(backdrop);
-
-                            // Show modal
-                            window.$(`#${modalId}`).modal({
-                                backdrop: false, // Don't let Bootstrap create another backdrop
-                                keyboard: true,
-                                focus: true,
-                                show: true
-                            });
-
-                            // Clean up backdrop when modal is hidden
-                            window.$(`#${modalId}`).on('hidden.bs.modal', function() {
-                                const backdrops = document.querySelectorAll('.modal-backdrop');
-                                backdrops.forEach(bd => bd.remove());
-                            });
-                        }
-                    }}
+                    data-bs-toggle="modal"
+                    data-bs-target={`#${modalId}`}
                 >
                     <span className="fa fa-edit" />
                 </button>
@@ -199,174 +179,101 @@ function SectionCanEmployment({ profile }) {
                     )}
                 </div>
             </div>
-            {/*Employment */}
-            <div
-                className="modal fade twm-saved-jobs-view"
-                id={modalId}
-                tabIndex={-1}
-            >
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-                        <form onSubmit={(e) => e.preventDefault()}>
-                            <div className="modal-header">
-                                <h2 className="modal-title">Add Employment</h2>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-                            </div>
-                            <div className="modal-body">
-                                <div className="row">
-                                    <div className="col-xl-12 col-lg-12">
-                                        <div className="form-group">
-                                            <label>Total Experience</label>
-                                            <div className="ls-inputicon-box">
-                                                <input 
-                                                    className="form-control" 
-                                                    type="text" 
-                                                    placeholder="e.g., 2 years, 6 months" 
-                                                    value={totalExperience}
-                                                    onChange={(e) => setTotalExperience(e.target.value)}
-                                                    style={{paddingLeft: '40px'}}
-                                                />
-                                                <i className="fs-input-icon fa fa-clock" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-xl-12 col-lg-12">
-                                        <div className="form-group">
-                                            <label>Your Designation *</label>
-                                            <div className="ls-inputicon-box">
-                                                <input
-                                                    className={`form-control ${errors.designation ? 'is-invalid' : ''}`}
-                                                    type="text"
-                                                    placeholder="Enter Your Designation"
-                                                    value={formData.designation}
-                                                    onChange={(e) => handleInputChange('designation', e.target.value)}
-                                                    style={{paddingLeft: '40px'}}
-                                                />
-                                                <i className="fs-input-icon fa fa-address-card" />
-                                            </div>
-                                            {errors.designation && <div className="invalid-feedback d-block">{errors.designation}</div>}
-                                        </div>
-                                    </div>
-                                    <div className="col-xl-12 col-lg-12">
-                                        <div className="form-group">
-                                            <label>Your Organization *</label>
-                                            <div className="ls-inputicon-box">
-                                                <input
-                                                    className={`form-control ${errors.organization ? 'is-invalid' : ''}`}
-                                                    type="text"
-                                                    placeholder="Enter Your Organization"
-                                                    value={formData.organization}
-                                                    onChange={(e) => handleInputChange('organization', e.target.value)}
-                                                    style={{paddingLeft: '40px'}}
-                                                />
-                                                <i className="fs-input-icon fa fa-building" />
-                                            </div>
-                                            {errors.organization && <div className="invalid-feedback d-block">{errors.organization}</div>}
-                                        </div>
-                                    </div>
-                                    <div className="col-xl-12 col-lg-12">
-                                        <div className="form-group">
-                                            <label>Is this your current company?</label>
-                                            <div className="row twm-form-radio-inline">
-                                                <div className="col-md-6">
-                                                    <input 
-                                                        className="form-check-input" 
-                                                        type="radio" 
-                                                        name="flexRadioDefault" 
-                                                        id="flexRadioDefault1" 
-                                                        checked={formData.isCurrent}
-                                                        onChange={() => handleInputChange('isCurrent', true)}
-                                                    />
-                                                    <label className="form-check-label" htmlFor="flexRadioDefault1">
-                                                        Yes
-                                                    </label>
-                                                </div>
-                                                <div className="col-md-6">
-                                                    <input 
-                                                        className="form-check-input" 
-                                                        type="radio" 
-                                                        name="flexRadioDefault" 
-                                                        id="S_no" 
-                                                        checked={!formData.isCurrent}
-                                                        onChange={() => handleInputChange('isCurrent', false)}
-                                                    />
-                                                    <label className="form-check-label" htmlFor="S_no">
-                                                        No
-                                                    </label>
+            {createPortal(
+                <div className="modal fade twm-saved-jobs-view" id={modalId} tabIndex={-1}>
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <form onSubmit={(e) => e.preventDefault()}>
+                                <div className="modal-header">
+                                    <h2 className="modal-title">Add Employment</h2>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                                </div>
+                                <div className="modal-body">
+                                    <div className="row">
+                                        <div className="col-xl-12 col-lg-12">
+                                            <div className="form-group">
+                                                <label>Total Experience</label>
+                                                <div className="ls-inputicon-box">
+                                                    <input className="form-control" type="text" placeholder="e.g., 2 years, 6 months" value={totalExperience} onChange={(e) => setTotalExperience(e.target.value)} style={{paddingLeft: '40px'}} />
+                                                    <i className="fs-input-icon fa fa-clock" />
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    {/*Start Date*/}
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <label>Started Working From *</label>
-                                            <div className="ls-inputicon-box">
-                                                <input
-                                                    className={`form-control ${errors.startDate ? 'is-invalid' : ''}`}
-                                                    type="date"
-                                                    value={formData.startDate}
-                                                    onChange={(e) => handleInputChange('startDate', e.target.value)}
-                                                    style={{paddingLeft: '40px'}}
-                                                />
-                                                <i className="fs-input-icon far fa-calendar" />
+                                        <div className="col-xl-12 col-lg-12">
+                                            <div className="form-group">
+                                                <label>Your Designation *</label>
+                                                <div className="ls-inputicon-box">
+                                                    <input className={`form-control ${errors.designation ? 'is-invalid' : ''}`} type="text" placeholder="Enter Your Designation" value={formData.designation} onChange={(e) => handleInputChange('designation', e.target.value)} style={{paddingLeft: '40px'}} />
+                                                    <i className="fs-input-icon fa fa-address-card" />
+                                                </div>
+                                                {errors.designation && <div className="invalid-feedback d-block">{errors.designation}</div>}
                                             </div>
-                                            {errors.startDate && <div className="invalid-feedback d-block">{errors.startDate}</div>}
                                         </div>
-                                    </div>
-                                    {/*End Date*/}
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <label>Worked Till {!formData.isCurrent && '*'}</label>
-                                            <div className="ls-inputicon-box">
-                                                <input
-                                                    className={`form-control ${errors.endDate ? 'is-invalid' : ''}`}
-                                                    type="date"
-                                                    value={formData.endDate}
-                                                    onChange={(e) => handleInputChange('endDate', e.target.value)}
-                                                    disabled={formData.isCurrent}
-                                                    style={{paddingLeft: '40px'}}
-                                                />
-                                                <i className="fs-input-icon far fa-calendar" />
+                                        <div className="col-xl-12 col-lg-12">
+                                            <div className="form-group">
+                                                <label>Your Organization *</label>
+                                                <div className="ls-inputicon-box">
+                                                    <input className={`form-control ${errors.organization ? 'is-invalid' : ''}`} type="text" placeholder="Enter Your Organization" value={formData.organization} onChange={(e) => handleInputChange('organization', e.target.value)} style={{paddingLeft: '40px'}} />
+                                                    <i className="fs-input-icon fa fa-building" />
+                                                </div>
+                                                {errors.organization && <div className="invalid-feedback d-block">{errors.organization}</div>}
                                             </div>
-                                            {errors.endDate && <div className="invalid-feedback d-block">{errors.endDate}</div>}
                                         </div>
-                                    </div>
-                                    <div className="col-md-12">
-                                        <div className="form-group mb-0">
-                                            <label>Describe your Job Profile</label>
-                                            <textarea
-                                                className={`form-control ${errors.description ? 'is-invalid' : ''}`}
-                                                rows={3}
-                                                placeholder="Describe your Job"
-                                                value={formData.description}
-                                                onChange={(e) => handleInputChange('description', e.target.value)}
-                                            />
-                                            {errors.description && <div className="invalid-feedback d-block">{errors.description}</div>}
-                                            <small className="text-muted">Optional: {formData.description.length}/1000 characters</small>
+                                        <div className="col-xl-12 col-lg-12">
+                                            <div className="form-group">
+                                                <label>Is this your current company?</label>
+                                                <div className="row twm-form-radio-inline">
+                                                    <div className="col-md-6">
+                                                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked={formData.isCurrent} onChange={() => handleInputChange('isCurrent', true)} />
+                                                        <label className="form-check-label" htmlFor="flexRadioDefault1">Yes</label>
+                                                    </div>
+                                                    <div className="col-md-6">
+                                                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="S_no" checked={!formData.isCurrent} onChange={() => handleInputChange('isCurrent', false)} />
+                                                        <label className="form-check-label" htmlFor="S_no">No</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label>Started Working From *</label>
+                                                <div className="ls-inputicon-box">
+                                                    <input className={`form-control ${errors.startDate ? 'is-invalid' : ''}`} type="date" value={formData.startDate} onChange={(e) => handleInputChange('startDate', e.target.value)} style={{paddingLeft: '40px'}} />
+                                                    <i className="fs-input-icon far fa-calendar" />
+                                                </div>
+                                                {errors.startDate && <div className="invalid-feedback d-block">{errors.startDate}</div>}
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label>Worked Till {!formData.isCurrent && '*'}</label>
+                                                <div className="ls-inputicon-box">
+                                                    <input className={`form-control ${errors.endDate ? 'is-invalid' : ''}`} type="date" value={formData.endDate} onChange={(e) => handleInputChange('endDate', e.target.value)} disabled={formData.isCurrent} style={{paddingLeft: '40px'}} />
+                                                    <i className="fs-input-icon far fa-calendar" />
+                                                </div>
+                                                {errors.endDate && <div className="invalid-feedback d-block">{errors.endDate}</div>}
+                                            </div>
+                                        </div>
+                                        <div className="col-md-12">
+                                            <div className="form-group mb-0">
+                                                <label>Describe your Job Profile</label>
+                                                <textarea className={`form-control ${errors.description ? 'is-invalid' : ''}`} rows={3} placeholder="Describe your Job" value={formData.description} onChange={(e) => handleInputChange('description', e.target.value)} />
+                                                {errors.description && <div className="invalid-feedback d-block">{errors.description}</div>}
+                                                <small className="text-muted">Optional: {formData.description.length}/1000 characters</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="site-button" data-bs-dismiss="modal">Close</button>
-                                <button 
-                                    type="button" 
-                                    className="site-button" 
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        handleSave();
-                                    }}
-                                    disabled={loading}
-                                >
-                                    {loading ? 'Saving...' : 'Save'}
-                                </button>
-                            </div>
-                        </form>
+                                <div className="modal-footer">
+                                    <button type="button" className="site-button" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" className="site-button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSave(); }} disabled={loading}>{loading ? 'Saving...' : 'Save'}</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </div>,
+                document.body
+            )}
         </>
     )
 }

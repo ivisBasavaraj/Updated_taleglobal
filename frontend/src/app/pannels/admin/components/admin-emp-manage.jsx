@@ -112,7 +112,7 @@ function AdminEmployersAllRequest() {
                         <div className="alert alert-danger m-b20">{error}</div>
                     )}
                     <div className="p-a20 table-responsive table-container">
-                        <table className="table twm-table table-striped table-borderless">
+                        <table className="table emp-table">
                             <thead>
                                 <tr>
                                     <th>Company Name</th>
@@ -128,23 +128,45 @@ function AdminEmployersAllRequest() {
                             <tbody>
                                 {employers.length === 0 ? (
                                     <tr>
-                                        <td colSpan="7" className="text-center">No employers found</td>
+                                        <td colSpan="7" className="text-center" style={{padding: '40px', fontSize: '1rem', color: '#6c757d'}}>
+                                            <i className="fa fa-building" style={{fontSize: '2rem', marginBottom: '10px', display: 'block', color: '#dee2e6'}}></i>
+                                            No employers found
+                                        </td>
                                     </tr>
                                 ) : (
                                     employers.map((employer) => (
                                         <tr key={employer._id}>
                                             <td>
-                                                <span className="site-text-primary">
+                                                <span className="company-name">
                                                     {employer.companyName || employer.email}
                                                 </span>
                                             </td>
-                                            <td>{employer.employerType === 'consultant' ? 'Consultant' : 'Company'}</td>
-                                            <td>{employer.email}</td>
-                                            <td>{employer.phone || 'N/A'}</td>
-                                            <td>{formatDate(employer.createdAt)}</td>
-                                            <td>
-                                                <span className={employer.status === 'approved' ? 'text-success' : 
-                                                               employer.status === 'rejected' ? 'text-danger' : 'text-warning'}>
+                                            <td style={{textAlign: 'center'}}>
+                                                <span style={{
+                                                    background: employer.employerType === 'consultant' ? '#e3f2fd' : '#f3e5f5',
+                                                    color: employer.employerType === 'consultant' ? '#1976d2' : '#7b1fa2',
+                                                    padding: '4px 10px',
+                                                    borderRadius: '12px',
+                                                    fontSize: '0.8rem',
+                                                    fontWeight: '500'
+                                                }}>
+                                                    {employer.employerType === 'consultant' ? 'Consultant' : 'Company'}
+                                                </span>
+                                            </td>
+                                            <td style={{fontFamily: 'monospace', fontSize: '0.85rem'}}>
+                                                {employer.email}
+                                            </td>
+                                            <td style={{textAlign: 'center', fontFamily: 'monospace', fontSize: '0.85rem'}}>
+                                                {employer.phone || 'N/A'}
+                                            </td>
+                                            <td style={{textAlign: 'center', fontSize: '0.85rem'}}>
+                                                {formatDate(employer.createdAt)}
+                                            </td>
+                                            <td style={{textAlign: 'center'}}>
+                                                <span className={`status-badge ${
+                                                    employer.status === 'approved' ? 'status-approved' :
+                                                    employer.status === 'rejected' ? 'status-rejected' : 'status-pending'
+                                                }`}>
                                                     {employer.status || 'Pending'}
                                                 </span>
                                             </td>
@@ -154,14 +176,18 @@ function AdminEmployersAllRequest() {
                                                         type="button"
                                                         className="action-btn btn-approve"
                                                         onClick={() => handleApprove(employer._id)}
+                                                        disabled={actionLoading[employer._id]}
                                                     >
+                                                        <i className="fa fa-check"></i>
                                                         Approve
                                                     </button>
                                                     <button
                                                         type="button"
                                                         className="action-btn btn-reject"
                                                         onClick={() => handleReject(employer._id)}
+                                                        disabled={actionLoading[employer._id]}
                                                     >
+                                                        <i className="fa fa-times"></i>
                                                         Reject
                                                     </button>
                                                     <button
@@ -169,7 +195,8 @@ function AdminEmployersAllRequest() {
                                                         className="action-btn btn-view"
                                                         onClick={() => navigate(`/admin/employer-details/${employer._id}`)}
                                                     >
-                                                        View Details
+                                                        <i className="fa fa-eye"></i>
+                                                        View
                                                     </button>
                                                 </div>
                                             </td>

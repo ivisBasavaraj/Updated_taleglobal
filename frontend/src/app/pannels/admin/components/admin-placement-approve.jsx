@@ -57,16 +57,16 @@ function AdminPlacementOfficersApproved() {
                     {error && (
                         <div className="alert alert-danger m-b20">{error}</div>
                     )}
-                    <div className="p-a20 table-responsive">
-                        <table className="table twm-table table-striped table-borderless">
+                    <div className="p-a20 table-responsive" style={{maxHeight: '500px', overflowY: 'auto'}}>
+                        <table className="table twm-table table-striped table-borderless" style={{tableLayout: 'fixed', width: '100%'}}>
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Join Date</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
+                                    <th style={{width: '20%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Name</th>
+                                    <th style={{width: '25%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Email</th>
+                                    <th style={{width: '15%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Phone</th>
+                                    <th style={{width: '15%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Join Date</th>
+                                    <th style={{width: '15%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Status</th>
+                                    <th style={{width: '10%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Actions</th>
                                 </tr>
                             </thead>
 
@@ -78,15 +78,15 @@ function AdminPlacementOfficersApproved() {
                                 ) : (
                                     placements.map((placement) => (
                                         <tr key={placement._id}>
-                                            <td>
+                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={placement.name}>
                                                 <span className="site-text-primary">
                                                     {placement.name}
                                                 </span>
                                             </td>
-                                            <td>{placement.email}</td>
-                                            <td>{placement.phone || 'N/A'}</td>
-                                            <td>{formatDate(placement.createdAt)}</td>
-                                            <td>
+                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={placement.email}>{placement.email}</td>
+                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={placement.phone || 'N/A'}>{placement.phone || 'N/A'}</td>
+                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={formatDate(placement.createdAt)}>{formatDate(placement.createdAt)}</td>
+                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
                                                 <span className="text-success">Approved</span>
                                             </td>
                                             <td>

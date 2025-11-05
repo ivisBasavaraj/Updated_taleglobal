@@ -13,13 +13,9 @@ import useDebounce from "../../../../../utils/useDebounce";
 import { SkeletonContainer, JobCardSkeleton, StatsSkeleton, RecruiterSkeleton } from "../../../../../components/SkeletonLoader";
 import "../../../../../new-job-card.css";
 import "../../../../../home-responsive.css";
-import "../../../../../remove-orange-categories.css";
-import "../../../../../index16-job-categories-orange.css";
 import "../../../../../employer-how-it-works.css";
 import "../../../../../ux-improvements.css";
-import "../../../../../remove-orange-underlines.css";
-import "../../../../../home-spacing-color-fix.css";
-import "../../../../../job-categories-height-fix.css";
+import "./naukri-preview.css";
 
 function Home16Page() {
     const [jobs, setJobs] = useState([]);
@@ -845,7 +841,7 @@ function Home16Page() {
 
                                             return (
                                                 <li key={recruiter._id} style={{marginBottom: '30px'}}>
-                                                    <div className="twm-recruiters5-box hover-card">
+                                                    <div className="twm-recruiters5-box">
                                                         <div className="twm-rec-top">
                                                             <div className="twm-rec-media">
                                                                 {recruiter.logo ? (

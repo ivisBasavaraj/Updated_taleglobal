@@ -126,40 +126,76 @@
 
 .emp-table {
     margin: 0;
-    border: none;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
 }
 
 .emp-table thead th {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    color: #232323;
-    font-weight: 600;
-    padding: 20px 15px;
+    background: linear-gradient(135deg, #343a40 0%, #495057 100%);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 18px 20px;
     border: none;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
     position: sticky;
     top: 0;
     z-index: 10;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.emp-table thead th:first-child {
+    border-top-left-radius: 12px;
+}
+
+.emp-table thead th:last-child {
+    border-top-right-radius: 12px;
 }
 
 .emp-table tbody tr {
     transition: all 0.3s ease;
-    border-bottom: 1px solid #f1f3f4;
+    border-bottom: 1px solid #f8f9fa;
+    background: #ffffff;
 }
 
 .emp-table tbody tr:hover {
-    background: linear-gradient(135deg, #fff8f5 0%, #fef7f0 100%);
-    transform: scale(1.01);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-left: 3px solid #007bff;
+}
+
+.emp-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.emp-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 12px;
+}
+
+.emp-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 12px;
 }
 
 .emp-table tbody td {
-    padding: 20px 15px;
+    padding: 16px 20px;
     vertical-align: middle;
     border: none;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: #495057;
+    border-right: 1px solid #f8f9fa;
+}
+
+.emp-table tbody td:last-child {
+    border-right: none;
 }
 
 .company-name {

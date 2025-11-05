@@ -7,8 +7,6 @@ import ApplyJobPopup from "../../../../common/popups/popup-apply-job";
 import SectionShareProfile from "../../sections/common/section-share-profile";
 import SectionJobsSidebar2 from "../../sections/jobs/sidebar/section-jobs-sidebar2";
 import "./job-detail.css";
-import "../../../../../performance-optimizations.css";
-import "../../../../../sidebar-fix.css";
 
 function JobDetail1Page() {
     const { id, param1 } = useParams();
@@ -112,20 +110,6 @@ function JobDetail1Page() {
         if (jobId) {
             fetchJobDetails();
         }
-        
-        // Force orange background on consultant info
-        const forceOrangeBackground = () => {
-            const consultantDivs = document.querySelectorAll('div[style*="padding: 20px"]');
-            consultantDivs.forEach(div => {
-                div.style.setProperty('background', '#ff9c00', 'important');
-                div.style.setProperty('background-color', '#ff9c00', 'important');
-                div.style.setProperty('background-image', 'linear-gradient(135deg, #ff9c00, #ff8c00)', 'important');
-                div.style.setProperty('color', 'white', 'important');
-            });
-        };
-        
-        setTimeout(forceOrangeBackground, 100);
-        setTimeout(forceOrangeBackground, 500);
         
         let ticking = false;
         const throttledScroll = () => {
@@ -327,7 +311,7 @@ function JobDetail1Page() {
 										{job.postedBy === 'Consultant' && job.employerProfile && (
 											<>
 												<h4 className="twm-s-title">About Consultant:</h4>
-												<div style={{padding: '20px', marginBottom: '20px', background: '#ff9c00 !important', backgroundColor: '#ff9c00 !important', backgroundImage: 'linear-gradient(135deg, #ff9c00, #ff8c00) !important', border: '1px solid #ff7a00', borderRadius: '12px', color: 'white'}} className="force-orange-bg">
+												<div style={{padding: '20px', marginBottom: '20px', border: '1px solid #dee2e6', borderRadius: '12px'}} className="consultant-info-box">
 													<div className="row">
 														<div className="col-md-3">
 															{job.employerProfile.logo && (

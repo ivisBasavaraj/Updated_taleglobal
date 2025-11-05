@@ -5,9 +5,6 @@ import { useState, useEffect } from "react";
 import CanHeaderSection from "../app/pannels/candidate/common/can-header";
 import CanSidebarSection from "../app/pannels/candidate/common/can-sidebar";
 import CandidateRoutes from "../routing/candidate-routes";
-import "../candidate-layout-fix.css";
-import "../admin-orange-underline-fix.css";
-import "../mobile-hamburger-fix.css";
 
 function CandidateLayout() {
 

@@ -53,8 +53,8 @@
   --color-blue-primary: #2563eb;
   --color-blue-dark: #1e40af;
   --color-bg-white: #ffffff;
-  --color-text-dark: #111827;
-  --color-text-gray: #6b7280;
+  --color-text-dark: #000000;
+  --color-text-gray: #000000;
   --color-border-light: #d1d5db;
   --color-bg-light: #f9fafb;
   --color-bg-lighter: #f8fafc;
@@ -160,7 +160,7 @@ body,
 main {
   font-family: 'Rubik', sans-serif !important;
   background-color: #ffffff !important;
-  color: #111827 !important;
+  color: #000000 !important;
 }
 
 /* Smooth scrolling for the entire page */
@@ -430,15 +430,16 @@ button:focus-visible,
   color: #FF7A00 !important;
 }
 
-/* Hover states */
+/* Hover states - DISABLED */
 button:hover,
 .btn:hover,
 .site-button:hover,
 .ant-btn:hover {
-  background-color: #FFF3E5 !important;
+  background-color: rgba(255, 122, 0, 0.08) !important;
   color: #FF7A00 !important;
   border: 1px solid #FF7A00 !important;
-  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 /* Active states */
@@ -730,11 +731,12 @@ button.btn-apply:hover,
 .header-style-3 .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job:hover,
 .header-full-width .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job:hover,
 .header-style-light .header-nav-btn-section .twm-nav-btn-right .twm-nav-post-a-job:hover {
-  background-color: #FFF3E5 !important;
+  background-color: rgba(255, 122, 0, 0.08) !important;
   color: #FF7A00 !important;
   border: 1px solid #FF7A00 !important;
   text-decoration: none !important;
-  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2);
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 /* Enhanced button hover effects */
@@ -2925,6 +2927,13 @@ a.btn.active {
 .content-admin-main,
 #content {
   background: #f7f7f7 !important;
+}
+
+/* Force black color for titles */
+.wt-title,
+.twm-title,
+h1, h2, h3, h4, h5, h6 {
+  color: #000000 !important;
 }
 
 /* ============================================================================

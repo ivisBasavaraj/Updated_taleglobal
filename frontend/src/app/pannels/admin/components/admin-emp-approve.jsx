@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { api } from '../../../../utils/api';
-import '../../../../admin-orange-underline-fix.css';
 
 function AdminEmployersApproved() {
     const navigate = useNavigate();
@@ -66,15 +65,15 @@ function AdminEmployersApproved() {
                         <div className="alert alert-danger m-b20">{error}</div>
                     )}
                     <div className="p-a20 table-responsive table-container">
-                        <table className="table twm-table table-striped table-borderless">
+                        <table className="table twm-table table-striped table-borderless" style={{tableLayout: 'fixed', width: '100%'}}>
                             <thead>
                                 <tr>
-                                    <th>Company Name</th>
-                                    <th>Type</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Approved Date</th>
-                                    <th>Actions</th>
+                                    <th style={{width: '25%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Company Name</th>
+                                    <th style={{width: '12%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Type</th>
+                                    <th style={{width: '25%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Email</th>
+                                    <th style={{width: '15%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Phone</th>
+                                    <th style={{width: '13%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Approved Date</th>
+                                    <th style={{width: '10%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Actions</th>
                                 </tr>
                             </thead>
 
@@ -86,15 +85,15 @@ function AdminEmployersApproved() {
                                 ) : (
                                     employers.map((employer) => (
                                         <tr key={employer._id}>
-                                            <td>
+                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={employer.companyName || employer.email}>
                                                 <span className="site-text-primary">
                                                     {employer.companyName || employer.email}
                                                 </span>
                                             </td>
-                                            <td>{employer.employerType === 'consultant' ? 'Consultant' : 'Company'}</td>
-                                            <td>{employer.email}</td>
-                                            <td>{employer.phone || 'N/A'}</td>
-                                            <td>{formatDate(employer.updatedAt || employer.createdAt)}</td>
+                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={employer.employerType === 'consultant' ? 'Consultant' : 'Company'}>{employer.employerType === 'consultant' ? 'Consultant' : 'Company'}</td>
+                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={employer.email}>{employer.email}</td>
+                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={employer.phone || 'N/A'}>{employer.phone || 'N/A'}</td>
+                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={formatDate(employer.updatedAt || employer.createdAt)}>{formatDate(employer.updatedAt || employer.createdAt)}</td>
                                             <td>
                                                 <button
                                                     style={{

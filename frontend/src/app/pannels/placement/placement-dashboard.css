@@ -1,9 +1,13 @@
+/* Placement Dashboard Card Styles - Consolidated */
 .modern-card {
     background: #ffffff;
     border-radius: 20px;
     box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
     transition: all 0.35s ease;
     border: 1px solid rgba(226, 232, 240, 0.8);
+    /* Performance optimizations */
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .modern-card:hover {
@@ -21,6 +25,8 @@
     transition: all 0.3s ease;
     gap: 1rem;
     box-shadow: 0 8px 20px rgba(44, 62, 80, 0.08);
+    /* Performance optimizations */
+    contain: layout style;
 }
 
 .info-card:hover {
@@ -48,8 +54,31 @@
 
 .upload-zone:hover {
     border-color: #0056b3 !important;
-    background: #f8f9fa !important;
-    transform: translateY(-2px);
+}
+
+/* Performance optimizations for placement dashboard */
+.table-responsive {
+  contain: layout style;
+}
+
+.spinner-border {
+  contain: layout style paint;
+}
+
+.modal {
+  contain: layout;
+}
+
+@font-face {
+  font-display: swap;
+}
+
+img {
+  content-visibility: auto;
+}
+
+.fade {
+  contain: layout style;
 }
 
 .timeline-item {

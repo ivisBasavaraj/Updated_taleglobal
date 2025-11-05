@@ -249,3 +249,10 @@
 
 .rounded-lg { border-radius: 12px !important; }
 .rounded-xl { border-radius: 16px !important; }
+
+/* Button text shadow fix */
+button,
+.btn,
+.site-button {
+  text-shadow: none !important;
+}

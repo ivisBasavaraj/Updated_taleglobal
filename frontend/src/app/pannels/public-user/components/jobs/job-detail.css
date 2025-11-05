@@ -246,7 +246,6 @@
     color: #2c3e50;
     margin: 32px 0 16px 0;
     padding-bottom: 8px;
-    border-bottom: 3px solid #ff9c00;
     display: inline-block;
     animation: fadeInUp 0.6s ease-out;
 }
@@ -429,26 +428,25 @@ a.site-text-primary:hover {
 /* Job details grid styling */
 .job-details-grid {
     animation: scaleIn 0.6s ease-out 0.4s both;
-    transition: all 0.3s ease;
+    transition: none;
 }
 
 .job-details-grid:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transform: none;
+    box-shadow: none;
 }
 
 .detail-item {
     margin-bottom: 20px;
-    padding: 16px;
-    background: white;
-    border-radius: 8px;
-    border-left: 4px solid #ff9c00;
+    padding: 0;
+    background: transparent;
+    border: none;
     transition: all 0.3s ease;
 }
 
 .detail-item:hover {
-    transform: translateX(4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: none;
+    box-shadow: none;
 }
 
 .detail-item h5 {
@@ -734,46 +732,133 @@ a.site-text-primary:hover {
     }
 }
 
-/* HIGHEST PRIORITY OVERRIDE FOR CONSULTANT INFO */
-html body .cabdidate-de-info .consultant-info,
-html body div.consultant-info,
-html body .consultant-info {
-    background: #ff9c00 !important;
-    background-color: #ff9c00 !important;
-    background-image: linear-gradient(135deg, #ff9c00, #ff8c00) !important;
-    border: 1px solid #ff7a00 !important;
-    color: white !important;
+/* Consultant info box styling */
+.consultant-info-box {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
-html body .consultant-info h5,
-html body .consultant-info p,
-html body .consultant-info strong {
-    color: white !important;
+/* Sidebar Fix - Remove white background from job information sidebar */
+.twm-job-hilites,
+.twm-job-hilites li,
+.twm-s-info2-wrap,
+.twm-s-info2 {
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
-html body .consultant-info a {
-    color: white !important;
-    text-decoration: underline !important;
-}
-/* FORCE ORANGE BACKGROUND - OVERRIDE ALL BLUE GRADIENTS */
-div[style*="padding: 20px"],
-div[style*="marginBottom: 20px"],
-.cabdidate-de-info > div:nth-child(n) {
-    background: #ff9c00 !important;
-    background-color: #ff9c00 !important;
-    background-image: linear-gradient(135deg, #ff9c00, #ff8c00) !important;
+.twm-job-hilites li .twm-title {
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
-/* Target the specific div that has the blue gradient */
-div[style*="linear-gradient(135deg, rgb(102, 126, 234)"] {
-    background: #ff9c00 !important;
-    background-color: #ff9c00 !important;
-    background-image: linear-gradient(135deg, #ff9c00, #ff8c00) !important;
+.twm-job-hilites li {
+  box-shadow: none !important;
+  border: none !important;
 }
-.force-orange-bg {
-    background: #ff9c00 !important;
-    background-color: #ff9c00 !important;
-    background-image: linear-gradient(135deg, #ff9c00, #ff8c00) !important;
-    border: 1px solid #ff7a00 !important;
-    color: white !important;
+
+.side-bar .twm-s-info2-wrap {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.side-bar .twm-s-info2 {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.twm-job-hilites li span.twm-title {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.twm-job-hilites2 li,
+.twm-job-hilites li {
+  margin-bottom: 6px !important;
+  padding-bottom: 3px !important;
+}
+
+.twm-s-info-inner {
+  margin-bottom: 6px !important;
+  padding-bottom: 3px !important;
+}
+
+/* Performance Optimizations */
+.scroll-progress {
+  will-change: width;
+  transform: translateZ(0);
+}
+
+img {
+  content-visibility: auto;
+  contain-intrinsic-size: 200px 150px;
+}
+
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+.floating-apply-btn {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.back-to-top {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.loading-container {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.twm-job-title,
+.twm-s-title {
+  text-rendering: optimizeLegibility;
+}
+
+.skills-container {
+  contain: layout;
+}
+
+.skill-tag {
+  contain: layout style;
+}
+
+.section-full {
+  contain: layout;
+}
+
+.rightSidebar {
+  contain: layout style;
+}
+
+.consultant-info,
+.job-details-grid {
+  contain: layout style paint;
 }
