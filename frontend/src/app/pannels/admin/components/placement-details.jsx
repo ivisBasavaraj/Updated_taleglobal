@@ -564,9 +564,9 @@ function PlacementDetails() {
 
                 <div className="row">
                     <div className="col-lg-3 col-md-6 mb-3">
-                        <div className="info-card">
-                            <div className="info-icon" style={{background: '#007bff20', color: '#007bff'}}>
-                                <i className="fa fa-phone"></i>
+                        <div className="info-card" style={{minHeight: '100px'}}>
+                            <div className="info-icon" style={{background: '#f8f9fa', border: '1px solid #dee2e6'}}>
+                                <i className="fa fa-phone" style={{color: '#000'}}></i>
                             </div>
                             <div>
                                 <label className="text-muted mb-1">Phone Number</label>
@@ -575,9 +575,9 @@ function PlacementDetails() {
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-6 mb-3">
-                        <div className="info-card">
-                            <div className="info-icon" style={{background: '#28a74520', color: '#28a745'}}>
-                                <i className="fa fa-calendar"></i>
+                        <div className="info-card" style={{minHeight: '100px'}}>
+                            <div className="info-icon" style={{background: '#f8f9fa', border: '1px solid #dee2e6'}}>
+                                <i className="fa fa-calendar" style={{color: '#000'}}></i>
                             </div>
                             <div>
                                 <label className="text-muted mb-1">Registration Date</label>
@@ -590,12 +590,14 @@ function PlacementDetails() {
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-6 mb-3">
-                        <div className="info-card">
+                        <div className="info-card" style={{minHeight: '100px'}}>
                             <div className="info-icon" style={{
-                                background: placement.status === 'approved' ? '#28a74520' : '#ffc10720',
-                                color: placement.status === 'approved' ? '#28a745' : '#ffc107'
+                                background: '#f8f9fa',
+                                border: '2px solid #FDC360',
+                                padding: '8px',
+                                borderRadius: '8px'
                             }}>
-                                <i className={`fa ${placement.status === 'approved' ? 'fa-check-circle' : 'fa-clock-o'}`}></i>
+                                <i className={`fa ${placement.status === 'approved' ? 'fa-check-circle' : 'fa-clock-o'}`} style={{color: '#000'}}></i>
                             </div>
                             <div>
                                 <label className="text-muted mb-1">
@@ -611,9 +613,14 @@ function PlacementDetails() {
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-6 mb-3">
-                        <div className="info-card">
-                            <div className="info-icon" style={{background: '#17a2b820', color: '#17a2b8'}}>
-                                <i className="fa fa-files-o"></i>
+                        <div className="info-card" style={{minHeight: '100px'}}>
+                            <div className="info-icon" style={{
+                                background: '#f8f9fa',
+                                border: '2px solid #FDC360',
+                                padding: '8px',
+                                borderRadius: '8px'
+                            }}>
+                                <i className="fa fa-files-o" style={{color: '#000'}}></i>
                             </div>
                             <div>
                                 <label className="text-muted mb-1">
@@ -681,20 +688,18 @@ function PlacementDetails() {
                                                 width: '48px',
                                                 height: '48px',
                                                 borderRadius: '12px',
-                                                background: file.status === 'processed' ? 'linear-gradient(135deg, #4CAF50, #45a049)' : 
-                                                           file.status === 'approved' ? 'linear-gradient(135deg, #2196F3, #1976D2)' : 
-                                                           file.status === 'rejected' ? 'linear-gradient(135deg, #f44336, #d32f2f)' : 'linear-gradient(135deg, #FF9800, #F57C00)',
+                                                background: '#f8f9fa',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 flexShrink: 0,
-                                                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                                                border: '1px solid #dee2e6'
                                             }}>
                                                 <i className={`fa ${
                                                     file.status === 'processed' ? 'fa-check-circle' : 
                                                     file.status === 'approved' ? 'fa-check' : 
                                                     file.status === 'rejected' ? 'fa-times' : 'fa-clock-o'
-                                                } text-white`} style={{fontSize: '18px'}}></i>
+                                                }`} style={{fontSize: '18px', color: '#000'}}></i>
                                             </div>
                                             <div className="ml-4 flex-grow-1">
                                                 <div className="d-flex justify-content-between align-items-start">
@@ -742,35 +747,41 @@ function PlacementDetails() {
                                                     </div>
                                                     <div className="d-flex flex-wrap gap-2 ml-3">
                                                         <button
-                                                            className="btn btn-outline-info btn-sm"
+                                                            className="btn btn-sm"
                                                             onClick={() => handleViewFileData(file._id, file.fileName)}
                                                             style={{
                                                                 fontSize: '0.8rem',
                                                                 padding: '6px 12px',
                                                                 borderRadius: '8px',
                                                                 fontWeight: '500',
-                                                                transition: 'all 0.2s ease'
+                                                                transition: 'all 0.2s ease',
+                                                                backgroundColor: '#FDC360',
+                                                                border: '1px solid #FDC360',
+                                                                color: '#000'
                                                             }}
                                                             title="View file data in Student Records section"
                                                         >
-                                                            <i className="fa fa-eye mr-1"></i>View
+                                                            <i className="fa fa-eye mr-1" style={{color: '#000'}}></i>View
                                                         </button>
                                                         <button
-                                                            className="btn btn-outline-warning btn-sm"
+                                                            className="btn btn-sm"
                                                             onClick={() => handleFileCreditsManagement(file)}
                                                             style={{
                                                                 fontSize: '0.8rem',
                                                                 padding: '6px 12px',
                                                                 borderRadius: '8px',
                                                                 fontWeight: '500',
-                                                                transition: 'all 0.2s ease'
+                                                                transition: 'all 0.2s ease',
+                                                                backgroundColor: '#FDC360',
+                                                                border: '1px solid #FDC360',
+                                                                color: '#000'
                                                             }}
                                                             title="Manage credits for this file"
                                                         >
-                                                            <i className="fa fa-credit-card mr-1"></i>Credits
+                                                            <i className="fa fa-credit-card mr-1" style={{color: '#000'}}></i>Credits
                                                         </button>
                                                         <button
-                                                            className={`btn btn-sm ${file.status === 'processed' ? 'btn-success' : 'btn-outline-primary'}`}
+                                                            className="btn btn-sm"
                                                             onClick={() => handleProcessData(file._id, file.fileName)}
                                                             disabled={processingFiles[file._id] || file.status === 'processed'}
                                                             style={{
@@ -778,22 +789,25 @@ function PlacementDetails() {
                                                                 padding: '6px 12px',
                                                                 borderRadius: '8px',
                                                                 fontWeight: '500',
-                                                                transition: 'all 0.2s ease'
+                                                                transition: 'all 0.2s ease',
+                                                                backgroundColor: '#FDC360',
+                                                                border: '1px solid #FDC360',
+                                                                color: '#000'
                                                             }}
                                                             title={file.status === 'processed' ? 'File already processed - candidates can login' : 'Process file data and create candidate accounts with login access'}
                                                         >
                                                             {processingFiles[file._id] === 'processing' ? (
-                                                                <><i className="fa fa-spinner fa-spin mr-1"></i>Processing...</>
+                                                                <><i className="fa fa-spinner fa-spin mr-1" style={{color: '#000'}}></i>Processing...</>
                                                             ) : file.status === 'processed' ? (
-                                                                <><i className="fa fa-check mr-1"></i>Processed</>
+                                                                <><i className="fa fa-check mr-1" style={{color: '#000'}}></i>Processed</>
                                                             ) : (
-                                                                <><i className="fa fa-cogs mr-1"></i>Process</>
+                                                                <><i className="fa fa-cogs mr-1" style={{color: '#000'}}></i>Process</>
                                                             )}
                                                         </button>
                                                         {file.status === 'pending' && (
                                                             <>
                                                                 <button
-                                                                    className="btn btn-outline-success btn-sm"
+                                                                    className="btn btn-sm"
                                                                     onClick={() => handleFileApprove(file._id, file.fileName)}
                                                                     disabled={processingFiles[file._id]}
                                                                     style={{
@@ -801,7 +815,10 @@ function PlacementDetails() {
                                                                         padding: '6px 12px',
                                                                         borderRadius: '8px',
                                                                         fontWeight: '500',
-                                                                        transition: 'all 0.2s ease'
+                                                                        transition: 'all 0.2s ease',
+                                                                        backgroundColor: '#FDC360',
+                                                                        border: '1px solid #FDC360',
+                                                                        color: '#000'
                                                                     }}
                                                                     title="Approve and process this file"
                                                                 >
@@ -812,7 +829,7 @@ function PlacementDetails() {
                                                                     )}
                                                                 </button>
                                                                 <button
-                                                                    className="btn btn-outline-danger btn-sm"
+                                                                    className="btn btn-sm"
                                                                     onClick={() => handleFileReject(file._id, file.fileName)}
                                                                     disabled={processingFiles[file._id]}
                                                                     style={{
@@ -820,7 +837,10 @@ function PlacementDetails() {
                                                                         padding: '6px 12px',
                                                                         borderRadius: '8px',
                                                                         fontWeight: '500',
-                                                                        transition: 'all 0.2s ease'
+                                                                        transition: 'all 0.2s ease',
+                                                                        backgroundColor: '#FDC360',
+                                                                        border: '1px solid #FDC360',
+                                                                        color: '#000'
                                                                     }}
                                                                     title="Reject this file"
                                                                 >
@@ -839,28 +859,28 @@ function PlacementDetails() {
                                                         {file.status === 'processed' ? (
                                                             <>
                                                                 <span style={{
-                                                                    background: 'rgba(40, 167, 69, 0.1)',
-                                                                    color: '#28a745',
+                                                                    background: '#f8f9fa',
+                                                                    color: '#000',
                                                                     padding: '6px 12px',
                                                                     borderRadius: '20px',
                                                                     fontSize: '0.8rem',
                                                                     fontWeight: '500',
-                                                                    border: '1px solid rgba(40, 167, 69, 0.2)'
+                                                                    border: '1px solid #dee2e6'
                                                                 }}>
-                                                                    <i className="fa fa-check-circle mr-2"></i>
+                                                                    <i className="fa fa-check-circle mr-2" style={{color: '#000'}}></i>
                                                                     Processed - Login Ready
                                                                 </span>
                                                                 {file.candidatesCreated > 0 && (
                                                                     <span style={{
-                                                                        background: 'rgba(23, 162, 184, 0.1)',
-                                                                        color: '#17a2b8',
+                                                                        background: '#f8f9fa',
+                                                                        color: '#000',
                                                                         padding: '6px 12px',
                                                                         borderRadius: '20px',
                                                                         fontSize: '0.8rem',
                                                                         fontWeight: '500',
-                                                                        border: '1px solid rgba(23, 162, 184, 0.2)'
+                                                                        border: '1px solid #dee2e6'
                                                                     }}>
-                                                                        <i className="fa fa-users mr-2"></i>
+                                                                        <i className="fa fa-users mr-2" style={{color: '#000'}}></i>
                                                                         {file.candidatesCreated} candidates can login
                                                                     </span>
                                                                 )}
@@ -909,28 +929,28 @@ function PlacementDetails() {
                                                             </span>
                                                         ) : (
                                                             <span style={{
-                                                                background: 'linear-gradient(135deg, #ffc107, #e0a800)',
-                                                                color: '#212529',
+                                                                background: '#FDC360',
+                                                                color: '#000',
                                                                 padding: '6px 12px',
                                                                 borderRadius: '20px',
                                                                 fontSize: '0.8rem',
                                                                 fontWeight: '500',
-                                                                boxShadow: '0 2px 8px rgba(255, 193, 7, 0.3)'
+                                                                border: '1px solid #FDC360'
                                                             }}>
-                                                                <i className="fa fa-clock-o mr-2"></i>
+                                                                <i className="fa fa-clock-o mr-2" style={{color: '#000'}}></i>
                                                                 Waiting for Admin Approval
                                                             </span>
                                                         )}
                                                         <span style={{
-                                                            background: 'rgba(111, 66, 193, 0.1)',
-                                                            color: '#6f42c1',
+                                                            background: '#f8f9fa',
+                                                            color: '#000',
                                                             padding: '6px 12px',
                                                             borderRadius: '20px',
                                                             fontSize: '0.8rem',
                                                             fontWeight: '500',
-                                                            border: '1px solid rgba(111, 66, 193, 0.2)'
+                                                            border: '1px solid #dee2e6'
                                                         }}>
-                                                            <i className="fa fa-credit-card mr-2"></i>
+                                                            <i className="fa fa-credit-card mr-2" style={{color: '#000'}}></i>
                                                             Credits: {file.credits || 0}
                                                         </span>
                                                         {file.status === 'processed' && (
@@ -1088,57 +1108,57 @@ function PlacementDetails() {
                     </div>
                 ) : studentData.length > 0 ? (
                     <div className="table-responsive">
-                        <table className="table table-hover" style={{fontSize: '0.9rem'}}>
-                            <thead style={{background: '#f8f9fa'}}>
+                        <table className="emp-table">
+                            <thead>
                                 <tr>
-                                    <th style={{border: 'none', fontWeight: '600'}}>ID</th>
-                                    <th style={{border: 'none', fontWeight: '600'}}>Name</th>
-                                    <th style={{border: 'none', fontWeight: '600'}}>College</th>
-                                    <th style={{border: 'none', fontWeight: '600'}}>Email</th>
-                                    <th style={{border: 'none', fontWeight: '600'}}>Phone</th>
-                                    <th style={{border: 'none', fontWeight: '600'}}>Course</th>
-                                    <th style={{border: 'none', fontWeight: '600'}}>Password</th>
-                                    <th style={{border: 'none', fontWeight: '600'}}>Credits</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>College</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Course</th>
+                                    <th>Password</th>
+                                    <th>Credits</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {studentData.map((student, index) => (
-                                    <tr key={index} style={{borderTop: '1px solid #e9ecef'}}>
-                                        <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>
+                                    <tr key={index}>
+                                        <td>
                                             <span className="badge badge-light">{student.id || (index + 1)}</span>
                                         </td>
-                                        <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>
+                                        <td>
                                             <div className="d-flex align-items-center">
                                                 <div className="avatar-sm mr-2" style={{
                                                     width: '32px',
                                                     height: '32px',
                                                     borderRadius: '50%',
-                                                    background: '#007bff20',
+                                                    background: '#FDC36020',
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
-                                                    color: '#007bff',
+                                                    color: '#FDC360',
                                                     fontSize: '0.8rem',
                                                     fontWeight: '600'
                                                 }}>
                                                     {(student.name || 'N').charAt(0).toUpperCase()}
                                                 </div>
-                                                {student.name || 'N/A'}
+                                                <span className="company-name">{student.name || 'N/A'}</span>
                                             </div>
                                         </td>
-                                        <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>
-                                            <small className="text-muted">{student.collegeName || '-'}</small>
+                                        <td>
+                                            {student.collegeName || '-'}
                                         </td>
-                                        <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>
+                                        <td>
                                             {student.email || 'N/A'}
                                         </td>
-                                        <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>
+                                        <td>
                                             {student.phone || '-'}
                                         </td>
-                                        <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>
-                                            <small className="text-muted">{student.course || '-'}</small>
+                                        <td>
+                                            {student.course || '-'}
                                         </td>
-                                        <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>
+                                        <td>
                                             <code style={{
                                                 background: '#f8f9fa',
                                                 padding: '4px 8px',
@@ -1148,8 +1168,8 @@ function PlacementDetails() {
                                                 {student.password || 'N/A'}
                                             </code>
                                         </td>
-                                        <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>
-                                            <span className="badge badge-info">
+                                        <td>
+                                            <span className="status-badge status-approved">
                                                 {student.credits || (() => {
                                                     if (currentViewingFileId) {
                                                         const currentFile = placement?.fileHistory?.find(f => f._id === currentViewingFileId);
@@ -1280,8 +1300,8 @@ function PlacementDetails() {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" onClick={() => setShowCreditsModal(false)}>Cancel</button>
-                                <button type="button" className="btn btn-primary" onClick={handleUpdateFileCredits}>
-                                    <i className="fa fa-save mr-1"></i>Update File Credits
+                                <button type="button" className="btn" onClick={handleUpdateFileCredits} style={{backgroundColor: '#FDC360', border: '1px solid #FDC360', color: '#000'}}>
+                                    <i className="fa fa-save mr-1" style={{color: '#000'}}></i>Update File Credits
                                 </button>
                             </div>
                         </div>

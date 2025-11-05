@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { api } from '../../../../utils/api';
+import './admin-emp-manage-styles.css';
 
 function AdminPlacementOfficersAllRequest() {
     const navigate = useNavigate();
@@ -88,7 +89,7 @@ function AdminPlacementOfficersAllRequest() {
                         <div className="alert alert-danger m-b20">{error}</div>
                     )}
                     <div className="p-a20 table-responsive table-container">
-                        <table className="table twm-table table-striped table-borderless">
+                        <table className="table emp-table">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -109,63 +110,42 @@ function AdminPlacementOfficersAllRequest() {
                                     placements.map((placement) => (
                                         <tr key={placement._id}>
                                             <td>
-                                                <span className="site-text-primary">
+                                                <span className="company-name">
                                                     {placement.name}
                                                 </span>
                                             </td>
-                                            <td>{placement.email}</td>
-                                            <td>{placement.phone || 'N/A'}</td>
-                                            <td>{formatDate(placement.createdAt)}</td>
-                                            <td>
-                                                <span className={placement.status === 'approved' ? 'text-success' : 
-                                                               placement.status === 'rejected' ? 'text-danger' : 'text-warning'}>
+                                            <td style={{fontFamily: 'monospace', fontSize: '0.85rem'}}>{placement.email}</td>
+                                            <td style={{textAlign: 'center', fontFamily: 'monospace', fontSize: '0.85rem'}}>{placement.phone || 'N/A'}</td>
+                                            <td style={{textAlign: 'center', fontSize: '0.85rem'}}>{formatDate(placement.createdAt)}</td>
+                                            <td style={{textAlign: 'center'}}>
+                                                <span className="status-badge status-pending">
                                                     {placement.status || 'Pending'}
                                                 </span>
                                             </td>
                                             <td>
-                                                <button
-                                                    style={{
-                                                        backgroundColor: "green",
-                                                        color: "#fff",
-                                                        border: "none",
-                                                        padding: "5px 10px",
-                                                        borderRadius: "4px",
-                                                        cursor: "pointer",
-                                                    }}
-                                                    onClick={() => handleApprove(placement._id)}
-                                                >
-                                                    Approve
-                                                </button>
-                                                
-                                                <button
-                                                    style={{
-                                                        backgroundColor: "#dc3545",
-                                                        color: "#fff",
-                                                        border: "none",
-                                                        padding: "5px 10px",
-                                                        borderRadius: "4px",
-                                                        cursor: "pointer",
-                                                    }}
-                                                    className="ms-3"
-                                                    onClick={() => handleReject(placement._id)}
-                                                >
-                                                    Reject
-                                                </button>
-
-                                                <button
-                                                    style={{
-                                                        backgroundColor: "#fd7e14",
-                                                        color: "#fff",
-                                                        border: "none",
-                                                        padding: "5px 10px",
-                                                        borderRadius: "4px",
-                                                        cursor: "pointer",
-                                                    }}
-                                                    className="ms-3"
-                                                    onClick={() => navigate(`/admin/placement-details/${placement._id}`)}
-                                                >
-                                                    <i className="fa fa-eye"></i>
-                                                </button>
+                                                <div className="action-buttons">
+                                                    <button
+                                                        className="action-btn"
+                                                        onClick={() => handleApprove(placement._id)}
+                                                    >
+                                                        <i className="fa fa-check"></i>
+                                                        Approve
+                                                    </button>
+                                                    <button
+                                                        className="action-btn"
+                                                        onClick={() => handleReject(placement._id)}
+                                                    >
+                                                        <i className="fa fa-times"></i>
+                                                        Reject
+                                                    </button>
+                                                    <button
+                                                        className="action-btn"
+                                                        onClick={() => navigate(`/admin/placement-details/${placement._id}`)}
+                                                    >
+                                                        <i className="fa fa-eye"></i>
+                                                        View
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))

@@ -143,12 +143,12 @@ function AdminEmployersAllRequest() {
                                             </td>
                                             <td style={{textAlign: 'center'}}>
                                                 <span style={{
-                                                    background: employer.employerType === 'consultant' ? '#e3f2fd' : '#f3e5f5',
-                                                    color: employer.employerType === 'consultant' ? '#1976d2' : '#7b1fa2',
+                                                    background: 'transparent',
+                                                    color: '#000000',
                                                     padding: '4px 10px',
                                                     borderRadius: '12px',
                                                     fontSize: '0.8rem',
-                                                    fontWeight: '500'
+                                                    fontWeight: '700'
                                                 }}>
                                                     {employer.employerType === 'consultant' ? 'Consultant' : 'Company'}
                                                 </span>

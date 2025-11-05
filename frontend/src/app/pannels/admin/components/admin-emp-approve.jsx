@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { api } from '../../../../utils/api';
+import './admin-emp-manage-styles.css';
 
 function AdminEmployersApproved() {
     const navigate = useNavigate();
@@ -65,15 +66,15 @@ function AdminEmployersApproved() {
                         <div className="alert alert-danger m-b20">{error}</div>
                     )}
                     <div className="p-a20 table-responsive table-container">
-                        <table className="table twm-table table-striped table-borderless" style={{tableLayout: 'fixed', width: '100%'}}>
+                        <table className="table emp-table">
                             <thead>
                                 <tr>
-                                    <th style={{width: '25%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Company Name</th>
-                                    <th style={{width: '12%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Type</th>
-                                    <th style={{width: '25%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Email</th>
-                                    <th style={{width: '15%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Phone</th>
-                                    <th style={{width: '13%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Approved Date</th>
-                                    <th style={{width: '10%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Actions</th>
+                                    <th>Company Name</th>
+                                    <th>Type</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Approved Date</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
 
@@ -85,29 +86,33 @@ function AdminEmployersApproved() {
                                 ) : (
                                     employers.map((employer) => (
                                         <tr key={employer._id}>
-                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={employer.companyName || employer.email}>
-                                                <span className="site-text-primary">
+                                            <td>
+                                                <span className="company-name">
                                                     {employer.companyName || employer.email}
                                                 </span>
                                             </td>
-                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={employer.employerType === 'consultant' ? 'Consultant' : 'Company'}>{employer.employerType === 'consultant' ? 'Consultant' : 'Company'}</td>
-                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={employer.email}>{employer.email}</td>
-                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={employer.phone || 'N/A'}>{employer.phone || 'N/A'}</td>
-                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={formatDate(employer.updatedAt || employer.createdAt)}>{formatDate(employer.updatedAt || employer.createdAt)}</td>
+                                            <td style={{textAlign: 'center'}}>
+                                                <span style={{
+                                                    background: 'transparent',
+                                                    color: '#000000',
+                                                    padding: '4px 10px',
+                                                    borderRadius: '12px',
+                                                    fontSize: '0.8rem',
+                                                    fontWeight: '700'
+                                                }}>
+                                                    {employer.employerType === 'consultant' ? 'Consultant' : 'Company'}
+                                                </span>
+                                            </td>
+                                            <td style={{fontFamily: 'monospace', fontSize: '0.85rem'}}>{employer.email}</td>
+                                            <td style={{textAlign: 'center', fontFamily: 'monospace', fontSize: '0.85rem'}}>{employer.phone || 'N/A'}</td>
+                                            <td style={{textAlign: 'center', fontSize: '0.85rem'}}>{formatDate(employer.updatedAt || employer.createdAt)}</td>
                                             <td>
                                                 <button
-                                                    style={{
-                                                        backgroundColor: "#fd7e14",
-                                                        color: "#fff",
-                                                        border: "none",
-                                                        padding: "5px 10px",
-                                                        borderRadius: "4px",
-                                                        cursor: "pointer",
-                                                    }}
-                                                    className="ms-3"
+                                                    className="action-btn btn-view"
                                                     onClick={() => navigate(`/admin/employer-details/${employer._id}`)}
                                                 >
-                                                    View Details
+                                                    <i className="fa fa-eye"></i>
+                                                    View
                                                 </button>
                                             </td>
                                         </tr>

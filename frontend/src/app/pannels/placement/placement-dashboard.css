@@ -93,6 +93,28 @@ img {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+/* Prevent text overflow */
+.modern-card strong,
+.modern-card p,
+.modern-card small,
+.modern-card span {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.table {
+    table-layout: auto;
+}
+
+.table td,
+.table th {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    vertical-align: top;
+}
+
 .badge {
     font-size: 0.75rem;
     padding: 0.375rem 0.75rem;

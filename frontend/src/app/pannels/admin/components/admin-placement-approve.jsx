@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../../../utils/api';
+import './admin-emp-manage-styles.css';
 
 function AdminPlacementOfficersApproved() {
     const [placements, setPlacements] = useState([]);
@@ -57,16 +58,16 @@ function AdminPlacementOfficersApproved() {
                     {error && (
                         <div className="alert alert-danger m-b20">{error}</div>
                     )}
-                    <div className="p-a20 table-responsive" style={{maxHeight: '500px', overflowY: 'auto'}}>
-                        <table className="table twm-table table-striped table-borderless" style={{tableLayout: 'fixed', width: '100%'}}>
+                    <div className="p-a20 table-responsive table-container">
+                        <table className="table emp-table">
                             <thead>
                                 <tr>
-                                    <th style={{width: '20%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Name</th>
-                                    <th style={{width: '25%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Email</th>
-                                    <th style={{width: '15%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Phone</th>
-                                    <th style={{width: '15%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Join Date</th>
-                                    <th style={{width: '15%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Status</th>
-                                    <th style={{width: '10%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Actions</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Join Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
 
@@ -78,30 +79,24 @@ function AdminPlacementOfficersApproved() {
                                 ) : (
                                     placements.map((placement) => (
                                         <tr key={placement._id}>
-                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={placement.name}>
-                                                <span className="site-text-primary">
+                                            <td>
+                                                <span className="company-name">
                                                     {placement.name}
                                                 </span>
                                             </td>
-                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={placement.email}>{placement.email}</td>
-                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={placement.phone || 'N/A'}>{placement.phone || 'N/A'}</td>
-                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={formatDate(placement.createdAt)}>{formatDate(placement.createdAt)}</td>
-                                            <td style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                                                <span className="text-success">Approved</span>
+                                            <td style={{fontFamily: 'monospace', fontSize: '0.85rem'}}>{placement.email}</td>
+                                            <td style={{textAlign: 'center', fontFamily: 'monospace', fontSize: '0.85rem'}}>{placement.phone || 'N/A'}</td>
+                                            <td style={{textAlign: 'center', fontSize: '0.85rem'}}>{formatDate(placement.createdAt)}</td>
+                                            <td style={{textAlign: 'center'}}>
+                                                <span className="status-badge status-approved">Approved</span>
                                             </td>
                                             <td>
                                                 <button
-                                                    style={{
-                                                        backgroundColor: "#fd7e14",
-                                                        color: "#fff",
-                                                        border: "none",
-                                                        padding: "5px 10px",
-                                                        borderRadius: "4px",
-                                                        cursor: "pointer"
-                                                    }}
+                                                    className="action-btn btn-view"
                                                     onClick={() => window.open(`/admin/placement-details/${placement._id}`, '_blank')}
                                                 >
                                                     <i className="fa fa-eye"></i>
+                                                    View
                                                 </button>
                                             </td>
                                         </tr>

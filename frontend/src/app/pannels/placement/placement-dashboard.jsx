@@ -632,30 +632,7 @@ function PlacementDashboard() {
                         </div>
                     </div>
 
-                    <div className="col-lg-4 col-md-6 mb-3">
-                        <div className="info-card">
-                            <div className="info-icon">
-                                <i className="fa fa-check-circle" style={{fontSize: '20px'}}></i>
-                            </div>
-                            <div>
-                                <label className="text-muted mb-1" style={{fontSize: '0.75rem'}}>Status</label>
-                                <h4 className="mb-0" style={{fontWeight: 700, color: '#1f2937', textTransform: 'capitalize'}}>{placementData?.status || 'Pending'}</h4>
-                                <small className="text-muted">Your placement account is currently {placementData?.status || 'pending'}</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6 mb-3">
-                        <div className="info-card">
-                            <div className="info-icon">
-                                <i className="fa fa-file-excel-o" style={{fontSize: '20px'}}></i>
-                            </div>
-                            <div>
-                                <label className="text-muted mb-1" style={{fontSize: '0.75rem'}}>Files Uploaded</label>
-                                <h4 className="mb-0" style={{fontWeight: 700, color: '#1f2937'}}>{placementData?.fileHistory?.length || 0}</h4>
-                                <small className="text-muted">Awaiting admin review and processing</small>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
 
@@ -691,7 +668,7 @@ function PlacementDashboard() {
                                     <p className="text-muted mb-3" style={{fontSize: '0.85rem'}}>
                                         Required: ID | Candidate Name | College Name | Email | Phone | Course | Password | Credits Assigned
                                     </p>
-                                    <button className="btn btn-primary" disabled={uploadingFile}>
+                                    <button className="btn" disabled={uploadingFile} style={{backgroundColor: '#FDC360', border: '1px solid #FDC360', color: '#000'}}>
                                         <i className="fa fa-upload mr-2"></i>
                                         Choose File
                                     </button>
@@ -721,8 +698,8 @@ function PlacementDashboard() {
                                     <a 
                                         href="/assets/student-data-template.csv" 
                                         download="student-data-template.csv"
-                                        className="btn btn-sm btn-outline-success"
-                                        style={{fontSize: '0.8rem'}}
+                                        className="btn btn-sm btn-light"
+                                        style={{fontSize: '0.8rem', border: '1px solid #dee2e6'}}
                                     >
                                         <i className="fa fa-download mr-1"></i>
                                         Template
@@ -730,8 +707,8 @@ function PlacementDashboard() {
                                     <a 
                                         href="/assets/sample-student-data.csv" 
                                         download="sample-student-data.csv"
-                                        className="btn btn-sm btn-outline-info"
-                                        style={{fontSize: '0.8rem'}}
+                                        className="btn btn-sm btn-light"
+                                        style={{fontSize: '0.8rem', border: '1px solid #dee2e6'}}
                                     >
                                         <i className="fa fa-download mr-1"></i>
                                         Sample Data
@@ -1033,8 +1010,9 @@ function PlacementDashboard() {
                                 </button>
                                 <button 
                                     type="button" 
-                                    className="btn btn-primary" 
+                                    className="btn btn-light" 
                                     onClick={handleConfirmUpload}
+                                    style={{border: '1px solid #dee2e6'}}
                                 >
                                     <i className="fa fa-upload mr-1"></i>
                                     Upload File
@@ -1112,7 +1090,7 @@ function PlacementDashboard() {
                                 </button>
                                 <button 
                                     type="button" 
-                                    className="btn btn-success" 
+                                    className="btn btn-light" 
                                     onClick={handleUpdateProfile}
                                     disabled={updating}
                                 >

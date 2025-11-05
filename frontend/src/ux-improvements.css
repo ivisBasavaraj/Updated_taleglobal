@@ -23,35 +23,14 @@ input:focus:not(:focus-visible) {
 }
 
 /* ===== Better Button Feedback ===== */
-.site-button,
-button[type="submit"],
-button[type="button"],
 .apply-now-btn,
 .circle-line-btn {
-    position: relative;
     transition: all 0.3s ease;
     user-select: none;
     -webkit-user-select: none;
 }
 
-/* ===== Specific Button Hover Fixes (Component-level overrides only) ===== */
-/* These selectors target only the specific buttons that had dark orange hover issues */
-.site-button:hover,
-button[type="submit"]:hover,
-button[type="button"]:hover,
-.apply-now-btn:hover,
-.circle-line-btn:hover {
-    position: relative;
-    transition: all 0.3s ease;
-}
 
-.site-button:active,
-button[type="submit"]:active,
-button[type="button"]:active,
-.apply-now-btn:active,
-.circle-line-btn:active {
-    transform: translateY(0);
-}
 
 /* ===== Improved Form Input States ===== */
 input:focus,
@@ -88,29 +67,14 @@ html {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
 }
 
-/* Remove hover color changing - keep recruiter cards white */
+/* Recruiter card hover effect */
+.twm-recruiters5-box {
+    transition: all 0.3s ease;
+}
+
 .twm-recruiters5-box:hover {
-    transform: none !important;
-    box-shadow: none !important;
-    background-color: #fff !important;
-}
-
-/* Keep text colors on hover */
-.twm-column-5 ul li .twm-recruiters5-box:hover {
-    background: #fff !important;
-}
-
-.twm-column-5 ul li .twm-recruiters5-box:hover .twm-title a {
-    color: inherit !important;
-}
-
-.twm-column-5 ul li .twm-recruiters5-box:hover .twm-job-address,
-.twm-column-5 ul li .twm-recruiters5-box:hover .twm-rec-rating-count {
-    color: inherit !important;
-}
-
-.twm-column-5 ul li .twm-recruiters5-box:hover:after {
-    opacity: 0 !important;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12) !important;
 }
 
 /* ===== Improved Loading Spinner ===== */
@@ -402,4 +366,22 @@ code {
 .twm-title,
 h1, h2, h3, h4, h5, h6 {
   color: #000000 !important;
+}
+
+/* Fix password eye icon position */
+.password-eye-icon {
+    position: absolute !important;
+    right: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 10;
+}
+
+/* Prevent form-group height changes from affecting eye icon */
+.form-group.position-relative {
+    position: relative;
+}
+
+.form-group.position-relative .form-control {
+    padding-right: 40px;
 }

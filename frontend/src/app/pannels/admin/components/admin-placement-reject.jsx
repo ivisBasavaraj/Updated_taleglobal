@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../../../utils/api';
+import './admin-emp-manage-styles.css';
 
 function AdminPlacementOfficersRejected() {
     const [placements, setPlacements] = useState([]);
@@ -57,8 +58,8 @@ function AdminPlacementOfficersRejected() {
                     {error && (
                         <div className="alert alert-danger m-b20">{error}</div>
                     )}
-                    <div className="p-a20 table-responsive">
-                        <table className="table twm-table table-striped table-borderless">
+                    <div className="p-a20 table-responsive table-container">
+                        <table className="table emp-table">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -79,29 +80,23 @@ function AdminPlacementOfficersRejected() {
                                     placements.map((placement) => (
                                         <tr key={placement._id}>
                                             <td>
-                                                <span className="site-text-primary">
+                                                <span className="company-name">
                                                     {placement.name}
                                                 </span>
                                             </td>
-                                            <td>{placement.email}</td>
-                                            <td>{placement.phone || 'N/A'}</td>
-                                            <td>{formatDate(placement.createdAt)}</td>
-                                            <td>
-                                                <span className="text-danger">Rejected</span>
+                                            <td style={{fontFamily: 'monospace', fontSize: '0.85rem'}}>{placement.email}</td>
+                                            <td style={{textAlign: 'center', fontFamily: 'monospace', fontSize: '0.85rem'}}>{placement.phone || 'N/A'}</td>
+                                            <td style={{textAlign: 'center', fontSize: '0.85rem'}}>{formatDate(placement.createdAt)}</td>
+                                            <td style={{textAlign: 'center'}}>
+                                                <span className="status-badge status-rejected">Rejected</span>
                                             </td>
                                             <td>
                                                 <button
-                                                    style={{
-                                                        backgroundColor: "#fd7e14",
-                                                        color: "#fff",
-                                                        border: "none",
-                                                        padding: "5px 10px",
-                                                        borderRadius: "4px",
-                                                        cursor: "pointer",
-                                                    }}
+                                                    className="action-btn btn-view"
                                                     onClick={() => window.open(`/admin/placement-details/${placement._id}`, '_blank')}
                                                 >
                                                     <i className="fa fa-eye"></i>
+                                                    View
                                                 </button>
                                             </td>
                                         </tr>

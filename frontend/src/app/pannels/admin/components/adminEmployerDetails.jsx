@@ -415,7 +415,7 @@ function EmployerDetails() {
                                     </span>
                                 </td>
                                 <td>
-                                    {profile.panCardImage && (
+                                    {profile.panCardImage ? (
                                         <div className="action-buttons-container">
                                             <button className="btn btn-outline-primary btn-sm" onClick={() => downloadDocument(id, 'panCardImage')} style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35', marginRight: '5px' }}>
                                                 <i className="fa fa-download"></i> Download
@@ -427,6 +427,8 @@ function EmployerDetails() {
                                                 <i className="fa fa-times"></i> Reject
                                             </button>
                                         </div>
+                                    ) : (
+                                        <span style={{ color: '#6c757d', fontStyle: 'italic' }}>No actions available</span>
                                     )}
                                 </td>
                             </tr>
@@ -451,7 +453,7 @@ function EmployerDetails() {
                                     </span>
                                 </td>
                                 <td>
-                                    {profile.cinImage && (
+                                    {profile.cinImage ? (
                                         <div className="action-buttons-container">
                                             <button className="btn btn-outline-primary btn-sm" onClick={() => downloadDocument(id, 'cinImage')} style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35', marginRight: '5px' }}>
                                                 <i className="fa fa-download"></i> Download
@@ -463,6 +465,8 @@ function EmployerDetails() {
                                                 <i className="fa fa-times"></i> Reject
                                             </button>
                                         </div>
+                                    ) : (
+                                        <span style={{ color: '#6c757d', fontStyle: 'italic' }}>No actions available</span>
                                     )}
                                 </td>
                             </tr>
@@ -487,7 +491,7 @@ function EmployerDetails() {
                                     </span>
                                 </td>
                                 <td>
-                                    {profile.gstImage && (
+                                    {profile.gstImage ? (
                                         <div className="action-buttons-container">
                                             <button className="btn btn-outline-primary btn-sm" onClick={() => downloadDocument(id, 'gstImage')} style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35', marginRight: '5px' }}>
                                                 <i className="fa fa-download"></i> Download
@@ -499,6 +503,8 @@ function EmployerDetails() {
                                                 <i className="fa fa-times"></i> Reject
                                             </button>
                                         </div>
+                                    ) : (
+                                        <span style={{ color: '#6c757d', fontStyle: 'italic' }}>No actions available</span>
                                     )}
                                 </td>
                             </tr>
@@ -523,7 +529,7 @@ function EmployerDetails() {
                                     </span>
                                 </td>
                                 <td>
-                                    {profile.certificateOfIncorporation && (
+                                    {profile.certificateOfIncorporation ? (
                                         <div className="action-buttons-container">
                                             <button className="btn btn-outline-primary btn-sm" onClick={() => downloadDocument(id, 'certificateOfIncorporation')} style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35', marginRight: '5px' }}>
                                                 <i className="fa fa-download"></i> Download
@@ -535,6 +541,8 @@ function EmployerDetails() {
                                                 <i className="fa fa-times"></i> Reject
                                             </button>
                                         </div>
+                                    ) : (
+                                        <span style={{ color: '#6c757d', fontStyle: 'italic' }}>No actions available</span>
                                     )}
                                 </td>
                             </tr>

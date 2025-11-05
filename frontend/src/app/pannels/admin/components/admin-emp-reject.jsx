@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { api } from '../../../../utils/api';
+import './admin-emp-manage-styles.css';
 
 function AdminEmployersRejected() {
     const navigate = useNavigate();
@@ -65,7 +66,7 @@ function AdminEmployersRejected() {
                         <div className="alert alert-danger m-b20">{error}</div>
                     )}
                     <div className="p-a20 table-responsive table-container">
-                        <table className="table twm-table table-striped table-borderless">
+                        <table className="table emp-table">
                             <thead>
                                 <tr>
                                     <th>Company Name</th>
@@ -86,28 +87,32 @@ function AdminEmployersRejected() {
                                     employers.map((employer) => (
                                         <tr key={employer._id}>
                                             <td>
-                                                <span className="site-text-primary">
+                                                <span className="company-name">
                                                     {employer.companyName || employer.email}
                                                 </span>
                                             </td>
-                                            <td>{employer.employerType === 'consultant' ? 'Consultant' : 'Company'}</td>
-                                            <td>{employer.email}</td>
-                                            <td>{employer.phone || 'N/A'}</td>
-                                            <td>{formatDate(employer.updatedAt || employer.createdAt)}</td>
+                                            <td style={{textAlign: 'center'}}>
+                                                <span style={{
+                                                    background: 'transparent',
+                                                    color: '#000000',
+                                                    padding: '4px 10px',
+                                                    borderRadius: '12px',
+                                                    fontSize: '0.8rem',
+                                                    fontWeight: '700'
+                                                }}>
+                                                    {employer.employerType === 'consultant' ? 'Consultant' : 'Company'}
+                                                </span>
+                                            </td>
+                                            <td style={{fontFamily: 'monospace', fontSize: '0.85rem'}}>{employer.email}</td>
+                                            <td style={{textAlign: 'center', fontFamily: 'monospace', fontSize: '0.85rem'}}>{employer.phone || 'N/A'}</td>
+                                            <td style={{textAlign: 'center', fontSize: '0.85rem'}}>{formatDate(employer.updatedAt || employer.createdAt)}</td>
                                             <td>
                                                 <button
-                                                    style={{
-                                                        backgroundColor: "#fd7e14",
-                                                        color: "#fff",
-                                                        border: "none",
-                                                        padding: "5px 10px",
-                                                        borderRadius: "4px",
-                                                        cursor: "pointer",
-                                                    }}
-                                                    className="ms-3"
+                                                    className="action-btn btn-view"
                                                     onClick={() => navigate(`/admin/employer-details/${employer._id}`)}
                                                 >
-                                                    View Details
+                                                    <i className="fa fa-eye"></i>
+                                                    View
                                                 </button>
                                             </td>
                                         </tr>
