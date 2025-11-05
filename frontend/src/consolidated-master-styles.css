@@ -1177,6 +1177,28 @@ img[src*="logo-skin-8.png"] {
   transform: none !important;
 }
 
+/* Remove hover effect from recruiter cards */
+.twm-column-5 ul li .twm-recruiters5-box .twm-rec-jobs,
+.twm-recruiters5-box .twm-rec-jobs {
+  color: #d45850 !important;
+  background-color: #f9f5f4 !important;
+  transition: none !important;
+}
+
+.twm-column-5 ul li .twm-recruiters5-box:hover .twm-rec-jobs,
+.twm-recruiters5-box:hover .twm-rec-jobs {
+  color: #d45850 !important;
+  background-color: #f9f5f4 !important;
+  transform: none !important;
+}
+
+.twm-recruiters5-box:hover {
+  background: transparent !important;
+  background-color: transparent !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 /* Employer sidebar */
 #sidebar-admin-wraper {
   position: fixed !important;
