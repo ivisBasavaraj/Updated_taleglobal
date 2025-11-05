@@ -652,7 +652,7 @@ function SignUpPopup() {
 													</div>
 												</div>
 												<div className="col-md-12">
-													<button type="submit" className="site-button" style={{ width: "100%", maxWidth: "100%", margin: "0 auto", display: "flex", justifyContent: "center", alignItems: "center", padding: "10px 16px", borderRadius: "10px" }} disabled={loading || passwordError}>
+													<button type="submit" className="site-button" style={{ width: "100%", padding: "10px 16px", borderRadius: "10px" }} disabled={loading || passwordError}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -824,7 +824,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" className="site-button" style={{ width: "80%", maxWidth: "80%", margin: "0 auto", display: "flex", justifyContent: "center", alignItems: "center", padding: "10px 16px", borderRadius: "10px" }} disabled={loading || passwordError}>
+													<button type="submit" className="site-button" style={{ width: "100%", padding: "10px 16px", borderRadius: "10px" }} disabled={loading || passwordError}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -997,7 +997,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" className="site-button" style={{ width: "80%", maxWidth: "80%", margin: "0 auto", display: "flex", justifyContent: "center", alignItems: "center", padding: "10px 16px", borderRadius: "10px" }} disabled={loading || passwordError}>
+													<button type="submit" className="site-button" style={{ width: "100%", padding: "10px 16px", borderRadius: "10px" }} disabled={loading || passwordError}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>

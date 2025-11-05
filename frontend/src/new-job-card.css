@@ -204,9 +204,9 @@
   background: #fd7e14;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -222,32 +222,10 @@
   transform: translateY(0);
 }
 
-/* Responsive Design */
+/* Responsive Design - Maintain Desktop Layout */
 @media (max-width: 768px) {
   .new-job-card {
     padding: 16px;
-  }
-  
-  .job-card-header {
-    margin-bottom: 12px;
-  }
-  
-  .job-card-middle {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  
-  .job-card-footer {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-  
-  .apply-now-btn {
-    width: 100%;
-    text-align: center;
   }
   
   .company-logo {
@@ -261,13 +239,13 @@
 }
 
 @media (max-width: 576px) {
-  .job-card-left {
-    gap: 8px;
+  .new-job-card {
+    padding: 14px;
   }
-
+  
   .company-logo {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
   }
 
   .job-title {

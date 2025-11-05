@@ -67,14 +67,21 @@ html {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
 }
 
-/* Recruiter card hover effect */
-.twm-recruiters5-box {
-    transition: all 0.3s ease;
+/* Remove recruiter card hover effects */
+.twm-column-5 ul li .twm-recruiters5-box:after {
+    display: none !important;
 }
 
-.twm-recruiters5-box:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12) !important;
+.twm-column-5 ul li .twm-recruiters5-box:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    background: #fff !important;
+}
+
+.twm-column-5 ul li .twm-recruiters5-box:hover .twm-title a,
+.twm-column-5 ul li .twm-recruiters5-box:hover .twm-job-address,
+.twm-column-5 ul li .twm-recruiters5-box:hover .twm-rec-rating-count {
+    color: inherit !important;
 }
 
 /* ===== Improved Loading Spinner ===== */

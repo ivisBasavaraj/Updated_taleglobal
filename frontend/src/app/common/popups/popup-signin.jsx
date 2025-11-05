@@ -117,14 +117,8 @@ function SignInPopup() {
         borderRadius: '10px',
         padding: '10px 16px',
         fontWeight: 600,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '8px',
         transition: 'background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease',
-        width: '100%',
-        maxWidth: '100%',
-        margin: '0 auto'
+        width: '100%'
     };
 
     const handleButtonEnter = (event) => {

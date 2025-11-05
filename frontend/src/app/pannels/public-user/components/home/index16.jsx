@@ -1003,11 +1003,10 @@ function Home16Page() {
                             <Col xl={4} lg={4} md={6} sm={12} xs={12}>
                                 <div className="twm-w-process-steps3">
                                     <div className="twm-media">
-                                        <div style={{width: '80px', height: '80px', borderRadius: '12px', overflow: 'hidden'}}>
+                                        <div>
                                             <img 
                                                 src="https://static.vecteezy.com/system/resources/previews/067/381/647/non_2x/job-posting-announcement-recruitment-hiring-application-candidate-employment-vector.jpg" 
-                                                alt="Post Your Job" 
-                                                style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                                                alt="Post Your Job"
                                             />
                                         </div>
                                     </div>
@@ -1022,11 +1021,10 @@ function Home16Page() {
                             <Col xl={4} lg={4} md={6} sm={12} xs={12}>
                                 <div className="twm-w-process-steps3">
                                     <div className="twm-media">
-                                        <div style={{width: '80px', height: '80px', borderRadius: '12px', overflow: 'hidden'}}>
+                                        <div>
                                             <img 
                                                 src="https://i.pinimg.com/736x/57/2e/14/572e1453e353f60c803bd01c4ea68a05.jpg" 
-                                                alt="Hire the Best" 
-                                                style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                                                alt="Hire the Best"
                                             />
                                         </div>
                                     </div>
@@ -1041,11 +1039,10 @@ function Home16Page() {
                             <Col xl={4} lg={4} md={6} sm={12} xs={12}>
                                 <div className="twm-w-process-steps3">
                                     <div className="twm-media">
-                                        <div style={{width: '80px', height: '80px', borderRadius: '12px', overflow: 'hidden'}}>
+                                        <div>
                                             <img 
                                                 src="https://i.pinimg.com/736x/c3/10/17/c31017b46cfd17082e7ab29ba1df4f55.jpg" 
-                                                alt="Build Your Team" 
-                                                style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                                                alt="Build Your Team"
                                             />
                                         </div>
                                     </div>
