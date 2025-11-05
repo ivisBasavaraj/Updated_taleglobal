@@ -551,7 +551,7 @@ function Home16Page() {
                         </div>
 
                         <div className="text-center job-categories-btn">
-                            <NavLink to="/job-grid" className="site-button" style={{padding: '0.5rem 1rem', fontSize: '14px', display: 'inline-flex', width: 'auto', whiteSpace: 'nowrap'}}>
+                            <NavLink to="/job-grid" className="site-button" style={{padding: '0.5rem 0.75rem', fontSize: '14px', display: 'inline-flex', width: 'auto', whiteSpace: 'nowrap'}}>
                                 All Categories
                             </NavLink>
                         </div>
@@ -619,7 +619,7 @@ function Home16Page() {
                                         Clear Filters
                                     </button>
                                 )}
-                                <NavLink to="/job-grid" className=" site-button" style={{padding: '0.5rem 1rem', fontSize: '14px', display: 'inline-flex', width: 'auto', whiteSpace: 'nowrap'}}>
+                                <NavLink to="/job-grid" className=" site-button" style={{padding: '0.5rem 0.75rem', fontSize: '14px', display: 'inline-flex', width: 'auto', whiteSpace: 'nowrap'}}>
                                     Browse All Jobs
                                 </NavLink>
                             </Col>
@@ -767,14 +767,14 @@ function Home16Page() {
             <div className="section-full p-t20 p-b20 site-bg-white animate-on-scroll">
                 <Container className="py-2">
                     {/* title="" START*/}
-                    <div className="d-flex justify-content-between align-items-center mb-3">
+                    <div className="recruiters-header-section">
                         <div className="text-left">
                             <div className="wt-small-separator site-text-primary">
                                 <div>Top Recruiters</div>
                             </div>
                             <h2 className="wt-title mb-0">Discover your next career move</h2>
                         </div>
-                        <NavLink to="/emp-grid" className="site-button">
+                        <NavLink to="/emp-grid" className="site-button recruiters-view-all-btn">
                             View All
                         </NavLink>
                     </div>
