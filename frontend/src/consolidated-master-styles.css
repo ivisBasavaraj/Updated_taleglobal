@@ -1130,6 +1130,46 @@ img[src*="logo-skin-8.png"] {
   -webkit-box-shadow: none !important;
 }
 
+/* Remove hover effects from Top Recruiters section */
+.recruiters-header-section,
+.recruiters-header-section *,
+.recruiters-header-section h2,
+.recruiters-header-section .wt-title,
+.recruiters-header-section .wt-small-separator,
+.recruiters-header-section div {
+  transition: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.recruiters-header-section:hover,
+.recruiters-header-section *:hover,
+.recruiters-header-section h2:hover,
+.recruiters-header-section .wt-title:hover,
+.recruiters-header-section .wt-small-separator:hover,
+.recruiters-header-section div:hover {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: inherit !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Specifically target the title and separator */
+.wt-title,
+.wt-small-separator {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.wt-title:hover,
+.wt-small-separator:hover {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: inherit !important;
+  transform: none !important;
+}
+
 /* Employer sidebar */
 #sidebar-admin-wraper {
   position: fixed !important;
