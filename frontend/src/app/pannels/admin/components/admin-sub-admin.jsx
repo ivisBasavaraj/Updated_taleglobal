@@ -333,86 +333,66 @@ function AdminSubAdmin() {
                                 <form onSubmit={handleSubmit}>
                                     <div className="row g-4">
                                         <div className="col-md-6">
-                                            <div className="form-floating">
-                                                <input
-                                                    className="form-control rounded-3"
-                                                    name="firstName"
-                                                    type="text"
-                                                    placeholder="First Name"
-                                                    value={formData.firstName}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                    id="firstName"
-                                                />
-                                                <label htmlFor="firstName">First Name *</label>
-                                            </div>
+                                            <input
+                                                className="form-control rounded-3"
+                                                name="firstName"
+                                                type="text"
+                                                placeholder="First Name *"
+                                                value={formData.firstName}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
                                         </div>
 
                                         <div className="col-md-6">
-                                            <div className="form-floating">
-                                                <input
-                                                    className="form-control rounded-3"
-                                                    name="lastName"
-                                                    type="text"
-                                                    placeholder="Last Name"
-                                                    value={formData.lastName}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                    id="lastName"
-                                                />
-                                                <label htmlFor="lastName">Last Name *</label>
-                                            </div>
+                                            <input
+                                                className="form-control rounded-3"
+                                                name="lastName"
+                                                type="text"
+                                                placeholder="Last Name *"
+                                                value={formData.lastName}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
                                         </div>
 
                                         <div className="col-md-6">
-                                            <div className="form-floating">
-                                                <input
-                                                    className="form-control rounded-3"
-                                                    name="username"
-                                                    type="text"
-                                                    placeholder="Username"
-                                                    value={formData.username}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                    id="username"
-                                                />
-                                                <label htmlFor="username">Username *</label>
-                                            </div>
+                                            <input
+                                                className="form-control rounded-3"
+                                                name="username"
+                                                type="text"
+                                                placeholder="Username *"
+                                                value={formData.username}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
                                         </div>
 
                                         <div className="col-md-6">
-                                            <div className="form-floating">
-                                                <input
-                                                    className="form-control rounded-3"
-                                                    name="email"
-                                                    type="email"
-                                                    placeholder="Email"
-                                                    value={formData.email}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                    id="email"
-                                                />
-                                                <label htmlFor="email">Email Address *</label>
-                                            </div>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <div className="form-floating">
-                                                <input
-                                                    className="form-control rounded-3"
-                                                    name="phone"
-                                                    type="tel"
-                                                    placeholder="Phone"
-                                                    value={formData.phone}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                    id="phone"
-                                                />
-                                                <label htmlFor="phone">Phone Number *</label>
-                                            </div>
+                                            <input
+                                                className="form-control rounded-3"
+                                                name="email"
+                                                type="email"
+                                                placeholder="Email Address *"
+                                                value={formData.email}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
                                         </div>
 
                                         <div className="col-12">
+                                            <input
+                                                className="form-control rounded-3"
+                                                name="phone"
+                                                type="tel"
+                                                placeholder="Phone Number *"
+                                                value={formData.phone}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="col-12 mt-4">
                                             <label className="form-label fw-semibold text-dark mb-3">Permissions *</label>
                                             <div className="row g-3">
                                                 <div className="col-md-4">
@@ -472,72 +452,60 @@ function AdminSubAdmin() {
                                             </div>
                                         </div>
 
-                                        <div className="col-md-6">
-                                            <div className="form-floating" style={{ position: 'relative' }}>
-                                                <input
-                                                    className="form-control rounded-3"
-                                                    name="password"
-                                                    type={showPassword ? "text" : "password"}
-                                                    placeholder="Password"
-                                                    value={formData.password}
-                                                    onChange={handleInputChange}
-                                                    required={showAddForm}
-                                                    id="password"
-                                                    style={{ paddingRight: '50px' }}
-                                                />
-                                                <label htmlFor="password">
-                                                    Password {showAddForm ? '*' : '(Leave blank to keep current)'}
-                                                </label>
-                                                <span
-                                                    onClick={() => setShowPassword(!showPassword)}
-                                                    style={{
-                                                        position: 'absolute',
-                                                        right: '15px',
-                                                        top: '50%',
-                                                        transform: 'translateY(-50%)',
-                                                        cursor: 'pointer',
-                                                        fontSize: '18px',
-                                                        color: '#666',
-                                                        zIndex: 10
-                                                    }}
-                                                >
-                                                    {showPassword ? '👁️' : '👁️🗨️'}
-                                                </span>
-                                            </div>
+                                        <div className="col-md-6" style={{ position: 'relative' }}>
+                                            <input
+                                                className="form-control rounded-3"
+                                                name="password"
+                                                type={showPassword ? "text" : "password"}
+                                                placeholder={showAddForm ? "Password *" : "Password (Leave blank to keep current)"}
+                                                value={formData.password}
+                                                onChange={handleInputChange}
+                                                required={showAddForm}
+                                                style={{ paddingRight: '45px' }}
+                                            />
+                                            <span
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    right: '15px',
+                                                    top: '50%',
+                                                    transform: 'translateY(-50%)',
+                                                    cursor: 'pointer',
+                                                    fontSize: '16px',
+                                                    color: '#666',
+                                                    zIndex: 10
+                                                }}
+                                            >
+                                                {showPassword ? '👁️' : '👁️🗨️'}
+                                            </span>
                                         </div>
 
-                                        <div className="col-md-6">
-                                            <div className="form-floating" style={{ position: 'relative' }}>
-                                                <input
-                                                    className="form-control rounded-3"
-                                                    name="confirmPassword"
-                                                    type={showConfirmPassword ? "text" : "password"}
-                                                    placeholder="Confirm Password"
-                                                    value={formData.confirmPassword}
-                                                    onChange={handleInputChange}
-                                                    required={showAddForm}
-                                                    id="confirmPassword"
-                                                    style={{ paddingRight: '50px' }}
-                                                />
-                                                <label htmlFor="confirmPassword">
-                                                    Confirm Password {showAddForm ? '*' : ''}
-                                                </label>
-                                                <span
-                                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                                    style={{
-                                                        position: 'absolute',
-                                                        right: '15px',
-                                                        top: '50%',
-                                                        transform: 'translateY(-50%)',
-                                                        cursor: 'pointer',
-                                                        fontSize: '18px',
-                                                        color: '#666',
-                                                        zIndex: 10
-                                                    }}
-                                                >
-                                                    {showConfirmPassword ? '👁️' : '👁️🗨️'}
-                                                </span>
-                                            </div>
+                                        <div className="col-md-6" style={{ position: 'relative' }}>
+                                            <input
+                                                className="form-control rounded-3"
+                                                name="confirmPassword"
+                                                type={showConfirmPassword ? "text" : "password"}
+                                                placeholder={showAddForm ? "Confirm Password *" : "Confirm Password"}
+                                                value={formData.confirmPassword}
+                                                onChange={handleInputChange}
+                                                required={showAddForm}
+                                                style={{ paddingRight: '45px' }}
+                                            />
+                                            <span
+                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    right: '15px',
+                                                    top: '50%',
+                                                    transform: 'translateY(-50%)',
+                                                    cursor: 'pointer',
+                                                    fontSize: '16px',
+                                                    color: '#666',
+                                                    zIndex: 10
+                                                }}
+                                            >
+                                                {showConfirmPassword ? '👁️' : '👁️🗨️'}
+                                            </span>
                                         </div>
 
                                         <div className="col-12">
