@@ -472,8 +472,7 @@ function AdminSubAdmin() {
                                                     transform: 'translateY(-50%)',
                                                     cursor: 'pointer',
                                                     fontSize: '16px',
-                                                    color: '#666',
-                                                    zIndex: 10
+                                                    color: '#666'
                                                 }}
                                             >
                                                 {showPassword ? '👁️' : '👁️🗨️'}
@@ -500,8 +499,7 @@ function AdminSubAdmin() {
                                                     transform: 'translateY(-50%)',
                                                     cursor: 'pointer',
                                                     fontSize: '16px',
-                                                    color: '#666',
-                                                    zIndex: 10
+                                                    color: '#666'
                                                 }}
                                             >
                                                 {showConfirmPassword ? '👁️' : '👁️🗨️'}

@@ -20,6 +20,12 @@ const EmployersGridPage = memo(() => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [isFirstLoad, setIsFirstLoad] = useState(true);
     const [establishedYears, setEstablishedYears] = useState([]);
+    const [filters, setFilters] = useState({
+        keyword: '',
+        location: '',
+        industry: '',
+        teamSize: ''
+    });
     const navigate = useNavigate();
     const abortControllerRef = useRef(null);
     const debounceTimerRef = useRef(null);
@@ -68,6 +74,11 @@ const EmployersGridPage = memo(() => {
                     limit: itemsPerPage.toString(),
                     page: '1'
                 });
+                
+                if (filters.keyword) params.append('keyword', filters.keyword);
+                if (filters.location) params.append('location', filters.location);
+                if (filters.industry) params.append('industry', filters.industry);
+                if (filters.teamSize) params.append('teamSize', filters.teamSize);
 
                 const url = `http://localhost:5000/api/public/employers?${params.toString()}`;
                 const data = await requestCache.get(url, {
@@ -110,7 +121,7 @@ const EmployersGridPage = memo(() => {
                 setIsFirstLoad(false);
             }
         }, 200); // 200ms debounce for employers
-    }, [sortBy, itemsPerPage]);
+    }, [sortBy, itemsPerPage, filters]);
 
     useEffect(() => {
         fetchEmployers();
@@ -216,7 +227,7 @@ const EmployersGridPage = memo(() => {
             <Container>
                 <Row className="mb-4">
                     <Col lg={4} md={12} className="rightSidebar">
-                        <SectionEmployerSidebar />
+                        <SectionEmployerSidebar onFilterChange={setFilters} />
                     </Col>
 
                     <Col lg={8} md={12}>

@@ -105,7 +105,6 @@ function PlacementDashboard() {
 
     const fetchStudentData = async () => {
         try {
-            // Check if token exists
             const token = localStorage.getItem('placementToken');
             if (!token) {
                 console.error('No placement token found');
@@ -113,16 +112,17 @@ function PlacementDashboard() {
                 return;
             }
             
+            console.log('Fetching student data...');
             const data = await api.getMyPlacementData();
+            console.log('Student data response:', data);
+            
             if (data.success) {
                 setStudentData(data.students || []);
                 setDataLoaded(true);
+                console.log('Student data loaded:', data.students?.length || 0, 'students');
             }
         } catch (error) {
-            
-            if (error.message.includes('401')) {
-                
-            }
+            console.error('Error fetching student data:', error);
         } finally {
             setLoading(false);
         }
@@ -848,33 +848,42 @@ function PlacementDashboard() {
                             </h5>
                         </div>
                         
-                        {studentData.length > 0 ? (
+                        {loading && !dataLoaded ? (
+                            <div className="text-center py-5">
+                                <div className="spinner-border text-primary mb-3" role="status"></div>
+                                <p className="text-muted">Loading student data...</p>
+                            </div>
+                        ) : studentData.length > 0 ? (
                             <div className="table-responsive">
                                 <table className="table table-hover" style={{fontSize: '0.9rem'}}>
                                     <thead style={{background: '#f8f9fa'}}>
                                         <tr>
-                                            {Object.keys(studentData[0]).map(key => (
-                                                <th key={key} style={{border: 'none', fontWeight: '600'}}>
-                                                    {key.charAt(0).toUpperCase() + key.slice(1)}
-                                                </th>
-                                            ))}
+                                            <th style={{border: 'none', fontWeight: '600'}}>Name</th>
+                                            <th style={{border: 'none', fontWeight: '600'}}>Email</th>
+                                            <th style={{border: 'none', fontWeight: '600'}}>Phone</th>
+                                            <th style={{border: 'none', fontWeight: '600'}}>Course</th>
+                                            <th style={{border: 'none', fontWeight: '600'}}>Credits</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {studentData.map((student, index) => (
                                             <tr key={index} style={{borderTop: '1px solid #e9ecef'}}>
-                                                {Object.entries(student).map(([key, value], i) => (
-                                                    <td key={i} style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>
-                                                        {key === 'Course' && (value === 'Not Specified' || !value) ? (
-                                                            <span className="text-warning">
-                                                                <i className="fa fa-exclamation-triangle mr-1"></i>
-                                                                Not Specified
-                                                            </span>
-                                                        ) : (
-                                                            value || '-'
-                                                        )}
-                                                    </td>
-                                                ))}
+                                                <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>{student.name || '-'}</td>
+                                                <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>{student.email || '-'}</td>
+                                                <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>{student.phone || '-'}</td>
+                                                <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>
+                                                    {!student.course || student.course === 'Not Specified' ? (
+                                                        <span className="text-warning">
+                                                            <i className="fa fa-exclamation-triangle mr-1"></i>
+                                                            Not Specified
+                                                        </span>
+                                                    ) : (
+                                                        student.course
+                                                    )}
+                                                </td>
+                                                <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>
+                                                    <span className="badge badge-info">{student.credits || 0}</span>
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -884,7 +893,7 @@ function PlacementDashboard() {
                             <div className="text-center py-5">
                                 <i className="fa fa-users fa-3x text-muted mb-3"></i>
                                 <h6 className="text-muted">No student data available</h6>
-                                <p className="text-muted mb-0">Click the eye icon on any file to view student data</p>
+                                <p className="text-muted mb-0">Upload a file and wait for admin approval to see students here</p>
                             </div>
                         )}
                     </div>
