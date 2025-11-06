@@ -393,7 +393,7 @@ function CanStatusPage() {
 															</span>
 														</td>
 														<td className="px-4 py-3">
-															<div className="view-details-wrapper">
+															<div className="view-details-wrapper" style={{display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-start'}}>
 																{interviewRounds.length > 0 ? (
 																	interviewRounds.map((round, roundIndex) => {
 																		const roundTypeMap = {
@@ -408,13 +408,13 @@ function CanStatusPage() {
 																		return (
 																			<button
 																				key={roundIndex}
-																				className="btn btn-sm btn-outline-primary view-details-btn"
-																				style={{fontSize: '10px', padding: '2px 6px', margin: '1px', backgroundColor: 'transparent', whiteSpace: 'nowrap'}}
+																				className="btn btn-sm"
+																				style={{fontSize: '10px', padding: '4px 8px', backgroundColor: 'transparent', border: '1px solid #ff6b35', color: '#ff6b35 !important', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px', minWidth: '120px', justifyContent: 'flex-start'}}
 																				onClick={() => handleViewRoundDetails(roundKey, roundDetails)}
 																				title={`View ${round} details`}
 																			>
-																				<i className="fa fa-eye me-1"></i>
-																				{round}
+																				<i className="fa fa-eye" style={{color: '#ff6b35', width: '14px'}}></i>
+																				<span style={{color: '#ff6b35'}}>{round}</span>
 																			</button>
 																		);
 																	})

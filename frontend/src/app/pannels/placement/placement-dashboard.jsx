@@ -698,7 +698,7 @@ function PlacementDashboard() {
                                     <a 
                                         href="/assets/student-data-template.csv" 
                                         download="student-data-template.csv"
-                                        className="btn btn-sm btn-light"
+                                         className="btn btn-sm btn-light"
                                         style={{fontSize: '0.8rem', border: '1px solid #dee2e6'}}
                                     >
                                         <i className="fa fa-download mr-1"></i>

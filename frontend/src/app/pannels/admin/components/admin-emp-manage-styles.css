@@ -262,7 +262,7 @@
     width: auto;
     min-width: 140px;
     padding: 12px 28px;
-    border: 1px solid #dee2e6;
+    border: 1px solid #FDC360;
     border-radius: 10px;
     font-size: 0.85rem;
     font-weight: 600;
@@ -275,15 +275,16 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     text-align: center;
-    background: #f5f5f5;
-    color: #495057;
+    background: #FDC360;
+    color: white;
     white-space: nowrap;
     box-sizing: border-box;
 }
 
 .action-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 5px 15px rgba(253, 195, 96, 0.4);
+    background: #e5b050;
 }
 
 .btn-approve {

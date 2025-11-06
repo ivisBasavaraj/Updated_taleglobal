@@ -25,8 +25,8 @@ function PlacementLayout() {
                                 </span>
                             </div>
                             <button 
-                                className="btn btn-outline-light btn-sm"
-                                style={{borderRadius: '50px', padding: '0.4rem 1.1rem', fontWeight: 600, letterSpacing: '0.5px'}}
+                                className="btn btn-sm logout-btn"
+                                style={{borderRadius: '50px', padding: '0.4rem 1.1rem', fontWeight: 600, letterSpacing: '0.5px', color: '#ffffff', border: '2px solid #ffffff', backgroundColor: 'transparent', transition: 'all 0.3s'}}
                                 onClick={() => {
                                     localStorage.removeItem('placementToken');
                                     window.location.href = '/login';
@@ -35,6 +35,12 @@ function PlacementLayout() {
                                 <i className="fa fa-sign-out mr-2"></i>
                                 Logout
                             </button>
+                            <style>{`
+                                .logout-btn:hover {
+                                    background-color: #ffffff !important;
+                                    color: #ff6b35 !important;
+                                }
+                            `}</style>
                         </div>
                     </div>
                 </nav>

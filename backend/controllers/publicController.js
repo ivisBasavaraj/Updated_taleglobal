@@ -34,7 +34,15 @@ exports.getJobs = async (req, res) => {
       'employerId': { $exists: true }
     };
     
-    if (employerId) query.employerId = employerId;
+    if (employerId) {
+      try {
+        query.employerId = new mongoose.Types.ObjectId(employerId);
+      } catch (e) {
+        query.employerId = employerId;
+      }
+      // Override status to only active when filtering by specific employer
+      query.status = 'active';
+    }
     if (title) query.title = { $regex: title, $options: 'i' };
     if (location) query.location = { $regex: location, $options: 'i' };
 

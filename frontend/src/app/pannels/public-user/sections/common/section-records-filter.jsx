@@ -13,6 +13,8 @@ function SectionRecordsFilter({ _config, onSortChange, onItemsPerPageChange, est
         }
     };
 
+    const isEmployerPage = _config.type === 'employers';
+
     return (
         <>
             <div className="product-filter-wrap d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
@@ -30,10 +32,23 @@ function SectionRecordsFilter({ _config, onSortChange, onItemsPerPageChange, est
                 <form className="woocommerce-ordering twm-filter-select d-flex align-items-center gap-3" method="get">
                     <span className="woocommerce-result-count">Sort By</span>
                     <select className="wt-select-bar-2 form-select" onChange={handleSortChange}>
-                        <option value="">All Years</option>
-                        {establishedYears.map(year => (
-                            <option key={year} value={year}>Established {year}</option>
-                        ))}
+                        {isEmployerPage ? (
+                            <>
+                                <option value="">All Years</option>
+                                {establishedYears.map(year => (
+                                    <option key={year} value={year}>Established {year}</option>
+                                ))}
+                            </>
+                        ) : (
+                            <>
+                                <option value="Most Recent">Most Recent</option>
+                                <option value="Oldest">Oldest</option>
+                                <option value="Salary High to Low">Salary High to Low</option>
+                                <option value="Salary Low to High">Salary Low to High</option>
+                                <option value="A-Z">A-Z</option>
+                                <option value="Z-A">Z-A</option>
+                            </>
+                        )}
                     </select>
                     <select className="wt-select-bar-2 form-select" onChange={handleItemsPerPageChange}>
                         <option value="10">Show 10</option>

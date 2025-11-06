@@ -381,10 +381,10 @@ function SignUpPopup() {
 														<button
 															type="button"
 															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer', padding: '0', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 															onClick={() => setShowCandidatePassword(!showCandidatePassword)}
 														>
-															<i className={showCandidatePassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
+															<i className={showCandidatePassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14', pointerEvents: 'none' }} />
 														</button>
 													</div>
 												</div>
@@ -404,10 +404,10 @@ function SignUpPopup() {
 														<button
 															type="button"
 															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer', padding: '0', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 															onClick={() => setShowCandidateConfirmPassword(!showCandidateConfirmPassword)}
 														>
-															<i className={showCandidateConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
+															<i className={showCandidateConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14', pointerEvents: 'none' }} />
 														</button>
 														{passwordError && <small className="text-danger">{passwordError}</small>}
 													</div>
@@ -541,10 +541,10 @@ function SignUpPopup() {
 														<button
 															type="button"
 															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer', padding: '0', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 															onClick={() => setShowEmployerPassword(!showEmployerPassword)}
 														>
-															<i className={showEmployerPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
+															<i className={showEmployerPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14', pointerEvents: 'none' }} />
 														</button>
 													</div>
 												</div>
@@ -564,10 +564,10 @@ function SignUpPopup() {
 														<button
 															type="button"
 															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer', padding: '0', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 															onClick={() => setShowEmployerConfirmPassword(!showEmployerConfirmPassword)}
 														>
-															<i className={showEmployerConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
+															<i className={showEmployerConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14', pointerEvents: 'none' }} />
 														</button>
 														{passwordError && <small className="text-danger">{passwordError}</small>}
 													</div>
@@ -701,10 +701,10 @@ function SignUpPopup() {
 														<button
 															type="button"
 															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer', padding: '0', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 															onClick={() => setShowPlacementPassword(!showPlacementPassword)}
 														>
-															<i className="fas fa-eye" style={{ color: '#fd7e14' }} />
+															<i className={showPlacementPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14', pointerEvents: 'none' }} />
 														</button>
 													</div>
 												</div>
@@ -724,10 +724,10 @@ function SignUpPopup() {
 														<button
 															type="button"
 															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer', padding: '0', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 															onClick={() => setShowPlacementConfirmPassword(!showPlacementConfirmPassword)}
 														>
-															<i className="fas fa-eye" style={{ color: '#fd7e14' }} />
+															<i className={showPlacementConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14', pointerEvents: 'none' }} />
 														</button>
 														{passwordError && <small className="text-danger">{passwordError}</small>}
 													</div>

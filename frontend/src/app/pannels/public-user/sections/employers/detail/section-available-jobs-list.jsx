@@ -16,23 +16,25 @@ function SectionAvailableJobsList({ employerId }) {
 
 	const fetchEmployerJobs = async () => {
 		try {
-			
+			console.log('Fetching jobs for employer:', employerId);
 			const response = await fetch(`http://localhost:5000/api/public/jobs?employerId=${employerId}`);
 			const data = await response.json();
 			
-			
+			console.log('Jobs API response:', data);
+			console.log('First job details:', data.jobs?.[0]);
 			
 			if (data.success) {
-				// Filter out jobs where employerId is null (not approved employers)
-				const validJobs = (data.jobs || []).filter(job => job.employerId && job.status === 'active');
+				// No filtering needed - backend already filters properly
+				const validJobs = data.jobs || [];
 				
+				console.log('Valid jobs after filtering:', validJobs.length);
 				setJobs(validJobs);
 			} else {
-				
+				console.log('API returned success: false');
 				setJobs([]);
 			}
 		} catch (error) {
-			
+			console.error('Error fetching jobs:', error);
 			setJobs([]);
 		} finally {
 			setLoading(false);

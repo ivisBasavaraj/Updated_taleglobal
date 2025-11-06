@@ -579,14 +579,12 @@ function SignUpPopup() {
 															onChange={handleCandidateChange}
 															required
 														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+														<span
+															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none' }}
 															onClick={() => setShowCandidatePassword(!showCandidatePassword)}
 														>
 															<i className={showCandidatePassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</button>
+														</span>
 														{fieldErrors.password && (
 															<div className="invalid-feedback d-block">{fieldErrors.password}</div>
 														)}
@@ -605,14 +603,12 @@ function SignUpPopup() {
 															onChange={handleCandidateChange}
 															required
 														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+														<span
+															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none' }}
 															onClick={() => setShowCandidateConfirmPassword(!showCandidateConfirmPassword)}
 														>
 															<i className={showCandidateConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</button>
+														</span>
 														{passwordError && <small className="text-danger d-block">{passwordError}</small>}
 														{fieldErrors.confirmPassword && (
 															<div className="invalid-feedback d-block">{fieldErrors.confirmPassword}</div>
@@ -652,7 +648,7 @@ function SignUpPopup() {
 													</div>
 												</div>
 												<div className="col-md-12">
-													<button type="submit" className="site-button" style={{ width: "100%", padding: "10px 16px", borderRadius: "10px" }} disabled={loading || passwordError}>
+													<button type="submit" style={{ width: "100%", maxWidth: "none", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer" }} disabled={loading || passwordError}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -750,14 +746,12 @@ function SignUpPopup() {
 															onChange={handleEmployerChange}
 															required
 														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+														<span
+															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none' }}
 															onClick={() => setShowEmployerPassword(!showEmployerPassword)}
 														>
 															<i className={showEmployerPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</button>
+														</span>
 														{fieldErrors.password && (
 															<div className="invalid-feedback d-block">{fieldErrors.password}</div>
 														)}
@@ -776,14 +770,12 @@ function SignUpPopup() {
 															onChange={handleEmployerChange}
 															required
 														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+														<span
+															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none' }}
 															onClick={() => setShowEmployerConfirmPassword(!showEmployerConfirmPassword)}
 														>
 															<i className={showEmployerConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</button>
+														</span>
 														{passwordError && <small className="text-danger d-block">{passwordError}</small>}
 														{fieldErrors.confirmPassword && (
 															<div className="invalid-feedback d-block">{fieldErrors.confirmPassword}</div>
@@ -824,7 +816,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" className="site-button" style={{ width: "100%", padding: "10px 16px", borderRadius: "10px" }} disabled={loading || passwordError}>
+													<button type="submit" style={{ width: "100%", maxWidth: "none", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer" }} disabled={loading || passwordError}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -921,14 +913,12 @@ function SignUpPopup() {
 															onChange={handlePlacementChange}
 															required
 														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+														<span
+															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none' }}
 															onClick={() => setShowPlacementPassword(!showPlacementPassword)}
 														>
 															<i className={showPlacementPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</button>
+														</span>
 														{fieldErrors.password && (
 															<div className="invalid-feedback d-block">{fieldErrors.password}</div>
 														)}
@@ -947,14 +937,12 @@ function SignUpPopup() {
 															onChange={handlePlacementChange}
 															required
 														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+														<span
+															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none' }}
 															onClick={() => setShowPlacementConfirmPassword(!showPlacementConfirmPassword)}
 														>
 															<i className={showPlacementConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</button>
+														</span>
 														{passwordError && <small className="text-danger d-block">{passwordError}</small>}
 														{fieldErrors.confirmPassword && (
 															<div className="invalid-feedback d-block">{fieldErrors.confirmPassword}</div>
@@ -997,7 +985,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" className="site-button" style={{ width: "100%", padding: "10px 16px", borderRadius: "10px" }} disabled={loading || passwordError}>
+													<button type="submit" style={{ width: "100%", maxWidth: "none", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer" }} disabled={loading || passwordError}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>

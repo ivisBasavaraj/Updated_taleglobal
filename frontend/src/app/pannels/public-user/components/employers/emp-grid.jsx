@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useCallback, memo, useRef } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
 import JobZImage from "../../../../common/jobz-img";
-import SectionJobsSidebar1 from "../../sections/jobs/sidebar/section-jobs-sidebar1";
+import SectionEmployerSidebar from "../../sections/employers/section-employer-sidebar";
 import SectionRecordsFilter from "../../sections/common/section-records-filter";
 import SectionPagination from "../../sections/common/section-pagination";
 import { loadScript } from "../../../../../globals/constants";
@@ -216,7 +216,7 @@ const EmployersGridPage = memo(() => {
             <Container>
                 <Row className="mb-4">
                     <Col lg={4} md={12} className="rightSidebar">
-                        <SectionJobsSidebar1 />
+                        <SectionEmployerSidebar />
                     </Col>
 
                     <Col lg={8} md={12}>

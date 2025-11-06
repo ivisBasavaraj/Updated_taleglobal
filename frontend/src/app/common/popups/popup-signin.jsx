@@ -244,14 +244,12 @@ function SignInPopup() {
 																setCanPassword(event.target.value);
 															}}
 														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+														<span
+															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none', background: '#f8f9fa', padding: '5px 8px', borderRadius: '4px' }}
 															onClick={() => setShowCanPassword(!showCanPassword)}
 														>
 															<i className={showCanPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</button>
+														</span>
 													</div>
 												</div>
 
@@ -331,14 +329,12 @@ function SignInPopup() {
 																setEmpPassword(event.target.value);
 															}}
 														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+														<span
+															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none', background: '#f8f9fa', padding: '5px 8px', borderRadius: '4px' }}
 															onClick={() => setShowEmpPassword(!showEmpPassword)}
 														>
 															<i className={showEmpPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</button>
+														</span>
 													</div>
 												</div>
 
@@ -418,14 +414,12 @@ function SignInPopup() {
 																setPlacementPassword(event.target.value);
 															}}
 														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer' }}
+														<span
+															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none', background: '#f8f9fa', padding: '5px 8px', borderRadius: '4px' }}
 															onClick={() => setShowPlacementPassword(!showPlacementPassword)}
 														>
-															<i className="fas fa-eye" style={{ color: '#fd7e14' }} />
-														</button>
+															<i className={showPlacementPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
+														</span>
 													</div>
 												</div>
 
