@@ -108,20 +108,7 @@ function EmpCandidatesPage() {
   };
 
   const getStatusBadge = (status) => {
-    switch (status) {
-      case "pending":
-        return "twm-bg-yellow";
-      case "shortlisted":
-        return "twm-bg-purple";
-      case "interviewed":
-        return "twm-bg-orange";
-      case "hired":
-        return "twm-bg-green";
-      case "rejected":
-        return "twm-bg-red";
-      default:
-        return "twm-bg-light-blue";
-    }
+    return "twm-bg-orange";
   };
 
   const formatDate = (dateString) => {
@@ -155,15 +142,26 @@ function EmpCandidatesPage() {
   return (
     <>
       <div className="wt-admin-right-page-header clearfix">
-        <h2 style={{marginLeft: '25px'}}>
+        <h2>
+          <i className="fa fa-users me-3"></i>
           {jobId && currentJob
             ? `Applicants for ${currentJob.title}`
-            : "Applicants Details"}
+            : "Candidates"}
         </h2>
+        <p className="page-subtitle mb-0">
+          <i className="fa fa-search me-2"></i>
+          View and manage candidate applications
+        </p>
         {jobId && currentJob && (
           <div className="d-flex align-items-center gap-2 mt-2">
             <button
-              className="btn btn-outline-secondary btn-sm"
+              className="btn btn-orange btn-sm"
+              style={{
+                backgroundColor: 'rgba(255, 122, 0, 0.08)',
+                border: '1px solid #FF7A00',
+                color: '#FF7A00',
+                fontWeight: 'bold'
+              }}
               onClick={() => navigate("/employer/manage-jobs")}
             >
               <ArrowLeft size={16} className="me-1" /> Back to Jobs
@@ -304,7 +302,13 @@ function EmpCandidatesPage() {
 
                       <div className="d-flex align-items-center gap-3">
                         <button
-                          className="btn btn-outline-primary btn-sm"
+                          className="btn btn-orange btn-sm"
+                          style={{
+                            backgroundColor: 'rgba(255, 122, 0, 0.08)',
+                            border: '1px solid #FF7A00',
+                            color: '#FF7A00',
+                            fontWeight: 'bold'
+                          }}
                           onClick={() =>
                             navigate(
                               `/employer/emp-candidate-review/${application._id}`

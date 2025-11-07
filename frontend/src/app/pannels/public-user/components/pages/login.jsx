@@ -19,6 +19,7 @@ function LoginPage() {
     const [placementpassword, setPlacementPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState('candidate');
 
     
     const from = location.state?.from?.pathname || '/';
@@ -147,20 +148,23 @@ function LoginPage() {
                                         </div>
                                     )}
                                             <div className="mb-4">
-                                                <ul className="nav nav-pills nav-fill" id="myTab2" role="tablist" style={{background: '#f8f9fa', borderRadius: '12px', padding: '6px', marginBottom: '24px', gap: '8px'}}>
-                                                    <li className="nav-item">
-                                                        <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#twm-login-candidate" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-user-tie me-2" style={{color: '#ffffff'}} />Candidate</button>
-                                                    </li>
-                                                    <li className="nav-item">
-                                                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Employer" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-building me-2" style={{color: 'white'}} />Employer</button>
-                                                    </li>
-                                                    <li className="nav-item">
-                                                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#twm-login-Placement" type="button" style={{borderRadius: '10px', fontWeight: '500', padding: '10px 16px', fontSize: '14px'}}><i className="fas fa-graduation-cap me-2" style={{color: 'white'}} />Placement Officer</button>
-                                                    </li>
-                                                </ul>
-                                                <div className="tab-content" id="myTab2Content">
-                                            {/*Login Candidate Content*/}
-                                            <form onSubmit={handleCandidateLogin} className="tab-pane fade show active" id="twm-login-candidate">
+                                                <div style={{display: 'flex', flexWrap: 'wrap', backgroundColor: 'rgba(255, 122, 0, 0.08)', borderRadius: '12px', padding: '6px', marginBottom: '24px', gap: '6px'}}>
+                                                    <button onClick={() => setActiveTab('candidate')} style={{flex: 1, border: 'none', backgroundColor: activeTab === 'candidate' ? '#FF7A00' : 'transparent', color: activeTab === 'candidate' ? 'white' : '#FF7A00', borderRadius: '10px', padding: '10px 16px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'none'}}>
+                                                        <i className="fas fa-user-tie"></i>
+                                                        <span>Candidate</span>
+                                                    </button>
+                                                    <button onClick={() => setActiveTab('employer')} style={{flex: 1, border: 'none', backgroundColor: activeTab === 'employer' ? '#FF7A00' : 'transparent', color: activeTab === 'employer' ? 'white' : '#FF7A00', borderRadius: '10px', padding: '10px 16px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'none'}}>
+                                                        <i className="fas fa-building"></i>
+                                                        <span>Employer</span>
+                                                    </button>
+                                                    <button onClick={() => setActiveTab('placement')} style={{flex: 1, border: 'none', backgroundColor: activeTab === 'placement' ? '#FF7A00' : 'transparent', color: activeTab === 'placement' ? 'white' : '#FF7A00', borderRadius: '10px', padding: '10px 16px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'none'}}>
+                                                        <i className="fas fa-graduation-cap"></i>
+                                                        <span>Placement Officer</span>
+                                                    </button>
+                                                </div>
+                                                <div>
+                                            {activeTab === 'candidate' && (
+                                            <form onSubmit={handleCandidateLogin}>
                                                 <div className="mb-3">
                                                     <input name="email"
                                                         type="email"
@@ -193,7 +197,7 @@ function LoginPage() {
                                                 <div className="d-flex justify-content-between align-items-center mb-4">
                                                     <div className="form-check">
                                                         <input type="checkbox" className="form-check-input" id="rememberCandidate" />
-                                                        <label className="form-check-label text-muted" htmlFor="rememberCandidate" style={{fontSize: '14px'}}>Remember me</label>
+                                                        <label className="form-check-label" htmlFor="rememberCandidate" style={{fontSize: '14px', color: '#666'}}>Remember me</label>
                                                     </div>
                                                     <NavLink to={publicUser.pages.FORGOT} className="site-text-primary" style={{fontSize: '14px', textDecoration: 'none'}}>Forgot Password</NavLink>
                                                 </div>
@@ -201,8 +205,9 @@ function LoginPage() {
                                                     {loading ? 'Logging in...' : 'Log in'}
                                                 </button>
                                             </form>
-                                            {/*Login Employer Content*/}
-                                            <form onSubmit={handleEmployerLogin} className="tab-pane fade" id="twm-login-Employer">
+                                            )}
+                                            {activeTab === 'employer' && (
+                                            <form onSubmit={handleEmployerLogin}>
                                                 <div className="mb-3">
                                                     <input
                                                         name="email"
@@ -236,7 +241,7 @@ function LoginPage() {
                                                 <div className="d-flex justify-content-between align-items-center mb-4">
                                                     <div className="form-check">
                                                         <input type="checkbox" className="form-check-input" id="rememberEmployer" />
-                                                        <label className="form-check-label text-muted" htmlFor="rememberEmployer" style={{fontSize: '14px'}}>Remember me</label>
+                                                        <label className="form-check-label" htmlFor="rememberEmployer" style={{fontSize: '14px', color: '#666'}}>Remember me</label>
                                                     </div>
                                                     <NavLink to={publicUser.pages.FORGOT} className="site-text-primary" style={{fontSize: '14px', textDecoration: 'none'}}>Forgot Password</NavLink>
                                                 </div>
@@ -244,8 +249,9 @@ function LoginPage() {
                                                     {loading ? 'Logging in...' : 'Log in'}
                                                 </button>
                                             </form>
-                                            {/*Login Placement Content*/}
-                                            <form onSubmit={handlePlacementLogin} className="tab-pane fade" id="twm-login-Placement">
+                                            )}
+                                            {activeTab === 'placement' && (
+                                            <form onSubmit={handlePlacementLogin}>
                                                 <div className="mb-3">
                                                     <input
                                                         name="username"
@@ -279,7 +285,7 @@ function LoginPage() {
                                                 <div className="d-flex justify-content-between align-items-center mb-4">
                                                     <div className="form-check">
                                                         <input type="checkbox" className="form-check-input" id="rememberPlacement" />
-                                                        <label className="form-check-label text-muted" htmlFor="rememberPlacement" style={{fontSize: '14px'}}>Remember me</label>
+                                                        <label className="form-check-label" htmlFor="rememberPlacement" style={{fontSize: '14px', color: '#666'}}>Remember me</label>
                                                     </div>
                                                     <NavLink to={publicUser.pages.FORGOT} className="site-text-primary" style={{fontSize: '14px', textDecoration: 'none'}}>Forgot Password</NavLink>
                                                 </div>
@@ -287,10 +293,11 @@ function LoginPage() {
                                                     {loading ? 'Logging in...' : 'Log in'}
                                                 </button>
                                             </form>
+                                            )}
                                         </div>
                                         <div className="text-center mt-3">
-                                            <NavLink to={publicUser.INITIAL} className="btn btn-outline-secondary" style={{padding: '8px 20px', borderRadius: '8px', textDecoration: 'none'}}>
-                                                <i className="fas fa-home me-2" style={{color: 'white'}}></i>Back to Home
+                                            <NavLink to={publicUser.INITIAL} className="btn" style={{padding: '8px 20px', borderRadius: '8px', textDecoration: 'none', border: '1px solid #FF7A00', color: '#FF7A00', backgroundColor: 'transparent'}}>
+                                                <i className="fas fa-home me-2" style={{color: '#FF7A00'}}></i>Back to Home
                                             </NavLink>
                                         </div>
                                     </div>

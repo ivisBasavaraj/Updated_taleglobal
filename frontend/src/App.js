@@ -7,10 +7,12 @@ import { useState, useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import forceLightMode from "./utils/forceLightMode";
-// CONSOLIDATED MASTER STYLES - All CSS in one file to eliminate cascade conflicts
-import "./consolidated-master-styles.css";
 import "./global-icon-color.css";
 import "./ux-improvements.css";
+import "./shared-animations.css";
+import "./shared-component-utils.css";
+import "./shared-sidebar-utils.css";
+import "./app/pannels/candidate/common/can-sidebar.css";
 
 function App() {
 

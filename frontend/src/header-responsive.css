@@ -5,22 +5,22 @@
   /* Hide hamburger menu button */
   .vnav-btn,
   .twm-side-navigation-menu {
-    display: none !important;
+    display: none;
   }
 
   /* Hide mobile auth section inside nav */
   .mobile-auth-section {
-    display: none !important;
+    display: none;
   }
 
   /* Show desktop navigation */
   .header-nav.navbar-collapse {
-    display: flex !important;
+    display: flex;
   }
 
   /* Show desktop auth buttons */
   .extra-nav.header-2-nav {
-    display: flex !important;
+    display: flex;
   }
 }
 
@@ -28,22 +28,22 @@
 @media (max-width: 991px) {
   /* Hide desktop auth buttons */
   .extra-nav.header-2-nav .extra-cell:first-child {
-    display: none !important;
+    display: none;
   }
 
   /* Show hamburger button */
   .extra-nav.header-2-nav .extra-cell:last-child {
-    display: flex !important;
+    display: flex;
   }
 
   /* Hide desktop navigation */
   .header-nav.navbar-collapse {
-    display: none !important;
+    display: none;
   }
 
   /* Show mobile menu when active */
   .twm-side-navigation-menu.active {
-    display: block !important;
+    display: block;
   }
 
   /* Mobile auth in sidebar */

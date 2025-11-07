@@ -4,6 +4,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { loadScript, setMenuActive } from "../../../../globals/constants";
 import { employer, empRoute, publicUser } from "../../../../globals/route-names";
 import { useEffect } from "react";
+import "./emp-sidebar.css";
 
 function EmpSidebarSection({ sidebarActive, isMobile }) {
     const currentpath = useLocation().pathname;

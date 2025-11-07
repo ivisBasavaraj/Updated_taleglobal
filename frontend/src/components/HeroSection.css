@@ -49,7 +49,7 @@
 }
 
 .hero-section__category-card {
-  min-width: auto !important;
+  min-width: auto;
 }
 
 @media (max-width: 992px) {

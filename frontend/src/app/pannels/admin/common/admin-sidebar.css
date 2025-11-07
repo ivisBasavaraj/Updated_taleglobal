@@ -229,12 +229,13 @@ nav#sidebar-admin-wraper {
         pointer-events: auto !important;
         margin-left: 0 !important;
         visibility: visible !important;
-        transition: opacity 0.2s ease !important;
+        transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease !important;
     }
     
     #sidebar-admin-wraper.active {
         transform: translateX(0) !important;
         opacity: 1 !important;
+        visibility: visible !important;
     }
 
     #sidebar-admin-wraper.collapsed {
@@ -245,19 +246,30 @@ nav#sidebar-admin-wraper {
         display: none !important;
     }
 
+    body.admin-layout.admin-layout-desktop.admin-sidebar-collapsed #sidebar-admin-wraper {
+        display: none !important;
+    }
+
     #header-admin {
         width: calc(100% - 280px) !important;
         top: 0;
-        right: 0;
+        left: 280px !important;
+        right: 0 !important;
         position: fixed;
         background: #ffffff !important;
         border-bottom: 1px solid #e5e7eb !important;
         z-index: 1001 !important;
-        transition: width 0.3s ease !important;
+        transition: width 0.3s ease, left 0.3s ease !important;
+    }
+
+    body.admin-layout.admin-layout-desktop.admin-sidebar-collapsed #header-admin {
+        width: 100% !important;
+        left: 0 !important;
     }
 
     #header-admin.active {
         width: 100% !important;
+        left: 0 !important;
     }
 }
 
@@ -318,180 +330,33 @@ nav#sidebar-admin-wraper {
         box-shadow: 0 4px 24px rgba(0,0,0,0.25) !important;
         margin-left: 0 !important;
         display: block !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
-    }
-
-    #sidebar-admin-wraper:not(.active) {
-        transform: translateX(-100%) !important;
-        opacity: 1 !important;
-        visibility: visible !important;
     }
 
     #sidebar-admin-wraper.active {
         transform: translateX(0) !important;
-        opacity: 1 !important;
-        visibility: visible !important;
+    }
+
+    #sidebar-admin-wraper.collapsed {
+        transform: translateX(-100%) !important;
+    }
+
+    .mobile-menu-toggle {
+        display: block !important;
     }
 
     #content {
         margin-left: 0 !important;
         width: 100% !important;
-        overflow-x: hidden !important;
-    }
-
-    .mobile-menu-toggle {
-        position: fixed !important;
-        top: 15px !important;
-        left: 15px !important;
-        z-index: 10001 !important;
-        width: 50px !important;
-        height: 50px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        border-radius: 8px !important;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
-        transition: all 0.3s ease !important;
-        display: block !important;
-    }
-    
-    .mobile-menu-toggle:hover {
-        transform: translateY(-1px) !important;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.3) !important;
-    }
-  
-    .mobile-menu-toggle:active {
-        transform: translateY(0) !important;
+        min-height: 100vh !important;
+        transition: none !important;
+        background: #f8fafc !important;
+        padding-top: 90px !important;
     }
 
     #header-admin {
         width: 100% !important;
         left: 0;
         right: 0;
-    }
-
-    /* Hide all hamburger buttons except the first one */
-    .page-wraper .mobile-menu-toggle:not(:first-of-type) {
-        display: none !important;
-    }
-  
-    /* Hamburger button styling */
-    .page-wraper > .mobile-menu-toggle:first-child {
-        display: flex !important;
-        position: fixed;
-        top: 15px;
-        right: 15px;
-        z-index: 10001;
-        width: 44px;
-        height: 44px;
-        background: #fd7e14 !important;
-        border: none !important;
-        border-radius: 8px;
-        color: white !important;
-        font-size: 18px;
-    }
-  
-    .page-wraper > .mobile-menu-toggle:first-child i,
-    .page-wraper > .mobile-menu-toggle:first-child .fa,
-    .page-wraper > .mobile-menu-toggle:first-child .fas {
-        color: white !important;
-    }
-  
-    .page-wraper > .mobile-menu-toggle:first-child:hover,
-    .page-wraper > .mobile-menu-toggle:first-child:active,
-    .page-wraper > .mobile-menu-toggle:first-child:focus {
-        color: white !important;
-    }
-  
-    .page-wraper > .mobile-menu-toggle:first-child:hover i,
-    .page-wraper > .mobile-menu-toggle:first-child:active i,
-    .page-wraper > .mobile-menu-toggle:first-child:focus i {
-        color: white !important;
-    }
-
-    /* Prevent any dark overlays from other sources */
-    .page-wraper::before,
-    .page-wraper::after {
-        display: none !important;
-    }
-
-    /* Ensure proper stacking context */
-    .page-wraper {
-        position: relative !important;
-        z-index: 1 !important;
-    }
-
-    /* Fix for any potential Bootstrap conflicts */
-    .fade {
-        opacity: 1 !important;
-    }
-
-    .fade.show {
-        opacity: 1 !important;
-    }
-
-    /* Ensure sidebar content is scrollable */
-    #sidebar-admin-wraper .admin-nav {
-        height: calc(100vh - 80px) !important;
-        overflow-y: auto !important;
-        padding-bottom: 20px !important;
-    }
-
-    /* Smooth scrolling for sidebar */
-    #sidebar-admin-wraper .admin-nav::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    #sidebar-admin-wraper .admin-nav::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-
-    #sidebar-admin-wraper .admin-nav::-webkit-scrollbar-thumb {
-        background: #c1c1c1;
-        border-radius: 2px;
-    }
-
-    #sidebar-admin-wraper .admin-nav::-webkit-scrollbar-thumb:hover {
-        background: #a8a8a8;
-    }
-
-    /* Prevent text selection on mobile menu button */
-    .mobile-menu-toggle {
-        -webkit-user-select: none !important;
-        -moz-user-select: none !important;
-        -ms-user-select: none !important;
-        user-select: none !important;
-        -webkit-tap-highlight-color: transparent !important;
-    }
-
-    /* Ensure no conflicting modal backdrops */
-    .modal-backdrop {
-        display: none !important;
-    }
-
-    /* Prevent Bootstrap modal interference */
-    body.modal-open {
-        overflow: auto !important;
-        padding-right: 0 !important;
-    }
-
-    /* Additional safety measures */
-    .modal,
-    .modal-backdrop,
-    .offcanvas-backdrop {
-        z-index: 1050 !important;
-    }
-
-    /* Ensure sidebar overlay doesn't interfere with modals */
-    .sidebar-overlay {
-        z-index: 999 !important;
-    }
-
-    /* When modal is open, hide sidebar overlay */
-    body.modal-open .sidebar-overlay {
-        display: none !important;
     }
 }
 

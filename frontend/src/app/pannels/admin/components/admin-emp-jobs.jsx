@@ -61,7 +61,14 @@ function AdminEmployerJobs() {
     if (loading) {
         return (
             <div className="wt-admin-right-page-header clearfix">
-                <h2>Employer Jobs</h2>
+                <h2>
+                    <i className="fa fa-building me-3"></i>
+                    Employer Jobs
+                </h2>
+                <p className="page-subtitle mb-0">
+                    <i className="fa fa-search me-2"></i>
+                    View and manage employer job postings
+                </p>
                 <div className="panel panel-default site-bg-white m-t30">
                     <div className="panel-body wt-panel-body p-a20">
                         <div className="text-center">Loading jobs...</div>
@@ -74,8 +81,14 @@ function AdminEmployerJobs() {
     return (
         <>
             <div className="wt-admin-right-page-header clearfix">
-                <h2>Employer Jobs</h2>
-                <div className="breadcrumbs"><a href="#">Home</a><a href="#">Dashboard</a><span>Employer Jobs</span></div>
+                <h2>
+                    <i className="fa fa-building me-3"></i>
+                    Employer Jobs
+                </h2>
+                <p className="page-subtitle mb-0">
+                    <i className="fa fa-search me-2"></i>
+                    View and manage employer job postings
+                </p>
             </div>
             <div className="twm-pro-view-chart-wrap">
                 <div className="col-lg-12 col-md-12 mb-4">

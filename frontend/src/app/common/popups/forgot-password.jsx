@@ -150,7 +150,7 @@ function ForgotPassword() {
               required
             />
           </div>
-          <button type="submit" className="btn twm-bg-orange w-100" disabled={loading}>
+          <button type="submit" className="btn twm-bg-green w-100" disabled={loading}>
             {loading ? 'Sending OTP...' : 'Send OTP'}
           </button>
         </form>
@@ -178,7 +178,7 @@ function ForgotPassword() {
               required
             />
           </div>
-          <button type="submit" className="btn twm-bg-orange w-100">
+          <button type="submit" className="btn twm-bg-green w-100">
             Reset Password
           </button>
         </form>

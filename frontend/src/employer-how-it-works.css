@@ -4,8 +4,8 @@
 
 /* Section Container */
 .twm-how-it-work-area {
-    background-color: #ffffff !important;
-    padding: 4rem 0 !important;
+    background-color: #ffffff;
+    padding: 4rem 0;
     transition: all 0.3s ease;
 }
 
@@ -15,14 +15,14 @@
 }
 
 .twm-how-it-work-area .wt-title {
-    color: #0a1f44 !important;
+    color: #0a1f44;
     font-size: 2.5rem;
     font-weight: 700;
     margin-top: 0.5rem;
 }
 
 .twm-how-it-work-area .wt-small-separator {
-    color: #ff6a00 !important;
+    color: #ff6a00;
     font-size: 0.95rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -36,10 +36,10 @@
 
 /* Individual Card */
 .twm-w-process-steps3 {
-    background-color: #ffffff !important;
-    border-radius: 12px !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-    padding: 1rem 1.25rem !important;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 1rem 1.25rem;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -51,7 +51,7 @@
 
 /* Hover Effect */
 .twm-w-process-steps3:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     transform: translateY(-5px);
 }
 
@@ -69,7 +69,7 @@
 .twm-w-process-steps3 .twm-media > div {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, #FF6A00 0%, #FF8A00 100%) !important;
+    background: linear-gradient(135deg, #FF6A00 0%, #FF8A00 100%);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -101,19 +101,19 @@
 
 /* Title */
 .twm-w-process-steps3 .twm-title {
-    font-size: 1.1rem !important;
-    font-weight: 700 !important;
-    color: #0a1f44 !important;
-    margin-bottom: 0.4rem !important;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0a1f44;
+    margin-bottom: 0.4rem;
     line-height: 1.25;
 }
 
 /* Description */
 .twm-w-process-steps3 p {
-    font-size: 0.85rem !important;
-    color: #6c757d !important;
-    line-height: 1.35 !important;
-    margin-bottom: 0 !important;
+    font-size: 0.85rem;
+    color: #6c757d;
+    line-height: 1.35;
+    margin-bottom: 0;
     font-weight: 400;
 }
 
@@ -154,7 +154,7 @@
 /* Tablet screens (md) */
 @media (max-width: 991px) {
     .twm-how-it-work-area {
-        padding: 3rem 0 !important;
+        padding: 3rem 0;
     }
 
     .twm-how-it-work-area .col-md-4,
@@ -164,29 +164,29 @@
     }
 
     .twm-w-process-steps3 {
-        flex-direction: row !important;
-        align-items: flex-start !important;
+        flex-direction: row;
+        align-items: flex-start;
         margin-bottom: 1rem;
-        padding: 1rem !important;
+        padding: 1rem;
     }
 
     .twm-w-process-steps3 .twm-media {
-        margin-right: 1rem !important;
-        margin-bottom: 0 !important;
-        min-width: 80px !important;
-        flex-shrink: 0 !important;
+        margin-right: 1rem;
+        margin-bottom: 0;
+        min-width: 80px;
+        flex-shrink: 0;
     }
 
     .twm-w-process-steps3 .twm-media > div {
-        width: 80px !important;
-        height: 80px !important;
+        width: 80px;
+        height: 80px;
     }
 
     .twm-w-process-steps3 .twm-media img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-        border-radius: 12px !important;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
     }
 
     .twm-w-process-steps3 svg {
@@ -195,26 +195,26 @@
     }
 
     .twm-w-process-steps3 > div:last-child {
-        flex: 1 !important;
-        display: flex !important;
-        flex-direction: column !important;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
 
     .twm-w-process-steps3 .twm-title {
-        font-size: 1rem !important;
-        margin-bottom: 0.4rem !important;
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
     }
 
     .twm-w-process-steps3 p {
-        font-size: 0.85rem !important;
-        line-height: 1.4 !important;
+        font-size: 0.85rem;
+        line-height: 1.4;
     }
 }
 
 /* Small screens (sm) */
 @media (max-width: 767px) {
     .twm-how-it-work-area {
-        padding: 2.5rem 0 !important;
+        padding: 2.5rem 0;
     }
 
     .twm-how-it-work-area .section-head {
@@ -232,32 +232,32 @@
     }
 
     .twm-w-process-steps3 {
-        flex-direction: row !important;
-        align-items: flex-start !important;
-        padding: 1rem !important;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 1rem;
         margin-bottom: 1rem;
     }
 
     .twm-w-process-steps3 .twm-media {
-        margin-right: 1rem !important;
-        margin-bottom: 0 !important;
-        min-width: 70px !important;
-        flex-shrink: 0 !important;
+        margin-right: 1rem;
+        margin-bottom: 0;
+        min-width: 70px;
+        flex-shrink: 0;
     }
 
     .twm-w-process-steps3 .twm-media > div {
-        width: 70px !important;
-        height: 70px !important;
-        min-width: 70px !important;
-        overflow: hidden !important;
-        border-radius: 12px !important;
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+        overflow: hidden;
+        border-radius: 12px;
     }
 
     .twm-w-process-steps3 .twm-media img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-        display: block !important;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
     }
 
     .twm-w-process-steps3 svg {
@@ -266,27 +266,27 @@
     }
 
     .twm-w-process-steps3 > div:last-child {
-        flex: 1 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        min-width: 0 !important;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
     }
 
     .twm-w-process-steps3 .twm-title {
-        font-size: 0.95rem !important;
-        margin-bottom: 0.3rem !important;
+        font-size: 0.95rem;
+        margin-bottom: 0.3rem;
     }
 
     .twm-w-process-steps3 p {
-        font-size: 0.8rem !important;
-        line-height: 1.35 !important;
+        font-size: 0.8rem;
+        line-height: 1.35;
     }
 }
 
 /* Extra small screens (xs) */
 @media (max-width: 575px) {
     .twm-how-it-work-area {
-        padding: 2rem 0 !important;
+        padding: 2rem 0;
     }
 
     .twm-how-it-work-area .wt-title {
@@ -299,35 +299,35 @@
     }
 
     .twm-w-process-steps3 {
-        flex-direction: row !important;
-        align-items: flex-start !important;
-        text-align: left !important;
-        padding: 0.9rem !important;
+        flex-direction: row;
+        align-items: flex-start;
+        text-align: left;
+        padding: 0.9rem;
         margin-bottom: 0.8rem;
     }
 
     .twm-w-process-steps3 .twm-media {
-        margin-right: 0.9rem !important;
-        margin-bottom: 0 !important;
-        width: auto !important;
-        justify-content: flex-start !important;
-        min-width: 65px !important;
-        flex-shrink: 0 !important;
+        margin-right: 0.9rem;
+        margin-bottom: 0;
+        width: auto;
+        justify-content: flex-start;
+        min-width: 65px;
+        flex-shrink: 0;
     }
 
     .twm-w-process-steps3 .twm-media > div {
-        width: 65px !important;
-        height: 65px !important;
-        min-width: 65px !important;
-        overflow: hidden !important;
-        border-radius: 12px !important;
+        width: 65px;
+        height: 65px;
+        min-width: 65px;
+        overflow: hidden;
+        border-radius: 12px;
     }
 
     .twm-w-process-steps3 .twm-media img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-        display: block !important;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
     }
 
     .twm-w-process-steps3 svg {
@@ -336,20 +336,20 @@
     }
 
     .twm-w-process-steps3 > div:last-child {
-        flex: 1 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        min-width: 0 !important;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
     }
 
     .twm-w-process-steps3 .twm-title {
-        font-size: 0.9rem !important;
-        margin-bottom: 0.25rem !important;
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
     }
 
     .twm-w-process-steps3 p {
-        font-size: 0.75rem !important;
-        line-height: 1.3 !important;
+        font-size: 0.75rem;
+        line-height: 1.3;
     }
 }
 
@@ -405,10 +405,10 @@
 /* Dark mode support (for future use) */
 @media (prefers-color-scheme: dark) {
     .twm-how-it-work-area {
-        background-color: #ffffff !important;
+        background-color: #ffffff;
     }
     
     .twm-how-it-work-area .wt-title {
-        color: #0a1f44 !important;
+        color: #0a1f44;
     }
 }

@@ -23,9 +23,9 @@ svg.icon,
 .icon,
 [class^="icon-"],
 [class*=" icon-"] {
-  color: #fd7e14 !important;
-  fill: #fd7e14 !important;
-  stroke: #fd7e14 !important;
+  color: #fd7e14;
+  fill: #fd7e14;
+  stroke: #fd7e14;
 }
 
 /* ============================================================================
@@ -38,9 +38,9 @@ svg.icon,
 .fa,
 i.fa,
 span.fa {
-  color: #fd7e14 !important;
-  fill: #fd7e14 !important;
-  stroke: #fd7e14 !important;
+  color: #fd7e14;
+  fill: #fd7e14;
+  stroke: #fd7e14;
 }
 
 /* Font Awesome solid, regular, light, brand, duotone */
@@ -59,9 +59,9 @@ span.far,
 span.fal,
 span.fab,
 span.fad {
-  color: #fd7e14 !important;
-  fill: #fd7e14 !important;
-  stroke: #fd7e14 !important;
+  color: #fd7e14;
+  fill: #fd7e14;
+  stroke: #fd7e14;
 }
 
 /* Explicit Font Awesome icons by name pattern */
@@ -124,9 +124,9 @@ span.fad {
 .fa-menu,
 .fa-ellipsis-h,
 .fa-ellipsis-v {
-  color: #fd7e14 !important;
-  fill: #fd7e14 !important;
-  stroke: #fd7e14 !important;
+  color: #fd7e14;
+  fill: #fd7e14;
+  stroke: #fd7e14;
 }
 
 /* ============================================================================
@@ -139,9 +139,9 @@ span.fad {
 .feather,
 i.feather,
 svg.feather {
-  color: #fd7e14 !important;
-  fill: #fd7e14 !important;
-  stroke: #fd7e14 !important;
+  color: #fd7e14;
+  fill: #fd7e14;
+  stroke: #fd7e14;
 }
 
 /* Specific feather icon names */
@@ -175,26 +175,26 @@ svg.feather {
 .feather-eye,
 .feather-lock,
 .feather-unlock {
-  color: #fd7e14 !important;
-  fill: #fd7e14 !important;
-  stroke: #fd7e14 !important;
+  color: #fd7e14;
+  fill: #fd7e14;
+  stroke: #fd7e14;
 }
 
 /* ============================================================================
- * SECTION 4: BUTTON & CTA ICON EXCEPTIONS - DARK ORANGE FOR ALL ICONS
+ * SECTION 4: BUTTON & CTA ICON EXCEPTIONS - LIGHT ORANGE FOR BUTTON ICONS
  * ============================================================================ */
 
-/* Primary buttons - orange icons */
+/* Primary buttons - light orange icons */
 .btn-primary i,
 .btn-primary [class^="fa"],
 .btn-primary [class^="feather"],
 .btn-primary svg {
-  color: #fd7e14 !important;
-  fill: #fd7e14 !important;
-  stroke: #fd7e14 !important;
+  color: #FF7A00;
+  fill: #FF7A00;
+  stroke: #FF7A00;
 }
 
-/* Secondary/Outline buttons - orange icons */
+/* Secondary/Outline buttons - light orange icons */
 .btn-secondary i,
 .btn-outline-primary i,
 .btn-outline-primary [class^="fa"],
@@ -205,9 +205,9 @@ svg.feather {
 .btn.site-button i,
 .site-button [class^="fa"],
 .site-button [class^="feather"] {
-  color: #fd7e14 !important;
-  fill: #fd7e14 !important;
-  stroke: #fd7e14 !important;
+  color: #FF7A00;
+  fill: #FF7A00;
+  stroke: #FF7A00;
 }
 
 /* Navigation buttons */
@@ -223,12 +223,12 @@ a.btn [class^="feather"],
 a.site-button i,
 a.site-button [class^="fa"],
 a.site-button [class^="feather"] {
-  color: #fd7e14 !important;
-  fill: #fd7e14 !important;
-  stroke: #fd7e14 !important;
+  color: #FF7A00;
+  fill: #FF7A00;
+  stroke: #FF7A00;
 }
 
-/* Specific button classes - orange icons */
+/* Specific button classes - light orange icons */
 .apply-now-btn i,
 .apply-now-btn [class^="fa"],
 .search-btn i,
@@ -251,9 +251,9 @@ a.site-button [class^="feather"] {
 .secondary-button [class^="fa"],
 .cta-button i,
 .cta-button [class^="fa"] {
-  color: #fd7e14 !important;
-  fill: #fd7e14 !important;
-  stroke: #fd7e14 !important;
+  color: #FF7A00;
+  fill: #FF7A00;
+  stroke: #FF7A00;
 }
 
 /* ============================================================================
@@ -269,8 +269,8 @@ a.site-button [class^="feather"] {
   svg.icon,
   .icon,
   [class^="icon-"] {
-    color: #fd7e14 !important;
-    fill: #fd7e14 !important;
-    stroke: #fd7e14 !important;
+    color: #fd7e14;
+    fill: #fd7e14;
+    stroke: #fd7e14;
   }
 }

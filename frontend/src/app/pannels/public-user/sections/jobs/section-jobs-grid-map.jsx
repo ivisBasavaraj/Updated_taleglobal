@@ -53,7 +53,7 @@ const mapOptions = {
             "elementType": "labels.text.fill",
             "stylers": [
                 {
-                    "color": "#1967d2"
+                    "color": "#FF7A00"
                 }
             ]
         },
@@ -98,7 +98,7 @@ const mapOptions = {
             "elementType": "geometry.fill",
             "stylers": [
                 {
-                    "color": "#1967d2"
+                    "color": "#FF7A00"
                 },
                 {
                     "saturation": "0"
@@ -131,7 +131,7 @@ const mapOptions = {
             "elementType": "geometry.stroke",
             "stylers": [
                 {
-                    "color": "#1967d2"
+                    "color": "#FF7A00"
                 },
                 {
                     "saturation": "0"

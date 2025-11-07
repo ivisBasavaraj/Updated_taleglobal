@@ -81,6 +81,7 @@ function PlacementDashboard() {
             console.log('Fetching placement profile...');
             const profileData = await api.getPlacementProfile();
             console.log('Profile data received:', profileData);
+            console.log('File history:', profileData.placement?.fileHistory);
             
             if (profileData.success) {
                 console.log('Setting placement data:', profileData.placement);
@@ -277,12 +278,14 @@ function PlacementDashboard() {
                 setCustomFileName('');
                 setPendingFile(null);
                 document.getElementById('fileInput').value = '';
-                fetchPlacementDetails();
+                // Refresh placement details to show new file in history
+                await fetchPlacementDetails();
+                console.log('File upload successful, placement details refreshed');
             } else {
                 alert(data.message || 'Upload failed');
             }
         } catch (error) {
-            
+            console.error('File upload error:', error);
             if (error.message.includes('401') || error.message.includes('authentication')) {
                 alert('Authentication failed. Please login again.');
                 localStorage.removeItem('placementToken');
@@ -344,11 +347,14 @@ function PlacementDashboard() {
                 const data = await response.json();
                 if (data.success) {
                     alert('Logo uploaded successfully!');
-                    fetchPlacementDetails();
+                    // Immediately update the state with the new logo
+                    setPlacementData(prev => ({ ...prev, logo: base64Logo }));
+                    await fetchPlacementDetails();
                 } else {
                     alert('Failed to upload logo');
                 }
             } catch (error) {
+                console.error('Logo upload error:', error);
                 alert('Error uploading logo');
             }
         };
@@ -388,11 +394,14 @@ function PlacementDashboard() {
                 const data = await response.json();
                 if (data.success) {
                     alert('ID card uploaded successfully!');
-                    fetchPlacementDetails();
+                    // Immediately update the state with the new ID card
+                    setPlacementData(prev => ({ ...prev, idCard: base64IdCard }));
+                    await fetchPlacementDetails();
                 } else {
                     alert('Failed to upload ID card');
                 }
             } catch (error) {
+                console.error('ID card upload error:', error);
                 alert('Error uploading ID card');
             }
         };
@@ -434,9 +443,9 @@ function PlacementDashboard() {
 
     if (authLoading) {
         return (
-            <div className="container-fluid p-4" style={{background: '#f8f9fa', minHeight: '100vh'}}>
+            <div className="container-fluid p-4" style={{background: 'rgba(255, 122, 0, 0.08)', minHeight: '100vh'}}>
                 <div className="text-center py-5">
-                    <div className="spinner-border text-primary mb-3" role="status"></div>
+                    <div className="spinner-border text-orange mb-3" role="status"></div>
                     <h4>Authenticating...</h4>
                 </div>
             </div>
@@ -447,18 +456,18 @@ function PlacementDashboard() {
 
     if (!authLoading && (!isAuthenticated() || userType !== 'placement')) {
         return (
-            <div className="container-fluid p-4" style={{background: '#f8f9fa', minHeight: '100vh'}}>
+            <div className="container-fluid p-4" style={{background: 'rgba(255, 122, 0, 0.08)', minHeight: '100vh'}}>
                 <div className="modern-card p-5 text-center">
                     <i className="fa fa-lock fa-3x text-danger mb-3"></i>
                     <h3>Access Denied</h3>
-                    <p className="text-muted">Please login with valid placement officer credentials.</p>
+                    <p className="text-orange">Please login with valid placement officer credentials.</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="container-fluid p-4" style={{background: '#f8f9fa', minHeight: '100vh'}}>
+        <div className="container-fluid p-4" style={{background: 'rgba(255, 122, 0, 0.08)', minHeight: '100vh'}}>
             {/* Header */}
             <div className="modern-card mb-4 p-4" style={{padding: '2.5rem', position: 'relative', overflow: 'hidden'}}>
                 <div style={{position: 'absolute', top: '-70px', right: '-70px', width: '200px', height: '200px', background: 'radial-gradient(circle, rgba(255, 140, 0, 0.25) 0%, rgba(255, 140, 0, 0) 65%)'}}></div>
@@ -469,11 +478,11 @@ function PlacementDashboard() {
                             <i className="fa fa-dashboard mr-2" style={{color: '#ff8c00'}}></i>
                             Placement Dashboard
                         </h2>
-                        <p className="text-muted mb-0 mt-2" style={{maxWidth: '520px'}}>Monitor student onboarding progress, manage uploaded data files, and keep your placement operations streamlined.</p>
+                        <p className="text-orange mb-0 mt-2" style={{maxWidth: '520px'}}>Monitor student onboarding progress, manage uploaded data files, and keep your placement operations streamlined.</p>
                     </div>
                     <div className="d-flex flex-wrap align-items-center" style={{gap: '0.75rem'}}>
                         <button 
-                            className="btn btn-outline-success"
+                            className="btn btn-orange-outline"
                             onClick={handleEditProfile}
                             style={{borderRadius: '50px', padding: '0.65rem 1.5rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.5rem'}}
                         >
@@ -481,7 +490,7 @@ function PlacementDashboard() {
                             Edit Profile
                         </button>
                         <button 
-                            className="btn btn-outline-primary"
+                            className="btn btn-orange-outline"
                             onClick={() => {
                                 fetchPlacementDetails();
                                 fetchStudentData();
@@ -508,8 +517,8 @@ function PlacementDashboard() {
                                     height: '100px',
                                     objectFit: 'contain',
                                     borderRadius: '12px',
-                                    border: '2px solid #e9ecef',
-                                    background: '#f8f9fa',
+                                    border: '2px solid #FF7A00',
+                                    background: 'rgba(255, 122, 0, 0.08)',
                                     cursor: 'pointer'
                                 }}
                                 onClick={() => document.getElementById('logoInput').click()}
@@ -520,8 +529,8 @@ function PlacementDashboard() {
                                     width: '100px',
                                     height: '100px',
                                     borderRadius: '12px',
-                                    border: '2px dashed #ccc',
-                                    background: '#f8f9fa',
+                                    border: '2px dashed #FF7A00',
+                                    background: 'rgba(255, 122, 0, 0.08)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
@@ -529,7 +538,7 @@ function PlacementDashboard() {
                                 }}
                                 onClick={() => document.getElementById('logoInput').click()}
                             >
-                                <i className="fa fa-university fa-2x text-muted"></i>
+                                <i className="fa fa-university fa-2x text-orange"></i>
                             </div>
                         )}
                         <input 
@@ -539,7 +548,7 @@ function PlacementDashboard() {
                             style={{display: 'none'}}
                             onChange={handleLogoUpload}
                         />
-                        <small className="text-muted d-block mt-2">College Logo</small>
+                        <small className="text-orange d-block mt-2">College Logo</small>
                     </div>
                     <div className="col-md-2 text-center">
                         {placementData?.idCard ? (
@@ -551,8 +560,8 @@ function PlacementDashboard() {
                                     height: '100px',
                                     objectFit: 'contain',
                                     borderRadius: '12px',
-                                    border: '2px solid #e9ecef',
-                                    background: '#f8f9fa',
+                                    border: '2px solid #FF7A00',
+                                    background: 'rgba(255, 122, 0, 0.08)',
                                     cursor: 'pointer'
                                 }}
                                 onClick={() => document.getElementById('idCardInput').click()}
@@ -563,8 +572,8 @@ function PlacementDashboard() {
                                     width: '100px',
                                     height: '100px',
                                     borderRadius: '12px',
-                                    border: '2px dashed #ccc',
-                                    background: '#f8f9fa',
+                                    border: '2px dashed #FF7A00',
+                                    background: 'rgba(255, 122, 0, 0.08)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
@@ -572,7 +581,7 @@ function PlacementDashboard() {
                                 }}
                                 onClick={() => document.getElementById('idCardInput').click()}
                             >
-                                <i className="fa fa-id-card fa-2x text-muted"></i>
+                                <i className="fa fa-id-card fa-2x text-orange"></i>
                             </div>
                         )}
                         <input 
@@ -582,7 +591,7 @@ function PlacementDashboard() {
                             style={{display: 'none'}}
                             onChange={handleIdCardUpload}
                         />
-                        <small className="text-muted d-block mt-2">ID Card</small>
+                        <small className="text-orange d-block mt-2">ID Card</small>
                     </div>
                     <div className="col-md-8">
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center" style={{gap: '1rem'}}>
@@ -591,17 +600,17 @@ function PlacementDashboard() {
                                 <h3 className="mb-1" style={{color: '#1f2937', fontWeight: 700}}>{placementData?.name || user?.name || JSON.parse(localStorage.getItem('placementUser') || '{}')?.name || 'Name not available'}</h3>
                                 <div className="d-flex align-items-center flex-wrap" style={{gap: '1rem'}}>
 
-                                    <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
+                                    <span className="d-flex align-items-center text-orange">
                                         <i className="fa fa-graduation-cap mr-2" style={{color: '#ff8c00'}}></i>
                                         {placementData?.collegeName || 'College Name Not Available'}
                                     </span>
                                 </div>
                                 <div className="mt-3" style={{display: 'grid', gap: '0.35rem'}}>
-                                    <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
+                                    <span className="d-flex align-items-center text-orange">
                                         <i className="fa fa-envelope mr-2" style={{color: '#ff8c00'}}></i>
                                         {placementData?.email || user?.email || JSON.parse(localStorage.getItem('placementUser') || '{}')?.email || 'Email not available'}
                                     </span>
-                                    <span className="d-flex align-items-center" style={{color: '#6c757d'}}>
+                                    <span className="d-flex align-items-center text-orange">
                                         <i className="fa fa-phone mr-2" style={{color: '#ff8c00'}}></i>
                                         {placementData?.phone || 'Phone Unavailable'}
                                     </span>
@@ -625,9 +634,9 @@ function PlacementDashboard() {
                                 <i className="fa fa-users" style={{fontSize: '20px'}}></i>
                             </div>
                             <div>
-                                <label className="text-muted mb-1" style={{fontSize: '0.75rem'}}>Total Students</label>
+                                <label className="text-orange mb-1" style={{fontSize: '0.75rem'}}>Total Students</label>
                                 <h4 className="mb-0" style={{fontWeight: 700, color: '#1f2937'}}>{studentData.length}</h4>
-                                <small className="text-muted">Currently registered in your placement batch</small>
+                                <small className="text-orange">Currently registered in your placement batch</small>
                             </div>
                         </div>
                     </div>
@@ -647,25 +656,25 @@ function PlacementDashboard() {
                         <div 
                             className="upload-zone p-4 text-center"
                             style={{
-                                border: '2px dashed #007bff',
+                                border: '2px dashed #FF7A00',
                                 borderRadius: '12px',
-                                background: '#f8f9fa',
+                                background: 'rgba(255, 122, 0, 0.08)',
                                 cursor: 'pointer'
                             }}
                             onClick={() => !uploadingFile && document.getElementById('fileInput').click()}
                         >
                             {uploadingFile ? (
                                 <div>
-                                    <div className="spinner-border text-primary mb-3" role="status"></div>
-                                    <h5 className="text-primary">Uploading...</h5>
-                                    <p className="text-muted">Please wait while we process your file</p>
+                                    <div className="spinner-border text-orange mb-3" role="status"></div>
+                                    <h5 className="text-orange">Uploading...</h5>
+                                    <p className="text-orange">Please wait while we process your file</p>
                                 </div>
                             ) : (
                                 <div>
-                                    <i className="fa fa-file-excel-o fa-3x text-primary mb-3"></i>
-                                    <h5 className="text-primary mb-2">Drop your file here or click to browse</h5>
-                                    <p className="text-muted mb-2">Supported formats: .xlsx, .xls, .csv (Max 5MB)</p>
-                                    <p className="text-muted mb-3" style={{fontSize: '0.85rem'}}>
+                                    <i className="fa fa-file-excel-o fa-3x text-orange mb-3"></i>
+                                    <h5 className="text-orange mb-2">Drop your file here or click to browse</h5>
+                                    <p className="text-orange mb-2">Supported formats: .xlsx, .xls, .csv (Max 5MB)</p>
+                                    <p className="text-orange mb-3" style={{fontSize: '0.85rem'}}>
                                         Required: ID | Candidate Name | College Name | Email | Phone | Course | Password | Credits Assigned
                                     </p>
                                     <button className="btn" disabled={uploadingFile} style={{backgroundColor: '#FDC360', border: '1px solid #FDC360', color: '#000'}}>
@@ -690,7 +699,7 @@ function PlacementDashboard() {
                         />
                         <div className="mt-3">
                             <div className="d-flex justify-content-between align-items-center mb-2">
-                                <small className="text-muted">
+                                <small className="text-orange">
                                     <i className="fa fa-info-circle mr-1"></i>
                                     Required columns: ID, Candidate Name, College Name, Email, Phone, Course, Password, Credits Assigned
                                 </small>
@@ -698,8 +707,8 @@ function PlacementDashboard() {
                                     <a 
                                         href="/assets/student-data-template.csv" 
                                         download="student-data-template.csv"
-                                         className="btn btn-sm btn-light"
-                                        style={{fontSize: '0.8rem', border: '1px solid #dee2e6'}}
+                                         className="btn btn-sm btn-orange-outline"
+                                        style={{fontSize: '0.8rem'}}
                                     >
                                         <i className="fa fa-download mr-1"></i>
                                         Template
@@ -707,8 +716,8 @@ function PlacementDashboard() {
                                     <a 
                                         href="/assets/sample-student-data.csv" 
                                         download="sample-student-data.csv"
-                                        className="btn btn-sm btn-light"
-                                        style={{fontSize: '0.8rem', border: '1px solid #dee2e6'}}
+                                        className="btn btn-sm btn-orange-outline"
+                                        style={{fontSize: '0.8rem'}}
                                     >
                                         <i className="fa fa-download mr-1"></i>
                                         Sample Data
@@ -718,8 +727,8 @@ function PlacementDashboard() {
                         </div>
                     </div>
                     <div className="col-md-4">
-                        <div className="p-3" style={{background: '#e3f2fd', borderRadius: '8px'}}>
-                            <h6 className="text-primary mb-2">
+                        <div className="p-3" style={{background: 'rgba(255, 122, 0, 0.08)', borderRadius: '8px'}}>
+                            <h6 className="text-orange mb-2">
                                 <i className="fa fa-lightbulb-o mr-2"></i>
                                 Upload Tips
                             </h6>
@@ -746,7 +755,7 @@ function PlacementDashboard() {
                                 Upload History
                             </h5>
                             <button 
-                                className="btn btn-sm btn-outline-primary"
+                                className="btn btn-sm btn-orange-outline"
                                 onClick={fetchPlacementDetails}
                                 style={{borderRadius: '6px'}}
                             >
@@ -756,7 +765,7 @@ function PlacementDashboard() {
                         <div style={{maxHeight: '400px', overflowY: 'auto'}}>
                             {placementData?.fileHistory && placementData.fileHistory.length > 0 ? (
                                 placementData?.fileHistory?.slice().reverse().map((file, index) => (
-                                    <div key={file._id || index} className="mb-3 p-3" style={{background: '#f8f9fa', borderRadius: '8px'}}>
+                                    <div key={file._id || index} className="mb-3 p-3" style={{background: 'rgba(255, 122, 0, 0.04)', borderRadius: '8px'}}>
                                         <div className="d-flex align-items-start">
                                             <div className={`timeline-dot ${
                                                 file.status === 'processed' ? 'bg-success' : 
@@ -794,7 +803,7 @@ function PlacementDashboard() {
                                                         </small>
                                                     </div>
                                                     <button 
-                                                        className="btn btn-sm btn-outline-primary"
+                                                        className="btn btn-sm btn-orange-outline"
                                                         onClick={() => handleViewFile(file._id, file.fileName)}
                                                         style={{fontSize: '0.7rem', padding: '2px 8px'}}
                                                         title="View file data"
@@ -827,9 +836,9 @@ function PlacementDashboard() {
                                 ))
                             ) : (
                                 <div className="text-center py-4">
-                                    <i className="fa fa-history fa-2x text-muted mb-2"></i>
-                                    <p className="mb-0 text-muted">No files uploaded yet</p>
-                                    <small className="text-muted">Upload history will appear here</small>
+                                    <i className="fa fa-history fa-2x text-orange mb-2"></i>
+                                    <p className="mb-0 text-orange">No files uploaded yet</p>
+                                    <small className="text-orange">Upload history will appear here</small>
                                 </div>
                             )}
                         </div>
@@ -850,13 +859,13 @@ function PlacementDashboard() {
                         
                         {loading && !dataLoaded ? (
                             <div className="text-center py-5">
-                                <div className="spinner-border text-primary mb-3" role="status"></div>
-                                <p className="text-muted">Loading student data...</p>
+                                <div className="spinner-border text-orange mb-3" role="status"></div>
+                                <p className="text-orange">Loading student data...</p>
                             </div>
                         ) : studentData.length > 0 ? (
                             <div className="table-responsive">
                                 <table className="table table-hover" style={{fontSize: '0.9rem'}}>
-                                    <thead style={{background: '#f8f9fa'}}>
+                                    <thead style={{background: 'rgba(255, 122, 0, 0.08)'}}>
                                         <tr>
                                             <th style={{border: 'none', fontWeight: '600'}}>Name</th>
                                             <th style={{border: 'none', fontWeight: '600'}}>Email</th>
@@ -867,7 +876,7 @@ function PlacementDashboard() {
                                     </thead>
                                     <tbody>
                                         {studentData.map((student, index) => (
-                                            <tr key={index} style={{borderTop: '1px solid #e9ecef'}}>
+                                            <tr key={index} style={{borderTop: '1px solid #FF7A00'}}>
                                                 <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>{student.name || '-'}</td>
                                                 <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>{student.email || '-'}</td>
                                                 <td style={{border: 'none', paddingTop: '12px', paddingBottom: '12px'}}>{student.phone || '-'}</td>
@@ -891,9 +900,9 @@ function PlacementDashboard() {
                             </div>
                         ) : (
                             <div className="text-center py-5">
-                                <i className="fa fa-users fa-3x text-muted mb-3"></i>
-                                <h6 className="text-muted">No student data available</h6>
-                                <p className="text-muted mb-0">Upload a file and wait for admin approval to see students here</p>
+                                <i className="fa fa-users fa-3x text-orange mb-3"></i>
+                                <h6 className="text-orange">No student data available</h6>
+                                <p className="text-orange mb-0">Upload a file and wait for admin approval to see students here</p>
                             </div>
                         )}
                     </div>
@@ -921,31 +930,31 @@ function PlacementDashboard() {
                             <div className="modal-body">
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
-                                        <label className="text-muted small">Student ID</label>
+                                        <label className="text-orange small">Student ID</label>
                                         <p className="mb-0 font-weight-bold">{selectedStudent.id || 'N/A'}</p>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="text-muted small">Full Name</label>
+                                        <label className="text-orange small">Full Name</label>
                                         <p className="mb-0 font-weight-bold">{selectedStudent.name || 'N/A'}</p>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="text-muted small">College Name</label>
+                                        <label className="text-orange small">College Name</label>
                                         <p className="mb-0">{selectedStudent.collegeName || 'N/A'}</p>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="text-muted small">Course</label>
+                                        <label className="text-orange small">Course</label>
                                         <p className="mb-0">{selectedStudent.course || 'N/A'}</p>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="text-muted small">Email Address</label>
+                                        <label className="text-orange small">Email Address</label>
                                         <p className="mb-0">{selectedStudent.email || 'N/A'}</p>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="text-muted small">Phone Number</label>
+                                        <label className="text-orange small">Phone Number</label>
                                         <p className="mb-0">{selectedStudent.phone || 'N/A'}</p>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="text-muted small">Credits Assigned</label>
+                                        <label className="text-orange small">Credits Assigned</label>
                                         <p className="mb-0">
                                             <span className="badge badge-info">
                                                 {selectedStudent.credits || placementData?.credits || 0}
@@ -953,7 +962,7 @@ function PlacementDashboard() {
                                         </p>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="text-muted small">Password</label>
+                                        <label className="text-orange small">Password</label>
                                         <p className="mb-0">{selectedStudent.password || 'N/A'}</p>
                                     </div>
                                 </div>
@@ -1019,9 +1028,8 @@ function PlacementDashboard() {
                                 </button>
                                 <button 
                                     type="button" 
-                                    className="btn btn-light" 
+                                    className="btn btn-orange" 
                                     onClick={handleConfirmUpload}
-                                    style={{border: '1px solid #dee2e6'}}
                                 >
                                     <i className="fa fa-upload mr-1"></i>
                                     Upload File
@@ -1099,7 +1107,7 @@ function PlacementDashboard() {
                                 </button>
                                 <button 
                                     type="button" 
-                                    className="btn btn-light" 
+                                    className="btn btn-orange" 
                                     onClick={handleUpdateProfile}
                                     disabled={updating}
                                 >

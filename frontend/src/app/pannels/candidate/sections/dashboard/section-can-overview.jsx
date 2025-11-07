@@ -311,7 +311,6 @@ function SectionCandidateOverview() {
 
 	const baseCards = [
 		{
-			bg: "#e0f7fa",
 			icon: "flaticon-resume",
 			color: "text-info",
 			count: stats.applied,
@@ -324,7 +323,6 @@ function SectionCandidateOverview() {
 			}
 		},
 		{
-			bg: "#fff3e0",
 			icon: "flaticon-envelope",
 			color: "text-warning",
 			count: stats.inProgress,
@@ -333,7 +331,6 @@ function SectionCandidateOverview() {
 			onClick: () => navigate('/candidate/status')
 		},
 		{
-			bg: "#fff3e0",
 			icon: "flaticon-bell",
 			color: "text-warning",
 			count: stats.shortlisted,
@@ -348,7 +345,6 @@ function SectionCandidateOverview() {
 	];
 
 	const creditsCard = {
-		bg: "#f0f4ff",
 		icon: "flaticon-job",
 		color: "text-primary",
 		count: candidate.credits || 0,
@@ -381,7 +377,6 @@ function SectionCandidateOverview() {
 							<div 
 								className="panel-body wt-panel-body dashboard-card-2" 
 								style={{ 
-									backgroundColor: card.bg,
 									cursor: card.clickable ? 'pointer' : 'default'
 								}}
 								onClick={card.clickable ? card.onClick : undefined}

@@ -1,0 +1,87 @@
+/* Shared Sidebar Utilities - Common sidebar patterns across admin, candidate, and employer panels */
+
+/* Sidebar Layout States */
+#sidebar-admin-wraper::-webkit-scrollbar,
+#sidebar-admin-wraper .admin-nav::-webkit-scrollbar,
+#sidebar-admin-wraper .admin-nav.scrollbar-macosx::-webkit-scrollbar {
+  width: 6px;
+}
+
+#sidebar-admin-wraper::-webkit-scrollbar-track,
+#sidebar-admin-wraper .admin-nav::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+#sidebar-admin-wraper::-webkit-scrollbar-thumb,
+#sidebar-admin-wraper .admin-nav::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+#sidebar-admin-wraper::-webkit-scrollbar-thumb:hover,
+#sidebar-admin-wraper .admin-nav::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Content Area Sidebar States */
+#content {
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+#content.sidebar-hidden {
+  margin-left: 0;
+  width: 100%;
+}
+
+/* Header States */
+#header-admin {
+  width: 100%;
+  top: 0;
+  right: 0;
+  position: fixed;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  z-index: 1001;
+  transition: width 0.3s ease;
+}
+
+#header-admin.active {
+  width: 100%;
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+  display: none;
+  cursor: pointer;
+  z-index: 1002;
+}
+
+@media (max-width: 768px) {
+  #sidebar-admin-wraper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  #sidebar-admin-wraper.active {
+    transform: translateX(0);
+  }
+
+  #header-admin {
+    width: 100%;
+  }
+
+  #content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+}

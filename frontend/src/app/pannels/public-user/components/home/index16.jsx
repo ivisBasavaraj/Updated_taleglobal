@@ -551,7 +551,7 @@ function Home16Page() {
                         </div>
 
                         <div className="text-center job-categories-btn">
-                            <NavLink to="/job-grid" className="site-button" style={{padding: '0.5rem 1rem', fontSize: '14px', display: 'inline-flex', width: 'auto', whiteSpace: 'nowrap'}}>
+                            <NavLink to="/job-grid" className="site-button">
                                 All Categories
                             </NavLink>
                         </div>
@@ -619,7 +619,7 @@ function Home16Page() {
                                         Clear Filters
                                     </button>
                                 )}
-                                <NavLink to="/job-grid" className=" site-button" style={{padding: '0.5rem 1rem', fontSize: '14px', display: 'inline-flex', width: 'auto', whiteSpace: 'nowrap'}}>
+                                <NavLink to="/job-grid" className="site-button">
                                     Browse All Jobs
                                 </NavLink>
                             </Col>
@@ -774,7 +774,7 @@ function Home16Page() {
                             </div>
                             <h2 className="wt-title mb-0">Discover your next career move</h2>
                         </div>
-                        <NavLink to="/emp-grid" className="site-button" style={{padding: '0.5rem 1rem', fontSize: '14px', display: 'inline-flex', width: 'auto', whiteSpace: 'nowrap'}}>
+                        <NavLink to="/emp-grid" className="site-button">
                             View All
                         </NavLink>
                     </div>

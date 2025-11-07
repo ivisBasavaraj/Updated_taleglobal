@@ -87,14 +87,7 @@ function EmpCandidateReviewPage () {
 	};
 
 	const getStatusBadge = (status) => {
-		switch (status) {
-			case 'pending': return 'twm-bg-yellow';
-			case 'shortlisted': return 'twm-bg-purple';
-			case 'interviewed': return 'twm-bg-orange';
-			case 'hired': return 'twm-bg-green';
-			case 'rejected': return 'twm-bg-red';
-			default: return 'twm-bg-light-blue';
-		}
+		return 'twm-bg-orange';
 	};
 
 	const formatDate = (dateString) => {
@@ -241,8 +234,8 @@ function EmpCandidateReviewPage () {
 					<div className="d-flex justify-content-between align-items-center bg-white p-4 rounded-3 shadow-sm border-0" style={{background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)'}}>
 						<div className="d-flex align-items-center gap-3">
 							<button
-								className="btn btn-outline-primary rounded-circle d-flex align-items-center justify-content-center"
-								style={{width: '40px', height: '40px', borderColor: '#ffb366', color: '#ffb366'}}
+								className="btn btn-orange rounded-circle d-flex align-items-center justify-content-center"
+								style={{width: '40px', height: '40px', backgroundColor: 'rgba(255, 122, 0, 0.08)', border: '1px solid #FF7A00', color: '#FF7A00', fontWeight: 'bold'}}
 								onClick={() => navigate(-1)}
 							>
 								<ArrowLeft size={18} />
@@ -406,15 +399,15 @@ function EmpCandidateReviewPage () {
 												{edu.marksheet && (
 													<div className="d-flex gap-2">
 														<button
-															className="btn btn-outline-primary btn-sm"
-															style={{color: 'white', backgroundColor: '#ffb366', borderColor: '#ffb366'}}
+															className="btn btn-orange btn-sm"
+															style={{backgroundColor: 'rgba(255, 122, 0, 0.08)', border: '1px solid #FF7A00', color: '#FF7A00', fontWeight: 'bold'}}
 															onClick={() => viewDocument(edu.marksheet)}
 														>
 															<Eye size={14} className="me-1" />View
 														</button>
 														<button
-															className="btn btn-outline-secondary btn-sm"
-															style={{color: 'white', backgroundColor: '#ffb366', borderColor: '#ffb366'}}
+															className="btn btn-orange btn-sm"
+															style={{backgroundColor: 'rgba(255, 122, 0, 0.08)', border: '1px solid #FF7A00', color: '#FF7A00', fontWeight: 'bold'}}
 															onClick={() => downloadDocument(edu.marksheet, `marksheet_${index}.pdf`)}
 														>
 															<Download size={14} className="me-1" />Download
@@ -473,8 +466,8 @@ function EmpCandidateReviewPage () {
 							</div>
 							<div className="card-body text-center p-4">
 								<button
-									className="btn btn-lg rounded-pill px-4 py-2 fw-semibold"
-									style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}}
+									className="btn btn-orange btn-lg rounded-pill px-4 py-2 fw-semibold"
+									style={{backgroundColor: 'rgba(255, 122, 0, 0.08)', border: '1px solid #FF7A00', color: '#FF7A00', fontWeight: 'bold'}}
 									onClick={() => downloadDocument(candidate.resume, 'resume.pdf')}
 								>
 									<Download size={18} className="me-2" />Download Resume
@@ -556,13 +549,13 @@ function EmpCandidateReviewPage () {
 							</div>
 
 							<div className="d-grid gap-3">
-								<button className="btn btn-lg rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}} onClick={saveReview}>
+								<button className="btn btn-orange btn-lg rounded-pill fw-semibold" style={{backgroundColor: 'rgba(255, 122, 0, 0.08)', border: '1px solid #FF7A00', color: '#FF7A00', fontWeight: 'bold'}} onClick={saveReview}>
 									<Save size={18} className="me-2" />Save Review
 								</button>
-								<button className="btn btn-lg rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}} onClick={shortlistCandidate}>
+								<button className="btn btn-orange btn-lg rounded-pill fw-semibold" style={{backgroundColor: 'rgba(255, 122, 0, 0.08)', border: '1px solid #FF7A00', color: '#FF7A00', fontWeight: 'bold'}} onClick={shortlistCandidate}>
 									<Check size={18} className="me-2" />Shortlist Candidate
 								</button>
-								<button className="btn btn-lg rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}} onClick={rejectCandidate}>
+								<button className="btn btn-orange btn-lg rounded-pill fw-semibold" style={{backgroundColor: 'rgba(255, 122, 0, 0.08)', border: '1px solid #FF7A00', color: '#FF7A00', fontWeight: 'bold'}} onClick={rejectCandidate}>
 									<X size={18} className="me-2" />Reject Candidate
 								</button>
 							</div>

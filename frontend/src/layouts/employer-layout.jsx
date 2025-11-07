@@ -10,6 +10,22 @@ function EmployerLayout() {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
+        document.body.classList.add("employer-layout");
+
+        return () => {
+            document.body.classList.remove(
+                "employer-layout",
+                "employer-layout-desktop",
+                "employer-layout-mobile",
+                "employer-sidebar-open",
+                "employer-sidebar-expanded",
+                "employer-sidebar-collapsed",
+                "sidebar-open"
+            );
+        };
+    }, []);
+
+    useEffect(() => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth <= 991);
             if (window.innerWidth <= 991) {
@@ -18,12 +34,33 @@ function EmployerLayout() {
                 setSidebarActive(true);
             }
         };
-        
+
         checkMobile();
         window.addEventListener('resize', checkMobile);
-        
+
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
+
+    useEffect(() => {
+        document.body.classList.toggle("employer-layout-mobile", isMobile);
+        document.body.classList.toggle("employer-layout-desktop", !isMobile);
+    }, [isMobile]);
+
+    useEffect(() => {
+        if (isMobile) {
+            document.body.classList.remove("employer-sidebar-expanded", "employer-sidebar-collapsed");
+
+            if (sidebarActive) {
+                document.body.classList.add("employer-sidebar-open", "sidebar-open");
+            } else {
+                document.body.classList.remove("employer-sidebar-open", "sidebar-open");
+            }
+        } else {
+            document.body.classList.remove("employer-sidebar-open", "sidebar-open");
+            document.body.classList.toggle("employer-sidebar-expanded", sidebarActive);
+            document.body.classList.toggle("employer-sidebar-collapsed", !sidebarActive);
+        }
+    }, [sidebarActive, isMobile]);
 
     const handleSidebarCollapse = () => {
         setSidebarActive(!sidebarActive);

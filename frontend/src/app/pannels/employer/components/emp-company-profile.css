@@ -159,7 +159,7 @@ label {
 
 /* Button animations */
 .site-button {
-  background: #ff9c00 !important;
+  background: #ff9c00;
   border: none;
   border-radius: 25px;
   padding: 12px 30px;
@@ -186,7 +186,7 @@ label {
 }
 
 .site-button:hover {
-  background: #e68900 !important;
+  background: #e68900;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(255, 156, 0, 0.3);
 }
@@ -334,28 +334,28 @@ input[type="file"]:focus {
 
 /* Validation error styling */
 .form-control.is-invalid {
-  border-color: #e53e3e !important;
-  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1) !important;
+  border-color: #e53e3e;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
   animation: shakeError 0.5s ease-out;
   background-color: #fef2f2;
 }
 
 .form-control.is-invalid:focus {
-  border-color: #e53e3e !important;
-  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.2) !important;
+  border-color: #e53e3e;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.2);
   background-color: #fef2f2;
 }
 
 /* Valid input styling */
 .form-control.is-valid {
-  border-color: #48bb78 !important;
-  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1) !important;
+  border-color: #48bb78;
+  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
   background-color: #f0fff4;
 }
 
 .form-control.is-valid:focus {
-  border-color: #48bb78 !important;
-  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2) !important;
+  border-color: #48bb78;
+  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);
   background-color: #f0fff4;
 }
 
@@ -624,7 +624,7 @@ input[type="radio"]:checked {
   
   /* Mobile form layout */
   .row {
-    margin: 0 !important;
+    margin: 0;
   }
   
   .col-xl-4,
@@ -632,8 +632,8 @@ input[type="radio"]:checked {
   .col-lg-6,
   .col-md-6,
   .col-md-12 {
-    padding: 0 0.5rem !important;
-    margin-bottom: 1rem !important;
+    padding: 0 0.5rem;
+    margin-bottom: 1rem;
   }
   
   /* Input group adjustments */
@@ -710,8 +710,8 @@ input[type="radio"]:checked {
   
   /* Gallery adjustments */
   .gallery-item {
-    width: 80px !important;
-    height: 80px !important;
+    width: 80px;
+    height: 80px;
   }
   
   /* Document cards */
@@ -721,8 +721,8 @@ input[type="radio"]:checked {
   
   /* Authorization letter sections */
   .col-md-6 {
-    flex: 0 0 100% !important;
-    max-width: 100% !important;
+    flex: 0 0 100%;
+    max-width: 100%;
   }
 }
 
@@ -756,13 +756,13 @@ html {
 .panel-heading .fa-times,
 .panel-heading .site-text-primary,
 .panel-heading .site-text-primary i {
-    color: #000 !important;
-    background: none !important;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
-    font-size: 18px !important;
+    color: #000;
+    background: none;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    font-size: 18px;
 }
 
 .panel-heading .btn-link:hover,
@@ -771,18 +771,18 @@ html {
 .panel-heading .fa-times:hover,
 .panel-heading .site-text-primary:hover,
 .panel-heading .site-text-primary:hover i {
-    color: #333 !important;
-    background: none !important;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
+    color: #333;
+    background: none;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    outline: none;
 }
 
 /* SVG icons - Orange color */
 .emp-company-profile svg {
-    color: #ff6b35 !important;
-    stroke: #ff6b35 !important;
+    color: #ff6b35;
+    stroke: #ff6b35;
 }
 
 /* Delete buttons - Orange color */
@@ -794,22 +794,22 @@ html {
 .fa-times,
 .fas.fa-trash,
 .fas.fa-times {
-    color: #ff6b35 !important;
-    background: none !important;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
+    color: #ff6b35;
+    background: none;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    outline: none;
 }
 
 .btn-outline-danger:hover,
 .btn-danger:hover,
 .btn-outline-danger:hover i,
 .btn-danger:hover i {
-    color: #fff !important;
-    background-color: #ff6b35 !important;
-    border: none !important;
-    box-shadow: none !important;
+    color: #fff;
+    background-color: #ff6b35;
+    border: none;
+    box-shadow: none;
 }
 
 /* Remove any orange background or circle from danger buttons */
@@ -817,14 +817,14 @@ html {
 .btn-danger::after,
 .btn-outline-danger::before,
 .btn-outline-danger::after {
-    display: none !important;
-    background: none !important;
+    display: none;
+    background: none;
 }
 
 /* Override Bootstrap default danger button styling */
 .btn-danger {
-    background-color: transparent !important;
-    border: none !important;
+    background-color: transparent;
+    border: none;
 }
 
 /* Mobile Touch Optimizations */
@@ -833,21 +833,21 @@ html {
   .document-card:hover,
   .site-button:hover,
   .btn:hover {
-    transform: none !important;
+    transform: none;
   }
   
   .form-control,
   .form-select,
   .site-button,
   .btn {
-    min-height: 44px !important;
+    min-height: 44px;
   }
   
   /* Better tap targets */
   .btn-outline-danger,
   .btn-success {
-    min-width: 44px !important;
-    min-height: 44px !important;
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 

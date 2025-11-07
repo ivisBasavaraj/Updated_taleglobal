@@ -32,11 +32,11 @@
     font-weight: 700;
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    color: white !important;
+    color: white;
 }
 
 .employer-details-header h2 i {
-    color: white !important;
+    color: white;
 }
 
 .employer-details-subtitle {
@@ -46,7 +46,7 @@
 }
 
 .employer-details-subtitle i {
-    color: white !important;
+    color: white;
 }
 
 .back-button {
@@ -166,99 +166,99 @@
 
 /* Document Verification Table - Clean Structure */
 .documents-table {
-    width: 100% !important;
-    border-collapse: collapse !important;
-    border-spacing: 0 !important;
-    border-radius: 12px !important;
-    overflow: hidden !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
-    margin: 0 !important;
-    table-layout: auto !important;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin: 0;
+    table-layout: auto;
 }
 
 /* Table Header */
 .documents-table thead {
-    background: #FDC360 !important;
-    display: table-header-group !important;
+    background: #FDC360;
+    display: table-header-group;
 }
 
 .documents-table thead tr {
-    display: table-row !important;
+    display: table-row;
 }
 
 .documents-table thead th {
-    background: #FDC360 !important;
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 0.85rem !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    padding: 18px 15px !important;
-    border: none !important;
-    vertical-align: middle !important;
-    line-height: 1.4 !important;
-    white-space: nowrap !important;
-    display: table-cell !important;
+    background: #FDC360;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 18px 15px;
+    border: none;
+    vertical-align: middle;
+    line-height: 1.4;
+    white-space: nowrap;
+    display: table-cell;
 }
 
 .documents-table thead th i {
-    color: #ffffff !important;
-    margin-right: 6px !important;
-    vertical-align: middle !important;
-    display: inline-block !important;
+    color: #ffffff;
+    margin-right: 6px;
+    vertical-align: middle;
+    display: inline-block;
 }
 
 .documents-table thead th .me-2 {
-    margin-right: 6px !important;
+    margin-right: 6px;
 }
 
 /* Table Body */
 .documents-table tbody tr {
-    background: #ffffff !important;
-    border-bottom: 1px solid #f0f0f0 !important;
-    transition: all 0.2s ease !important;
-    display: table-row !important;
+    background: #ffffff;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.2s ease;
+    display: table-row;
 }
 
 .documents-table tbody tr:hover {
-    background: #fffbf5 !important;
-    box-shadow: 0 2px 8px rgba(253, 195, 96, 0.15) !important;
+    background: #fffbf5;
+    box-shadow: 0 2px 8px rgba(253, 195, 96, 0.15);
 }
 
 .documents-table tbody tr:last-child {
-    border-bottom: none !important;
+    border-bottom: none;
 }
 
 .documents-table tbody td {
-    padding: 18px 15px !important;
-    vertical-align: middle !important;
-    border: none !important;
-    font-size: 0.9rem !important;
-    color: #333333 !important;
-    display: table-cell !important;
+    padding: 18px 15px;
+    vertical-align: middle;
+    border: none;
+    font-size: 0.9rem;
+    color: #333333;
+    display: table-cell;
 }
 
 .documents-table tbody td:nth-child(1) {
-    text-align: left !important;
-    font-weight: 600 !important;
-    color: #000000 !important;
+    text-align: left;
+    font-weight: 600;
+    color: #000000;
 }
 
 .documents-table tbody td:nth-child(1) i {
-    color: #FDC360 !important;
-    margin-right: 8px !important;
+    color: #FDC360;
+    margin-right: 8px;
 }
 
 .documents-table tbody td:nth-child(2) {
-    text-align: center !important;
+    text-align: center;
 }
 
 .documents-table tbody td:nth-child(3) {
-    text-align: center !important;
+    text-align: center;
 }
 
 .documents-table tbody td:nth-child(4) {
-    text-align: center !important;
+    text-align: center;
 }
 
 .status-badge {
@@ -308,20 +308,20 @@
 
 .badge-pending {
     background: linear-gradient(135deg, #ffb84d 0%, #ff9c00 100%);
-    color: white !important;
+    color: white;
     border-color: #ff9c00;
 }
 
 .badge-pending i {
-    color: white !important;
+    color: white;
 }
 
 .status-badge.badge-pending {
-    color: white !important;
+    color: white;
 }
 
 .status-badge.badge-pending * {
-    color: white !important;
+    color: white;
 }
 
 .action-btn {
@@ -351,59 +351,59 @@
 }
 
 .btn-download {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
-    color: white !important;
-    border: 2px solid transparent !important;
-    display: inline-flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: 2px solid transparent;
+    display: inline-flex;
+    visibility: visible;
+    opacity: 1;
 }
 
 .btn-download:hover {
-    background: linear-gradient(135deg, #2980b9 0%, #1f5f8b 100%) !important;
-    border-color: #2980b9 !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 16px rgba(52, 152, 219, 0.3) !important;
+    background: linear-gradient(135deg, #2980b9 0%, #1f5f8b 100%);
+    border-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(52, 152, 219, 0.3);
 }
 
 .btn-approve {
-    background: linear-gradient(135deg, #27ae60 0%, #229954 100%) !important;
-    color: white !important;
-    border: 2px solid transparent !important;
-    display: inline-flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    background: rgba(255, 122, 0, 0.08);
+    color: #FF7A00;
+    border: 1px solid #FF7A00;
+    display: inline-flex;
+    visibility: visible;
+    opacity: 1;
 }
 
 .btn-approve:hover {
-    background: linear-gradient(135deg, #229954 0%, #1e8449 100%) !important;
-    border-color: #229954 !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 16px rgba(39, 174, 96, 0.3) !important;
+    background: rgba(255, 122, 0, 0.12);
+    border-color: #FF7A00;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 122, 0, 0.3);
 }
 
 .btn-reject {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
-    color: white !important;
-    border: 2px solid transparent !important;
-    display: inline-flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    background: rgba(255, 122, 0, 0.08);
+    color: #FF7A00;
+    border: 1px solid #FF7A00;
+    display: inline-flex;
+    visibility: visible;
+    opacity: 1;
 }
 
 .btn-reject:hover {
-    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%) !important;
-    border-color: #c0392b !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 16px rgba(231, 76, 60, 0.3) !important;
+    background: rgba(255, 122, 0, 0.12);
+    border-color: #FF7A00;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 122, 0, 0.3);
 }
 
 .btn-outline-primary,
 .btn-outline-success,
 .btn-outline-danger {
-    display: inline-flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    display: inline-flex;
+    visibility: visible;
+    opacity: 1;
 }
 
 .btn-view-image {
@@ -722,17 +722,17 @@
 
 /* Action buttons container */
 .action-buttons-container {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 6px !important;
-    justify-content: center !important;
-    align-items: center !important;
-    padding: 8px 4px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 4px;
 }
 
 .action-buttons-container .btn {
-    width: 100% !important;
-    min-width: 100px !important;
+    width: 100%;
+    min-width: 100px;
 }
 
 /* Authorization Letters specific action buttons */
@@ -759,7 +759,7 @@
 }
 
 .documents-table tbody td:last-child .btn i {
-    color: #cc5500 !important;
+    color: #cc5500;
     font-weight: bold;
 }
 
@@ -779,23 +779,23 @@
 
 /* Force 2 columns for Company Information (2x13 layout) */
 .profile-info-card .row {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    margin: 0 !important;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
 }
 
 .profile-info-card .row .col-lg-6 {
-    width: 50% !important;
-    max-width: 50% !important;
-    flex: 0 0 50% !important;
-    padding: 0 15px !important;
+    width: 50%;
+    max-width: 50%;
+    flex: 0 0 50%;
+    padding: 0 15px;
 }
 
 @media (min-width: 992px) {
     .profile-info-card .row .col-lg-6 {
-        width: 50% !important;
-        max-width: 50% !important;
-        flex: 0 0 50% !important;
+        width: 50%;
+        max-width: 50%;
+        flex: 0 0 50%;
     }
 }
 
@@ -1172,27 +1172,29 @@
 }
 
 .letter-actions .btn-approve {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
-    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+    background: rgba(255, 122, 0, 0.08);
+    color: #FF7A00;
+    border: 1px solid #FF7A00;
+    box-shadow: 0 2px 8px rgba(255, 122, 0, 0.2);
 }
 
 .letter-actions .btn-approve:hover {
-    background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+    background: rgba(255, 122, 0, 0.12);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 122, 0, 0.3);
 }
 
 .letter-actions .btn-reject {
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-    color: white;
-    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
+    background: rgba(255, 122, 0, 0.08);
+    color: #FF7A00;
+    border: 1px solid #FF7A00;
+    box-shadow: 0 2px 8px rgba(255, 122, 0, 0.2);
 }
 
 .letter-actions .btn-reject:hover {
-    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+    background: rgba(255, 122, 0, 0.12);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 122, 0, 0.3);
 }
 
 /* Enhanced status badges for authorization letters */

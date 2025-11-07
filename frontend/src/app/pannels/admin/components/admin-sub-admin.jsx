@@ -213,8 +213,15 @@ function AdminSubAdmin() {
     return (
         <div className="content-admin-main admin-container" style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', padding: '20px' }}>
             <div className="container-fluid">
-                <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h2 className="fw-bold text-dark mb-0">Sub Admin Management</h2>
+                <div className="wt-admin-right-page-header clearfix">
+                    <h2>
+                        <i className="fa fa-user-shield me-3"></i>
+                        Sub Admin Management
+                    </h2>
+                    <p className="page-subtitle mb-0">
+                        <i className="fa fa-cogs me-2"></i>
+                        Manage sub-admin accounts and permissions
+                    </p>
                 </div>
                 
                 {error && (

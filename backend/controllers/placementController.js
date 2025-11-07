@@ -95,8 +95,6 @@ exports.uploadStudentData = async (req, res) => {
     const { fileToBase64 } = require('../middlewares/upload');
     const studentData = fileToBase64(req.file);
     
-    // Removed console debug line for security;
-    
     // Add to file history with file data and custom name
     const placement = await Placement.findByIdAndUpdate(placementId, {
       $push: {
@@ -110,9 +108,14 @@ exports.uploadStudentData = async (req, res) => {
           credits: 0
         }
       }
-    }, { new: true });
+    }, { new: true }).select('fileHistory');
     
     console.log('File added to history, total files:', placement.fileHistory.length);
+    console.log('Latest file:', {
+      fileName: placement.fileHistory[placement.fileHistory.length - 1].fileName,
+      customName: placement.fileHistory[placement.fileHistory.length - 1].customName,
+      status: placement.fileHistory[placement.fileHistory.length - 1].status
+    });
 
     // Create notification for admin
     try {
@@ -135,7 +138,8 @@ exports.uploadStudentData = async (req, res) => {
       success: true,
       message: 'Student data uploaded and validated successfully. Waiting for admin approval.',
       fileName: req.file.originalname,
-      customName: customFileName && customFileName.trim() ? customFileName.trim() : null
+      customName: customFileName && customFileName.trim() ? customFileName.trim() : null,
+      fileHistory: placement.fileHistory
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -1025,11 +1029,19 @@ exports.uploadLogo = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Logo data is required' });
     }
     
-    await Placement.findByIdAndUpdate(placementId, {
-      $set: { logo: logo }
-    });
+    const placement = await Placement.findByIdAndUpdate(
+      placementId,
+      { $set: { logo: logo } },
+      { new: true }
+    ).select('logo');
     
-    res.json({ success: true, message: 'Logo uploaded successfully' });
+    console.log('Logo uploaded for placement:', placementId, 'Has logo:', !!placement.logo);
+    
+    res.json({ 
+      success: true, 
+      message: 'Logo uploaded successfully',
+      logo: placement.logo
+    });
   } catch (error) {
     console.error('Error uploading logo:', error);
     res.status(500).json({ success: false, message: error.message });
@@ -1046,11 +1058,19 @@ exports.uploadIdCard = async (req, res) => {
       return res.status(400).json({ success: false, message: 'ID card data is required' });
     }
     
-    await Placement.findByIdAndUpdate(placementId, {
-      $set: { idCard: idCard }
-    });
+    const placement = await Placement.findByIdAndUpdate(
+      placementId,
+      { $set: { idCard: idCard } },
+      { new: true }
+    ).select('idCard');
     
-    res.json({ success: true, message: 'ID card uploaded successfully' });
+    console.log('ID card uploaded for placement:', placementId, 'Has ID card:', !!placement.idCard);
+    
+    res.json({ 
+      success: true, 
+      message: 'ID card uploaded successfully',
+      idCard: placement.idCard
+    });
   } catch (error) {
     console.error('Error uploading ID card:', error);
     res.status(500).json({ success: false, message: error.message });

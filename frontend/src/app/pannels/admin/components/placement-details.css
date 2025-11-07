@@ -143,11 +143,11 @@
 /* Actions section specific styling - Override Bootstrap */
 .container-fluid .modern-card .btn.btn-success,
 .modern-card .btn.btn-success {
-    background-color: #ffeaa7 !important;
-    background-image: none !important;
-    border-color: #fdcb6e !important;
-    color: #2d3436 !important;
-    box-shadow: none !important;
+    background-color: #ffeaa7;
+    background-image: none;
+    border-color: #fdcb6e;
+    color: #2d3436;
+    box-shadow: none;
 }
 
 .container-fluid .modern-card .btn.btn-success:hover,
@@ -156,11 +156,11 @@
 .modern-card .btn.btn-success:focus,
 .container-fluid .modern-card .btn.btn-success:active,
 .modern-card .btn.btn-success:active {
-    background-color: #fdcb6e !important;
-    background-image: none !important;
-    border-color: #e17055 !important;
-    color: #2d3436 !important;
-    box-shadow: none !important;
+    background-color: #fdcb6e;
+    background-image: none;
+    border-color: #e17055;
+    color: #2d3436;
+    box-shadow: none;
 }
 
 .modal {

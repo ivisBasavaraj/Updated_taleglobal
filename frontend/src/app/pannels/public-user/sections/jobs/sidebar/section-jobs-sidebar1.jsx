@@ -438,7 +438,7 @@ function SectionJobsSidebar1 ({ onFilterChange }) {
                                     }
                                 }}
                                 style={{
-                                    backgroundColor: filters.keyword === tag ? '#1967d2' : '',
+                                    backgroundColor: filters.keyword === tag ? '#FF7A00' : '',
                                     color: filters.keyword === tag ? 'white' : '',
                                     fontWeight: filters.keyword === tag ? 'bold' : 'normal'
                                 }}

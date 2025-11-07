@@ -242,7 +242,9 @@ function SignInPopup() {
 												<div className="col-md-12">
 													<button
 														type="submit"
-														className="popup-signin-btn"
+														style={buttonStyle}
+								onMouseEnter={handleButtonEnter}
+								onMouseLeave={handleButtonLeave}
 													>
 														Log in
 													</button>
@@ -325,7 +327,9 @@ function SignInPopup() {
 												<div className="col-md-12">
 													<button
 														type="submit"
-														className="popup-signin-btn"
+														style={buttonStyle}
+								onMouseEnter={handleButtonEnter}
+								onMouseLeave={handleButtonLeave}
 													>
 														Log in
 													</button>
@@ -408,7 +412,9 @@ function SignInPopup() {
 												<div className="col-md-12">
 													<button
 														type="submit"
-														className="popup-signin-btn"
+														style={buttonStyle}
+								onMouseEnter={handleButtonEnter}
+								onMouseLeave={handleButtonLeave}
 													>
 														Log in
 													</button>

@@ -44,43 +44,15 @@ function CanDashboardPage() {
       <div className="twm-right-section-panel site-bg-gray can-dashboard">
         {/* Welcome Card */}
         <div style={{ padding: '2rem 2rem 0 2rem' }}>
-          <div style={{ background: 'white', borderRadius: '12px', padding: '2rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', marginBottom: '2rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              {candidate.profilePicture ? (
-                <img 
-                  src={candidate.profilePicture} 
-                  alt="Profile" 
-                  style={{
-                    width: '60px', 
-                    height: '60px', 
-                    borderRadius: '50%', 
-                    objectFit: 'cover', 
-                    border: '3px solid #ff6b35'
-                  }}
-                />
-              ) : (
-                <div style={{
-                  width: '60px', 
-                  height: '60px', 
-                  borderRadius: '50%', 
-                  backgroundColor: '#f8f9fa', 
-                  border: '3px solid #dee2e6',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <i className="fa fa-user" style={{ color: '#6c757d', fontSize: '24px' }}></i>
-                </div>
-              )}
-              <div>
-                <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Welcome, {candidate.name}</h2>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                  <MapPin size={16} style={{ color: '#f97316' }} />
-                  <span style={{ color: '#f97316', fontSize: '0.875rem', fontWeight: '500' }}>{candidate.location}</span>
-                </div>
-                <p style={{ color: '#6b7280', margin: 0 }}>Here&apos;s an overview of your job applications and profile</p>
-              </div>
-            </div>
+          <div className="admin-dashboard-header" data-aos="fade-up">
+            <h2>
+              <i className="fa fa-tachometer-alt me-3"></i>
+              Welcome, {candidate.name}
+            </h2>
+            <p className="dashboard-subtitle mb-0">
+              <i className="fa fa-chart-line me-2"></i>
+              Track your job search progress and applications
+            </p>
           </div>
         </div>
 
@@ -90,10 +62,10 @@ function CanDashboardPage() {
 
           {/* Profile Completion and Notifications */}
           <div className="row">
-            <div className="col-xl-8 col-lg-8 col-md-12 mb-4">
+            <div className="col-xl-7 col-lg-7 col-md-12 mb-4">
               <CompleteProfileCard />
             </div>
-            <div className="col-xl-4 col-lg-4 col-md-12 mb-4">
+            <div className="col-xl-5 col-lg-5 col-md-12 mb-4">
               <SectionNotifications />
             </div>
           </div>

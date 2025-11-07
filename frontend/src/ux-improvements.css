@@ -64,24 +64,24 @@ html {
 
 .hover-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
 
 /* Remove recruiter card hover effects */
 .twm-column-5 ul li .twm-recruiters5-box:after {
-    display: none !important;
+    display: none;
 }
 
 .twm-column-5 ul li .twm-recruiters5-box:hover {
-    transform: none !important;
-    box-shadow: none !important;
-    background: #fff !important;
+    transform: none;
+    box-shadow: none;
+    background: #fff;
 }
 
 .twm-column-5 ul li .twm-recruiters5-box:hover .twm-title a,
 .twm-column-5 ul li .twm-recruiters5-box:hover .twm-job-address,
 .twm-column-5 ul li .twm-recruiters5-box:hover .twm-rec-rating-count {
-    color: inherit !important;
+    color: inherit;
 }
 
 /* ===== Improved Loading Spinner ===== */
@@ -131,14 +131,14 @@ a:not([class]):hover {
 input.is-invalid,
 select.is-invalid,
 textarea.is-invalid {
-    border-color: #ef4444 !important;
+    border-color: #ef4444;
     background-color: #fef2f2;
 }
 
 input.is-valid,
 select.is-valid,
 textarea.is-valid {
-    border-color: #10b981 !important;
+    border-color: #10b981;
     background-color: #f0fdf4;
 }
 
@@ -189,7 +189,7 @@ textarea.is-valid {
 }
 
 .job-cat-block-hpage-6:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 /* ===== Better Text Selection ===== */
@@ -238,10 +238,10 @@ textarea.is-valid {
     *,
     *::before,
     *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
+        animation-duration: 0.01ms;
+        animation-iteration-count: 1;
+        transition-duration: 0.01ms;
+        scroll-behavior: auto;
     }
 }
 
@@ -372,15 +372,15 @@ code {
 .wt-title,
 .twm-title,
 h1, h2, h3, h4, h5, h6 {
-  color: #000000 !important;
+  color: #000000;
 }
 
 /* Fix password eye icon position */
 .password-eye-icon {
-    position: absolute !important;
-    right: 10px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 10;
 }
 
