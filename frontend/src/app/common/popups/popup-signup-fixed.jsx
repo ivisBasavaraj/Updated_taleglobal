@@ -667,6 +667,7 @@ function SignUpPopup() {
 																value={placementData.phone}
 																onChange={handlePlacementChange}
 																required
+																style={{height: '38px'}}
 															/>
 														</div>
 													</div>

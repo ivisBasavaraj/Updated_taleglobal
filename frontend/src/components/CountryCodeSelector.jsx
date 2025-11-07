@@ -220,7 +220,9 @@ const CountryCodeSelector = ({ value, onChange, className = "" }) => {
         border: '1px solid #fd7e14',
         minWidth: '70px',
         maxWidth: '90px',
-        height: '38px',
+        height: '57px',
+        padding: '0.75rem 1rem',
+        boxSizing: 'border-box',
         borderRadius: '0.375rem 0 0 0.375rem'
       }}
     >

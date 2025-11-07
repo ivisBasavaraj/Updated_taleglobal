@@ -16,8 +16,8 @@
 }
 
 .can-dashboard .admin-dashboard-header:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  transform: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
 .can-dashboard .admin-dashboard-header h2 {
@@ -63,8 +63,8 @@
 }
 
 .can-dashboard .dashboard-card-2:hover {
-  transform: translateY(-2px);
-  transition: transform 0.2s ease;
+  transform: none;
+  transition: none;
 }
 
 /* Card titles */
@@ -102,8 +102,8 @@
 .can-dashboard .btn-primary:hover,
 .can-dashboard button[style*="background: #f97316"]:hover,
 .can-dashboard .site-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(249, 115, 22, 0.45);
+  transform: none;
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.35);
 }
 
 /* Soft badges */
@@ -174,8 +174,8 @@
   background-color: #f97316;
   border-color: #f97316;
   color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+  transform: none;
+  box-shadow: none;
 }
 
 /* Credit display styling */
@@ -247,4 +247,12 @@
   .can-dashboard .admin-dashboard-header h2 {
     font-size: 18px;
   }
+}
+/* Remove all hover effects from stats cards */
+.dashboard-card-2:hover,
+.panel:hover,
+.wt-panel-body:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
 }
