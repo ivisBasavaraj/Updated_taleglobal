@@ -53,8 +53,7 @@
 }
 
 .upload-zone:hover {
-    border-color: #FF7A00;
-    background-color: rgba(255, 122, 0, 0.06);
+    border-color: #0056b3 !important;
 }
 
 /* Performance optimizations for placement dashboard */
@@ -123,36 +122,32 @@ img {
 }
 
 .badge-primary {
-    background-color: #FF7A00;
+    background-color: #007bff;
     color: white;
 }
 
 .badge-success {
-    background-color: rgba(255, 122, 0, 0.12);
-    color: #FF7A00;
-    border: 1px solid #FF7A00;
+    background-color: #28a745;
+    color: white;
 }
 
 .badge-warning {
-    background-color: rgba(255, 122, 0, 0.08);
-    color: #FF7A00;
-    border: 1px solid #FF7A00;
+    background-color: #ffc107;
+    color: #212529;
 }
 
 .badge-info {
-    background-color: rgba(255, 122, 0, 0.06);
-    color: #FF7A00;
-    border: 1px solid #FF7A00;
+    background-color: #17a2b8;
+    color: white;
 }
 
 .badge-danger {
-    background-color: #ffebee;
-    color: #d32f2f;
-    border: 1px solid #d32f2f;
+    background-color: #dc3545;
+    color: white;
 }
 
 .table-hover tbody tr:hover {
-    background-color: rgba(255, 122, 0, 0.04);
+    background-color: #f8f9fa;
 }
 
 .avatar-sm {
@@ -170,39 +165,6 @@ img {
     transform: translateY(-1px);
 }
 
-.text-orange {
-    color: #000000 !important;
-    font-weight: 500;
-}
-
-.btn-orange {
-    background-color: rgba(255, 122, 0, 0.08) !important;
-    border: 1px solid #FF7A00 !important;
-    color: #FF7A00 !important;
-    font-weight: bold !important;
-}
-
-.btn-orange:hover {
-    background-color: rgba(255, 122, 0, 0.12) !important;
-    border-color: #FF7A00 !important;
-    color: #FF7A00 !important;
-    transform: none !important;
-}
-
-.btn-orange-outline {
-    background-color: transparent !important;
-    border: 1px solid #FF7A00 !important;
-    color: #FF7A00 !important;
-    font-weight: bold !important;
-}
-
-.btn-orange-outline:hover {
-    background-color: rgba(255, 122, 0, 0.08) !important;
-    border-color: #FF7A00 !important;
-    color: #FF7A00 !important;
-    transform: none !important;
-}
-
 .spinner-border {
     width: 2rem;
     height: 2rem;
@@ -218,6 +180,6 @@ img {
     }
     
     .upload-zone {
-        padding: 2rem 1rem;
+        padding: 2rem 1rem !important;
     }
 }

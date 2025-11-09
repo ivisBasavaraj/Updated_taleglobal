@@ -135,8 +135,8 @@
 }
 
 .emp-table thead th {
-    background: #FF7A00;
-    color: #ffffff;
+    background: #FDC360 !important;
+    color: #ffffff !important;
     font-weight: 700;
     padding: 18px 20px;
     border: none;
@@ -146,9 +146,9 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    box-shadow: 0 2px 8px rgba(255, 122, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(253, 195, 96, 0.3) !important;
     text-align: left;
-    border-bottom: 2px solid #FF7A00;
+    border-bottom: 2px solid #FDC360 !important;
     white-space: nowrap;
 }
 
@@ -177,10 +177,10 @@
 }
 
 .emp-table tbody tr:hover {
-    background: rgba(255, 122, 0, 0.08);
+    background: rgba(253, 195, 96, 0.1) !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2);
-    border-left: 3px solid #FF7A00;
+    box-shadow: 0 4px 12px rgba(253, 195, 96, 0.2) !important;
+    border-left: 3px solid #FDC360 !important;
 }
 
 .emp-table tbody tr:last-child {
@@ -221,8 +221,8 @@
 }
 
 .company-name {
-    font-weight: 700;
-    color: #000000;
+    font-weight: 700 !important;
+    color: #000000 !important;
     font-size: 1.1rem;
 }
 
@@ -236,21 +236,18 @@
 }
 
 .status-pending {
-    background: rgba(255, 122, 0, 0.08);
-    color: #FF7A00;
-    border: 1px solid #FF7A00;
+    background: #FDC360 !important;
+    color: white !important;
 }
 
 .status-approved {
-    background: rgba(255, 122, 0, 0.08);
-    color: #FF7A00;
-    border: 1px solid #FF7A00;
+    background: #FDC360 !important;
+    color: white !important;
 }
 
 .status-rejected {
-    background: rgba(255, 122, 0, 0.08);
-    color: #FF7A00;
-    border: 1px solid #FF7A00;
+    background: #FDC360 !important;
+    color: white !important;
 }
 
 .action-buttons {
@@ -265,7 +262,7 @@
     width: auto;
     min-width: 140px;
     padding: 12px 28px;
-    border: 1px solid #FF7A00 !important;
+    border: 1px solid #FDC360;
     border-radius: 10px;
     font-size: 0.85rem;
     font-weight: 600;
@@ -278,49 +275,49 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     text-align: center;
-    background: rgba(255, 122, 0, 0.08) !important;
-    color: #FF7A00 !important;
+    background: #FDC360;
+    color: white;
     white-space: nowrap;
     box-sizing: border-box;
 }
 
 .action-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 122, 0, 0.3) !important;
-    background: rgba(255, 122, 0, 0.12) !important;
+    box-shadow: 0 5px 15px rgba(253, 195, 96, 0.4);
+    background: #e5b050;
 }
 
 .btn-approve {
-    background: rgba(255, 122, 0, 0.08) !important;
-    color: #FF7A00 !important;
-    border: 1px solid #FF7A00 !important;
+    background: #FDC360 !important;
+    color: white !important;
+    border: 1px solid #FDC360 !important;
 }
 
 .btn-approve:hover {
-    background: rgba(255, 122, 0, 0.12) !important;
-    box-shadow: 0 5px 15px rgba(255, 122, 0, 0.3) !important;
+    background: #e5b050 !important;
+    box-shadow: 0 5px 15px rgba(253, 195, 96, 0.4) !important;
 }
 
 .btn-reject {
-    background: rgba(255, 122, 0, 0.08) !important;
-    color: #FF7A00 !important;
-    border: 1px solid #FF7A00 !important;
+    background: #FDC360 !important;
+    color: white !important;
+    border: 1px solid #FDC360 !important;
 }
 
 .btn-reject:hover {
-    background: rgba(255, 122, 0, 0.12) !important;
-    box-shadow: 0 5px 15px rgba(255, 122, 0, 0.3) !important;
+    background: #e5b050 !important;
+    box-shadow: 0 5px 15px rgba(253, 195, 96, 0.4) !important;
 }
 
 .btn-view {
-    background: rgba(255, 122, 0, 0.08) !important;
-    color: #FF7A00 !important;
-    border: 1px solid #FF7A00 !important;
+    background: #FDC360 !important;
+    color: white !important;
+    border: 1px solid #FDC360 !important;
 }
 
 .btn-view:hover {
-    background: rgba(255, 122, 0, 0.12) !important;
-    box-shadow: 0 5px 15px rgba(255, 122, 0, 0.3) !important;
+    background: #e5b050 !important;
+    box-shadow: 0 5px 15px rgba(253, 195, 96, 0.4) !important;
 }
 
 .loading-container {

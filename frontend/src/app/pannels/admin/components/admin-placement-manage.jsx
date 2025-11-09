@@ -68,14 +68,7 @@ function AdminPlacementOfficersAllRequest() {
     if (loading) {
         return (
             <div className="wt-admin-right-page-header clearfix">
-                <h2>
-                    <i className="fa fa-users-cog me-3"></i>
-                    Placement Officers
-                </h2>
-                <p className="page-subtitle mb-0">
-                    <i className="fa fa-user-graduate me-2"></i>
-                    Manage placement officer accounts
-                </p>
+                <h2>Loading...</h2>
             </div>
         );
     }
@@ -83,14 +76,7 @@ function AdminPlacementOfficersAllRequest() {
     return (
         <>
             <div className="wt-admin-right-page-header clearfix">
-                <h2>
-                    <i className="fa fa-users-cog me-3"></i>
-                    Placement Officers
-                </h2>
-                <p className="page-subtitle mb-0">
-                    <i className="fa fa-user-graduate me-2"></i>
-                    Manage placement officer accounts
-                </p>
+                <h2>Placement Officers Details</h2>
             </div>
 
             <div className="panel panel-default site-bg-white">

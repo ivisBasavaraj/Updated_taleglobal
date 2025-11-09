@@ -81,13 +81,13 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 15px 10px;
+    padding: 30px 20px;
     position: relative;
 }
 
 .wt-card-icon {
-    font-size: 32px;
-    margin-bottom: 8px;
+    font-size: 48px;
+    margin-bottom: 20px;
     opacity: 0.9;
 }
 
@@ -101,14 +101,14 @@
 }
 
 .wt-card-right {
-    font-size: 26px;
+    font-size: 36px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 15px;
     text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .wt-card-bottom h4 {
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 600;
     margin: 0;
     opacity: 0.95;
@@ -213,20 +213,20 @@
     
     /* Chart panels mobile optimization */
     .panel {
-        margin-bottom: 15px;
+        margin-bottom: 15px !important;
     }
     
     .panel-heading {
-        padding: 15px;
+        padding: 15px !important;
     }
     
     .panel-tittle {
-        font-size: 14px;
+        font-size: 14px !important;
         text-align: center;
     }
     
     .panel-body {
-        padding: 15px;
+        padding: 15px !important;
     }
 }
 
@@ -302,58 +302,4 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
     color: white;
-}
-
-/* Global Orange Gradient Header Design */
-.wt-admin-right-page-header {
-    background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
-    border-radius: 12px;
-    border: 1px solid #ffe0b3;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    padding: 25px;
-    margin-bottom: 30px;
-    transition: all 0.3s ease;
-}
-
-.wt-admin-right-page-header:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-}
-
-.wt-admin-right-page-header h2 {
-    color: #232323;
-    font-weight: 700;
-    font-size: 28px;
-    margin: 0;
-    display: flex;
-    align-items: center;
-}
-
-.wt-admin-right-page-header .page-subtitle {
-    color: #666;
-    font-size: 16px;
-    margin-top: 8px;
-    font-weight: 400;
-    display: flex;
-    align-items: center;
-}
-
-.wt-admin-right-page-header .page-subtitle i {
-    color: #fd7e14;
-    margin-right: 8px;
-}
-
-.wt-admin-right-page-header h2 i {
-    color: #fd7e14;
-    margin-right: 16px;
-}
-
-.admin-dashboard-header .dashboard-subtitle i {
-    color: #fd7e14;
-    margin-right: 8px;
-}
-
-.admin-dashboard-header h2 i {
-    color: #fd7e14;
-    margin-right: 16px;
 }

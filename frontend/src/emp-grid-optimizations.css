@@ -67,7 +67,7 @@
 
 .twm-employer-grid-style1 .twm-job-websites {
   font-size: 13px;
-  color: #FF7A00;
+  color: #1967d2;
   text-decoration: none;
   word-break: break-all;
 }
@@ -89,7 +89,7 @@
 
 .twm-jobs-vacancies span {
   font-weight: 600;
-  color: #FF7A00;
+  color: #1967d2;
   margin-right: 4px;
 }
 
@@ -266,7 +266,7 @@
 /* Hover effects optimization */
 @media (hover: hover) {
   .twm-employer-grid-style1:hover .twm-job-title h4 {
-    color: #FF7A00;
+    color: #1967d2;
   }
 }
 
@@ -306,12 +306,12 @@
 /* Print styles */
 @media print {
   .emp-grid-page {
-    background: white;
+    background: white !important;
   }
   
   .twm-employer-grid-style1 {
     break-inside: avoid;
-    box-shadow: none;
-    border: 1px solid #ccc;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
   }
 }

@@ -192,7 +192,7 @@
     vertical-align: middle;
     border: 1px solid #e9ecef;
     font-size: 0.85rem;
-    color: #232323;
+    color: #232323 !important;
     text-align: center;
 }
 
@@ -204,12 +204,12 @@
 
 .candidate-name {
     font-weight: 600;
-    color: #ff6b35;
+    color: #ff6b35 !important;
     font-size: 0.9rem;
 }
 
 .candidate-email {
-    color: #6c757d;
+    color: #6c757d !important;
 }
 
 .status-badge {
@@ -226,55 +226,55 @@
 
 .badge-completed {
     background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
+    color: white !important;
 }
 
 .badge-incomplete {
     background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
-    color: white;
+    color: white !important;
 }
 
 .badge-shortlisted {
     background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
-    color: white;
+    color: white !important;
 }
 
 .badge-not-shortlisted {
     background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-    color: white;
+    color: white !important;
 }
 
 .badge-shortlisted,
 .badge-not-shortlisted {
-    color: white;
+    color: white !important;
 }
 
 .badge-shortlisted i,
 .badge-not-shortlisted i {
-    color: white;
+    color: white !important;
 }
 
 .status-badge {
-    color: white;
+    color: white !important;
 }
 
 .status-badge * {
-    color: white;
+    color: white !important;
 }
 
 .badge-selected {
     background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
+    color: white !important;
 }
 
 .badge-rejected {
     background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-    color: white;
+    color: white !important;
 }
 
 .badge-pending {
     background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-    color: white;
+    color: white !important;
 }
 
 .action-btn {
@@ -310,7 +310,7 @@
 }
 
 .btn-view i {
-    color: #000000;
+    color: #000000 !important;
 }
 
 .loading-container {

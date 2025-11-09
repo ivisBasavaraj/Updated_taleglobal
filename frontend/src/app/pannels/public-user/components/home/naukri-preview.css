@@ -27,7 +27,7 @@
 
 /* CHIPS */
 .nk-chip { display: inline-block; border: 1px solid #e5e7eb; padding: 6px 12px; border-radius: 20px; font-size: 13px; color: #111827; background: #fff; }
-.nk-chip:hover { border-color: #FF7A00; color: #FF7A00; background-color: rgba(255, 122, 0, 0.08); }
+.nk-chip:hover { border-color: var(--site-primary, #2a41e8); color: var(--site-primary, #2a41e8); }
 
 /* CARDS */
 .nk-card { background: #fff; border: 1px solid #e5e7eb; border-radius: var(--nk-radius); padding: 14px; box-shadow: 0 1px 2px rgba(16,24,40,.06); }
@@ -68,8 +68,8 @@
 /* Index16 Job Categories Orange Theme - Consolidated Styles */
 /* Job categories section background */
 .twm-job-categories-hpage-6-area {
-  background-color: transparent;
-  padding: 40px 0;
+  background-color: transparent !important;
+  padding: 40px 0 !important;
 }
 
 /* Grid alignment - Center the category cards */
@@ -97,14 +97,14 @@
 
 /* Keep job category cards white with consistent height */
 .job-cat-block-hpage-6 {
-  background-color: #fff;
-  border: none;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff !important;
+  border: none !important;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1) !important;
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 120px;
-  padding: 10px;
+  min-height: 120px !important;
+  padding: 10px !important;
 }
 
 /* SVG Icon styling - orange with proper alignment */
@@ -112,14 +112,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
-  margin-bottom: 5px;
+  min-height: 40px !important;
+  margin-bottom: 5px !important;
   position: relative;
 }
 
 .job-cat-block-hpage-6 .twm-media .category-svg {
-  width: 35px;
-  height: 35px;
+  width: 35px !important;
+  height: 35px !important;
   display: block;
   filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.08));
   position: relative;
@@ -128,7 +128,7 @@
 
 /* Override blue ::after pseudo-element background - remove it completely */
 .job-cat-block-hpage-6 .twm-media::after {
-  display: none;
+  display: none !important;
 }
 
 /* Content area styling - ensure consistent layout */
@@ -137,40 +137,40 @@
   flex-direction: column;
   flex: 1;
   justify-content: space-between;
-  padding: 5px 0;
+  padding: 5px 0 !important;
 }
 
 /* Job count styling - orange theme */
 .job-cat-block-hpage-6 .twm-content .twm-jobs-available {
-  background-color: transparent;
-  color: #fd7e14;
-  margin: 5px 0;
-  padding: 2px 6px;
-  font-size: 11px;
+  background-color: transparent !important;
+  color: #fd7e14 !important;
+  margin: 5px 0 !important;
+  padding: 2px 6px !important;
+  font-size: 11px !important;
 }
 
 .job-cat-block-hpage-6 .twm-content .twm-jobs-available span {
-  color: #fd7e14;
+  color: #fd7e14 !important;
   font-weight: 600;
 }
 
 /* Category name styling */
 .job-cat-block-hpage-6 .twm-content > a {
-  color: #17171d;
+  color: #17171d !important;
   font-weight: 600;
-  font-size: 14px;
-  margin-bottom: 3px;
+  font-size: 14px !important;
+  margin-bottom: 3px !important;
 }
 
 /* Arrow button styling */
 .job-cat-block-hpage-6 .circle-line-wrap {
   margin-top: auto;
-  padding-top: 5px;
+  padding-top: 5px !important;
 }
 
 .job-cat-block-hpage-6 .circle-line-wrap .circle-line-btn {
-  border: 2px solid #fd7e14;
-  background-color: transparent;
+  border: 2px solid #fd7e14 !important;
+  background-color: transparent !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -178,19 +178,19 @@
 }
 
 .job-cat-block-hpage-6 .circle-line-wrap .circle-line-btn .fa-arrow-right {
-  color: #fd7e14;
+  color: #fd7e14 !important;
 }
 
 .fa-arrow-right:before {
-  color: #fd7e14;
+  color: #fd7e14 !important;
 }
 
 /* Hover effects - Subtle lift without color change */
 .job-cat-block-hpage-6:hover {
-  background-color: #fff;
+  background-color: #fff !important;
   transform: translateY(-5px);
   transition: all 0.3s ease;
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15) !important;
 }
 
 .job-cat-block-hpage-6:hover .twm-media .category-svg {
@@ -199,45 +199,45 @@
 }
 
 .job-cat-block-hpage-6:hover .twm-content > a {
-  color: #17171d;
+  color: #17171d !important;
 }
 
 .job-cat-block-hpage-6:hover .twm-content .twm-jobs-available {
-  background-color: transparent;
-  color: #fd7e14;
+  background-color: transparent !important;
+  color: #fd7e14 !important;
 }
 
 .job-cat-block-hpage-6:hover .twm-content .twm-jobs-available span {
-  color: #fd7e14;
+  color: #fd7e14 !important;
 }
 
 .job-cat-block-hpage-6:hover .circle-line-wrap .circle-line-btn {
-  background-color: transparent;
-  border: 2px solid #fd7e14;
+  background-color: transparent !important;
+  border: 2px solid #fd7e14 !important;
 }
 
 .job-cat-block-hpage-6:hover .circle-line-wrap .circle-line-btn .fa-arrow-right {
-  color: #fd7e14;
+  color: #fd7e14 !important;
 }
 
 /* Additional category styling */
 .job-categories-home-8 .twm-media {
-  background-color: rgba(253, 126, 20, 0.1);
+  background-color: rgba(253, 126, 20, 0.1) !important;
 }
 
 .twm-companies-wrap-h-page-7 .twm-companies-h-page-7 {
-  background-color: #fff;
+  background-color: #fff !important;
 }
 
 /* Index16 Navbar Transparency on Hero Section */
 /* Make navbar transparent initially (before scroll) */
 .h-page-16-hdr .main-bar {
-  background-color: transparent;
+  background-color: transparent !important;
 }
 
 /* Make navbar white and styled when fixed (after scroll) */
 .h-page-16-hdr .is-fixed .main-bar.color-fill {
-  background-color: #fff;
+  background-color: #fff !important;
   border-radius: 10px;
   box-shadow: 0px 0px 25px rgba(56, 152, 226, 0.3);
   backdrop-filter: blur(10px);
@@ -251,47 +251,47 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .h-page-16-hdr .main-bar {
-    background-color: transparent;
+    background-color: transparent !important;
   }
   
   .h-page-16-hdr .is-fixed .main-bar.color-fill {
-    background-color: #fff;
+    background-color: #fff !important;
   }
 }
 
 /* Home Page Spacing and Color Scheme Fix */
 .section-full {
-  padding: 40px 0;
+  padding: 40px 0 !important;
 }
 
 .twm-home-8-banner-section {
-  padding: 60px 0 40px 0;
+  padding: 60px 0 40px 0 !important;
 }
 
 .twm-job-categories-hpage-6-area {
-  padding: 40px 0;
+  padding: 40px 0 !important;
 }
 
 .twm-how-it-work-area {
-  padding: 40px 0;
+  padding: 40px 0 !important;
 }
 
 .twm-testimonials-h-page-8 {
-  padding: 40px 0;
+  padding: 40px 0 !important;
 }
 
 .twm-recruiters-area {
-  padding: 40px 0;
+  padding: 40px 0 !important;
 }
 
 .twm-blog-post-h-page-8 {
-  padding: 40px 0;
+  padding: 40px 0 !important;
 }
 
 .container {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
 
 .row {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }

@@ -900,7 +900,7 @@ function EmpCompanyProfilePage() {
                                         <img 
                                             src={formData.logo} 
                                             alt="Logo" 
-                                            style={{width: '150px', height: '150px', objectFit: 'cover', border: '1px solid #ddd', borderRadius: '4px'}} 
+                                            style={{maxWidth: '150px', maxHeight: '150px', objectFit: 'contain', border: '1px solid #ddd'}} 
                                             onError={(e) => {
                                                  
                                                 e.target.style.display = 'none';
@@ -929,7 +929,7 @@ function EmpCompanyProfilePage() {
                                         <img 
                                             src={formData.coverImage} 
                                             alt="Cover" 
-                                            style={{width: '100%', maxWidth: '400px', height: '200px', objectFit: 'cover', border: '1px solid #ddd', borderRadius: '4px'}} 
+                                            style={{width: '100%', maxWidth: '400px', height: 'auto', maxHeight: '200px', objectFit: 'contain', border: '1px solid #ddd', borderRadius: '4px'}} 
                                             onError={(e) => {
                                                  
                                                 e.target.style.display = 'none';

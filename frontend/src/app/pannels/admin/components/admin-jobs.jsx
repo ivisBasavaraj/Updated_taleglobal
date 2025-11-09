@@ -74,14 +74,8 @@ function AdminJobs() {
     return (
         <>
             <div className="wt-admin-right-page-header clearfix">
-                <h2>
-                    <i className="fa fa-briefcase me-3"></i>
-                    Jobs Management
-                </h2>
-                <p className="page-subtitle mb-0">
-                    <i className="fa fa-tasks me-2"></i>
-                    Manage and monitor all job postings
-                </p>
+                <h2>Jobs Management</h2>
+                <div className="breadcrumbs"><a href="#">Home</a><a href="#">Dashboard</a><span>Jobs</span></div>
             </div>
             <div className="panel panel-default site-bg-white m-t30">
                 <div className="panel-heading wt-panel-heading p-a20">
@@ -136,8 +130,7 @@ function AdminJobs() {
                                                     title="View" 
                                                     data-bs-toggle="tooltip" 
                                                     data-bs-placement="top"
-                                                    className="btn btn-orange btn-sm me-2"
-                                                    style={{backgroundColor: 'rgba(255, 122, 0, 0.08)', border: '1px solid #FF7A00', color: '#FF7A00', fontWeight: 'bold'}}
+                                                    className="btn btn-sm btn-outline-primary me-2"
                                                 >
                                                     <i className="fa fa-eye" />
                                                 </button>
@@ -145,8 +138,7 @@ function AdminJobs() {
                                                     title="Delete" 
                                                     data-bs-toggle="tooltip" 
                                                     data-bs-placement="top"
-                                                    className="btn btn-orange btn-sm"
-                                                    style={{backgroundColor: 'rgba(255, 122, 0, 0.08)', border: '1px solid #FF7A00', color: '#FF7A00', fontWeight: 'bold'}}
+                                                    className="btn btn-sm btn-outline-danger"
                                                     onClick={() => handleDeleteJob(job._id)}
                                                 >
                                                     <i className="fa fa-trash-alt" />

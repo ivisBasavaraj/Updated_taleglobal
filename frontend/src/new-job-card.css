@@ -150,7 +150,7 @@
 .ctc-text {
   font-size: 14px;
   font-weight: 600;
-  color: #FF7A00;
+  color: #1967d2;
 }
 
 .vacancy-info {
@@ -201,9 +201,9 @@
 
 /* Apply Button */
 .apply-now-btn {
-  background: transparent;
-  color: #fd7e14;
-  border: 1px solid #fd7e14;
+  background: #fd7e14;
+  color: white;
+  border: none;
   padding: 8px 16px;
   border-radius: 6px;
   font-size: 13px;
@@ -214,8 +214,7 @@
 }
 
 .apply-now-btn:hover {
-  background: rgba(253, 126, 20, 0.1);
-  color: #fd7e14;
+  background: #ff8c2a;
   transform: translateY(-1px);
 }
 

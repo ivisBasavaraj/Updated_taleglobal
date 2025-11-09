@@ -48,20 +48,20 @@ h5 {
     display: inline-block;
     padding: 6px 12px;
     margin: 4px;
-    background: none;
-    color: #333;
-    border: 1px solid #ddd;
+    background: none !important;
+    color: #333 !important;
+    border: 1px solid #ddd !important;
     border-radius: 20px;
     text-decoration: none;
     font-size: 13px;
-    transition: none;
+    transition: none !important;
 }
 
 .skill-tag:hover {
-    background: none;
-    color: #333;
-    border-color: #999;
-    transform: none;
+    background: none !important;
+    color: #333 !important;
+    border-color: #999 !important;
+    transform: none !important;
 }
 
 .skill-tag i {
@@ -75,7 +75,7 @@ h5 {
 
 .skill-tag button:hover {
     opacity: 1;
-    color: #dc3545;
+    color: #dc3545 !important;
 }
 
 /* Button icons */
@@ -84,12 +84,12 @@ h5 {
 }
 
 .twm-right-section-panel .btn:not(.btn-link) {
-    background-color: #FF6A0014;
+    background-color: #FF6A0014 !important;
 }
 
 .twm-right-section-panel .btn:not(.btn-link):hover,
 .twm-right-section-panel .btn:not(.btn-link):focus {
-    background-color: #FF6A0014;
+    background-color: #FF6A0014 !important;
 }
 
 /* File upload section styling */
@@ -108,7 +108,7 @@ h5 {
 
 /* Education section styling */
 .border.rounded {
-    border-color: #ebeaf1;
+    border-color: #ebeaf1 !important;
     background-color: #fafafa;
 }
 
@@ -141,8 +141,8 @@ h5 {
 
 /* Modal fixes to prevent blinking and display issues */
 .modal {
-    transition: opacity 0.15s linear;
-    z-index: 1055;
+    transition: opacity 0.15s linear !important;
+    z-index: 1055 !important;
 }
 
 .modal.fade {
@@ -155,8 +155,8 @@ h5 {
 }
 
 .modal-backdrop {
-    transition: opacity 0.15s linear;
-    z-index: 1050;
+    transition: opacity 0.15s linear !important;
+    z-index: 1050 !important;
 }
 
 /* Prevent multiple backdrop issues */
@@ -205,13 +205,13 @@ h5 {
 /* Edit button styling improvements - Black edit icons */
 .panel-heading-with-btn button,
 .panel-heading-with-btn a {
-    transition: none;
+    transition: none !important;
 }
 
 .panel-heading-with-btn button:hover,
 .panel-heading-with-btn a:hover {
-    color: #333;
-    transition: none;
+    color: #333 !important;
+    transition: none !important;
 }
 
 /* Edit icons - Black color without orange background */
@@ -219,55 +219,55 @@ h5 {
 .panel-heading .btn-link.site-text-primary i,
 .panel-heading .btn-link .fa-edit,
 .panel-heading .btn-link .fa-times {
-    color: #000;
-    background: none;
-    background-color: transparent;
-    border: none;
-    box-shadow: none;
-    outline: none;
-    font-size: 18px;
+    color: #000 !important;
+    background: none !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    font-size: 18px !important;
 }
 
 .panel-heading .btn-link.site-text-primary:hover,
 .panel-heading .btn-link.site-text-primary:hover i,
 .panel-heading .btn-link .fa-edit:hover,
 .panel-heading .btn-link .fa-times:hover {
-    color: #333;
-    background: none;
-    background-color: transparent;
-    border: none;
-    box-shadow: none;
-    outline: none;
+    color: #333 !important;
+    background: none !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
 }
 
 /* Edit button focus states */
 .btn-link:focus {
-    box-shadow: none;
-    outline: none;
-    border: none;
+    box-shadow: none !important;
+    outline: none !important;
+    border: none !important;
 }
 
 /* Enhanced prevention of blinking on Add Employment button */
 .panel-heading-with-btn .btn-link {
-    will-change: auto;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    -webkit-transform: none;
-    transform: none;
+    will-change: auto !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+    -webkit-transform: none !important;
+    transform: none !important;
     pointer-events: auto;
-    transition: none;
-    animation: none;
+    transition: none !important;
+    animation: none !important;
 }
 
 .panel-heading-with-btn .btn-link:active,
 .panel-heading-with-btn .btn-link:focus,
 .panel-heading-with-btn .btn-link:hover {
-    transform: none;
-    -webkit-transform: none;
-    transition: none;
-    animation: none;
-    background-color: transparent;
-    box-shadow: none;
+    transform: none !important;
+    -webkit-transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
 }
 
 /* Form improvements in modals */
@@ -300,86 +300,86 @@ h5 {
     border-radius: 6px;
     padding: 0.5rem 1rem;
     font-weight: 500;
-    transition: none;
+    transition: none !important;
 }
 
 .modal .btn-secondary {
     background-color: #6c757d;
     border-color: #6c757d;
-    transition: none;
+    transition: none !important;
 }
 
 .modal .btn-secondary:hover {
     background-color: #5a6268;
     border-color: #545b62;
-    transition: none;
+    transition: none !important;
 }
 
 /* Profile Summary Buttons - Both Secondary Style */
 .btn-primary {
-    background-color: #6c757d;
-    border-color: #6c757d;
-    color: white;
-    font-weight: 600;
-    transition: all 0.2s ease;
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: white !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
 }
 
 .btn-primary:hover {
-    background-color: #5a6268;
-    border-color: #545b62;
-    color: white;
+    background-color: #5a6268 !important;
+    border-color: #545b62 !important;
+    color: white !important;
 }
 
 .btn-primary:focus {
-    background-color: #5a6268;
-    border-color: #545b62;
-    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+    background-color: #5a6268 !important;
+    border-color: #545b62 !important;
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25) !important;
 }
 
 .btn-primary:active {
-    background-color: #545b62;
-    border-color: #4e555b;
+    background-color: #545b62 !important;
+    border-color: #4e555b !important;
 }
 
 /* Profile Summary button alignment and sizing */
 .edit-form .d-flex {
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
 }
 
 .edit-form .d-flex > div {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
 }
 
 /* Ensure both buttons have same size */
 .btn-secondary.btn-sm,
 .btn-primary.btn-sm {
-    padding: 0.375rem 0.75rem;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    border-radius: 0.25rem;
-    min-width: 70px;
+    padding: 0.375rem 0.75rem !important;
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+    border-radius: 0.25rem !important;
+    min-width: 70px !important;
 }
 
 /* Override any orange styling with higher specificity */
 .edit-form .btn.btn-primary.btn-sm,
 .panel-body .btn.btn-primary.btn-sm,
 .twm-panel-inner .btn.btn-primary.btn-sm {
-    background-color: #6c757d;
-    border-color: #6c757d;
-    color: white;
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: white !important;
 }
 
 .edit-form .btn.btn-primary.btn-sm:hover,
 .panel-body .btn.btn-primary.btn-sm:hover,
 .twm-panel-inner .btn.btn-primary.btn-sm:hover {
-    background-color: #5a6268;
-    border-color: #545b62;
-    color: white;
+    background-color: #5a6268 !important;
+    border-color: #545b62 !important;
+    color: white !important;
 }
 
 /* Character counter styling */
@@ -391,60 +391,60 @@ h5 {
 /* Additional modal fixes for z-index and display issues */
 body.modal-open {
     overflow: hidden;
-    padding-right: 0;
+    padding-right: 0 !important;
 }
 
 /* Ensure modals appear above all other content */
 .modal {
-    z-index: 1055;
+    z-index: 1055 !important;
 }
 
 .modal-backdrop {
-    z-index: 1050;
+    z-index: 1050 !important;
     background-color: rgba(0, 0, 0, 0.5);
 }
 
 /* Fix for modal not showing properly */
 .modal.show {
-    display: block;
+    display: block !important;
 }
 
 .modal.fade.show {
-    opacity: 1;
+    opacity: 1 !important;
 }
 
 /* Fix cursor blinking and textarea stability */
 .modal textarea {
-    caret-color: #000;
-    animation: none;
-    transition: none;
-    outline: none;
-    box-shadow: none;
+    caret-color: #000 !important;
+    animation: none !important;
+    transition: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .modal textarea:focus {
-    border-color: #fd7e14;
-    box-shadow: 0 0 0 0.2rem rgba(253, 126, 20, 0.25);
-    outline: none;
-    animation: none;
+    border-color: #fd7e14 !important;
+    box-shadow: 0 0 0 0.2rem rgba(253, 126, 20, 0.25) !important;
+    outline: none !important;
+    animation: none !important;
 }
 
 /* Stop excessive animations in modal - keep necessary ones */
 .modal .modal-header,
 .modal .modal-body,
 .modal .modal-footer {
-    animation: none;
+    animation: none !important;
 }
 
 /* Prevent modal content from shifting */
 .modal-content {
-    transform: none;
-    transition: none;
+    transform: none !important;
+    transition: none !important;
 }
 
 .modal-dialog {
-    transform: none;
-    transition: none;
+    transform: none !important;
+    transition: none !important;
 }
 
 /* Ensure modal content is clickable */
@@ -462,15 +462,15 @@ body.modal-open {
 
 /* Improve edit button visibility */
 .panel-heading .btn-link {
-    text-decoration: none;
+    text-decoration: none !important;
     padding: 4px 8px;
     border-radius: 4px;
-    transition: none;
+    transition: none !important;
 }
 
 .panel-heading .btn-link:hover {
-    background-color: transparent;
-    transition: none;
+    background-color: transparent !important;
+    transition: none !important;
 }
 
 /* Loading state improvements */
@@ -496,7 +496,7 @@ body.modal-open {
 
 /* Success feedback */
 .is-valid {
-    border-color: #FF7A00;
+    border-color: #28a745;
 }
 
 .is-invalid {
@@ -513,19 +513,19 @@ body.modal-open {
 
 /* Panel stability - prevent blinking and flickering */
 .panel {
-    transition: none;
-    animation: none;
+    transition: none !important;
+    animation: none !important;
 }
 
 .panel-heading {
-    transition: none;
-    animation: none;
+    transition: none !important;
+    animation: none !important;
     will-change: auto;
 }
 
 .panel-body {
-    transition: none;
-    animation: none;
+    transition: none !important;
+    animation: none !important;
     will-change: auto;
 }
 
@@ -561,11 +561,11 @@ body.modal-open {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 20px;
     background: white;
-    transition: none;
+    transition: none !important;
 }
 
 .panel:hover {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
 }
 
 .panel-heading {
@@ -621,198 +621,198 @@ body.modal-open {
 @media (max-width: 576px) {
     /* Main container adjustments */
     .twm-right-section-panel {
-        padding: 8px;
-        min-height: auto;
+        padding: 8px !important;
+        min-height: auto !important;
     }
 
     /* Header adjustments */
     .panel-heading .panel-tittle {
-        font-size: 18px;
-        line-height: 1.3;
+        font-size: 18px !important;
+        line-height: 1.3 !important;
     }
 
     .panel-heading .panel-tittle i {
-        font-size: 18px;
-        margin-right: 6px;
+        font-size: 18px !important;
+        margin-right: 6px !important;
     }
 
     .panel-heading p {
-        font-size: 13px;
-        margin-bottom: 0;
+        font-size: 13px !important;
+        margin-bottom: 0 !important;
     }
 
     /* Panel body spacing */
     .panel-body {
-        padding: 12px;
+        padding: 12px !important;
     }
 
     /* Form elements */
     .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 15px !important;
     }
 
     .form-control {
-        font-size: 16px; /* Prevents zoom on iOS */
-        padding: 10px 12px;
-        height: auto;
-        border-radius: 6px;
+        font-size: 16px !important; /* Prevents zoom on iOS */
+        padding: 10px 12px !important;
+        height: auto !important;
+        border-radius: 6px !important;
     }
 
     .form-select {
-        font-size: 16px;
-        padding: 10px 12px;
-        height: auto;
-        border-radius: 6px;
+        font-size: 16px !important;
+        padding: 10px 12px !important;
+        height: auto !important;
+        border-radius: 6px !important;
     }
 
     /* Labels */
     .form-label, label {
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 6px;
-        display: block;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        margin-bottom: 6px !important;
+        display: block !important;
     }
 
     /* Buttons */
     .btn {
-        padding: 10px 16px;
-        font-size: 14px;
-        font-weight: 600;
-        border-radius: 6px;
-        min-height: 44px; /* Touch target size */
-        width: 100%; /* Full width on mobile */
-        margin-bottom: 8px;
+        padding: 10px 16px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        border-radius: 6px !important;
+        min-height: 44px !important; /* Touch target size */
+        width: 100% !important; /* Full width on mobile */
+        margin-bottom: 8px !important;
     }
 
     .btn-sm {
-        padding: 8px 12px;
-        font-size: 13px;
-        min-height: 36px;
-        width: auto;
-        margin-bottom: 4px;
+        padding: 8px 12px !important;
+        font-size: 13px !important;
+        min-height: 36px !important;
+        width: auto !important;
+        margin-bottom: 4px !important;
     }
 
     /* Button groups */
     .d-flex.gap-2 {
-        flex-direction: column;
-        gap: 8px;
+        flex-direction: column !important;
+        gap: 8px !important;
     }
 
     .d-flex.gap-2 .btn {
-        width: 100%;
+        width: 100% !important;
     }
 
     /* Tables */
     .table-responsive {
-        border-radius: 6px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        border-radius: 6px !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 
     .table {
-        font-size: 13px;
-        min-width: 600px; /* Ensure horizontal scroll */
+        font-size: 13px !important;
+        min-width: 600px !important; /* Ensure horizontal scroll */
     }
 
     .table th, .table td {
-        padding: 8px 6px;
-        white-space: nowrap;
+        padding: 8px 6px !important;
+        white-space: nowrap !important;
     }
 
     /* Cards and panels */
     .panel, .card {
-        margin-bottom: 16px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 16px !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
     }
 
     /* Skill tags */
     .skill-tag {
-        display: inline-block;
-        padding: 4px 8px;
-        margin: 2px;
-        font-size: 12px;
-        border-radius: 4px;
+        display: inline-block !important;
+        padding: 4px 8px !important;
+        margin: 2px !important;
+        font-size: 12px !important;
+        border-radius: 4px !important;
     }
 
     /* File upload areas */
     .file-upload-area {
-        padding: 20px;
-        border-radius: 6px;
-        text-align: center;
+        padding: 20px !important;
+        border-radius: 6px !important;
+        text-align: center !important;
     }
 
     .file-upload-area i {
-        font-size: 24px;
-        margin-bottom: 8px;
+        font-size: 24px !important;
+        margin-bottom: 8px !important;
     }
 
     /* Progress bars */
     .progress {
-        height: 8px;
-        border-radius: 4px;
+        height: 8px !important;
+        border-radius: 4px !important;
     }
 
     /* Alerts and messages */
     .alert {
-        padding: 12px;
-        font-size: 14px;
-        border-radius: 6px;
+        padding: 12px !important;
+        font-size: 14px !important;
+        border-radius: 6px !important;
     }
 
     /* Loading states */
     .text-center p {
-        font-size: 14px;
+        font-size: 14px !important;
     }
 
     /* Modal adjustments */
     .modal-dialog {
-        margin: 10px;
-        max-width: calc(100vw - 20px);
+        margin: 10px !important;
+        max-width: calc(100vw - 20px) !important;
     }
 
     .modal-content {
-        border-radius: 8px;
+        border-radius: 8px !important;
     }
 
     /* Grid system adjustments */
     .row {
-        margin-left: -4px;
-        margin-right: -4px;
+        margin-left: -4px !important;
+        margin-right: -4px !important;
     }
 
     .col-12, .col-md-6, .col-lg-4, .col-xl-3 {
-        padding-left: 4px;
-        padding-right: 4px;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
     }
 
     /* Specific section adjustments */
     .education-section .row > div {
-        margin-bottom: 12px;
+        margin-bottom: 12px !important;
     }
 
     .employment-section .timeline {
-        padding-left: 20px;
+        padding-left: 20px !important;
     }
 
     .employment-section .timeline-item {
-        padding-left: 0;
-        border-left: 3px solid #dee2e6;
-        margin-bottom: 16px;
-        padding-bottom: 12px;
+        padding-left: 0 !important;
+        border-left: 3px solid #dee2e6 !important;
+        margin-bottom: 16px !important;
+        padding-bottom: 12px !important;
     }
 
     /* Project cards */
     .project-card {
-        margin-bottom: 12px;
-        padding: 12px;
+        margin-bottom: 12px !important;
+        padding: 12px !important;
     }
 
     /* Accomplishments */
     .accomplishment-item {
-        padding: 12px;
-        margin-bottom: 8px;
-        border-radius: 6px;
+        padding: 12px !important;
+        margin-bottom: 8px !important;
+        border-radius: 6px !important;
     }
 }
 
@@ -836,37 +836,37 @@ body.modal-open {
 
     /* Button adjustments for mobile */
     .btn {
-        padding: 10px 16px;
-        font-size: 14px;
-        min-width: 80px;
-        height: auto;
-        border-radius: 6px;
+        padding: 10px 16px !important;
+        font-size: 14px !important;
+        min-width: 80px !important;
+        height: auto !important;
+        border-radius: 6px !important;
     }
 
     .btn-sm {
-        padding: 8px 12px;
-        font-size: 13px;
-        min-width: 60px;
+        padding: 8px 12px !important;
+        font-size: 13px !important;
+        min-width: 60px !important;
     }
 
     /* Form elements for tablets */
     .form-control, .form-select {
-        font-size: 15px;
-        padding: 12px 14px;
+        font-size: 15px !important;
+        padding: 12px 14px !important;
     }
 
     /* Two column layout adjustments */
     .row .col-md-6 {
-        margin-bottom: 16px;
+        margin-bottom: 16px !important;
     }
 
     /* Table responsiveness */
     .table-responsive {
-        border-radius: 8px;
+        border-radius: 8px !important;
     }
 
     .table th, .table td {
-        padding: 10px 8px;
+        padding: 10px 8px !important;
     }
 }
 
@@ -874,24 +874,24 @@ body.modal-open {
 @media (max-width: 992px) {
     /* Three column layout adjustments */
     .row .col-lg-4 {
-        margin-bottom: 16px;
+        margin-bottom: 16px !important;
     }
 
     /* Form layouts */
     .form-row {
-        margin-bottom: 12px;
+        margin-bottom: 12px !important;
     }
 
     /* Button groups */
     .btn-group {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
     }
 
     .btn-group .btn {
-        border-radius: 6px;
-        margin-bottom: 4px;
+        border-radius: 6px !important;
+        margin-bottom: 4px !important;
     }
 }
 
@@ -899,20 +899,20 @@ body.modal-open {
 @media (max-width: 1200px) {
     /* Ensure touch targets are adequate */
     button, .btn, input, select, textarea, [role="button"] {
-        min-height: 44px;
-        min-width: 44px;
+        min-height: 44px !important;
+        min-width: 44px !important;
     }
 
     /* Improve readability */
     body {
-        font-size: 14px;
-        line-height: 1.5;
+        font-size: 14px !important;
+        line-height: 1.5 !important;
     }
 
     /* Better spacing for mobile */
     .container, .container-fluid {
-        padding-left: 12px;
-        padding-right: 12px;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
     }
 
     /* Loading states */
@@ -922,15 +922,15 @@ body.modal-open {
 
     /* Error states */
     .alert-danger {
-        background-color: #f8d7da;
-        border-color: #f5c6cb;
-        color: #721c24;
+        background-color: #f8d7da !important;
+        border-color: #f5c6cb !important;
+        color: #721c24 !important;
     }
 
     /* Success states */
     .alert-success {
-        background-color: #d4edda;
-        border-color: #c3e6cb;
-        color: #155724;
+        background-color: #d4edda !important;
+        border-color: #c3e6cb !important;
+        color: #155724 !important;
     }
 }

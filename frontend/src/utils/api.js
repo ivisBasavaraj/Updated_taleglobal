@@ -268,7 +268,10 @@ export const api = {
 
   getPlacementProfile: () => {
     return fetch(`${API_BASE_URL}/placement/profile`, {
-      headers: getAuthHeaders('placement'),
+      headers: {
+        ...getAuthHeaders('placement'),
+        'Cache-Control': 'max-age=300' // 5 minutes cache
+      },
     }).then(handleApiResponse);
   },
 
@@ -437,7 +440,10 @@ export const api = {
 
   getMyPlacementData: () => {
     return fetch(`${API_BASE_URL}/placement/data`, {
-      headers: getAuthHeaders('placement'),
+      headers: {
+        ...getAuthHeaders('placement'),
+        'Cache-Control': 'max-age=60' // 1 minute cache for student data
+      },
     }).then(handleApiResponse);
   },
 

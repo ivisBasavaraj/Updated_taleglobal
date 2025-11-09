@@ -39,14 +39,7 @@ router.get('/profile', auth(['placement']), async (req, res) => {
       name: placement.name,
       hasLogo: !!placement.logo,
       hasIdCard: !!placement.idCard,
-      fileHistoryCount: placement.fileHistory?.length || 0,
-      fileHistory: placement.fileHistory?.map(f => ({
-        id: f._id,
-        fileName: f.fileName,
-        customName: f.customName,
-        status: f.status,
-        uploadedAt: f.uploadedAt
-      }))
+      fileHistoryCount: placement.fileHistory?.length || 0
     });
     
     res.json({ success: true, placement });

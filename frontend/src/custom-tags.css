@@ -63,7 +63,7 @@
 
 .view-details-btn {
     background: #ff9800;
-    color: #fff;
+    color: #fff !important;
     padding: 8px 16px;
     border: 1px solid #ff9800;
     border-radius: 5px;
@@ -75,7 +75,7 @@
 
 .view-details-btn:hover {
     background: #f57c00;
-    color: #fff;
+    color: #fff !important;
     text-decoration: none;
 }
 

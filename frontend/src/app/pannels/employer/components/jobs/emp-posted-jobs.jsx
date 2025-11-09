@@ -114,7 +114,7 @@ export default function EmpPostedJobs() {
     };
 
     const getStatusBadge = (status) => {
-        return 'twm-bg-orange';
+        return status === 'active' ? 'twm-bg-green' : 'twm-bg-red';
     };
 
     // Simple utility for job CTC text
@@ -175,14 +175,7 @@ export default function EmpPostedJobs() {
 	return (
 		<>
 			<div className="wt-admin-right-page-header clearfix">
-				<h2>
-					<i className="fa fa-list-alt me-3"></i>
-					Jobs Posted
-				</h2>
-				<p className="page-subtitle mb-0">
-					<i className="fa fa-chart-line me-2"></i>
-					Review and manage your job postings
-				</p>
+				<h2 style={{marginLeft: '25px'}}>Jobs Posted</h2>
 			</div>
 
 			<div className="panel panel-default site-bg-white p-3">
@@ -232,21 +225,21 @@ export default function EmpPostedJobs() {
 						<div className="d-flex gap-2">
 							<button 
 								type="button" 
-								className={`btn ${statusFilter === 'all' ? 'btn-orange-active' : 'btn-orange'}`}
+								className={`btn ${statusFilter === 'all' ? 'btn-outline-primary' : 'btn-outline-primary'}`}
 								onClick={() => setStatusFilter('all')}
 							>
 								All
 							</button>
 							<button 
 								type="button" 
-								className={`btn ${statusFilter === 'active' ? 'btn-orange-active' : 'btn-orange'}`}
+								className={`btn ${statusFilter === 'active' ? 'btn-success' : 'btn-outline-success'}`}
 								onClick={() => setStatusFilter('active')}
 							>
 								Active
 							</button>
 							<button 
 								type="button" 
-								className={`btn ${statusFilter === 'inactive' ? 'btn-orange-active' : 'btn-orange'}`}
+								className={`btn ${statusFilter === 'inactive' ? 'btn-secondary' : 'btn-outline-secondary'}`}
 								onClick={() => setStatusFilter('inactive')}
 							>
 								Inactive
@@ -312,39 +305,21 @@ export default function EmpPostedJobs() {
 												</span>
 												<div className="d-flex gap-2">
 													<button
-														className="btn btn-orange btn-sm"
-														style={{
-															backgroundColor: 'rgba(255, 122, 0, 0.08)',
-															border: '1px solid #FF7A00',
-															color: '#FF7A00',
-															fontWeight: 'bold'
-														}}
+														className="btn btn-outline-primary btn-sm"
 														onClick={() => navigate(`/employer/emp-job-review/${job._id}`)}
 														title="View Details"
 													>
 														<Eye size={16} />
 													</button>
 													<button
-														className="btn btn-orange btn-sm"
-														style={{
-															backgroundColor: 'rgba(255, 122, 0, 0.08)',
-															border: '1px solid #FF7A00',
-															color: '#FF7A00',
-															fontWeight: 'bold'
-														}}
+														className="btn btn-outline-success btn-sm"
 														onClick={() => navigate(`/employer/edit-job/${job._id}`)}
 														title="Edit Job"
 													>
 														<Edit size={16} />
 													</button>
 													<button
-														className="btn btn-orange btn-sm"
-														style={{
-															backgroundColor: 'rgba(255, 122, 0, 0.08)',
-															border: '1px solid #FF7A00',
-															color: '#FF7A00',
-															fontWeight: 'bold'
-														}}
+														className={`btn btn-outline-${job.status === 'active' ? 'warning' : 'info'} btn-sm`}
 														onClick={() => handleStatusToggle(job._id, job.status)}
 														title={job.status === 'active' ? 'Deactivate Job' : 'Activate Job'}
 													>

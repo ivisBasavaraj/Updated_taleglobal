@@ -102,8 +102,7 @@
 }
 
 .site-button {
-  background: linear-gradient(135deg, #ff9c00 0%, #ffffff 100%);
-  border: 1px solid #ff9c00;
+  background-color: #ff9c00;
 }
 
 .wt-small-separator {
@@ -365,8 +364,7 @@
 
 /* Theme default button */
 .site-button {
-  background: linear-gradient(135deg, #ff9c00 0%, #ffffff 100%);
-  border: 1px solid #ff9c00;
+  background-color: #ff9c00;
 }
 .site-button.white {
   color: #ff9c00;

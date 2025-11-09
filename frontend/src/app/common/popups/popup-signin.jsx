@@ -2,7 +2,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { canRoute, candidate, empRoute, employer, placementRoute, placement, pubRoute, publicUser } from "../../../globals/route-names";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
-import "./popup-signin.css";
 
 function SignInPopup() {
 
@@ -110,6 +109,29 @@ function SignInPopup() {
         bootstrapModal?.hide();
         navigate(pubRoute(publicUser.pages.FORGOT));
     }
+
+    const buttonStyle = {
+        backgroundColor: '#1967d2',
+        color: '#f0f6fe',
+        border: '1px solid #1967d2',
+        borderRadius: '10px',
+        padding: '10px 16px',
+        fontWeight: 600,
+        transition: 'background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease',
+        width: '100%'
+    };
+
+    const handleButtonEnter = (event) => {
+        event.currentTarget.style.backgroundColor = '#165bbf';
+        event.currentTarget.style.borderColor = '#165bbf';
+        event.currentTarget.style.color = '#f0f6fe';
+    };
+
+    const handleButtonLeave = (event) => {
+        event.currentTarget.style.backgroundColor = '#1967d2';
+        event.currentTarget.style.borderColor = '#1967d2';
+        event.currentTarget.style.color = '#f0f6fe';
+    };
 
     return (
 			<>
@@ -242,7 +264,9 @@ function SignInPopup() {
 												<div className="col-md-12">
 													<button
 														type="submit"
-														className="popup-signin-btn"
+														style={buttonStyle}
+								onMouseEnter={handleButtonEnter}
+								onMouseLeave={handleButtonLeave}
 													>
 														Log in
 													</button>
@@ -325,7 +349,9 @@ function SignInPopup() {
 												<div className="col-md-12">
 													<button
 														type="submit"
-														className="popup-signin-btn"
+														style={buttonStyle}
+								onMouseEnter={handleButtonEnter}
+								onMouseLeave={handleButtonLeave}
 													>
 														Log in
 													</button>
@@ -408,7 +434,9 @@ function SignInPopup() {
 												<div className="col-md-12">
 													<button
 														type="submit"
-														className="popup-signin-btn"
+														style={buttonStyle}
+								onMouseEnter={handleButtonEnter}
+								onMouseLeave={handleButtonLeave}
 													>
 														Log in
 													</button>

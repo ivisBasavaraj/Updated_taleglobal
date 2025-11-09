@@ -953,31 +953,31 @@
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #000;
+    color: #000 !important;
 }
 
 .status-badge.shortlisted {
     background: #e8f5e8;
-    color: #000;
-    font-weight: bold;
+    color: #000 !important;
+    font-weight: bold !important;
 }
 
 .status-badge.pending {
     background: #fff3e0;
-    color: #000;
-    font-weight: bold;
+    color: #000 !important;
+    font-weight: bold !important;
 }
 
 .status-badge.selected {
     background: #e8f5e8;
-    color: #000;
-    font-weight: bold;
+    color: #000 !important;
+    font-weight: bold !important;
 }
 
 .status-badge.not-selected {
     background: #ffebee;
-    color: #000;
-    font-weight: bold;
+    color: #000 !important;
+    font-weight: bold !important;
 }
 
 .round-info {

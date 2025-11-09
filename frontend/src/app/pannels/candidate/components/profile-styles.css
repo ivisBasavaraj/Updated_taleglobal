@@ -211,7 +211,7 @@ label {
 
 /* Form validation error messages */
 .invalid-feedback {
-    font-size: 16px;
+    font-size: 16px !important;
     font-weight: 500;
     margin-top: 8px;
     margin-bottom: 15px;
@@ -275,7 +275,7 @@ input[type="file"]:hover {
     position: absolute;
     top: 100%;
     left: 0;
-    z-index: 1050;
+    z-index: 1050 !important;
     display: block;
     min-width: 100%;
     padding: 0.5rem 0;
@@ -324,11 +324,11 @@ input[type="file"]:hover {
 
 /* Ensure dropdown appears above other elements */
 .panel.panel-default {
-    overflow: visible;
+    overflow: visible !important;
 }
 
 .panel-body.wt-panel-body {
-    overflow: visible;
+    overflow: visible !important;
 }
 
 /* Location input specific styling */
@@ -347,7 +347,7 @@ input[type="file"]:hover {
     top: 100%;
     left: 0;
     right: 0;
-    z-index: 1060;
+    z-index: 1060 !important;
     margin-top: 2px;
     border-top: none;
     border-top-left-radius: 0;

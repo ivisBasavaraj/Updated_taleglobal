@@ -119,7 +119,7 @@ function SectionJobCategories() {
                                                 <div className="twm-jobs-available">
                                                     {categoryCounts[category.name] || 0} Jobs
                                                 </div>
-                                                <span style={{color: '#FF7A00', textDecoration: 'none'}}>
+                                                <span style={{color: '#1967d2', textDecoration: 'none'}}>
                                                     {category.name}
                                                 </span>
                                             </div>

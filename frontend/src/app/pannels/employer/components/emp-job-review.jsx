@@ -47,20 +47,14 @@ function EmpJobReviewPage() {
                         <i className="far fa-user-circle" /> Job Details
                     </h4>
 
-                    <span className="badge twm-bg-orange text-capitalize">
+                    <span className={`badge ${jobDetails.status === 'active' ? 'twm-bg-green' : 'twm-bg-orange'} text-capitalize`}>
                         {jobDetails.status}
                     </span>
                 </div>
 
                 <div className="panel-body">
                     <button
-                        className="btn btn-orange mb-3"
-                        style={{
-                            backgroundColor: 'rgba(255, 122, 0, 0.08)',
-                            border: '1px solid #FF7A00',
-                            color: '#FF7A00',
-                            fontWeight: 'bold'
-                        }}
+                        className="btn btn-outline-secondary mb-3"
                         onClick={() => navigate(-1)}
                     >
                         ← Back to Jobs List

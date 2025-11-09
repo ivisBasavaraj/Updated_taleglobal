@@ -155,7 +155,7 @@ function EmpDashboardPage() {
                     <div className="row" style={{ marginBottom: '2rem', margin: '0' }}>
                         <div className="col-xl-4 col-lg-4 col-md-12 mb-3">
                             <div className="panel panel-default">
-                                <div className="panel-body wt-panel-body dashboard-card-2">
+                                <div className="panel-body wt-panel-body dashboard-card-2" style={{ backgroundColor: '#e0f7fa' }}>
                                     <div className="d-flex align-items-center" style={{ display: "flex", justifyContent: "flex-end" }}>
                                         <div className="wt-card-icon-2 me-3 fs-2 text-info" style={{ lineHeight: "1" }}>
                                             <i className="flaticon-resume" />
@@ -173,7 +173,7 @@ function EmpDashboardPage() {
 
                         <div className="col-xl-4 col-lg-4 col-md-12 mb-3">
                             <div className="panel panel-default">
-                                <div className="panel-body wt-panel-body dashboard-card-2">
+                                <div className="panel-body wt-panel-body dashboard-card-2" style={{ backgroundColor: '#fff3e0' }}>
                                     <div className="d-flex align-items-center" style={{ display: "flex", justifyContent: "flex-end" }}>
                                         <div className="wt-card-icon-2 me-3 fs-2 text-warning" style={{ lineHeight: "1" }}>
                                             <i className="flaticon-envelope" />
@@ -191,7 +191,7 @@ function EmpDashboardPage() {
 
                         <div className="col-xl-4 col-lg-4 col-md-12 mb-3">
                             <div className="panel panel-default">
-                                <div className="panel-body wt-panel-body dashboard-card-2">
+                                <div className="panel-body wt-panel-body dashboard-card-2" style={{ backgroundColor: '#e8f5e9' }}>
                                     <div className="d-flex align-items-center" style={{ display: "flex", justifyContent: "flex-end" }}>
                                         <div className="wt-card-icon-2 me-3 fs-2 text-success" style={{ lineHeight: "1" }}>
                                             ✓

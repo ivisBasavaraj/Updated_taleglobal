@@ -425,14 +425,7 @@ function PlacementDetails() {
     if (loading) {
         return (
             <div className="wt-admin-right-page-header clearfix">
-                <h2>
-                    <i className="fa fa-graduation-cap me-3"></i>
-                    Placement Details
-                </h2>
-                <p className="page-subtitle mb-0">
-                    <i className="fa fa-info-circle me-2"></i>
-                    View detailed placement officer information
-                </p>
+                <h2>Loading...</h2>
             </div>
         );
     }
@@ -440,14 +433,7 @@ function PlacementDetails() {
     if (error) {
         return (
             <div className="wt-admin-right-page-header clearfix">
-                <h2>
-                    <i className="fa fa-graduation-cap me-3"></i>
-                    Placement Details
-                </h2>
-                <p className="page-subtitle mb-0">
-                    <i className="fa fa-exclamation-triangle me-2"></i>
-                    Error: {error}
-                </p>
+                <h2>Error: {error}</h2>
             </div>
         );
     }

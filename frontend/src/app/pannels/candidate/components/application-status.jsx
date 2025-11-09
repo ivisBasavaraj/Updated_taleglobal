@@ -234,10 +234,10 @@ function CanStatusPage() {
 					<small className="text-muted">Updates automatically every 30 seconds</small>
 				</div>
 				<button 
-					className="btn btn-orange btn-sm refresh-btn"
+					className="btn btn-sm btn-outline-primary refresh-btn"
 					onClick={fetchApplications}
 					disabled={loading}
-					style={{backgroundColor: 'rgba(255, 122, 0, 0.08)', border: '1px solid #FF7A00', color: '#FF7A00', fontWeight: 'bold'}}
+					style={{backgroundColor: 'transparent'}}
 				>
 					<i className="fa fa-refresh me-1" />
 					{loading ? 'Refreshing...' : 'Refresh Now'}
@@ -296,7 +296,7 @@ function CanStatusPage() {
 														<i className="fa fa-search fa-3x mb-3" style={{color: '#ff6b35'}}></i>
 														<h5 style={{color: '#232323'}}>No Applications Yet</h5>
 														<p className="text-muted mb-3">Start applying to jobs to see your application status here</p>
-														<button className="btn btn-orange" onClick={() => navigate(pubRoute(publicUser.jobs.GRID))} style={{backgroundColor: 'rgba(255, 122, 0, 0.08)', border: '1px solid #FF7A00', color: '#FF7A00', fontWeight: 'bold'}}>
+														<button className="btn btn-outline-primary" onClick={() => navigate(pubRoute(publicUser.jobs.GRID))} style={{backgroundColor: 'transparent'}}>
 															<i className="fa fa-search me-2"></i>
 															Browse Jobs
 														</button>

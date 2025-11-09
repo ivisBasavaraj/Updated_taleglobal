@@ -5,14 +5,8 @@ function EmpBookmarksPage() {
         <>
             <div>
                 <div className="wt-admin-right-page-header clearfix">
-                    <h2>
-                        <i className="fa fa-bookmark me-3"></i>
-                        Bookmarks
-                    </h2>
-                    <p className="page-subtitle mb-0">
-                        <i className="fa fa-heart me-2"></i>
-                        Manage your saved candidate profiles
-                    </p>
+                    <h2>Bookmark</h2>
+                    <div className="breadcrumbs"><a href="#">Home</a><a href="#">Dasboard</a><span>Bookmarked Jobs</span></div>
                 </div>
                 <div className="twm-pro-view-chart-wrap">
                     <div className="col-lg-12 col-md-12 mb-4">

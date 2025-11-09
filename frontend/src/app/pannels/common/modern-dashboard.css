@@ -19,7 +19,7 @@
     }
     
     .twm-right-section-panel {
-        margin-left: 0;
+        margin-left: 0 !important;
         padding: 1rem;
     }
     
@@ -205,7 +205,7 @@
     }
     
     .welcome-section h2 {
-        font-size: 1.5rem;
+        font-size: 1.5rem !important;
     }
 }
 
@@ -238,21 +238,21 @@
 }
 
 /* Utility Classes */
-.text-primary { color: var(--primary-color); }
-.text-secondary { color: var(--secondary-color); }
-.bg-primary { background-color: var(--primary-color); }
-.bg-light { background-color: var(--light-color); }
+.text-primary { color: var(--primary-color) !important; }
+.text-secondary { color: var(--secondary-color) !important; }
+.bg-primary { background-color: var(--primary-color) !important; }
+.bg-light { background-color: var(--light-color) !important; }
 
-.shadow-sm { box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.shadow { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-.shadow-lg { box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+.shadow-sm { box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important; }
+.shadow { box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important; }
+.shadow-lg { box-shadow: 0 8px 16px rgba(0,0,0,0.1) !important; }
 
-.rounded-lg { border-radius: 12px; }
-.rounded-xl { border-radius: 16px; }
+.rounded-lg { border-radius: 12px !important; }
+.rounded-xl { border-radius: 16px !important; }
 
 /* Button text shadow fix */
 button,
 .btn,
 .site-button {
-  text-shadow: none;
+  text-shadow: none !important;
 }
