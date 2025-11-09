@@ -87,11 +87,15 @@ export const AuthProvider = ({ children }) => {
         const userData = response[type] || response.subAdmin;
         const token = response.token;
         
+        console.log('Login response:', { success: response.success, hasToken: !!token, hasUserData: !!userData });
+        
         const tokenKey = type === 'sub-admin' ? 'subAdminToken' : `${type}Token`;
         const userKey = type === 'sub-admin' ? 'subAdminData' : `${type}User`;
         
         localStorage.setItem(tokenKey, token);
         localStorage.setItem(userKey, JSON.stringify(userData));
+        
+        console.log('Token stored in localStorage:', tokenKey, localStorage.getItem(tokenKey) ? 'success' : 'failed');
         
         setUser(userData);
         setUserType(type);

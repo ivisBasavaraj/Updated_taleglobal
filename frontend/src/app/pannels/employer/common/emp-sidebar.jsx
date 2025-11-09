@@ -57,6 +57,10 @@ function EmpSidebarSection({ sidebarActive, isMobile }) {
                             <NavLink to={empRoute(employer.MANAGE_JOBS)} style={{display: 'flex', alignItems: 'center'}}><i className="fa fa-suitcase" style={{minWidth: '30px', textAlign: 'center'}} /><span className="admin-nav-text" style={{paddingLeft: '10px'}}>Openings</span></NavLink>
                         </li>
 
+                        <li className={setMenuActive(currentpath, empRoute(employer.CREATE_ASSESSMENT))}>
+                            <NavLink to={empRoute(employer.CREATE_ASSESSMENT)} style={{display: 'flex', alignItems: 'center'}}><i className="fa fa-clipboard-check" style={{minWidth: '30px', textAlign: 'center'}} /><span className="admin-nav-text" style={{paddingLeft: '10px'}}>Assessments</span></NavLink>
+                        </li>
+
                         <li className={setMenuActive(currentpath, empRoute(employer.CANDIDATES))}>
                             <NavLink to={empRoute(employer.CANDIDATES)} style={{display: 'flex', alignItems: 'center'}}><i className="fa fa-user-friends" style={{minWidth: '30px', textAlign: 'center'}} /><span className="admin-nav-text" style={{paddingLeft: '15px'}}>Applicants</span></NavLink>
                         </li>

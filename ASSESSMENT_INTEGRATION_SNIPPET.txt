@@ -1,0 +1,62 @@
+// ADD THIS CODE TO emp-post-job.jsx
+
+// 1. Add to initial state (line 10-60):
+const [formData, setFormData] = useState({
+  // ... existing fields ...
+  assessmentId: null,  // ADD THIS LINE
+});
+
+// 2. Add state for assessments list (after line 65):
+const [assessments, setAssessments] = useState([]);
+
+// 3. Add useEffect to fetch assessments (after line 100):
+useEffect(() => {
+  fetchAssessments();
+}, []);
+
+const fetchAssessments = async () => {
+  try {
+    const token = localStorage.getItem('employerToken');
+    const response = await fetch('http://localhost:5000/api/employer/assessments', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const data = await response.json();
+    if (data.success) {
+      setAssessments(data.assessments.filter(a => a.status === 'published'));
+    }
+  } catch (error) {
+    console.error('Error fetching assessments:', error);
+  }
+};
+
+// 4. Add this section AFTER the Interview Round Details section (around line 1500)
+// and BEFORE the "Additional Details Section":
+
+{/* Assessment Selection */}
+<div style={fullRow}>
+  <label style={label}>
+    <i className="fa fa-clipboard-check" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+    Assessment (Optional)
+  </label>
+  <select
+    style={{...input, cursor: 'pointer'}}
+    value={formData.assessmentId || ''}
+    onChange={(e) => update({ assessmentId: e.target.value || null })}
+  >
+    <option value="">No Assessment Required</option>
+    {assessments.map(assessment => (
+      <option key={assessment._id} value={assessment._id}>
+        {assessment.title} ({assessment.totalQuestions} questions, {assessment.timer} min)
+      </option>
+    ))}
+  </select>
+  <small style={{color: '#6b7280', fontSize: 12, marginTop: 4, display: 'block'}}>
+    Select an assessment for candidates to complete after applying
+  </small>
+</div>
+
+// 5. Update jobData in submitNext function (around line 400):
+const jobData = {
+  // ... existing fields ...
+  assessmentId: formData.assessmentId,  // ADD THIS LINE
+};

@@ -5,9 +5,7 @@ function SignUpPopup() {
     const [candidateData, setCandidateData] = useState({
         username: '',
         email: '',
-        mobile: '',
-        password: '',
-        confirmPassword: ''
+        mobile: ''
     });
     
     const [employerData, setEmployerData] = useState({
@@ -40,7 +38,7 @@ function SignUpPopup() {
     const [showPlacementConfirmPassword, setShowPlacementConfirmPassword] = useState(false);
 
     useEffect(() => {
-        setCandidateData({ username: '', email: '', mobile: '', password: '', confirmPassword: '' });
+        setCandidateData({ username: '', email: '', mobile: '' });
         setEmployerData({ name: '', email: '', mobile: '', password: '', confirmPassword: '', employerCategory: '' });
         setPlacementData({ name: '', email: '', phone: '', password: '', confirmPassword: '', collegeName: '' });
         setFieldErrors({});
@@ -149,16 +147,7 @@ function SignUpPopup() {
         // Validate the field
         validateField(name, value, 'candidate');
 
-        if (name === 'confirmPassword' || name === 'password') {
-            const password = name === 'password' ? value : candidateData.password;
-            const confirmPassword = name === 'confirmPassword' ? value : candidateData.confirmPassword;
 
-            if (confirmPassword && password !== confirmPassword) {
-                setPasswordError('Passwords do not match');
-            } else {
-                setPasswordError('');
-            }
-        }
     };
 
     const handleEmployerChange = (e) => {
@@ -202,16 +191,10 @@ function SignUpPopup() {
     const handleCandidateSubmit = async (e) => {
         e.preventDefault();
 
-        // Validate all fields
         const isFormValid = validateForm(candidateData, 'candidate');
 
         if (!isFormValid || Object.keys(fieldErrors).length > 0) {
             setError('Please correct the errors below and try again.');
-            return;
-        }
-
-        if (candidateData.password !== candidateData.confirmPassword) {
-            setError('Passwords do not match');
             return;
         }
         
@@ -226,52 +209,27 @@ function SignUpPopup() {
                     name: candidateData.username,
                     email: candidateData.email,
                     phone: candidateData.mobile,
-                    password: candidateData.password,
-                    confirmPassword: candidateData.confirmPassword
+                    sendWelcomeEmail: true
                 })
             });
             
             const data = await response.json();
 
             if (response.ok && data.success) {
-                setCandidateData({ username: '', email: '', mobile: '', password: '', confirmPassword: '' });
+                setCandidateData({ username: '', email: '', mobile: '' });
                 setFieldErrors({});
-                setPasswordError('');
-                // Close signup modal and open login modal
+                alert('Welcome email sent! Please check your email to create your password.');
                 const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
                 if (signupModal) signupModal.hide();
-                setTimeout(() => {
-                    const loginModal = new window.bootstrap.Modal(document.getElementById('sign_up_popup2'));
-                    loginModal.show();
-                }, 300);
             } else {
-                // Handle specific server error messages
-                if (data.message) {
-                    if (data.message.includes('email') || data.message.includes('Email')) {
-                        setError('This email address is already registered. Please use a different email or try logging in.');
-                    } else if (data.message.includes('phone') || data.message.includes('mobile')) {
-                        setError('This phone number is already registered. Please use a different number.');
-                    } else if (data.message.includes('password')) {
-                        setError('Password does not meet security requirements. Please ensure it contains uppercase, lowercase, number, and special character.');
-                    } else {
-                        setError(data.message);
-                    }
-                } else if (response.status === 400) {
-                    setError('Invalid registration data. Please check all fields and try again.');
-                } else if (response.status === 409) {
-                    setError('Account already exists with this information. Please try logging in instead.');
-                } else if (response.status === 500) {
-                    setError('Server error occurred. Please try again later.');
+                if (data.message && data.message.includes('email')) {
+                    setError('This email address is already registered. Please try logging in instead.');
                 } else {
-                    setError('Registration failed. Please check your information and try again.');
+                    setError(data.message || 'Registration failed. Please try again.');
                 }
             }
         } catch (error) {
-            if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                setError('Network error. Please check your internet connection and try again.');
-            } else {
-                setError('An unexpected error occurred. Please try again.');
-            }
+            setError('Network error. Please check your connection and try again.');
         } finally {
             setLoading(false);
         }
@@ -567,54 +525,7 @@ function SignUpPopup() {
 													</div>
 												</div>
 
-												<div className="col-lg-12">
-													<div className="form-group mb-3 position-relative">
-														<input
-															name="password"
-															type={showCandidatePassword ? "text" : "password"}
-															className={`form-control ${fieldErrors.password ? 'is-invalid' : ''}`}
-															placeholder="Password*"
-															value={candidateData.password}
-															autoComplete="new-password"
-															onChange={handleCandidateChange}
-															required
-														/>
-														<span
-															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none' }}
-															onClick={() => setShowCandidatePassword(!showCandidatePassword)}
-														>
-															<i className={showCandidatePassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</span>
-														{fieldErrors.password && (
-															<div className="invalid-feedback d-block">{fieldErrors.password}</div>
-														)}
-													</div>
-												</div>
 
-												<div className="col-lg-12">
-													<div className="form-group mb-3 position-relative">
-														<input
-															name="confirmPassword"
-															type={showCandidateConfirmPassword ? "text" : "password"}
-															className={`form-control ${fieldErrors.confirmPassword ? 'is-invalid' : ''}`}
-															placeholder="Confirm Password*"
-															value={candidateData.confirmPassword}
-															autoComplete="new-password"
-															onChange={handleCandidateChange}
-															required
-														/>
-														<span
-															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none' }}
-															onClick={() => setShowCandidateConfirmPassword(!showCandidateConfirmPassword)}
-														>
-															<i className={showCandidateConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</span>
-														{passwordError && <small className="text-danger d-block">{passwordError}</small>}
-														{fieldErrors.confirmPassword && (
-															<div className="invalid-feedback d-block">{fieldErrors.confirmPassword}</div>
-														)}
-													</div>
-												</div>
 												
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
@@ -648,7 +559,7 @@ function SignUpPopup() {
 													</div>
 												</div>
 												<div className="col-md-12">
-													<button type="submit" style={{ width: "100%", maxWidth: "none", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer" }} disabled={loading || passwordError}>
+													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading || passwordError}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -816,7 +727,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" style={{ width: "100%", maxWidth: "none", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer" }} disabled={loading || passwordError}>
+													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading || passwordError}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -985,7 +896,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" style={{ width: "100%", maxWidth: "none", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer" }} disabled={loading || passwordError}>
+													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading || passwordError}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>

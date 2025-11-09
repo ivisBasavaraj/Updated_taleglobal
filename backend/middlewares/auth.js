@@ -21,7 +21,13 @@ const auth = (roles = []) => {
       // Removed auth debug line for security
 
       if (decoded.role === 'candidate') {
-        user = await Candidate.findById(decoded.id).select('-password');
+        user = await Candidate.findById(decoded.id);
+        if (user && !user.password) {
+          return res.status(401).json({ message: 'Please complete your registration by creating a password' });
+        }
+        if (user) {
+          user.password = undefined;
+        }
       } else if (decoded.role === 'employer') {
         user = await Employer.findById(decoded.id).select('-password');
       } else if (decoded.role === 'admin') {

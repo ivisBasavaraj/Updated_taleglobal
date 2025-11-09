@@ -20,6 +20,8 @@ const employerProfileSchema = new mongoose.Schema({
   legalEntityCode: { type: String },
   corporateAddress: { type: String },
   branchLocations: { type: String },
+  pincode: { type: String },
+  city: { type: String },
   officialEmail: { type: String },
   officialMobile: { type: String },
   companyType: { type: String },

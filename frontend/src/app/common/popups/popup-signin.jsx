@@ -115,10 +115,17 @@ function SignInPopup() {
         color: '#f0f6fe',
         border: '1px solid #1967d2',
         borderRadius: '10px',
-        padding: '10px 16px',
-        fontWeight: 600,
+        padding: '22px',
+        fontWeight: 700,
+        fontSize: '22px',
+        minHeight: '70px',
         transition: 'background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease',
-        width: '100%'
+        width: '100%',
+        maxWidth: 'none',
+        minWidth: '100%',
+        display: 'block',
+        boxSizing: 'border-box',
+        flex: '1 1 100%'
     };
 
     const handleButtonEnter = (event) => {

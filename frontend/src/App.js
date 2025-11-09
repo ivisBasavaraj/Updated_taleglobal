@@ -11,6 +11,7 @@ import forceLightMode from "./utils/forceLightMode";
 import "./consolidated-master-styles.css";
 import "./global-icon-color.css";
 import "./ux-improvements.css";
+import "./remove-button-arrows.css";
 
 function App() {
 

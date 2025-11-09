@@ -87,11 +87,16 @@ export const api = {
   },
 
   getCandidateProfile: () => {
+    const token = localStorage.getItem('candidateToken');
+    console.log('Token from localStorage:', token ? 'exists' : 'missing');
+    console.log('Headers being sent:', getAuthHeaders('candidate'));
     return fetch(`${API_BASE_URL}/candidate/profile`, {
       headers: getAuthHeaders('candidate'),
     }).then(async (res) => {
+      console.log('Response status:', res.status);
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({ message: 'Network error' }));
+        console.log('Error data:', errorData);
         throw new Error(`HTTP ${res.status}: ${errorData.message || 'Request failed'}`);
       }
       return res.json();
@@ -236,6 +241,12 @@ export const api = {
     }).then((res) => res.json());
   },
 
+  getEmployerJobById: (jobId) => {
+    return fetch(`${API_BASE_URL}/employer/jobs/${jobId}`, {
+      headers: getAuthHeaders('employer'),
+    }).then((res) => res.json());
+  },
+
   updateJob: (jobId, jobData) => {
     return fetch(`${API_BASE_URL}/employer/jobs/${jobId}`, {
       method: 'PUT',
@@ -268,10 +279,7 @@ export const api = {
 
   getPlacementProfile: () => {
     return fetch(`${API_BASE_URL}/placement/profile`, {
-      headers: {
-        ...getAuthHeaders('placement'),
-        'Cache-Control': 'max-age=300' // 5 minutes cache
-      },
+      headers: getAuthHeaders('placement'),
     }).then(handleApiResponse);
   },
 
@@ -440,10 +448,7 @@ export const api = {
 
   getMyPlacementData: () => {
     return fetch(`${API_BASE_URL}/placement/data`, {
-      headers: {
-        ...getAuthHeaders('placement'),
-        'Cache-Control': 'max-age=60' // 1 minute cache for student data
-      },
+      headers: getAuthHeaders('placement'),
     }).then(handleApiResponse);
   },
 
@@ -452,6 +457,57 @@ export const api = {
       method: 'PUT',
       headers: getAuthHeaders('placement'),
       body: JSON.stringify(data),
+    }).then(handleApiResponse);
+  },
+
+  // Assessment APIs
+  getAssessmentById: (assessmentId) => {
+    return fetch(`${API_BASE_URL}/candidate/assessments/${assessmentId}`, {
+      headers: getAuthHeaders('candidate'),
+    }).then((res) => res.json());
+  },
+
+  getAssessmentForCandidate: (assessmentId) => {
+    return fetch(`${API_BASE_URL}/candidate/assessments/${assessmentId}`, {
+      headers: getAuthHeaders('candidate'),
+    }).then(handleApiResponse);
+  },
+
+  startAssessment: (data) => {
+    return fetch(`${API_BASE_URL}/candidate/assessments/start`, {
+      method: 'POST',
+      headers: getAuthHeaders('candidate'),
+      body: JSON.stringify(data),
+    }).then(handleApiResponse);
+  },
+
+  submitAnswer: (attemptId, questionIndex, selectedAnswer, timeSpent) => {
+    return fetch(`${API_BASE_URL}/candidate/assessments/answer`, {
+      method: 'POST',
+      headers: getAuthHeaders('candidate'),
+      body: JSON.stringify({
+        attemptId,
+        questionIndex,
+        selectedAnswer,
+        timeSpent
+      }),
+    }).then(handleApiResponse);
+  },
+
+  submitAssessment: (attemptId, violations = []) => {
+    return fetch(`${API_BASE_URL}/candidate/assessments/submit`, {
+      method: 'POST',
+      headers: getAuthHeaders('candidate'),
+      body: JSON.stringify({
+        attemptId,
+        violations
+      }),
+    }).then(handleApiResponse);
+  },
+
+  getAssessmentResult: (attemptId) => {
+    return fetch(`${API_BASE_URL}/candidate/assessments/result/${attemptId}`, {
+      headers: getAuthHeaders('candidate'),
     }).then(handleApiResponse);
   },
 };

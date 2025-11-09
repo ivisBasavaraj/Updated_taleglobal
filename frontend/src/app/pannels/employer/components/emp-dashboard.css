@@ -10,7 +10,7 @@
 .emp-dashboard .wt-admin-right-page-header {
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
-  padding: 24px 28px !important;
+  padding: 24px 28px 24px 64px !important;
   margin: 0 !important;
   width: 100% !important;
 }
@@ -277,7 +277,7 @@
 /* Fix profile completion card height */
 .emp-dashboard .col-xl-8 > div,
 .emp-dashboard .col-lg-8 > div {
-  min-height: 350px !important;
+  min-height: 250px !important;
   height: auto !important;
   margin-bottom: 0.5rem !important;
 }

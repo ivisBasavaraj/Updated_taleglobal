@@ -419,6 +419,43 @@ exports.createJob = async (req, res) => {
 
     const jobData = { ...req.body, employerId: req.user._id, status: 'active' };
     
+    // Map assignedAssessment to assessmentId
+    if (jobData.assignedAssessment) {
+      jobData.assessmentId = jobData.assignedAssessment;
+      delete jobData.assignedAssessment;
+    }
+    
+    // Handle nested assessment object from frontend
+    if (jobData.assessment && jobData.assessment.assessmentId) {
+      jobData.assessmentId = jobData.assessment.assessmentId;
+      if (jobData.assessment.fromDate) jobData.assessmentStartDate = jobData.assessment.fromDate;
+      if (jobData.assessment.toDate) jobData.assessmentEndDate = jobData.assessment.toDate;
+      delete jobData.assessment;
+    }
+
+    // If assessment is selected, automatically enable technical interview round
+    if (jobData.assessmentId) {
+      if (!jobData.interviewRoundTypes) {
+        jobData.interviewRoundTypes = {
+          technical: false,
+          managerial: false,
+          nonTechnical: false,
+          final: false,
+          hr: false
+        };
+      }
+      jobData.interviewRoundTypes.technical = true;
+      // Set interview rounds count if not set
+      if (!jobData.interviewRoundsCount || jobData.interviewRoundsCount < 1) {
+        jobData.interviewRoundsCount = 1;
+      }
+    }
+
+    // Remove assessment from interviewRoundTypes (it's stored separately in assessmentId)
+    if (jobData.interviewRoundTypes && jobData.interviewRoundTypes.assessment) {
+      delete jobData.interviewRoundTypes.assessment;
+    }
+    
     // Parse CTC from string format to proper structure
     if (jobData.ctc && typeof jobData.ctc === 'string') {
       const ctcStr = jobData.ctc.trim();
@@ -471,6 +508,20 @@ exports.createJob = async (req, res) => {
     
     const job = await Job.create(jobData);
     console.log('Job created:', JSON.stringify(job, null, 2));
+
+    // If job has assessment, update existing applications to set assessmentStatus to 'available'
+    if (job.assessmentId) {
+      try {
+        await Application.updateMany(
+          { jobId: job._id },
+          { assessmentStatus: 'available' }
+        );
+        console.log('Updated existing applications with assessment status');
+      } catch (updateError) {
+        console.error('Error updating existing applications:', updateError);
+        // Don't fail job creation if this update fails
+      }
+    }
 
     // Clear job-related caches immediately
     cacheInvalidation.clearJobCaches();
@@ -560,14 +611,59 @@ exports.updateJob = async (req, res) => {
       req.body.interviewScheduled = true;
     }
     
+    // Map assignedAssessment to assessmentId
+    if (req.body.assignedAssessment) {
+      req.body.assessmentId = req.body.assignedAssessment;
+      delete req.body.assignedAssessment;
+    }
+    
+    // Handle nested assessment object from frontend
+    if (req.body.assessment && req.body.assessment.assessmentId) {
+      req.body.assessmentId = req.body.assessment.assessmentId;
+      if (req.body.assessment.fromDate) req.body.assessmentStartDate = req.body.assessment.fromDate;
+      if (req.body.assessment.toDate) req.body.assessmentEndDate = req.body.assessment.toDate;
+      delete req.body.assessment;
+    }
+    
+    // Remove assessment from interviewRoundTypes (it's stored separately in assessmentId)
+    if (req.body.interviewRoundTypes && req.body.interviewRoundTypes.assessment) {
+      delete req.body.interviewRoundTypes.assessment;
+    }
+    
+    // Ensure interviewRoundDetails is properly set
+    if (req.body.interviewRoundDetails) {
+      // Clean up empty round details
+      Object.keys(req.body.interviewRoundDetails).forEach(key => {
+        const round = req.body.interviewRoundDetails[key];
+        if (!round || (!round.description && !round.fromDate && !round.toDate && !round.time)) {
+          delete req.body.interviewRoundDetails[key];
+        }
+      });
+    }
+    
     const job = await Job.findOneAndUpdate(
       { _id: req.params.jobId, employerId: req.user._id },
       req.body,
-      { new: true }
+      { new: true, runValidators: false }
     );
+
+    // If assessment was added to the job, update existing applications
+    if (!oldJob.assessmentId && job.assessmentId) {
+      try {
+        await Application.updateMany(
+          { jobId: job._id },
+          { assessmentStatus: 'available' }
+        );
+        console.log('Updated existing applications with assessment status after job update');
+      } catch (updateError) {
+        console.error('Error updating existing applications after job update:', updateError);
+      }
+    }
 
     // Clear job-related caches immediately
     cacheInvalidation.clearJobCaches();
+    // Also clear candidate application caches to ensure they see updated job data
+    cacheInvalidation.clearCandidateApplicationCaches();
 
     // Create notification if interview rounds are newly scheduled or updated
     if (hasScheduledRounds && !wasScheduled) {
@@ -644,6 +740,18 @@ exports.getRecentJobs = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(5);
     res.json({ success: true, jobs });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.getJob = async (req, res) => {
+  try {
+    const job = await Job.findOne({ _id: req.params.jobId, employerId: req.user._id });
+    if (!job) {
+      return res.status(404).json({ success: false, message: 'Job not found' });
+    }
+    res.json({ success: true, job });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

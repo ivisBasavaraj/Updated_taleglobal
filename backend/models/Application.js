@@ -27,6 +27,16 @@ const applicationSchema = new mongoose.Schema({
   notes: { type: String },
   appliedAt: { type: Date, default: Date.now },
   
+  // Assessment fields
+  assessmentStatus: { 
+    type: String, 
+    enum: ['not_required', 'pending', 'available', 'in_progress', 'completed', 'expired'], 
+    default: 'not_required' 
+  },
+  assessmentScore: { type: Number },
+  assessmentPercentage: { type: Number },
+  assessmentResult: { type: String, enum: ['pass', 'fail', 'pending'] },
+  
   // Interview review fields
   interviewRounds: [{
     round: { type: Number, required: true },

@@ -58,6 +58,7 @@ function CanStatusPage() {
 	const [showRoundDetails, setShowRoundDetails] = useState(false);
 	const [selectedRoundDetails, setSelectedRoundDetails] = useState(null);
 	const [selectedRoundType, setSelectedRoundType] = useState(null);
+	const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
 
 	useEffect(() => {
 		loadScript("js/custom.js");
@@ -96,31 +97,34 @@ function CanStatusPage() {
 	const fetchApplications = async () => {
 		setLoading(true);
 		try {
-			
 			const response = await api.getCandidateApplicationsWithInterviews();
 			if (response.success) {
 				const apps = response.applications || response.data || [];
-				
-				
-
-				
+				console.log('Applications received:', apps);
+				if (apps.length > 0) {
+					console.log('First application job data:', apps[0].jobId);
+					console.log('Assessment ID:', apps[0].jobId?.assessmentId);
+					console.log('Interview Round Types:', apps[0].jobId?.interviewRoundTypes);
+					// Log all applications with assessment info
+					apps.forEach((app, idx) => {
+						console.log(`App ${idx + 1} - Job: ${app.jobId?.title}, Has Assessment: ${!!app.jobId?.assessmentId}, Assessment ID: ${app.jobId?.assessmentId}`);
+					});
+				}
 				setApplications(apps);
-			} else {
-				
 			}
 		} catch (error) {
-			
+			console.error('Error fetching applications with interviews:', error);
 			// Fallback to regular applications if new endpoint fails
 			try {
-				
+				console.log('Falling back to regular applications endpoint');
 				const fallbackResponse = await api.getCandidateApplications();
 				if (fallbackResponse.success) {
 					const apps = fallbackResponse.applications || fallbackResponse.data || [];
-					
+					console.log('Fallback applications received:', apps);
 					setApplications(apps);
 				}
 			} catch (fallbackError) {
-				
+				console.error('Fallback also failed:', fallbackError);
 			}
 		} finally {
 			setLoading(false);
@@ -132,16 +136,24 @@ function CanStatusPage() {
 		if (job?.interviewRoundTypes) {
 			const rounds = [];
 			const roundTypes = job.interviewRoundTypes;
-			
-			if (roundTypes.technical) rounds.push('Technical');
+
+			// If assessment is assigned, always show it first
+			if (job.assessmentId) {
+				rounds.push('Assessment');
+			}
+
+			// Show other rounds
+			if (roundTypes.technical && !job.assessmentId) {
+				rounds.push('Technical');
+			}
 			if (roundTypes.hr) rounds.push('HR');
 			if (roundTypes.managerial) rounds.push('Managerial');
 			if (roundTypes.nonTechnical) rounds.push('Non-Technical');
 			if (roundTypes.final) rounds.push('Final');
-			
+
 			if (rounds.length > 0) return rounds;
 		}
-		
+
 		// Default rounds for testing
 		return ['Technical', 'HR', 'Final'];
 	};
@@ -191,10 +203,207 @@ function CanStatusPage() {
 		return { text: 'Not Started', class: 'bg-secondary text-white', feedback: '' };
 	};
 
-	const handleViewRoundDetails = (roundType, roundDetails) => {
+	const handleViewRoundDetails = (roundType, roundDetails, assessmentId = null) => {
 		setSelectedRoundType(roundType);
 		setSelectedRoundDetails(roundDetails);
+		setSelectedAssessmentId(assessmentId);
 		setShowRoundDetails(true);
+	};
+
+	const handleStartAssessment = (application) => {
+		const assessmentId = application.jobId?.assessmentId;
+		if (assessmentId) {
+			navigate('/candidate/start-tech-assessment', {
+				state: {
+					assessmentId,
+					jobId: application.jobId?._id,
+					applicationId: application._id
+				}
+			});
+		}
+	};
+
+	const getAssessmentButton = (application) => {
+		const assessmentStatus = application.assessmentStatus || 'not_required';
+		const job = application.jobId;
+		const hasAssessment = job?.assessmentId;
+
+		// If no assessment is assigned to the job, show default view details
+		if (!hasAssessment) {
+			return (
+				<button
+					className="btn btn-sm"
+					style={{
+						fontSize: '10px',
+						padding: '4px 8px',
+						backgroundColor: 'transparent',
+						border: '1px solid #ff6b35',
+						color: '#ff6b35',
+						whiteSpace: 'nowrap',
+						display: 'flex',
+						alignItems: 'center',
+						gap: '4px',
+						minWidth: '120px',
+						justifyContent: 'flex-start'
+					}}
+					onClick={() => handleViewRoundDetails('Assessment', null, job?.assessmentId)}
+					title="View Assessment Details"
+				>
+					<i className="fa fa-eye" style={{color: '#ff6b35', width: '14px'}}></i>
+					<span>View Details</span>
+				</button>
+			);
+		}
+
+		// Format assessment dates
+		const formatDate = (dateString) => {
+			if (!dateString) return null;
+			return new Date(dateString).toLocaleDateString('en-US', {
+				day: '2-digit',
+				month: 'short',
+				year: 'numeric'
+			});
+		};
+
+		const startDate = formatDate(job?.assessmentStartDate);
+		const endDate = formatDate(job?.assessmentEndDate);
+		const dateDisplay = startDate && endDate ? `${startDate} - ${endDate}` :
+						   startDate ? `From ${startDate}` :
+						   endDate ? `Until ${endDate}` : null;
+
+		switch (assessmentStatus) {
+			case 'available':
+				return (
+					<div style={{display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '120px'}}>
+						<button
+							className="btn btn-sm"
+							style={{
+								fontSize: '10px',
+								padding: '4px 8px',
+								backgroundColor: '#28a745',
+								border: '1px solid #28a745',
+								color: 'white',
+								whiteSpace: 'nowrap',
+								display: 'flex',
+								alignItems: 'center',
+								gap: '4px',
+								width: '100%',
+								justifyContent: 'flex-start'
+							}}
+							onClick={() => handleStartAssessment(application)}
+							title="Start Assessment"
+						>
+							<i className="fa fa-play" style={{color: 'white', width: '14px'}}></i>
+							<span>Start Assessment</span>
+						</button>
+						{dateDisplay && (
+							<small style={{fontSize: '8px', color: '#666', textAlign: 'center'}}>
+								{dateDisplay}
+							</small>
+						)}
+					</div>
+				);
+			case 'in_progress':
+				return (
+					<div style={{display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '120px'}}>
+						<button
+							className="btn btn-sm"
+							style={{
+								fontSize: '10px',
+								padding: '4px 8px',
+								backgroundColor: '#ffc107',
+								border: '1px solid #ffc107',
+								color: '#212529',
+								whiteSpace: 'nowrap',
+								display: 'flex',
+								alignItems: 'center',
+								gap: '4px',
+								width: '100%',
+								justifyContent: 'flex-start'
+							}}
+							onClick={() => handleStartAssessment(application)}
+							title="Continue Assessment"
+						>
+							<i className="fa fa-clock-o" style={{color: '#212529', width: '14px'}}></i>
+							<span>Continue</span>
+						</button>
+						{dateDisplay && (
+							<small style={{fontSize: '8px', color: '#666', textAlign: 'center'}}>
+								{dateDisplay}
+							</small>
+						)}
+					</div>
+				);
+			case 'completed':
+				return (
+					<div style={{display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '120px'}}>
+						<button
+							className="btn btn-sm"
+							style={{
+								fontSize: '10px',
+								padding: '4px 8px',
+								backgroundColor: '#17a2b8',
+								border: '1px solid #17a2b8',
+								color: 'white',
+								whiteSpace: 'nowrap',
+								display: 'flex',
+								alignItems: 'center',
+								gap: '4px',
+								width: '100%',
+								justifyContent: 'flex-start'
+							}}
+							onClick={() => navigate('/candidate/assessment-result', {
+								state: {
+									attemptId: application.assessmentAttemptId,
+									assessmentId: job?.assessmentId,
+									applicationId: application._id
+								}
+							})}
+							title="View Assessment Results"
+						>
+							<i className="fa fa-trophy" style={{color: 'white', width: '14px'}}></i>
+							<span>Results</span>
+						</button>
+						{dateDisplay && (
+							<small style={{fontSize: '8px', color: '#666', textAlign: 'center'}}>
+								{dateDisplay}
+							</small>
+						)}
+					</div>
+				);
+			default:
+				// For jobs with assessment but status not set, default to available
+				return (
+					<div style={{display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '120px'}}>
+						<button
+							className="btn btn-sm"
+							style={{
+								fontSize: '10px',
+								padding: '4px 8px',
+								backgroundColor: '#28a745',
+								border: '1px solid #28a745',
+								color: 'white',
+								whiteSpace: 'nowrap',
+								display: 'flex',
+								alignItems: 'center',
+								gap: '4px',
+								width: '100%',
+								justifyContent: 'flex-start'
+							}}
+							onClick={() => handleStartAssessment(application)}
+							title="Start Assessment"
+						>
+							<i className="fa fa-play" style={{color: 'white', width: '14px'}}></i>
+							<span>Start Assessment</span>
+						</button>
+						{dateDisplay && (
+							<small style={{fontSize: '8px', color: '#666', textAlign: 'center'}}>
+								{dateDisplay}
+							</small>
+						)}
+					</div>
+				);
+		}
 	};
 
 	return (
@@ -248,7 +457,7 @@ function CanStatusPage() {
 				<div className="col-lg-12 col-md-12 mb-4">
 					<div className="card card-shadow border-0">
 						<div className="card-body p-0">
-							<div className="table-responsive">
+							<div className="table-responsive" style={{overflowX: 'auto'}}>
 								<table className="table table-hover mb-0">
 									<thead style={{backgroundColor: '#f8f9fa'}}>
 										<tr>
@@ -353,7 +562,7 @@ function CanStatusPage() {
 															</span>
 														</td>
 														<td className="px-4 py-3">
-															<div className="interview-progress-wrapper">
+															<div className="interview-progress-wrapper" style={{maxHeight: '150px', overflowY: 'auto', overflowX: 'hidden'}}>
 																{interviewRounds.length > 0 ? (
 																	interviewRounds.map((round, roundIndex) => {
 																		const roundStatus = getRoundStatus(app, roundIndex);
@@ -393,9 +602,19 @@ function CanStatusPage() {
 															</span>
 														</td>
 														<td className="px-4 py-3">
-															<div className="view-details-wrapper" style={{display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-start'}}>
+															<div className="view-details-wrapper" style={{display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-start', maxHeight: '150px', overflowY: 'auto', overflowX: 'hidden'}}>
 																{interviewRounds.length > 0 ? (
 																	interviewRounds.map((round, roundIndex) => {
+																		// Special handling for Assessment round
+																		if (round === 'Assessment') {
+																			return (
+																				<div key={roundIndex} style={{marginBottom: '4px'}}>
+																					{getAssessmentButton(app)}
+																				</div>
+																			);
+																		}
+
+																		// Regular interview rounds
 																		const roundTypeMap = {
 																			'Technical': 'technical',
 																			'HR': 'hr',
@@ -406,16 +625,17 @@ function CanStatusPage() {
 																		const roundKey = roundTypeMap[round];
 																		const roundDetails = app.jobId?.interviewRoundDetails?.[roundKey];
 																		return (
-																			<button
-																				key={roundIndex}
-																				className="btn btn-sm"
-																				style={{fontSize: '10px', padding: '4px 8px', backgroundColor: 'transparent', border: '1px solid #ff6b35', color: '#ff6b35 !important', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px', minWidth: '120px', justifyContent: 'flex-start'}}
-																				onClick={() => handleViewRoundDetails(roundKey, roundDetails)}
-																				title={`View ${round} details`}
-																			>
-																				<i className="fa fa-eye" style={{color: '#ff6b35', width: '14px'}}></i>
-																				<span style={{color: '#ff6b35'}}>{round}</span>
-																			</button>
+																			<div key={roundIndex} style={{marginBottom: '4px'}}>
+																				<button
+																					className="btn btn-sm"
+																					style={{fontSize: '10px', padding: '4px 8px', backgroundColor: 'transparent', border: '1px solid #ff6b35', color: '#ff6b35 !important', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px', minWidth: '120px', justifyContent: 'flex-start'}}
+																					onClick={() => handleViewRoundDetails(roundKey, roundDetails)}
+																					title={`View ${round} details`}
+																				>
+																					<i className="fa fa-eye" style={{color: '#ff6b35', width: '14px'}}></i>
+																					<span style={{color: '#ff6b35'}}>{round}</span>
+																				</button>
+																			</div>
 																		);
 																	})
 																) : (
@@ -442,6 +662,7 @@ function CanStatusPage() {
 				onClose={() => setShowRoundDetails(false)}
 				roundDetails={selectedRoundDetails}
 				roundType={selectedRoundType}
+				assessmentId={selectedAssessmentId}
 			/>
 		</>
 	);

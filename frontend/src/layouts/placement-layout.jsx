@@ -9,7 +9,7 @@ function PlacementLayout() {
             <div className="page-wraper" style={{background: '#f8f9fa'}}>
                 {/* Top Navigation Bar */}
                 <nav className="navbar navbar-expand-lg" style={{
-                    background: '#ff6b35',
+                    background: '#FF8237',
                     boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
                 }}>
                     <div className="container-fluid px-4">
@@ -36,9 +36,20 @@ function PlacementLayout() {
                                 Logout
                             </button>
                             <style>{`
+                                .logout-btn {
+                                    color: #FF8237 !important;
+                                    border-color: #ffffff !important;
+                                    background-color: #ffffff !important;
+                                }
+                                .logout-btn i {
+                                    color: #FF8237 !important;
+                                }
                                 .logout-btn:hover {
                                     background-color: #ffffff !important;
-                                    color: #ff6b35 !important;
+                                    color: #FF8237 !important;
+                                }
+                                .logout-btn:hover i {
+                                    color: #FF8237 !important;
                                 }
                             `}</style>
                         </div>

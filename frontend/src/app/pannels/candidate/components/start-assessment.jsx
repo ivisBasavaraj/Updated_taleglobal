@@ -1,14 +1,107 @@
 
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { FaClock } from "react-icons/fa";
-
-
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import TermsModal from "./TermsModal";
+import AssessmentQuiz from "./AssessmentQuiz";
+import AssessmentResult from "./AssessmentResult";
 
 const StartAssessment = () => {
-	const { id } = useParams(); // ✅ Get the dynamic ID from route
-
+	const location = useLocation();
 	const navigate = useNavigate();
+	const { assessmentId, jobId, applicationId } = location.state || {};
+
+	 const [showTerms, setShowTerms] = useState(true);
+	const [assessment, setAssessment] = useState(null);
+	const [attemptId, setAttemptId] = useState(null);
+	const [result, setResult] = useState(null);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		if (assessmentId) {
+			fetchAssessment();
+		}
+	}, [assessmentId]);
+
+	const fetchAssessment = async () => {
+		try {
+			const token = localStorage.getItem('candidateToken');
+			const response = await axios.get(`/api/candidate/assessments/${assessmentId}`, {
+				headers: { Authorization: `Bearer ${token}` }
+			});
+			if (response.data.success) {
+				setAssessment(response.data.assessment);
+			}
+		} catch (error) {
+			console.error('Error fetching assessment:', error);
+			alert('Failed to load assessment');
+			navigate('/candidate/dashboard');
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleAcceptTerms = async () => {
+		try {
+			const token = localStorage.getItem('candidateToken');
+			const response = await axios.post('/api/candidate/assessments/start', {
+				assessmentId,
+				jobId,
+				applicationId
+			}, {
+				headers: { Authorization: `Bearer ${token}` }
+			});
+			if (response.data.success) {
+				setAttemptId(response.data.attempt._id);
+				setShowTerms(false);
+			}
+		} catch (error) {
+			console.error('Error starting assessment:', error);
+			alert('Failed to start assessment');
+		}
+	};
+
+	const handleDeclineTerms = () => {
+		navigate('/candidate/dashboard');
+	};
+
+	const handleComplete = (resultData) => {
+		setResult(resultData);
+	};
+
+	if (loading) {
+		return <div className="container mt-5"><p>Loading...</p></div>;
+	}
+
+	if (!assessment) {
+		return <div className="container mt-5"><p>Assessment not found</p></div>;
+	}
+
+	if (result) {
+		return <AssessmentResult result={result} />;
+	}
+
+	if (showTerms) {
+		return (
+			<TermsModal
+				isOpen={showTerms}
+				onAccept={handleAcceptTerms}
+				onDecline={handleDeclineTerms}
+				assessment={assessment}
+			/>
+		);
+	}
+
+	return (
+		<AssessmentQuiz
+			assessment={assessment}
+			attemptId={attemptId}
+			onComplete={handleComplete}
+		/>
+	);
+};
+
+export default StartAssessment;
 
 	const handleSubmit = () => {
 		const results = {

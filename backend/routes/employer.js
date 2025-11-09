@@ -58,6 +58,7 @@ router.post('/jobs', [
   body('jobType').isIn(['full-time', 'part-time', 'contract', 'internship', 'internship-(paid)', 'internship-(unpaid)', 'work-from-home']).withMessage('Invalid job type')
 ], handleValidationErrors, employerController.createJob);
 
+router.get('/jobs/:jobId', employerController.getJob);
 router.put('/jobs/:jobId', employerController.updateJob);
 router.delete('/jobs/:jobId', employerController.deleteJob);
 
@@ -95,5 +96,15 @@ router.put('/subscription', employerController.updateSubscription);
 router.get('/notifications', employerController.getNotifications);
 router.patch('/notifications/:id/read', employerController.markNotificationAsRead);
 router.patch('/notifications/read-all', employerController.markAllNotificationsAsRead);
+
+// Assessment Routes
+const assessmentController = require('../controllers/assessmentController');
+router.post('/assessments', assessmentController.createAssessment);
+router.get('/assessments', assessmentController.getAssessments);
+router.get('/assessments/:id', assessmentController.getAssessmentDetails);
+router.put('/assessments/:id', assessmentController.updateAssessment);
+router.delete('/assessments/:id', assessmentController.deleteAssessment);
+router.get('/assessments/:id/results', assessmentController.getAssessmentResults);
+router.get('/assessment-attempts/:attemptId', assessmentController.getAttemptDetails);
 
 module.exports = router;

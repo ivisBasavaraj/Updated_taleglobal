@@ -4,6 +4,7 @@ import { NavLink, useParams } from "react-router-dom";
 import { employer, empRoute, publicUser } from "../../../../../globals/route-names";
 import { holidaysApi } from "../../../../../utils/holidaysApi";
 import HolidayIndicator from "../../../../../components/HolidayIndicator";
+import { api } from "../../../../../utils/api";
 
 export default function EmpPostJob({ onNext }) {
 	const { id } = useParams();
@@ -30,6 +31,7 @@ export default function EmpPostJob({ onNext }) {
 			nonTechnical: false,
 			final: false,
 			hr: false,
+			assessment: false,
 		},
 		interviewRoundOrder: [],
 		interviewRoundDetails: {
@@ -37,7 +39,8 @@ export default function EmpPostJob({ onNext }) {
 			nonTechnical: { description: '', fromDate: '', toDate: '', time: '' },
 			managerial: { description: '', fromDate: '', toDate: '', time: '' },
 			final: { description: '', fromDate: '', toDate: '', time: '' },
-			hr: { description: '', fromDate: '', toDate: '', time: '' }
+			hr: { description: '', fromDate: '', toDate: '', time: '' },
+			assessment: { description: '', fromDate: '', toDate: '', time: '' }
 		},
 		offerLetterDate: "",
 		joiningDate: "",
@@ -63,6 +66,8 @@ export default function EmpPostJob({ onNext }) {
 	const [employerType, setEmployerType] = useState('company');
 	const [logoFile, setLogoFile] = useState(null);
 	const [isMobile, setIsMobile] = useState(false);
+	const [availableAssessments, setAvailableAssessments] = useState([]);
+	const [selectedAssessment, setSelectedAssessment] = useState('');
 
 	/* Helpers */
 	const update = (patch) => setFormData((s) => ({ ...s, ...patch }));
@@ -97,6 +102,7 @@ export default function EmpPostJob({ onNext }) {
 			}
 		}
 		fetchEmployerType();
+		fetchAssessments();
 		
 		// Mobile detection
 		const checkMobile = () => {
@@ -108,6 +114,91 @@ export default function EmpPostJob({ onNext }) {
 		
 		return () => window.removeEventListener('resize', checkMobile);
 	}, [id, isEditMode]);
+
+	const fetchAssessments = async () => {
+		try {
+			const token = localStorage.getItem('employerToken');
+			const response = await fetch('http://localhost:5000/api/employer/assessments', {
+				headers: { 'Authorization': `Bearer ${token}` }
+			});
+			const data = await response.json();
+			if (data.success) {
+				setAvailableAssessments(data.assessments || []);
+			}
+		} catch (error) {
+			console.error('Failed to fetch assessments:', error);
+		}
+	};
+
+	const fetchJobData = async () => {
+		try {
+			const token = localStorage.getItem('employerToken');
+			const response = await fetch(`http://localhost:5000/api/employer/jobs/${id}`, {
+				headers: { 'Authorization': `Bearer ${token}` }
+			});
+			const data = await response.json();
+			if (data.success) {
+				const job = data.job;
+
+				// Populate form with job data
+				update({
+					jobTitle: job.title || '',
+					jobLocation: job.location || '',
+					jobType: job.jobType || '',
+					netSalary: job.netSalary || '',
+					ctc: job.ctc ? (typeof job.ctc === 'object' ? `${job.ctc.min}-${job.ctc.max}` : job.ctc) : '',
+					vacancies: job.vacancies || '',
+					applicationLimit: job.applicationLimit || '',
+					jobDescription: job.description || '',
+					education: job.education || '',
+					backlogsAllowed: job.backlogsAllowed || false,
+					requiredSkills: job.requiredSkills || [],
+					experienceLevel: job.experienceLevel || 'freshers',
+					minExperience: job.minExperience || '',
+					interviewRoundsCount: job.interviewRoundsCount || '',
+					interviewRoundTypes: job.interviewRoundTypes || {
+						technical: false,
+						managerial: false,
+						nonTechnical: false,
+						final: false,
+						hr: false,
+					},
+					interviewRoundDetails: job.interviewRoundDetails || {
+						technical: { description: '', fromDate: '', toDate: '', time: '' },
+						nonTechnical: { description: '', fromDate: '', toDate: '', time: '' },
+						managerial: { description: '', fromDate: '', toDate: '', time: '' },
+						final: { description: '', fromDate: '', toDate: '', time: '' },
+						hr: { description: '', fromDate: '', toDate: '', time: '' },
+					},
+					offerLetterDate: job.offerLetterDate ? job.offerLetterDate.split('T')[0] : '',
+					joiningDate: job.lastDateOfApplication ? job.lastDateOfApplication.split('T')[0] : '',
+					lastDateOfApplication: job.lastDateOfApplication ? job.lastDateOfApplication.split('T')[0] : '',
+					transportation: job.transportation || {
+						oneWay: false,
+						twoWay: false,
+						noCab: false,
+					},
+					interviewMode: job.interviewMode || {
+						faceToFace: false,
+						phone: false,
+						videoCall: false,
+						documentVerification: false,
+					},
+					companyLogo: job.companyLogo || '',
+					companyName: job.companyName || '',
+					companyDescription: job.companyDescription || '',
+					category: job.category || ''
+				});
+
+				// Set selected assessment
+				if (job.assessmentId) {
+					setSelectedAssessment(job.assessmentId._id || job.assessmentId);
+				}
+			}
+		} catch (error) {
+			console.error('Failed to fetch job data:', error);
+		}
+	};
 
 	const fetchEmployerType = async () => {
 		try {
@@ -140,73 +231,7 @@ export default function EmpPostJob({ onNext }) {
 		}
 	};
 
-	const fetchJobData = async () => {
-		try {
-			const token = localStorage.getItem('employerToken');
-			const response = await fetch('http://localhost:5000/api/employer/jobs', {
-				headers: { 'Authorization': `Bearer ${token}` }
-			});
-			const data = await response.json();
-			if (data.success) {
-				const job = data.jobs.find(j => j._id === id);
-				if (job) {
-					setFormData({
-						jobTitle: job.title || '',
-						jobLocation: job.location || '',
-						jobType: job.jobType || '',
-						ctc: job.ctc && job.ctc.min ? (job.ctc.min === job.ctc.max ? (job.ctc.min/100000).toString() : `${(job.ctc.min/100000).toFixed(1)}-${(job.ctc.max/100000).toFixed(1)}`) : '',
-						netSalary: job.netSalary && job.netSalary.min ? (job.netSalary.min === job.netSalary.max ? (job.netSalary.min/1000).toString() : `${(job.netSalary.min/1000).toFixed(0)}-${(job.netSalary.max/1000).toFixed(0)}`) : '',
-						vacancies: job.vacancies || '',
-						applicationLimit: job.applicationLimit || '',
-						jobDescription: job.description || '',
-						education: job.education || '',
-						backlogsAllowed: job.backlogsAllowed || false,
-						requiredSkills: job.requiredSkills || [],
-						experienceLevel: job.experienceLevel || 'freshers',
-						minExperience: job.minExperience || '',
-						interviewRoundsCount: job.interviewRoundsCount || '',
-						interviewRoundTypes: job.interviewRoundTypes || {
-							technical: false,
-							managerial: false,
-							nonTechnical: false,
-							final: false,
-							hr: false,
-						},
-						interviewRoundOrder: job.interviewRoundOrder || [],
-						interviewRoundDetails: job.interviewRoundDetails || {
-							technical: { description: '', fromDate: '', toDate: '', time: '' },
-							nonTechnical: { description: '', fromDate: '', toDate: '', time: '' },
-							managerial: { description: '', fromDate: '', toDate: '', time: '' },
-							final: { description: '', fromDate: '', toDate: '', time: '' },
-							hr: { description: '', fromDate: '', toDate: '', time: '' }
-						},
-						offerLetterDate: job.offerLetterDate ? job.offerLetterDate.split('T')[0] : '',
-						lastDateOfApplication: job.lastDateOfApplication ? job.lastDateOfApplication.split('T')[0] : '',
-						transportation: job.transportation || {
-							oneWay: false,
-							twoWay: false,
-							noCab: false,
-						},
-						// Consultant fields
-						companyLogo: job.companyLogo || '',
-						companyName: job.companyName || '',
-						companyDescription: job.companyDescription || '',
-						category: job.category || '',
-						skillInput: '',
-						joiningDate: '',
-						interviewMode: {
-							faceToFace: false,
-							phone: false,
-							videoCall: false,
-							documentVerification: false,
-						}
-					});
-				}
-			}
-		} catch (error) {
-			
-		}
-	};
+
 
 	/* Skills logic */
 	const addSkill = () => {
@@ -376,6 +401,7 @@ export default function EmpPostJob({ onNext }) {
 				interviewRoundsCount: parseInt(formData.interviewRoundsCount) || 0,
 				interviewRoundTypes: formData.interviewRoundTypes,
 				interviewRoundDetails: formData.interviewRoundDetails,
+				assignedAssessment: selectedAssessment || null,
 				offerLetterDate: formData.offerLetterDate || null,
 				lastDateOfApplication: formData.lastDateOfApplication || null,
 				transportation: formData.transportation,
@@ -1122,22 +1148,126 @@ export default function EmpPostJob({ onNext }) {
 					<div style={fullRow}>
 						<label style={label}>
 							<i className="fa fa-list-check" style={{marginRight: '8px', color: '#ff6b35'}}></i>
-							Interview Round Types
-							<span style={{
-								fontSize: 12, 
-								color: '#10b981', 
-								fontWeight: 500,
-								marginLeft: 8,
-								background: '#d1fae5',
-								padding: '2px 8px',
-								borderRadius: 4,
-							}}>
-								{Object.values(formData.interviewRoundTypes).filter(Boolean).length} selected
-							</span>
+							Select Interview Round Type
 						</label>
+						<select
+							style={{ ...input, cursor: 'pointer' }}
+							value=""
+							onChange={(e) => {
+								const roundType = e.target.value;
+								if (roundType && !formData.interviewRoundTypes[roundType]) {
+									toggleNested('interviewRoundTypes', roundType);
+								}
+							}}
+						>
+							<option value="">-- Select Round Type --</option>
+							<option value="technical">Technical</option>
+							<option value="nonTechnical">Non-Technical</option>
+							<option value="managerial">Managerial Round</option>
+							<option value="final">Final Round</option>
+							<option value="hr">HR Round</option>
+							<option value="assessment">Assessment</option>
+						</select>
+						<div style={{marginTop: 12}}>
+							<label style={{...label, marginBottom: 8}}>Selected Rounds:</label>
+							{Object.entries(formData.interviewRoundTypes)
+								.filter(([key, value]) => value)
+								.map(([roundType], index) => {
+									const roundNames = {
+										technical: 'Technical',
+										nonTechnical: 'Non-Technical',
+										managerial: 'Managerial Round',
+										final: 'Final Round',
+										hr: 'HR Round',
+										assessment: 'Assessment'
+									};
+									return (
+										<div key={roundType} style={{
+											display: 'inline-flex',
+											alignItems: 'center',
+											gap: 8,
+											padding: '8px 12px',
+											background: '#e7f3ff',
+											borderRadius: 20,
+											border: '1px solid #b3d9ff',
+											marginRight: 8,
+											marginBottom: 8
+										}}>
+											<span style={{fontSize: 13, fontWeight: 500, color: '#0066cc'}}>{index + 1}. {roundNames[roundType]}</span>
+											<span 
+												style={{cursor: 'pointer', color: '#ef4444', fontWeight: 700, fontSize: 16}}
+												onClick={() => toggleNested('interviewRoundTypes', roundType)}
+												title="Remove"
+											>
+												×
+											</span>
+										</div>
+									);
+								})}
+						</div>
+					</div>
+
+					{/* Assessment Selection - Only show when Assessment is selected */}
+					{formData.interviewRoundTypes.assessment && (
+						<>
+							<div style={fullRow}>
+								<label style={label}>
+									<i className="fa fa-clipboard-check" style={{marginRight: '8px', color: '#ff6b35'}}></i>
+									Select Assessment
+								</label>
+								<select
+									style={{ ...input, cursor: 'pointer' }}
+									value={selectedAssessment}
+									onChange={(e) => setSelectedAssessment(e.target.value)}
+								>
+									<option value="">-- Select Assessment --</option>
+									{availableAssessments.map((assessment) => (
+										<option key={assessment._id} value={assessment._id}>
+											{assessment.title}
+										</option>
+									))}
+								</select>
+							</div>
+							<div style={fullRow}>
+								<h4 style={{ margin: "16px 0 12px 0", fontSize: 15, color: "#0f172a" }}>Assessment Schedule</h4>
+								<div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 8 : 12 }}>
+									<div>
+										<label style={{...label, marginBottom: 4}}>
+											<i className="fa fa-calendar" style={{marginRight: 4, color: '#ff6b35'}}></i>
+											From Date
+										</label>
+										<input
+											style={{...input, fontSize: 13}}
+											type="date"
+											min={new Date().toISOString().split('T')[0]}
+											value={formData.interviewRoundDetails.assessment?.fromDate || ''}
+											onChange={(e) => updateRoundDetails('assessment', 'fromDate', e.target.value)}
+										/>
+										<HolidayIndicator date={formData.interviewRoundDetails.assessment?.fromDate} />
+									</div>
+									<div>
+										<label style={{...label, marginBottom: 4}}>
+											<i className="fa fa-calendar" style={{marginRight: 4, color: '#ff6b35'}}></i>
+											To Date
+										</label>
+										<input
+											style={{...input, fontSize: 13}}
+											type="date"
+											min={new Date().toISOString().split('T')[0]}
+											value={formData.interviewRoundDetails.assessment?.toDate || ''}
+											onChange={(e) => updateRoundDetails('assessment', 'toDate', e.target.value)}
+										/>
+										<HolidayIndicator date={formData.interviewRoundDetails.assessment?.toDate} />
+									</div>
+								</div>
+							</div>
+						</>
+					)}
+
+					<div style={fullRow}>
 						<div
 							style={{
-								display: "grid",
+								display: "none",
 								gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
 								gap: isMobile ? 8 : 12,
 								padding: 16,
@@ -1324,24 +1454,60 @@ export default function EmpPostJob({ onNext }) {
 								/>
 								<span style={{fontSize: 14, fontWeight: 500}}>HR Round</span>
 							</label>
+
+							<label style={{ 
+								display: "flex", 
+								alignItems: "center", 
+								gap: 10,
+								cursor: 'pointer',
+								padding: 8,
+								borderRadius: 6,
+								transition: 'background 0.2s',
+							}}
+							onMouseEnter={(e) => e.currentTarget.style.background = '#fff'}
+							onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+							>
+								<span style={{
+									fontSize: 12, 
+									color: '#fff', 
+									minWidth: '20px',
+									height: '20px',
+									background: formData.interviewRoundTypes.assessment ? '#10b981' : '#d1d5db',
+									borderRadius: '50%',
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+									fontWeight: 600,
+								}}>
+									{formData.interviewRoundTypes.assessment ? (formData.interviewRoundOrder || []).indexOf('assessment') + 1 : ''}
+								</span>
+								<input
+									type="checkbox"
+									checked={formData.interviewRoundTypes.assessment}
+									onChange={() => toggleNested("interviewRoundTypes", "assessment")}
+									style={{cursor: 'pointer'}}
+								/>
+								<span style={{fontSize: 14, fontWeight: 500}}>Assessment</span>
+							</label>
 						</div>
 					</div>
 
-					{/* Interview Round Details */}
-					{Object.entries(formData.interviewRoundTypes).some(([key, value]) => value) && (
+					{/* Interview Round Details - Only show for non-assessment rounds */}
+					{Object.entries(formData.interviewRoundTypes).some(([key, value]) => value && key !== 'assessment') && (
 						<div style={fullRow}>
 							<h4 style={{ margin: "16px 0 12px 0", fontSize: 15, color: "#0f172a" }}>
 								Interview Round Details
 							</h4>
 							{Object.entries(formData.interviewRoundTypes)
-								.filter(([key, value]) => value)
+								.filter(([key, value]) => value && key !== 'assessment')
 								.map(([roundType]) => {
 									const roundNames = {
 										technical: 'Technical Round',
 										nonTechnical: 'Non-Technical Round',
 										managerial: 'Managerial Round',
 										final: 'Final Round',
-										hr: 'HR Round'
+										hr: 'HR Round',
+										assessment: 'Assessment'
 									};
 									return (
 										<div key={roundType} style={{ 
@@ -1360,7 +1526,7 @@ export default function EmpPostJob({ onNext }) {
 													<textarea
 														style={{...input, minHeight: '60px', fontSize: 13}}
 														placeholder={`Describe the ${roundNames[roundType].toLowerCase()}...`}
-														value={formData.interviewRoundDetails[roundType].description}
+																						value={formData.interviewRoundDetails[roundType]?.description || ''}
 														onChange={(e) => updateRoundDetails(roundType, 'description', e.target.value)}
 													/>
 												</div>
@@ -1373,10 +1539,10 @@ export default function EmpPostJob({ onNext }) {
 														style={{...input, fontSize: 13}}
 														type="date"
 														min={new Date().toISOString().split('T')[0]}
-														value={formData.interviewRoundDetails[roundType].fromDate}
+														value={formData.interviewRoundDetails[roundType]?.fromDate || ''}
 														onChange={(e) => updateRoundDetails(roundType, 'fromDate', e.target.value)}
 													/>
-													<HolidayIndicator date={formData.interviewRoundDetails[roundType].fromDate} />
+													<HolidayIndicator date={formData.interviewRoundDetails[roundType]?.fromDate} />
 												</div>
 												<div>
 													<label style={{...label, marginBottom: 4}}>
@@ -1387,17 +1553,17 @@ export default function EmpPostJob({ onNext }) {
 														style={{...input, fontSize: 13}}
 														type="date"
 														min={new Date().toISOString().split('T')[0]}
-														value={formData.interviewRoundDetails[roundType].toDate}
+														value={formData.interviewRoundDetails[roundType]?.toDate || ''}
 														onChange={(e) => updateRoundDetails(roundType, 'toDate', e.target.value)}
 													/>
-													<HolidayIndicator date={formData.interviewRoundDetails[roundType].toDate} />
+													<HolidayIndicator date={formData.interviewRoundDetails[roundType]?.toDate} />
 												</div>
 												<div>
 													<label style={{...label, marginBottom: 4}}>Time</label>
 													<input
 														style={{...input, fontSize: 13}}
 														type="time"
-														value={formData.interviewRoundDetails[roundType].time}
+														value={formData.interviewRoundDetails[roundType]?.time || ''}
 														onChange={(e) => updateRoundDetails(roundType, 'time', e.target.value)}
 													/>
 												</div>

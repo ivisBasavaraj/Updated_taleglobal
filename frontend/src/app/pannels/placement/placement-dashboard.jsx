@@ -222,14 +222,11 @@ function PlacementDashboard() {
                 if (data.success && data.fileData) {
                     const cleanedData = data.fileData.map(row => {
                         return {
-                            'ID': row.ID || row.id || row.Id || '',
-                            'Candidate Name': row['Candidate Name'] || row['candidate name'] || row['CANDIDATE NAME'] || row.Name || row.name || row.NAME || row['Full Name'] || row['Student Name'] || '',
-                            'College Name': row['College Name'] || row['college name'] || row['COLLEGE NAME'] || row.College || row.college || row.COLLEGE || '',
-                            'Email': row.Email || row.email || row.EMAIL || '',
-                            'Phone': row.Phone || row.phone || row.PHONE || row.Mobile || row.mobile || row.MOBILE || '',
-                            'Course': row.Course || row.course || row.COURSE || row.Branch || row.branch || row.BRANCH || 'Not Specified',
-                            'Password': row.Password || row.password || row.PASSWORD || '',
-                            'Credits': row['Credits Assigned'] || row['credits assigned'] || row['CREDITS ASSIGNED'] || row.Credits || row.credits || row.CREDITS || row.Credit || row.credit || '0'
+                            name: row['Candidate Name'] || row['candidate name'] || row['CANDIDATE NAME'] || row.Name || row.name || row.NAME || row['Full Name'] || row['Student Name'] || '',
+                            email: row.Email || row.email || row.EMAIL || '',
+                            phone: row.Phone || row.phone || row.PHONE || row.Mobile || row.mobile || row.MOBILE || '',
+                            course: row.Course || row.course || row.COURSE || row.Branch || row.branch || row.BRANCH || 'Not Specified',
+                            credits: row['Credits Assigned'] || row['credits assigned'] || row['CREDITS ASSIGNED'] || row.Credits || row.credits || row.CREDITS || row.Credit || row.credit || '0'
                         };
                     });
                     setStudentData(cleanedData);
@@ -240,7 +237,7 @@ function PlacementDashboard() {
                 alert('Unable to view file. Please try again.');
             }
         } catch (error) {
-            
+            console.error('Error viewing file:', error);
             alert('Error viewing file. Please try again.');
         }
     };
@@ -501,7 +498,7 @@ function PlacementDashboard() {
                     <div className="col-md-2 text-center">
                         {placementData?.logo ? (
                             <img 
-                                src={placementData.logo} 
+                                src={placementData.logo.startsWith('data:') ? placementData.logo : `data:image/jpeg;base64,${placementData.logo}`} 
                                 alt="College Logo" 
                                 style={{
                                     width: '100px',
@@ -544,7 +541,7 @@ function PlacementDashboard() {
                     <div className="col-md-2 text-center">
                         {placementData?.idCard ? (
                             <img 
-                                src={placementData.idCard} 
+                                src={placementData.idCard.startsWith('data:') ? placementData.idCard : `data:image/jpeg;base64,${placementData.idCard}`} 
                                 alt="ID Card" 
                                 style={{
                                     width: '100px',
@@ -804,7 +801,7 @@ function PlacementDashboard() {
                                                 </div>
                                                 <div className="mt-1">
                                                     {file.status === 'processed' ? (
-                                                        <span className="badge badge-success" style={{fontSize: '0.7rem'}}>
+                                                        <span className="badge" style={{fontSize: '0.7rem', backgroundColor: '#d4edda', color: '#155724'}}>
                                                             <i className="fa fa-check-circle mr-1"></i>Processed - Login Ready
                                                         </span>
                                                     ) : file.status === 'approved' ? (
@@ -816,7 +813,7 @@ function PlacementDashboard() {
                                                             <i className="fa fa-times mr-1"></i>Rejected
                                                         </span>
                                                     ) : (
-                                                        <span className="badge badge-warning" style={{fontSize: '0.7rem'}}>
+                                                        <span className="badge" style={{fontSize: '0.7rem', backgroundColor: '#fff3cd', color: '#856404'}}>
                                                             <i className="fa fa-clock-o mr-1"></i>Waiting for Admin Approval
                                                         </span>
                                                     )}

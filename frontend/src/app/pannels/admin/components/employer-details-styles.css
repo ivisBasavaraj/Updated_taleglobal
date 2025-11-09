@@ -1,52 +1,45 @@
 /* Employer Details Styles */
 .employer-details-container {
-    background: #fff8f0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
     min-height: 100vh;
     padding: 20px;
 }
 
 .employer-details-header {
-    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-    color: white;
-    padding: 30px;
-    border-radius: 15px;
+    background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
+    border-radius: 12px;
+    border: 1px solid #ffe0b3;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 25px;
     margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
-    position: relative;
-    overflow: hidden;
+    transition: all 0.3s ease;
+    overflow: visible;
 }
 
-.employer-details-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    animation: float 6s ease-in-out infinite;
-}
+
 
 .employer-details-header h2 {
-    font-size: 2.2rem;
+    color: #232323;
     font-weight: 700;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    color: white !important;
+    font-size: 28px;
+    margin: 0;
+    display: flex;
+    align-items: center;
 }
 
 .employer-details-header h2 i {
-    color: white !important;
+    color: #232323;
 }
 
 .employer-details-subtitle {
-    font-size: 1rem;
-    opacity: 0.9;
-    font-weight: 300;
+    color: #666;
+    font-size: 16px;
+    margin-top: 8px;
+    font-weight: 400;
 }
 
 .employer-details-subtitle i {
-    color: white !important;
+    color: #666;
 }
 
 .back-button {
@@ -188,7 +181,7 @@
 
 .documents-table thead th {
     background: #FDC360 !important;
-    color: #ffffff !important;
+    color: #232323 !important;
     font-weight: 700 !important;
     font-size: 0.85rem !important;
     text-transform: uppercase !important;
@@ -619,20 +612,20 @@
 }
 
 .job-count-card {
-    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    background: #FDC360;
     border-radius: 15px;
     padding: 25px;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+    box-shadow: 0 8px 25px rgba(253, 195, 96, 0.3);
     transition: all 0.3s ease;
 }
 
 .job-count-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(255, 107, 53, 0.4);
+    box-shadow: 0 12px 35px rgba(253, 195, 96, 0.4);
 }
 
 .job-count-info {

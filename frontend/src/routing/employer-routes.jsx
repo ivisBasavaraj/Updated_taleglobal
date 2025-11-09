@@ -8,6 +8,7 @@ import EmpResumeAlertsPage from "../app/pannels/employer/components/emp-resume-a
 import Error404Page from "../app/pannels/public-user/components/pages/error404";
 import EmpCandidateReviewPage from "../app/pannels/employer/components/emp-candidate-review";
 import AssessmentDashboard from "../app/pannels/employer/components/pages/AssessmentDashboard";
+import AssessmentResults from "../app/pannels/employer/components/pages/AssessmentResults";
 import EmpPostedJobs from "../app/pannels/employer/components/jobs/emp-posted-jobs";
 import EmpPostJob from "../app/pannels/employer/components/jobs/emp-post-job";
 import EmpJobReviewPage from "../app/pannels/employer/components/emp-job-review";
@@ -24,6 +25,10 @@ function EmployerRoutes() {
 				<Route
 					path={employer.CREATE_ASSESSMENT}
 					element={<AssessmentDashboard />}
+				/>
+				<Route
+					path="/assessment-results/:assessmentId"
+					element={<AssessmentResults />}
 				/>
 				<Route path={employer.CANDIDATES} element={<EmpCandidatesPage />} />
 				<Route path="/candidates-list/:jobId" element={<EmpCandidatesPage />} />

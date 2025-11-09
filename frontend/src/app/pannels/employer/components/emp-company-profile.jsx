@@ -25,6 +25,8 @@ function EmpCompanyProfilePage() {
         legalEntityCode: '',
         corporateAddress: '',
         branchLocations: '',
+        pincode: '',
+        city: '',
         officialEmail: '',
         officialMobile: '',
         officialMobileCountryCode: '+91',
@@ -61,6 +63,7 @@ function EmpCompanyProfilePage() {
     const [loading, setLoading] = useState(false);
     const [authSections, setAuthSections] = useState([{ id: 1, companyName: '' }]);
     const [errors, setErrors] = useState({});
+    const [fetchingCity, setFetchingCity] = useState(false);
 
     useEffect(() => {
         loadScript("js/custom.js");
@@ -155,12 +158,17 @@ function EmpCompanyProfilePage() {
         }
     };
 
-    const handleInputChange = (field, value) => {
+    const handleInputChange = async (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
         
         // Clear error when user starts typing
         if (errors[field]) {
             setErrors(prev => ({ ...prev, [field]: '' }));
+        }
+        
+        // Fetch city when pincode is entered
+        if (field === 'pincode' && value.length === 6) {
+            await fetchCityFromPincode(value);
         }
         
         // Real-time validation for specific fields
@@ -241,6 +249,28 @@ function EmpCompanyProfilePage() {
         }
         
         setErrors(newErrors);
+    };
+
+    const fetchCityFromPincode = async (pincode) => {
+        if (!/^\d{6}$/.test(pincode)) return;
+        
+        setFetchingCity(true);
+        try {
+            const response = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
+            const data = await response.json();
+            
+            if (data && data[0]?.Status === 'Success' && data[0]?.PostOffice?.length > 0) {
+                const city = data[0].PostOffice[0].District;
+                setFormData(prev => ({ ...prev, city }));
+            } else {
+                setFormData(prev => ({ ...prev, city: '' }));
+                alert('Invalid pincode or city not found');
+            }
+        } catch (error) {
+            console.error('Error fetching city:', error);
+        } finally {
+            setFetchingCity(false);
+        }
     };
 
     const validateForm = () => {
@@ -1204,6 +1234,36 @@ function EmpCompanyProfilePage() {
                                         value={formData.branchLocations}
                                         onChange={(e) => handleInputChange('branchLocations', e.target.value)}
                                         placeholder="Enter branch locations"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label><MapPin size={16} className="me-2" /> Pincode</label>
+                                    <input
+                                        className="form-control"
+                                        type="text"
+                                        value={formData.pincode}
+                                        onChange={(e) => handleInputChange('pincode', e.target.value)}
+                                        placeholder="Enter 6-digit pincode"
+                                        maxLength="6"
+                                    />
+                                    {fetchingCity && <small className="text-info">Fetching city...</small>}
+                                </div>
+                            </div>
+
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label><MapPin size={16} className="me-2" /> City</label>
+                                    <input
+                                        className="form-control"
+                                        type="text"
+                                        value={formData.city}
+                                        onChange={(e) => handleInputChange('city', e.target.value)}
+                                        placeholder="City (auto-filled from pincode)"
+                                        readOnly
+                                        style={{backgroundColor: '#f8f9fa'}}
                                     />
                                 </div>
                             </div>

@@ -244,57 +244,48 @@ function AdminSubAdmin() {
                                 </div>
                                 
                                 <div className="table-container">
-                                    <table className="table table-hover align-middle">
-                                        <thead className="table-light">
+                                    <table className="table emp-table">
+                                        <thead>
                                             <tr>
-                                                <th className="fw-semibold text-dark border-0 py-3">Name</th>
-                                                <th className="fw-semibold text-dark border-0 py-3">Username</th>
-                                                <th className="fw-semibold text-dark border-0 py-3">Email</th>
-                                                <th className="fw-semibold text-dark border-0 py-3">Permissions</th>
-                                                <th className="fw-semibold text-dark border-0 py-3 text-center">Actions</th>
+                                                <th>Name</th>
+                                                <th>Username</th>
+                                                <th>Email</th>
+                                                <th>Permissions</th>
+                                                <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {subAdmins.length > 0 ? (
                                                 subAdmins.map((admin) => (
-                                                    <tr key={admin._id} className="border-bottom">
-                                                        <td className="py-3">
-                                                            <div className="d-flex align-items-center">
-                                                                <div className="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" 
-                                                                     style={{ width: '40px', height: '40px', backgroundColor: '#fd7e14' }}>
-                                                                    <i className="fa fa-user text-white"></i>
-                                                                </div>
-                                                                <span className="fw-medium">{admin.name}</span>
-                                                            </div>
+                                                    <tr key={admin._id}>
+                                                        <td>
+                                                            <span className="company-name">{admin.name}</span>
                                                         </td>
-                                                        <td className="py-3 text-muted">{admin.username}</td>
-                                                        <td className="py-3 text-muted">{admin.email}</td>
-                                                        <td className="py-3">
-                                                            <div className="d-flex flex-wrap gap-1">
-                                                                {admin.permissions.map((permission, index) => (
-                                                                    <span key={index} className="badge bg-light text-dark rounded-pill px-2 py-1 small">
-                                                                        {permission.replace('_', ' ')}
-                                                                    </span>
-                                                                ))}
-                                                            </div>
+                                                        <td style={{fontFamily: 'monospace', fontSize: '0.85rem'}}>{admin.username}</td>
+                                                        <td style={{fontFamily: 'monospace', fontSize: '0.85rem'}}>{admin.email}</td>
+                                                        <td style={{fontSize: '0.85rem'}}>
+                                                            {admin.permissions.map((permission, index) => (
+                                                                <span key={index}>
+                                                                    {permission.replace('_', ' ')}{index < admin.permissions.length - 1 ? ', ' : ''}
+                                                                </span>
+                                                            ))}
                                                         </td>
-                                                        <td className="py-3 text-center">
+                                                        <td>
                                                             <div className="action-buttons">
                                                                 <button 
-                                                                    className="btn btn-outline-primary btn-sm rounded-pill touch-friendly"
+                                                                    className="action-btn"
                                                                     onClick={() => handleEdit(admin)}
-                                                                    title="Edit Sub Admin"
-                                                                    style={{ backgroundColor: 'transparent', borderColor: '#ff6b35', color: '#ff6b35' }}
+                                                                    style={{ minWidth: '140px', maxWidth: '140px', width: '140px' }}
                                                                 >
-                                                                    <i className="fa fa-edit me-1"></i>
+                                                                    <i className="fa fa-edit"></i>
                                                                     Edit
                                                                 </button>
                                                                 <button 
-                                                                    className="btn btn-outline-danger btn-sm rounded-pill touch-friendly"
+                                                                    className="action-btn"
                                                                     onClick={() => handleDelete(admin._id)}
-                                                                    title="Delete Sub Admin"
+                                                                    style={{ minWidth: '140px', maxWidth: '140px', width: '140px' }}
                                                                 >
-                                                                    <i className="fa fa-trash me-1"></i>
+                                                                    <i className="fa fa-trash"></i>
                                                                     Delete
                                                                 </button>
                                                             </div>
@@ -303,10 +294,8 @@ function AdminSubAdmin() {
                                                 ))
                                             ) : (
                                                 <tr>
-                                                    <td colSpan="5" className="text-center py-5 text-muted">
-                                                        <i className="fa fa-users fa-3x mb-3 text-muted opacity-50"></i>
-                                                        <div>No sub admins found</div>
-                                                        <small>Click "Add New Sub Admin" to create your first sub admin</small>
+                                                    <td colSpan="5" className="text-center">
+                                                        No sub admins found
                                                     </td>
                                                 </tr>
                                             )}

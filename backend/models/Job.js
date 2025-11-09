@@ -79,6 +79,11 @@ const jobSchema = new mongoose.Schema({
       time: { type: String }
     }
   },
+  assessmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Assessment' },
+  assessmentStartDate: { type: Date },
+  assessmentEndDate: { type: Date },
+  assessmentInstructions: { type: String },
+  assessmentPassingPercentage: { type: Number, default: 60 },
   offerLetterDate: { type: Date },
   lastDateOfApplication: { type: Date },
   transportation: {

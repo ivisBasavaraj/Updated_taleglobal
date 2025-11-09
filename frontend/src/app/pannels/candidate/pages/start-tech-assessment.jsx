@@ -1,86 +1,301 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { FaClock } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { api } from "../../../../utils/api";
+import TermsModal from "../components/TermsModal";
+import ViolationModal from "../components/ViolationModal";
+import AssessmentTerminated from "../components/AssessmentTerminated";
 
 const StartAssessment = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { assessmentId, jobId, applicationId } = location.state || {};
 
-    const handleSubmit = () => {
-			navigate("/candidate/assessment-result", {
-				state: {
-					answers,
-					totalQuestions: assessment.questions.length,
-				},
-			});
-		};
-	// Hardcoded data for demo
-	const assessment = {
-		title: "Technical Assessment - React & JavaScript",
-		timeLimit: 30, // minutes
-		questions: [
-			{
-				question: "Which method is used to update state in React?",
-				options: [
-					"updateState()",
-					"setState()",
-					"changeState()",
-					"modifyState()",
-				],
-			},
-			{
-				question: "What does `===` mean in JavaScript?",
-				options: [
-					"Loose equality",
-					"Strict equality",
-					"Assignment",
-					"Type coercion",
-				],
-			},
-			{
-				question: "What is a closure?",
-				options: [
-					"A function inside a function",
-					"A loop",
-					"A variable",
-					"None",
-				],
-			},
-			{
-				question: "Which hook is used for side effects in React?",
-				options: ["useEffect", "useState", "useReducer", "useMemo"],
-			},
-			{
-				question: "What is JSX?",
-				options: [
-					"A JavaScript syntax extension",
-					"A JavaScript compiler",
-					"A JSON format",
-					"A CSS preprocessor",
-				],
-			},
-		],
-	};
+    // Assessment state
+    const [assessment, setAssessment] = useState(null);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [answers, setAnswers] = useState([]);
+    const [timeLeft, setTimeLeft] = useState(0);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [attemptId, setAttemptId] = useState(null);
+    const [startTime, setStartTime] = useState(null);
 
-	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-	const [answers, setAnswers] = useState(
-		Array(assessment.questions.length).fill(null)
-	);
-	const [timeLeft, setTimeLeft] = useState(assessment.timeLimit * 60);
-	const [isSubmitted, setIsSubmitted] = useState(false);
+    // Security and modal state
+    const [assessmentState, setAssessmentState] = useState('not_started'); // not_started, terms_pending, in_progress, terminated, completed
+    const [showTermsModal, setShowTermsModal] = useState(false);
+    const [showViolationModal, setShowViolationModal] = useState(false);
+    const [currentViolation, setCurrentViolation] = useState(null);
+    const [isTerminated, setIsTerminated] = useState(false);
+    const [terminationReason, setTerminationReason] = useState(null);
+    const [terminationTimestamp, setTerminationTimestamp] = useState(null);
+
+    // Refs for event listeners
+    const assessmentContainerRef = useRef(null);
+    const visibilityChangeListener = useRef(null);
+    const blurListener = useRef(null);
+    const focusListener = useRef(null);
+    const contextMenuListener = useRef(null);
+    const copyListener = useRef(null);
+    const pasteListener = useRef(null);
+
+    // Violation detection functions
+    const logViolation = useCallback(async (violationType, details = '') => {
+        if (!attemptId || assessmentState !== 'in_progress') return;
+
+        try {
+            const timestamp = new Date().toISOString();
+            const response = await api.logAssessmentViolation({
+                attemptId,
+                violationType,
+                timestamp,
+                details
+            });
+
+            if (response.success) {
+                const terminatingViolations = ['tab_switch', 'window_blur', 'right_click', 'copy_attempt'];
+                if (terminatingViolations.includes(violationType)) {
+                    setTerminationReason(violationType);
+                    setTerminationTimestamp(timestamp);
+                    setIsTerminated(true);
+                    setAssessmentState('terminated');
+                    removeSecurityListeners();
+                }
+            }
+        } catch (error) {
+            console.error('Failed to log violation:', error);
+        }
+    }, [attemptId, assessmentState]);
+
+    const handleVisibilityChange = useCallback(() => {
+        if (document.hidden && assessmentState === 'in_progress') {
+            logViolation('tab_switch', 'User switched browser tabs');
+            setCurrentViolation({
+                type: 'tab_switch',
+                timestamp: new Date()
+            });
+            setShowViolationModal(true);
+        }
+    }, [assessmentState, logViolation]);
+
+    const handleWindowBlur = useCallback(() => {
+        if (assessmentState === 'in_progress') {
+            logViolation('window_blur', 'Browser window lost focus');
+            setCurrentViolation({
+                type: 'window_blur',
+                timestamp: new Date()
+            });
+            setShowViolationModal(true);
+        }
+    }, [assessmentState, logViolation]);
+
+    const handleContextMenu = useCallback((e) => {
+        e.preventDefault();
+        if (assessmentState === 'in_progress') {
+            logViolation('right_click', 'Right-click attempted');
+            setCurrentViolation({
+                type: 'right_click',
+                timestamp: new Date()
+            });
+            setShowViolationModal(true);
+        }
+    }, [assessmentState, logViolation]);
+
+    const handleCopy = useCallback((e) => {
+        if (assessmentState === 'in_progress') {
+            e.preventDefault();
+            logViolation('copy_attempt', 'Copy action attempted');
+            setCurrentViolation({
+                type: 'copy_attempt',
+                timestamp: new Date()
+            });
+            setShowViolationModal(true);
+        }
+    }, [assessmentState, logViolation]);
+
+    const handlePaste = useCallback((e) => {
+        if (assessmentState === 'in_progress') {
+            e.preventDefault();
+            logViolation('copy_attempt', 'Paste action attempted');
+            setCurrentViolation({
+                type: 'copy_attempt',
+                timestamp: new Date()
+            });
+            setShowViolationModal(true);
+        }
+    }, [assessmentState, logViolation]);
+
+    // Security listeners management
+    const addSecurityListeners = useCallback(() => {
+        if (assessmentState !== 'in_progress') return;
+
+        // Tab/window visibility change
+        visibilityChangeListener.current = handleVisibilityChange;
+        document.addEventListener('visibilitychange', visibilityChangeListener.current);
+
+        // Window blur/focus
+        blurListener.current = handleWindowBlur;
+        window.addEventListener('blur', blurListener.current);
+
+        // Right-click prevention
+        contextMenuListener.current = handleContextMenu;
+        document.addEventListener('contextmenu', contextMenuListener.current);
+
+        // Copy-paste prevention
+        copyListener.current = handleCopy;
+        document.addEventListener('copy', copyListener.current);
+
+        pasteListener.current = handlePaste;
+        document.addEventListener('paste', pasteListener.current);
+    }, [assessmentState, handleVisibilityChange, handleWindowBlur, handleContextMenu, handleCopy, handlePaste]);
+
+    const removeSecurityListeners = useCallback(() => {
+        if (visibilityChangeListener.current) {
+            document.removeEventListener('visibilitychange', visibilityChangeListener.current);
+        }
+        if (blurListener.current) {
+            window.removeEventListener('blur', blurListener.current);
+        }
+        if (contextMenuListener.current) {
+            document.removeEventListener('contextmenu', contextMenuListener.current);
+        }
+        if (copyListener.current) {
+            document.removeEventListener('copy', copyListener.current);
+        }
+        if (pasteListener.current) {
+            document.removeEventListener('paste', pasteListener.current);
+        }
+    }, []);
 
 	useEffect(() => {
-		const timer = setInterval(() => {
-			setTimeLeft((prev) => {
-				if (prev <= 1) {
-					clearInterval(timer);
-					setIsSubmitted(true);
-					return 0;
-				}
-				return prev - 1;
+		if (!assessmentId || !jobId || !applicationId) {
+			setError("Missing assessment information. Please go back and try again.");
+			setLoading(false);
+			return;
+		}
+
+		fetchAssessment();
+	}, [assessmentId, jobId, applicationId]);
+
+	// Add security listeners when assessment starts
+	useEffect(() => {
+		if (assessmentState === 'in_progress') {
+			addSecurityListeners();
+		} else {
+			removeSecurityListeners();
+		}
+
+		return () => {
+			removeSecurityListeners();
+		};
+	}, [assessmentState, addSecurityListeners, removeSecurityListeners]);
+
+	// Timer effect with violation logging for time expiration
+	useEffect(() => {
+		if (timeLeft > 0 && !isSubmitted && assessmentState === 'in_progress') {
+			const timer = setInterval(() => {
+				setTimeLeft((prev) => {
+					if (prev <= 1) {
+						handleTimeExpired();
+						return 0;
+					}
+					return prev - 1;
+				});
+			}, 1000);
+			return () => clearInterval(timer);
+		}
+	}, [timeLeft, isSubmitted, assessmentState]);
+
+	const fetchAssessment = async () => {
+		try {
+			setLoading(true);
+			setError(null);
+
+			// Fetch assessment questions first (without starting attempt)
+			const assessmentResponse = await api.getAssessmentForCandidate(assessmentId);
+			if (assessmentResponse.success) {
+				const assessmentData = assessmentResponse.assessment;
+				setAssessment(assessmentData);
+				setAnswers(new Array(assessmentData.questions.length).fill(null));
+				setAssessmentState('terms_pending');
+				setShowTermsModal(true);
+			} else {
+				setError("Failed to load assessment questions");
+			}
+		} catch (err) {
+			console.error("Error fetching assessment:", err);
+			setError("Failed to load assessment. Please try again.");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleTermsAccept = async () => {
+		try {
+			setShowTermsModal(false);
+
+			// Now start the assessment attempt
+			const startResponse = await api.startAssessment({
+				assessmentId,
+				jobId,
+				applicationId
 			});
-		}, 1000);
-		return () => clearInterval(timer);
-	}, []);
+
+			if (startResponse.success && startResponse.attempt && startResponse.attempt._id) {
+				setAttemptId(startResponse.attempt._id);
+				setStartTime(new Date());
+				setTimeLeft(assessment.timer * 60); // Convert minutes to seconds
+				setAssessmentState('in_progress');
+			} else {
+				setError(startResponse.message || "Failed to start assessment. No attempt ID received.");
+				setShowTermsModal(true);
+			}
+		} catch (err) {
+			console.error("Error starting assessment:", err);
+			setError("Failed to start assessment. Please try again.");
+			setShowTermsModal(true);
+		}
+	};
+
+	const handleTermsDecline = () => {
+		setShowTermsModal(false);
+		navigate(-1); // Go back to previous page
+	};
+
+	const handleViolationAcknowledge = () => {
+		setShowViolationModal(false);
+		// Assessment is already terminated, component will show termination screen
+	};
+
+	const handleTimeExpired = async () => {
+		if (!isSubmitted) {
+			setIsSubmitted(true);
+			await logViolation('time_expired', 'Assessment time expired');
+			await submitAssessment();
+		}
+	};
+
+	const submitAssessment = async () => {
+		try {
+			const submitResponse = await api.submitAssessment(attemptId, []);
+			if (submitResponse.success) {
+				setAssessmentState('completed');
+				removeSecurityListeners();
+				navigate("/candidate/assessment-result", {
+					state: {
+						result: submitResponse.result,
+						assessment: assessment
+					},
+				});
+			} else {
+				setError("Failed to submit assessment");
+			}
+		} catch (err) {
+			console.error("Error submitting assessment:", err);
+			setError("Failed to submit assessment");
+		}
+	};
 
 	const formatTime = (seconds) => {
 		const m = Math.floor(seconds / 60);
@@ -88,12 +303,96 @@ const StartAssessment = () => {
 		return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 	};
 
-	const handleOptionChange = (option) => {
+	const handleOptionChange = async (option) => {
 		if (isSubmitted) return;
+
 		const updated = [...answers];
 		updated[currentQuestionIndex] = option;
 		setAnswers(updated);
+
+		// Submit answer to backend
+		if (attemptId) {
+			try {
+				await api.submitAnswer(attemptId, currentQuestionIndex, option, 0);
+			} catch (err) {
+				console.error("Error submitting answer:", err);
+				if (err.message.includes('404') || err.message.includes('not found')) {
+					setError("Assessment session expired. Please restart the assessment.");
+				}
+			}
+		}
 	};
+
+	const handleSubmit = async () => {
+		if (isSubmitted) return;
+		if (!attemptId) {
+			setError("Assessment session not started. Please restart the assessment.");
+			return;
+		}
+		setIsSubmitted(true);
+
+		try {
+			const submitResponse = await api.submitAssessment(attemptId, []);
+			if (submitResponse.success) {
+				navigate("/candidate/assessment-result", {
+					state: {
+						result: submitResponse.result,
+						assessment: assessment
+					},
+				});
+			} else {
+				setError(submitResponse.message || "Failed to submit assessment");
+				setIsSubmitted(false);
+			}
+		} catch (err) {
+			console.error("Error submitting assessment:", err);
+			if (err.message.includes('404') || err.message.includes('not found')) {
+				setError("Assessment session expired. Please restart the assessment.");
+			} else {
+				setError("Failed to submit assessment. Please try again.");
+			}
+			setIsSubmitted(false);
+		}
+	};
+
+	if (loading) {
+		return (
+			<div style={{ padding: "20px", textAlign: "center", fontFamily: "Arial, sans-serif" }}>
+				<div style={{ fontSize: "18px", marginBottom: "20px" }}>Loading Assessment...</div>
+				<div style={{ fontSize: "16px", color: "#666" }}>Please wait while we prepare your assessment.</div>
+			</div>
+		);
+	}
+
+	if (error) {
+		return (
+			<div style={{ padding: "20px", textAlign: "center", fontFamily: "Arial, sans-serif" }}>
+				<div style={{ fontSize: "18px", color: "#e74c3c", marginBottom: "20px" }}>Error</div>
+				<div style={{ fontSize: "16px", color: "#666", marginBottom: "20px" }}>{error}</div>
+				<button
+					onClick={() => navigate("/candidate/status")}
+					style={{
+						background: "#3498db",
+						color: "#fff",
+						border: "none",
+						padding: "10px 20px",
+						borderRadius: "5px",
+						cursor: "pointer",
+					}}
+				>
+					Back to Status
+				</button>
+			</div>
+		);
+	}
+
+	if (!assessment) {
+		return (
+			<div style={{ padding: "20px", textAlign: "center", fontFamily: "Arial, sans-serif" }}>
+				<div style={{ fontSize: "18px", color: "#e74c3c" }}>Assessment Not Found</div>
+			</div>
+		);
+	}
 
 	const question = assessment.questions[currentQuestionIndex];
 

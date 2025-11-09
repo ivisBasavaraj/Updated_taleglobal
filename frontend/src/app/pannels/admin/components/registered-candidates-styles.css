@@ -1,51 +1,45 @@
 /* Registered Candidates Styles */
 .registered-candidates-container {
-    background: #f8f9fa;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
     min-height: 100vh;
     padding: 20px;
 }
 
 .candidates-header {
-    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-    color: white;
-    padding: 30px;
-    border-radius: 15px;
+    background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
+    border-radius: 12px;
+    border: 1px solid #ffe0b3;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 25px;
     margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
-    position: relative;
-    overflow: hidden;
+    transition: all 0.3s ease;
+    overflow: visible;
 }
 
-.candidates-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    animation: float 6s ease-in-out infinite;
-}
+
 
 .candidates-header h2 {
-    font-size: 2.2rem;
+    color: #232323;
     font-weight: 700;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    font-size: 28px;
+    margin: 0;
+    display: flex;
+    align-items: center;
 }
 
 .candidates-header h2 i {
-    color: white;
+    color: #232323;
 }
 
 .candidates-subtitle {
-    font-size: 1rem;
-    opacity: 0.9;
-    font-weight: 300;
+    color: #666;
+    font-size: 16px;
+    margin-top: 8px;
+    font-weight: 400;
 }
 
 .candidates-subtitle i {
-    color: white;
+    color: #666;
 }
 
 .candidates-stats-section {
@@ -157,23 +151,23 @@
 }
 
 .candidates-table thead th {
-    background: #ffebe0;
+    background: #FDC360;
     color: #232323;
     font-weight: 600;
     padding: 15px 12px;
-    border: 2px solid #ff6b35;
+    border: 2px solid #FDC360;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.3px;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(255, 107, 53, 0.1);
+    box-shadow: 0 2px 4px rgba(253, 195, 96, 0.1);
     position: sticky;
     top: 0;
     z-index: 10;
 }
 
 .candidates-table thead th i {
-    color: #ff6b35;
+    color: #232323;
     margin-right: 6px;
     font-size: 0.8rem;
 }
@@ -203,8 +197,8 @@
 }
 
 .candidate-name {
-    font-weight: 600;
-    color: #ff6b35 !important;
+    font-weight: 700;
+    color: #000000 !important;
     font-size: 0.9rem;
 }
 
@@ -225,13 +219,13 @@
 }
 
 .badge-completed {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white !important;
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724 !important;
 }
 
 .badge-incomplete {
-    background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
-    color: white !important;
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    color: #856404 !important;
 }
 
 .badge-shortlisted {
@@ -361,7 +355,7 @@
 }
 
 .candidate-modal .modal-header {
-    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    background: #FDC360;
     color: white;
     border-radius: 15px 15px 0 0;
     padding: 20px 30px;
@@ -449,13 +443,13 @@
 }
 
 .candidates-table-responsive::-webkit-scrollbar-thumb {
-    background: #ff6b35;
+    background: #FDC360;
     border-radius: 4px;
     transition: background 0.3s ease;
 }
 
 .candidates-table-responsive::-webkit-scrollbar-thumb:hover {
-    background: #e55a2b;
+    background: #e5b050;
 }
 
 .candidates-table-responsive::-webkit-scrollbar-corner {
@@ -465,7 +459,7 @@
 /* Firefox scrollbar styling */
 .candidates-table-responsive {
     scrollbar-width: thin;
-    scrollbar-color: #ff6b35 #f1f1f1;
+    scrollbar-color: #FDC360 #f1f1f1;
 }
 
 /* Responsive Design */

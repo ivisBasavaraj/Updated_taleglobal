@@ -90,10 +90,10 @@ function CanDashboardPage() {
 
           {/* Profile Completion and Notifications */}
           <div className="row">
-            <div className="col-xl-8 col-lg-8 col-md-12 mb-4">
+            <div className="col-xl-8 col-lg-8 col-md-12 mb-4" style={{ position: 'relative', zIndex: 1 }}>
               <CompleteProfileCard />
             </div>
-            <div className="col-xl-4 col-lg-4 col-md-12 mb-4">
+            <div className="col-xl-4 col-lg-4 col-md-12 mb-4" style={{ position: 'relative', zIndex: 2 }}>
               <SectionNotifications />
             </div>
           </div>

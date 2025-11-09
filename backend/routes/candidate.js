@@ -10,9 +10,9 @@ const handleValidationErrors = require('../middlewares/validation');
 router.post('/register', [
   body('name').notEmpty().withMessage('Name is required'),
   body('email').isEmail().withMessage('Valid email is required'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  body('confirmPassword').custom((value, { req }) => {
-    if (value !== req.body.password) {
+  body('password').optional().isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  body('confirmPassword').optional().custom((value, { req }) => {
+    if (req.body.password && value !== req.body.password) {
       throw new Error('Passwords do not match');
     }
     return true;
@@ -43,6 +43,11 @@ router.post('/password/update-reset', [
   body('email').isEmail().withMessage('Valid email is required'),
   body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
 ], handleValidationErrors, candidateController.updatePasswordReset);
+
+router.post('/create-password', [
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+], handleValidationErrors, candidateController.createPassword);
 
 // Protected Routes
 router.use(auth(['candidate']));
@@ -234,5 +239,15 @@ router.post('/education', upload.single('marksheet'), [
 router.put('/education/marksheet', upload.single('marksheet'), candidateController.updateEducationWithMarksheet);
 
 router.delete('/education/:educationId', candidateController.deleteEducation);
+
+// Assessment Routes
+const assessmentController = require('../controllers/assessmentController');
+router.get('/assessments/available', assessmentController.getAvailableAssessments);
+router.get('/assessments/:id', assessmentController.getAssessmentForCandidate);
+router.post('/assessments/start', assessmentController.startAssessment);
+router.post('/assessments/answer', assessmentController.submitAnswer);
+router.post('/assessments/submit', assessmentController.submitAssessment);
+router.get('/assessments/result/:attemptId', assessmentController.getAssessmentResult);
+router.post('/assessments/violation', candidateController.logAssessmentViolation);
 
 module.exports = router;

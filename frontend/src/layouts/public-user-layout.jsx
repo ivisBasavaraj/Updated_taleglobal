@@ -33,9 +33,6 @@ function PublicUserLayout() {
                     setFooterType(currentpath)
                 }
 
-                {/* BUTTON TOP START */}
-                <button className="scroltop"><span className="fa fa-angle-up  relative" id="btn-vibrate" /></button>
-
                 <SignUpPopup />
                 <SignInPopup />
                 {/* <ForgotPassword/> */}

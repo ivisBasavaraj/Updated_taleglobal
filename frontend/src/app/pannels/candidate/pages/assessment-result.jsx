@@ -142,151 +142,234 @@
 
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const AssessmentResults = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const {
-		answers = [],
-		totalQuestions = 0,
-		timeTaken = 0,
-		currentStep = 3, // Default to step 3 after assessment
+		result,
+		assessment
 	} = location.state || {};
 
-	const correctAnswers = answers.filter(Boolean).length;
-	const percentage = ((correctAnswers / totalQuestions) * 100).toFixed(0);
-	const accuracy = percentage; // Same value as percentage here
+	// Handle both old format (answers array) and new format (result object)
+	const correctAnswers = result?.correctAnswers || 0;
+	const totalQuestions = result?.totalQuestions || assessment?.totalQuestions || 0;
+	const percentage = result?.percentage || 0;
+	const score = result?.score || 0;
+	const totalMarks = result?.totalMarks || 0;
+	const resultStatus = result?.result || 'pending';
 
-	// Close and go back to step tracker, preserving step state
-	const handleCloseAssessment = () => {
-		navigate("/candidate/step", {
-			state: {
-				currentStep, // Pass step number
-				answers,
-				totalQuestions,
-				timeTaken,
+	// Calculate incorrect answers
+	const incorrectAnswers = totalQuestions - correctAnswers;
+
+	// Pie chart data
+	const chartData = {
+		labels: ['Correct Answers', 'Incorrect Answers'],
+		datasets: [
+			{
+				data: [correctAnswers, incorrectAnswers],
+				backgroundColor: ['#28a745', '#dc3545'],
+				borderColor: ['#28a745', '#dc3545'],
+				borderWidth: 1,
 			},
-		});
+		],
+	};
+
+	const chartOptions = {
+		responsive: true,
+		plugins: {
+			legend: {
+				position: 'bottom',
+			},
+			tooltip: {
+				callbacks: {
+					label: function(context) {
+						const label = context.label || '';
+						const value = context.parsed;
+						const percentage = ((value / totalQuestions) * 100).toFixed(1);
+						return `${label}: ${value} (${percentage}%)`;
+					}
+				}
+			}
+		},
+	};
+
+	// Close and go back to status page
+	const handleCloseAssessment = () => {
+		navigate("/candidate/status");
 	};
 
 	return (
 		<div
 			style={{
 				fontFamily: "Arial, sans-serif",
-				backgroundColor: "rgba(0, 0, 0, 0.6)",
+				backgroundColor: "#f5f6fa",
 				minHeight: "100vh",
-				display: "flex",
-				justifyContent: "center",
-				alignItems: "center",
 				padding: "20px",
 			}}
 		>
-			<div
-				style={{
-					background: "#fff",
-					borderRadius: "12px",
-					padding: "30px",
-					width: "100%",
-					maxWidth: "500px",
-					textAlign: "center",
-					boxShadow: "0px 4px 15px rgba(0,0,0,0.2)",
-					position: "relative",
-				}}
-			>
-				{/* Close Button */}
-				<button
-					onClick={handleCloseAssessment}
-					style={{
-						position: "absolute",
-						right: "15px",
-						top: "15px",
-						border: "none",
-						background: "transparent",
-						fontSize: "18px",
-						cursor: "pointer",
-					}}
-				>
-					✖
-				</button>
-
-				<h2 style={{ marginBottom: "15px", fontWeight: "bold" }}>
-					Assessment Results
-				</h2>
-				<p style={{ marginBottom: "20px", color: "#555" }}>
-					Assessment Completed!
-				</p>
-
-				{/* Percentage */}
+			<div style={{ maxWidth: "800px", margin: "0 auto" }}>
+				{/* Header */}
 				<div
 					style={{
-						fontSize: "40px",
-						fontWeight: "bold",
-						color: percentage >= 60 ? "green" : "red",
+						background: "#fff",
+						padding: "20px",
+						borderRadius: "8px",
+						boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
+						marginBottom: "20px",
+						textAlign: "center",
 					}}
 				>
-					{percentage}%
+					<h2 style={{ margin: "0", fontSize: "24px", fontWeight: "bold", color: "#232323" }}>
+						Assessment Results
+					</h2>
+					<p style={{ margin: "10px 0 0 0", color: "#666" }}>
+						{assessment?.title || "Technical Assessment"}
+					</p>
 				</div>
-				<p style={{ marginBottom: "10px", color: "#555" }}>
-					{correctAnswers} out of {totalQuestions} correct
-				</p>
 
-				{/* Pass/Fail Badge */}
-				<span
+				{/* Results Cards */}
+				<div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
+					{/* Score Card */}
+					<div
+						style={{
+							flex: 1,
+							background: "#fff",
+							padding: "20px",
+							borderRadius: "8px",
+							boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
+							textAlign: "center",
+						}}
+					>
+						<h3 style={{ margin: "0 0 15px 0", color: "#232323" }}>Your Score</h3>
+						<div
+							style={{
+								fontSize: "48px",
+								fontWeight: "bold",
+								color: percentage >= 60 ? "#28a745" : "#dc3545",
+								marginBottom: "10px",
+							}}
+						>
+							{percentage.toFixed(1)}%
+						</div>
+						<p style={{ margin: "0", color: "#666" }}>
+							{score}/{totalMarks} marks
+						</p>
+					</div>
+
+					{/* Status Card */}
+					<div
+						style={{
+							flex: 1,
+							background: "#fff",
+							padding: "20px",
+							borderRadius: "8px",
+							boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
+							textAlign: "center",
+						}}
+					>
+						<h3 style={{ margin: "0 0 15px 0", color: "#232323" }}>Result</h3>
+						<span
+							style={{
+								display: "inline-block",
+								padding: "10px 20px",
+								borderRadius: "25px",
+								background: resultStatus === 'pass' ? "#d4edda" : "#f8d7da",
+								color: resultStatus === 'pass' ? "#155724" : "#721c24",
+								fontWeight: "bold",
+								fontSize: "18px",
+							}}
+						>
+							{resultStatus === 'pass' ? "PASSED" : "FAILED"}
+						</span>
+					</div>
+				</div>
+
+				{/* Pie Chart */}
+				<div
 					style={{
-						display: "inline-block",
-						padding: "5px 15px",
-						borderRadius: "20px",
-						background: percentage >= 60 ? "#d4edda" : "#f8d7da",
-						color: percentage >= 60 ? "#155724" : "#721c24",
-						fontWeight: "bold",
+						background: "#fff",
+						padding: "20px",
+						borderRadius: "8px",
+						boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
 						marginBottom: "20px",
 					}}
 				>
-					{percentage >= 60 ? "PASSED" : "FAILED"}
-				</span>
+					<h3 style={{ margin: "0 0 20px 0", textAlign: "center", color: "#232323" }}>
+						Performance Breakdown
+					</h3>
+					<div style={{ maxWidth: "400px", margin: "0 auto" }}>
+						<Pie data={chartData} options={chartOptions} />
+					</div>
+				</div>
 
-				{/* Stats Grid */}
+				{/* Detailed Stats */}
 				<div
 					style={{
-						display: "flex",
-						justifyContent: "space-around",
-						marginTop: "20px",
-						fontSize: "14px",
-						color: "#333",
+						background: "#fff",
+						padding: "20px",
+						borderRadius: "8px",
+						boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
+						marginBottom: "20px",
 					}}
 				>
-					<div>
-						<strong>Time Taken</strong>
-						<div>
-							{Math.floor(timeTaken / 60)}:
-							{(timeTaken % 60).toString().padStart(2, "0")}
+					<h3 style={{ margin: "0 0 20px 0", color: "#232323" }}>Detailed Statistics</h3>
+					<div
+						style={{
+							display: "grid",
+							gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+							gap: "20px",
+						}}
+					>
+						<div style={{ textAlign: "center" }}>
+							<strong style={{ color: "#232323" }}>Total Questions</strong>
+							<div style={{ fontSize: "24px", fontWeight: "bold", color: "#007bff" }}>
+								{totalQuestions}
+							</div>
 						</div>
-					</div>
-					<div>
-						<strong>Questions Answered</strong>
-						<div>{totalQuestions}</div>
-					</div>
-					<div>
-						<strong>Accuracy</strong>
-						<div>{accuracy}%</div>
+						<div style={{ textAlign: "center" }}>
+							<strong style={{ color: "#232323" }}>Correct Answers</strong>
+							<div style={{ fontSize: "24px", fontWeight: "bold", color: "#28a745" }}>
+								{correctAnswers}
+							</div>
+						</div>
+						<div style={{ textAlign: "center" }}>
+							<strong style={{ color: "#232323" }}>Incorrect Answers</strong>
+							<div style={{ fontSize: "24px", fontWeight: "bold", color: "#dc3545" }}>
+								{incorrectAnswers}
+							</div>
+						</div>
+						<div style={{ textAlign: "center" }}>
+							<strong style={{ color: "#232323" }}>Accuracy</strong>
+							<div style={{ fontSize: "24px", fontWeight: "bold", color: "#ffc107" }}>
+								{percentage.toFixed(1)}%
+							</div>
+						</div>
 					</div>
 				</div>
 
 				{/* Close Button */}
-				<button
-					onClick={handleCloseAssessment}
-					style={{
-						marginTop: "30px",
-						padding: "10px 20px",
-						border: "none",
-						borderRadius: "8px",
-						background: "#000",
-						color: "#fff",
-						cursor: "pointer",
-					}}
-				>
-					Close Assessment
-				</button>
+				<div style={{ textAlign: "center" }}>
+					<button
+						onClick={handleCloseAssessment}
+						style={{
+							padding: "12px 30px",
+							border: "none",
+							borderRadius: "8px",
+							background: "#007bff",
+							color: "#fff",
+							cursor: "pointer",
+							fontSize: "16px",
+							fontWeight: "bold",
+						}}
+					>
+						Back to Status Page
+					</button>
+				</div>
 			</div>
 		</div>
 	);

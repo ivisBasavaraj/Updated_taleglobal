@@ -172,6 +172,30 @@
   50% { opacity: 1; }
 }
 
+/* Notification panel visibility fix */
+.can-dashboard .panel.panel-default {
+  position: relative !important;
+  z-index: 10 !important;
+  background: white !important;
+}
+
+.can-dashboard .panel-body {
+  background: white !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.can-dashboard .notification-list {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.can-dashboard .notification-item {
+  position: relative !important;
+  z-index: 1 !important;
+  background: white !important;
+}
+
 /* Responsive paddings */
 @media (max-width: 992px) {
   .can-dashboard .wt-admin-right-page-header { padding: 20px !important; }

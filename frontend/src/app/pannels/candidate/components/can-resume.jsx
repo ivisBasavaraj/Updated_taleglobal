@@ -21,7 +21,13 @@ function CanMyResumePage() {
     const [error, setError] = useState(null);
     
     useEffect(()=>{
-        fetchProfile();
+        const token = localStorage.getItem('candidateToken');
+        if (token) {
+            fetchProfile();
+        } else {
+            setError('Please login to view your resume');
+            setLoading(false);
+        }
     }, [])
     
 

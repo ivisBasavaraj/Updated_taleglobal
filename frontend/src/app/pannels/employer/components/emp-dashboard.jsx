@@ -118,7 +118,7 @@ function EmpDashboardPage() {
                 minHeight: '100vh'
             }}>
                 {/* Header */}
-                <div className="wt-admin-right-page-header clearfix" style={{ background: 'white', borderBottom: '1px solid #e5e7eb', padding: '2rem' }}>
+                <div className="wt-admin-right-page-header clearfix" style={{ background: 'white', borderBottom: '1px solid #e5e7eb', padding: isMobile ? '1rem' : '2rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                             <div style={{
@@ -138,8 +138,8 @@ function EmpDashboardPage() {
                                 {!employer.logo && (employer.companyName ? employer.companyName.charAt(0).toUpperCase() : 'C')}
                             </div>
                             <div>
-                                <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.25rem 0' }}>Welcome, {employer.companyName}</h2>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                                <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', margin: '0 0 0.30rem 0' }}>Welcome, {employer.companyName}</h2>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1 rem', marginBottom: '0.25rem' }}>
                                     <MapPin size={16} style={{ color: '#f97316' }} />
                                     <span style={{ color: '#f97316', fontSize: '0.875rem', fontWeight: '500' }}>Bangalore</span>
                                 </div>

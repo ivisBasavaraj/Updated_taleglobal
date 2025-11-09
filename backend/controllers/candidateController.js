@@ -14,42 +14,72 @@ const generateToken = (id, role) => {
 // Authentication Controllers
 exports.registerCandidate = async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone, sendWelcomeEmail: shouldSendWelcome } = req.body;
+    console.log('Registration attempt:', { name, email, phone, shouldSendWelcome });
 
     const existingCandidate = await Candidate.findOne({ email });
     if (existingCandidate) {
+      console.log('Email already exists:', email);
       return res.status(400).json({ success: false, message: 'Email already registered' });
     }
 
-    const candidate = await Candidate.create({ 
-      name, 
-      email, 
-      password, 
-      phone,
-      registrationMethod: 'signup',
-      credits: 0
-    });
-    await CandidateProfile.create({ candidateId: candidate._id });
+    if (shouldSendWelcome) {
+      console.log('Creating candidate for email signup...');
+      // Create candidate without password for email-based signup
+      const candidate = await Candidate.create({ 
+        name, 
+        email, 
+        phone,
+        registrationMethod: 'email_signup',
+        credits: 0,
+        status: 'pending'
+      });
+      console.log('Candidate created:', candidate._id);
+      
+      await CandidateProfile.create({ candidateId: candidate._id });
+      console.log('Profile created for candidate');
 
-    const token = generateToken(candidate._id, 'candidate');
-
-    // Send welcome email
-    try {
-      await sendWelcomeEmail(email, name, 'candidate');
-    } catch (emailError) {
-      console.error('Welcome email failed:', emailError);
-    }
-
-    res.status(201).json({
-      success: true,
-      token,
-      candidate: {
-        id: candidate._id,
-        name: candidate.name,
-        email: candidate.email
+      // Send welcome email with password creation link
+      try {
+        const { sendPasswordCreationEmail } = require('../utils/emailService');
+        await sendPasswordCreationEmail(email, name);
+        console.log('Welcome email sent successfully');
+      } catch (emailError) {
+        console.error('Welcome email failed:', emailError);
+        // Don't fail registration if email fails, just log it
+        console.log('Continuing registration without email...');
       }
-    });
+
+      res.status(201).json({
+        success: true,
+        message: 'Welcome email sent successfully'
+      });
+    } else {
+      // Regular signup with password
+      const candidate = await Candidate.create({ 
+        name, 
+        email, 
+        password, 
+        phone,
+        registrationMethod: 'signup',
+        credits: 0
+      });
+      await CandidateProfile.create({ candidateId: candidate._id });
+
+      const token = generateToken(candidate._id, 'candidate');
+
+      res.status(201).json({
+        success: true,
+        token,
+        candidate: {
+          id: candidate._id,
+          name: candidate.name,
+          email: candidate.email
+        }
+      });
+    }
   } catch (error) {
+    console.error('Registration error:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -65,22 +95,15 @@ exports.loginCandidate = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
-    // Removed console debug line for security;
-    // Removed console debug line for security;
-    
-    // Removed console debug line for security;
-    // Removed console debug line for security;
-    // Removed console debug line for security;
-    // Removed console debug line for security;
+    if (!candidate.password) {
+      return res.status(401).json({ success: false, message: 'Please check your email to create your password first' });
+    }
+
     const passwordMatch = await candidate.comparePassword(password);
-    // Removed console debug line for security;
     
     if (!passwordMatch) {
-      // Removed console debug line for security;
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
-    
-    // Removed console debug line for security;
 
     if (candidate.status !== 'active') {
       return res.status(401).json({ success: false, message: 'Account is inactive' });
@@ -506,10 +529,22 @@ exports.applyForJob = async (req, res) => {
 
 exports.getAppliedJobs = async (req, res) => {
   try {
+    // Set cache-control headers to prevent browser caching
+    res.set({
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
+
     const applications = await Application.find({ candidateId: req.user._id })
-      .populate('jobId', 'title location jobType status interviewRoundsCount interviewRoundTypes')
+      .populate({
+        path: 'jobId',
+        select: 'title location jobType status interviewRoundsCount interviewRoundTypes',
+        options: { lean: false } // Ensure we get the latest data from DB
+      })
       .populate('employerId', 'companyName')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean(); // Use lean for better performance
 
     // Removed console debug line for security;
     if (applications.length > 0) {
@@ -590,6 +625,31 @@ exports.checkEmail = async (req, res) => {
       success: true, 
       exists: !!candidate 
     });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Create Password Controller
+exports.createPassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const candidate = await Candidate.findOne({ email });
+    if (!candidate) {
+      return res.status(404).json({ success: false, message: 'Candidate not found' });
+    }
+
+    if (candidate.password) {
+      return res.status(400).json({ success: false, message: 'Password already set' });
+    }
+
+    candidate.password = password;
+    candidate.status = 'active';
+    candidate.registrationMethod = 'signup';
+    await candidate.save();
+
+    res.json({ success: true, message: 'Password created successfully' });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -772,12 +832,33 @@ exports.getDashboardStats = async (req, res) => {
 
 exports.getCandidateApplicationsWithInterviews = async (req, res) => {
   try {
-    const applications = await Application.find({ candidateId: req.user._id })
-      .populate('jobId', 'title location jobType status interviewRoundsCount interviewRoundTypes interviewRoundDetails')
-      .populate('employerId', 'companyName')
-      .sort({ createdAt: -1 });
+    // Set cache-control headers to prevent browser caching
+    res.set({
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
 
-    res.json({ success: true, applications });
+    const applications = await Application.find({ candidateId: req.user._id })
+      .populate({
+        path: 'jobId',
+        select: 'title location jobType status interviewRoundsCount interviewRoundTypes interviewRoundDetails assessmentId assessmentStartDate assessmentEndDate',
+        options: { lean: false } // Ensure we get the latest data from DB
+      })
+      .populate('employerId', 'companyName')
+      .sort({ createdAt: -1 })
+      .lean(); // Use lean for better performance
+
+    // Add assessment status fields to each application
+    const applicationsWithAssessmentStatus = applications.map(app => ({
+      ...app,
+      assessmentStatus: app.assessmentStatus || 'not_required',
+      assessmentScore: app.assessmentScore || null,
+      assessmentPercentage: app.assessmentPercentage || null,
+      assessmentResult: app.assessmentResult || null
+    }));
+
+    res.json({ success: true, applications: applicationsWithAssessmentStatus });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -967,5 +1048,67 @@ exports.deleteEducation = async (req, res) => {
     res.json({ success: true, profile });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Assessment violation logging
+exports.logAssessmentViolation = async (req, res) => {
+  try {
+    const { attemptId, violationType, timestamp, details } = req.body;
+
+    if (!attemptId || !violationType || !timestamp) {
+      return res.status(400).json({
+        success: false,
+        message: 'Attempt ID, violation type, and timestamp are required'
+      });
+    }
+
+    const AssessmentAttempt = require('../models/AssessmentAttempt');
+
+    // Verify the attempt belongs to the authenticated candidate
+    const attempt = await AssessmentAttempt.findOne({
+      _id: attemptId,
+      candidateId: req.user._id
+    });
+
+    if (!attempt) {
+      return res.status(404).json({
+        success: false,
+        message: 'Assessment attempt not found or access denied'
+      });
+    }
+
+    // Add violation to the attempt
+    const violation = {
+      type: violationType,
+      timestamp: new Date(timestamp),
+      details: details || ''
+    };
+
+    attempt.violations.push(violation);
+
+    // If this is a terminating violation, update status
+    const terminatingViolations = ['tab_switch', 'window_minimize', 'copy_paste', 'right_click'];
+    if (terminatingViolations.includes(violationType)) {
+      attempt.status = 'terminated';
+      attempt.endTime = new Date();
+    }
+
+    await attempt.save();
+
+    res.json({
+      success: true,
+      message: 'Violation logged successfully',
+      violation: violation,
+      terminated: terminatingViolations.includes(violationType)
+    });
+
+  } catch (error) {
+    console.error('Error logging assessment violation:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to log violation',
+      error: error.message
+    });
   }
 };

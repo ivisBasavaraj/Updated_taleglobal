@@ -40,6 +40,7 @@ const PrivacyPolicyPage = lazy(() => import("../app/pannels/public-user/componen
 const SupportPage = lazy(() => import("../app/pannels/public-user/components/pages/support"));
 const AdminLogin = lazy(() => import("../app/admin-login/page"));
 const SubAdminLogin = lazy(() => import("../app/sub-admin-login/page"));
+const CreatePassword = lazy(() => import("../app/common/CreatePassword"));
 
 function PublicUserRoutes() {
     return (
@@ -71,6 +72,7 @@ function PublicUserRoutes() {
             <Route path={publicUser.pages.SUB_ADMIN_LOGIN} element={<SubAdminLogin />} />
             <Route path={publicUser.pages.FORGOT} element={<ForgotPassword/>} />
             <Route path={publicUser.pages.RESET_PASSWORD} element={<ResetPassword />} />
+            <Route path="/create-password" element={<CreatePassword />} />
             <Route path={publicUser.pages.TERMS} element={<TermsConditionsPage />} />
             <Route path={publicUser.pages.PRIVACY} element={<PrivacyPolicyPage />} />
             <Route path={publicUser.pages.SUPPORT} element={<SupportPage />} />

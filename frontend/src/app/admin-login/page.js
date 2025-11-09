@@ -120,6 +120,8 @@ export default function AdminLogin() {
                                                                         type="submit"
                                                                         className="site-button"
                                                                         disabled={loading}
+                                                                        style={{transition: 'none'}}
+                                                                        onMouseEnter={(e) => e.currentTarget.style.transform = 'none'}
                                                                     >
                                                                         {loading ? "Logging in..." : "Login"}
                                                                     </button>

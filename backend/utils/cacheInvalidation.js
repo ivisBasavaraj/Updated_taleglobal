@@ -10,12 +10,14 @@ class CacheInvalidation {
     // Get all cache keys
     const keys = Array.from(this.cache.cache.keys());
     
-    // Clear job-related caches
+    // Clear job-related caches including candidate applications
     const jobRelatedPatterns = [
       'jobs_',
       'job_',
       'employers_',
-      'recruiters_'
+      'recruiters_',
+      '/api/candidate/applications',
+      'applications'
     ];
     
     keys.forEach(key => {
@@ -35,6 +37,17 @@ class CacheInvalidation {
         this.cache.delete(key);
       }
     });
+  }
+
+  // Clear candidate application caches
+  clearCandidateApplicationCaches() {
+    const keys = Array.from(this.cache.cache.keys());
+    keys.forEach(key => {
+      if (key.includes('/api/candidate/applications') || key.includes('applications/interviews')) {
+        this.cache.delete(key);
+      }
+    });
+    console.log('Cleared candidate application caches');
   }
 
   // Clear employer-specific caches

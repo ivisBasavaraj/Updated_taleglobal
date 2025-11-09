@@ -96,4 +96,55 @@ const sendResetEmail = async (email, resetToken, userType) => {
   await transporter.sendMail(mailOptions);
 };
 
-module.exports = { sendWelcomeEmail, sendResetEmail };
+const sendPasswordCreationEmail = async (email, name) => {
+  const transporter = createTransport();
+  const createPasswordUrl = `${process.env.FRONTEND_URL}/create-password?email=${encodeURIComponent(email)}`;
+  
+  const welcomeTemplate = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9fa;">
+      <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <h1 style="color: #333; text-align: center; margin-bottom: 30px;">Welcome to TaleGlobal!</h1>
+        
+        <p style="color: #666; font-size: 16px; line-height: 1.6;">Dear ${name},</p>
+        
+        <p style="color: #666; font-size: 16px; line-height: 1.6;">
+          Thank you for signing up with TaleGlobal! We're excited to have you join our community of job seekers.
+        </p>
+        
+        <p style="color: #666; font-size: 16px; line-height: 1.6;">
+          To complete your registration, please create your password by clicking the button below:
+        </p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${createPasswordUrl}" style="background-color: #fd7e14; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; display: inline-block;">Create Your Password</a>
+        </div>
+        
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="color: #333; margin-top: 0;">What's Next?</h3>
+          <ul style="color: #666; line-height: 1.8;">
+            <li>Create your password</li>
+            <li>Complete your profile</li>
+            <li>Browse thousands of job opportunities</li>
+            <li>Apply to jobs with one click</li>
+          </ul>
+        </div>
+        
+        <p style="color: #999; font-size: 14px; text-align: center; margin-top: 30px;">
+          Best regards,<br>
+          The TaleGlobal Team
+        </p>
+      </div>
+    </div>
+  `;
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Welcome to TaleGlobal - Create Your Password',
+    html: welcomeTemplate
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+module.exports = { sendWelcomeEmail, sendResetEmail, sendPasswordCreationEmail };

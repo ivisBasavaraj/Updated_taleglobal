@@ -4,15 +4,15 @@ const bcrypt = require('bcryptjs');
 const candidateSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: false },
   phone: { type: String },
   course: { type: String }, // Course/Branch from Excel data
   credits: { type: Number, default: 0 },
-  registrationMethod: { type: String, enum: ['signup', 'admin', 'placement'], default: 'signup' },
+  registrationMethod: { type: String, enum: ['signup', 'admin', 'placement', 'email_signup'], default: 'signup' },
   placementId: { type: mongoose.Schema.Types.ObjectId, ref: 'Placement' },
   fileId: { type: mongoose.Schema.Types.ObjectId }, // Reference to specific file in placement's fileHistory
   isVerified: { type: Boolean, default: false },
-  status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+  status: { type: String, enum: ['active', 'inactive', 'pending'], default: 'active' },
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date }
 }, {

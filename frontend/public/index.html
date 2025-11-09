@@ -44,6 +44,7 @@
   
   <!-- iOS/Apple Settings -->
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Jobzz">
   
@@ -152,14 +153,29 @@
         };
       }
       
-      // Force light color scheme
-      document.documentElement.style.setProperty('color-scheme', 'light only', 'important');
-      document.body.style.setProperty('background-color', '#ffffff', 'important');
-      document.body.style.setProperty('color', '#111827', 'important');
+      // Force light color scheme - with null check
+      if (document.documentElement) {
+        document.documentElement.style.setProperty('color-scheme', 'light only', 'important');
+      }
+      
+      // Wait for body to be available
+      if (document.body) {
+        document.body.style.setProperty('background-color', '#ffffff', 'important');
+        document.body.style.setProperty('color', '#111827', 'important');
+      } else {
+        document.addEventListener('DOMContentLoaded', function() {
+          if (document.body) {
+            document.body.style.setProperty('background-color', '#ffffff', 'important');
+            document.body.style.setProperty('color', '#111827', 'important');
+          }
+        });
+      }
       
       // Add class to enable transitions after forcing light mode
       setTimeout(() => {
-        document.documentElement.classList.add('light-mode-forced');
+        if (document.documentElement) {
+          document.documentElement.classList.add('light-mode-forced');
+        }
       }, 100);
     })();
   </script>
