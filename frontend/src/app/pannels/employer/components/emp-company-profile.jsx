@@ -1515,7 +1515,8 @@ function EmpCompanyProfilePage() {
                                         <div className="mt-2">
                                             <button 
                                                 type="button" 
-                                                className="btn btn-success btn-sm"
+                                                className="btn btn-sm"
+                                                style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}}
                                                 onClick={addNewAuthSection}
                                             >
                                                 <i className="fas fa-plus me-1"></i> Add New Authorization Letter

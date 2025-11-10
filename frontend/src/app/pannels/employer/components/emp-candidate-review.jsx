@@ -555,15 +555,15 @@ function EmpCandidateReviewPage () {
 								</label>
 							</div>
 
-							<div className="d-flex flex-column gap-2">
-								<button className="btn btn-sm rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '8px 16px', minHeight: '38px', width: '100%', display: 'block'}} onClick={saveReview}>
-									<Save size={16} className="me-2" />Save Review
+							<div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
+								<button style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '10px 16px', height: '40px', width: '100%', borderRadius: '50px', fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'}} onClick={saveReview}>
+									<Save size={16} style={{marginRight: '8px'}} />Save Review
 								</button>
-								<button className="btn btn-sm rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '8px 16px', minHeight: '38px', width: '100%', display: 'block'}} onClick={shortlistCandidate}>
-									<Check size={16} className="me-2" />Shortlist Candidate
+								<button style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '10px 16px', height: '40px', width: '100%', borderRadius: '50px', fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'}} onClick={shortlistCandidate}>
+									<Check size={16} style={{marginRight: '8px'}} />Shortlist Candidate
 								</button>
-								<button className="btn btn-sm rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '8px 16px', minHeight: '38px', width: '100%', display: 'block'}} onClick={rejectCandidate}>
-									<X size={16} className="me-2" />Reject Candidate
+								<button style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '10px 16px', height: '40px', width: '100%', borderRadius: '50px', fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'}} onClick={rejectCandidate}>
+									<X size={16} style={{marginRight: '8px'}} />Reject Candidate
 								</button>
 							</div>
 						</div>
