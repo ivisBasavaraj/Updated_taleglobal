@@ -135,8 +135,8 @@
 }
 
 .emp-table thead th {
-    background: #FDC360 !important;
-    color: #ffffff !important;
+    background: #fff5e6 !important;
+    color: #000000 !important;
     font-weight: 700;
     padding: 18px 20px;
     border: none;
@@ -146,9 +146,9 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    box-shadow: 0 2px 8px rgba(253, 195, 96, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(255, 245, 230, 0.3) !important;
     text-align: left;
-    border-bottom: 2px solid #FDC360 !important;
+    border-bottom: 2px solid #ffe0b3 !important;
     white-space: nowrap;
 }
 
@@ -228,7 +228,7 @@
 
 .status-badge {
     padding: 8px 16px;
-    border-radius: 25px;
+    border-radius: 10px;
     font-size: 0.85rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -236,18 +236,21 @@
 }
 
 .status-pending {
-    background: #FDC360 !important;
-    color: white !important;
+    background: rgba(255, 122, 0, 0.08) !important;
+    color: #ff7a00 !important;
+    border: 1px solid rgba(255, 122, 0, 0.3) !important;
 }
 
 .status-approved {
-    background: #FDC360 !important;
-    color: white !important;
+    background: rgba(255, 122, 0, 0.08) !important;
+    color: #ff7a00 !important;
+    border: 1px solid rgba(255, 122, 0, 0.3) !important;
 }
 
 .status-rejected {
-    background: #FDC360 !important;
-    color: white !important;
+    background: rgba(255, 122, 0, 0.08) !important;
+    color: #ff7a00 !important;
+    border: 1px solid rgba(255, 122, 0, 0.3) !important;
 }
 
 .action-buttons {
@@ -259,10 +262,11 @@
 }
 
 .action-btn {
-    width: auto;
+    width: 140px;
     min-width: 140px;
-    padding: 12px 28px;
-    border: 1px solid #FDC360;
+    max-width: 140px;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 122, 0, 0.3);
     border-radius: 10px;
     font-size: 0.85rem;
     font-weight: 600;
@@ -275,8 +279,8 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     text-align: center;
-    background: #FDC360;
-    color: white;
+    background: rgba(255, 122, 0, 0.08);
+    color: rgba(255, 122, 0, 0.7);
     white-space: nowrap;
     box-sizing: border-box;
 }
@@ -310,14 +314,15 @@
 }
 
 .btn-view {
-    background: #FDC360 !important;
-    color: white !important;
-    border: 1px solid #FDC360 !important;
+    background: rgba(255, 122, 0, 0.08) !important;
+    color: rgba(255, 122, 0, 0.7) !important;
+    border: 1px solid rgba(255, 122, 0, 0.3) !important;
 }
 
 .btn-view:hover {
-    background: #e5b050 !important;
-    box-shadow: 0 5px 15px rgba(253, 195, 96, 0.4) !important;
+    background: rgba(255, 122, 0, 0.08) !important;
+    color: rgba(255, 122, 0, 0.7) !important;
+    box-shadow: 0 5px 15px rgba(255, 122, 0, 0.2) !important;
 }
 
 .loading-container {

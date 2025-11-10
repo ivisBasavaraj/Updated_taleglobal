@@ -305,6 +305,10 @@ function EmployerDetails() {
                             <h6><i className="fa fa-map-marker-alt"></i>Corporate Address</h6>
                             <p>{profile.corporateAddress || 'N/A'}</p>
                         </div>
+                        <div className="profile-field" data-aos="fade-left" data-aos-delay="375">
+                            <h6><i className="fa fa-map-pin"></i>Pincode</h6>
+                            <p>{profile.pincode || 'N/A'}</p>
+                        </div>
                         <div className="profile-field" data-aos="fade-left" data-aos-delay="400">
                             <h6><i className="fa fa-map-marked"></i>Branch Locations</h6>
                             <p>{profile.branchLocations || 'N/A'}</p>
