@@ -194,12 +194,6 @@
     flex-shrink: 0;
 }
 
-.card-apply-btn:hover {
-    background-color: #e8690a !important;
-    color: white !important;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(253, 126, 20, 0.3);
-}
 
 /* Responsive Design */
 @media (max-width: 1199px) {

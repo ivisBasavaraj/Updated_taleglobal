@@ -2058,23 +2058,8 @@ ol li {
 }
 
 .site-button::after {
-    content: '→' !important;
-    color: #FF7A00 !important;
-    font-weight: 600 !important;
-    transition: transform 0.3s ease !important;
-  outline: none;
-  color: #fff;
-  padding: 15px 30px;
-  border-radius: 10px;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  display: inline-table;
-  background-color: #1967d2;
-  border: none;
-  font-size: 16px;
-  font-weight: 600;
-  transition: 0.5s all ease;
+    content: none !important;
+    display: none !important;
 }
 .site-button:hover {
   color: #000;

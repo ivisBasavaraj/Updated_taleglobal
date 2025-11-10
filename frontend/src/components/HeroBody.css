@@ -91,16 +91,6 @@
   transition: all 0.3s ease;
 }
 
-.btn-signup {
-  background: #9E9E9E;
-  color: white;
-}
-
-.btn-signup:hover {
-  background: #9E9E9E;
-  transform: translateY(-1px);
-}
-
 .btn-signin {
   background: #ff9c00;
   color: white;
