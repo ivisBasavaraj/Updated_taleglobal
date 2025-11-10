@@ -34,7 +34,7 @@ export default function AssessmentResults() {
   return (
     <div className="container mt-4">
       <div className="card mb-4">
-        <div className="card-header bg-primary text-white">
+        <div className="card-header text-white" style={{background: 'linear-gradient(135deg, #ffb366 0%, #ff9933 100%)'}}>
           <h4 className="mb-0">{assessment?.title} - Results</h4>
           <small>{results.length} participants</small>
         </div>
@@ -73,8 +73,11 @@ export default function AssessmentResults() {
                     </td>
                     <td>
                       <button 
-                        className="btn btn-sm btn-primary"
-                        onClick={() => window.open(`/employer/assessment-details/${result._id}`, '_blank')}
+                        className="btn btn-sm rounded-pill"
+                        style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '6px 16px', transition: 'none'}}
+                        onClick={() => window.open(`/employer/emp-candidate-review/${result.applicationId || result._id}`, '_blank')}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#ffb366'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffb366'}
                       >
                         View Details
                       </button>

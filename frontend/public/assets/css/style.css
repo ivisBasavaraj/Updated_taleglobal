@@ -2042,16 +2042,16 @@ ol li {
     justify-content: center;
     gap: 8px;
     padding: 12px 26px;
-    border: 1px solid #FF7A00 !important;
+    border: 1px solid rgba(255, 122, 0, 0.3) !important;
     border-radius: 9999px !important;
     background: rgba(255, 122, 0, 0.08) !important;
-    color: #FF7A00 !important;
+    color: rgba(255, 122, 0, 0.7) !important;
     font-weight: 600 !important;
     font-size: 16px !important;
     letter-spacing: 0.3px !important;
     text-transform: none !important;
     text-decoration: none !important;
-    transition: all 0.3s ease !important;
+    transition: none !important;
     cursor: pointer !important;
     position: relative !important;
     overflow: hidden !important;
@@ -2061,21 +2061,19 @@ ol li {
     content: none !important;
     display: none !important;
 }
-.site-button:hover {
-  color: #000;
-}
-.site-button i {
-  padding-right: 10px;
-}
 
 .site-button:hover {
     background: rgba(255, 122, 0, 0.08) !important;
-    transform: none !important;
-    box-shadow: none !important;
+    color: rgba(255, 122, 0, 0.7) !important;
+    border: 1px solid rgba(255, 122, 0, 0.3) !important;
 }
 
 .site-button:hover::after {
     transform: none !important;
+}
+
+.site-button i {
+  padding-right: 10px;
 }
 
 /* White variant */
@@ -2093,7 +2091,6 @@ ol li {
 .site-button.secondry {
     background: rgba(255, 122, 0, 0.05) !important;
     border-color: rgba(255, 122, 0, 0.3) !important;
-    color: #FF7A00 !important;
 }
 
 /* Outline white variant */

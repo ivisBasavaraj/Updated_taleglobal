@@ -555,15 +555,15 @@ function EmpCandidateReviewPage () {
 								</label>
 							</div>
 
-							<div className="d-grid gap-3">
-								<button className="btn btn-lg rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}} onClick={saveReview}>
-									<Save size={18} className="me-2" />Save Review
+							<div className="d-flex flex-column gap-2">
+								<button className="btn btn-sm rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '8px 16px', minHeight: '38px', width: '100%', display: 'block'}} onClick={saveReview}>
+									<Save size={16} className="me-2" />Save Review
 								</button>
-								<button className="btn btn-lg rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}} onClick={shortlistCandidate}>
-									<Check size={18} className="me-2" />Shortlist Candidate
+								<button className="btn btn-sm rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '8px 16px', minHeight: '38px', width: '100%', display: 'block'}} onClick={shortlistCandidate}>
+									<Check size={16} className="me-2" />Shortlist Candidate
 								</button>
-								<button className="btn btn-lg rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}} onClick={rejectCandidate}>
-									<X size={18} className="me-2" />Reject Candidate
+								<button className="btn btn-sm rounded-pill fw-semibold" style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '8px 16px', minHeight: '38px', width: '100%', display: 'block'}} onClick={rejectCandidate}>
+									<X size={16} className="me-2" />Reject Candidate
 								</button>
 							</div>
 						</div>
