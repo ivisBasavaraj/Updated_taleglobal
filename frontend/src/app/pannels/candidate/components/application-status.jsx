@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadScript } from "../../../../globals/constants";
 import { api } from "../../../../utils/api";
+import showToast from "../../../../utils/toastNotification";
 import { pubRoute, publicUser } from "../../../../globals/route-names";
 import CanPostedJobs from "./can-posted-jobs";
 import PopupInterviewRoundDetails from "../../../common/popups/popup-interview-round-details";
@@ -59,6 +60,26 @@ function CanStatusPage() {
 	const [selectedRoundDetails, setSelectedRoundDetails] = useState(null);
 	const [selectedRoundType, setSelectedRoundType] = useState(null);
 	const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
+	const [showAllDetails, setShowAllDetails] = useState(false);
+	const [selectedApplication, setSelectedApplication] = useState(null);
+
+	const getAssessmentWindowInfo = (job) => {
+		const now = new Date();
+		const startRaw = job?.assessmentStartDate ? new Date(job.assessmentStartDate) : null;
+		const endRaw = job?.assessmentEndDate ? new Date(job.assessmentEndDate) : null;
+		const isValid = (date) => date instanceof Date && !isNaN(date.getTime());
+		const startDate = isValid(startRaw) ? startRaw : null;
+		const endDate = isValid(endRaw) ? endRaw : null;
+		const isBeforeStart = startDate ? now < startDate : false;
+		const isAfterEnd = endDate ? now > endDate : false;
+		return {
+			isBeforeStart,
+			isAfterEnd,
+			isWithinWindow: !(isBeforeStart || isAfterEnd),
+			startDate,
+			endDate
+		};
+	};
 
 	useEffect(() => {
 		loadScript("js/custom.js");
@@ -210,15 +231,39 @@ function CanStatusPage() {
 		setShowRoundDetails(true);
 	};
 
+	const handleViewAllDetails = (application) => {
+		setSelectedApplication(application);
+		setShowAllDetails(true);
+	};
+
 	const handleStartAssessment = (application) => {
-		const assessmentId = application.jobId?.assessmentId;
-		if (assessmentId) {
-			navigate('/candidate/start-tech-assessment', {
-				state: {
-					assessmentId,
-					jobId: application.jobId?._id,
-					applicationId: application._id
+		const job = application.jobId;
+		const windowInfo = getAssessmentWindowInfo(job);
+		if (!windowInfo.isWithinWindow) {
+			if (windowInfo.isBeforeStart) {
+				const startLabel = windowInfo.startDate ? windowInfo.startDate.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) : null;
+				showToast(startLabel ? `Assessment opens on ${startLabel}` : 'Assessment is not yet available', 'warning');
+				return;
+			}
+			showToast('Assessment window has ended', 'error');
+			return;
+		}
+		const assessmentId = job?.assessmentId;
+		const jobId = job?._id || job;
+		const applicationId = application._id;
+		if (assessmentId && jobId && applicationId) {
+			const sessionPayload = { assessmentId, jobId, applicationId };
+			try {
+				sessionStorage.setItem('candidateCurrentAssessment', JSON.stringify(sessionPayload));
+			} catch (err) {}
+			const params = new URLSearchParams();
+			Object.entries(sessionPayload).forEach(([key, value]) => {
+				if (value) {
+					params.set(key, value);
 				}
+			});
+			navigate(`/candidate/start-tech-assessment?${params.toString()}`, {
+				state: sessionPayload
 			});
 		}
 	};
@@ -255,7 +300,8 @@ function CanStatusPage() {
 			);
 		}
 
-		// Format assessment dates
+		const windowInfo = getAssessmentWindowInfo(job);
+
 		const formatDate = (dateString) => {
 			if (!dateString) return null;
 			return new Date(dateString).toLocaleDateString('en-US', {
@@ -272,29 +318,34 @@ function CanStatusPage() {
 						   endDate ? `Until ${endDate}` : null;
 
 		switch (assessmentStatus) {
-			case 'available':
+			case 'available': {
+				const isDisabled = !windowInfo.isWithinWindow;
+				const label = windowInfo.isBeforeStart ? 'Opens Soon' : windowInfo.isAfterEnd ? 'Closed' : 'Start Assessment';
+				const buttonStyle = {
+					fontSize: '10px',
+					padding: '4px 8px',
+					backgroundColor: isDisabled ? '#6c757d' : '#28a745',
+					border: `1px solid ${isDisabled ? '#6c757d' : '#28a745'}`,
+					color: 'white',
+					whiteSpace: 'nowrap',
+					display: 'flex',
+					alignItems: 'center',
+					gap: '4px',
+					width: '100%',
+					justifyContent: 'flex-start',
+					cursor: isDisabled ? 'not-allowed' : 'pointer'
+				};
 				return (
 					<div style={{display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '120px'}}>
 						<button
 							className="btn btn-sm"
-							style={{
-								fontSize: '10px',
-								padding: '4px 8px',
-								backgroundColor: '#28a745',
-								border: '1px solid #28a745',
-								color: 'white',
-								whiteSpace: 'nowrap',
-								display: 'flex',
-								alignItems: 'center',
-								gap: '4px',
-								width: '100%',
-								justifyContent: 'flex-start'
-							}}
+							style={buttonStyle}
 							onClick={() => handleStartAssessment(application)}
 							title="Start Assessment"
+							disabled={isDisabled}
 						>
 							<i className="fa fa-play" style={{color: 'white', width: '14px'}}></i>
-							<span>Start Assessment</span>
+							<span>{label}</span>
 						</button>
 						{dateDisplay && (
 							<small style={{fontSize: '8px', color: '#666', textAlign: 'center'}}>
@@ -303,29 +354,34 @@ function CanStatusPage() {
 						)}
 					</div>
 				);
-			case 'in_progress':
+			}
+			case 'in_progress': {
+				const isDisabled = windowInfo.isAfterEnd;
+				const buttonStyle = {
+					fontSize: '10px',
+					padding: '4px 8px',
+					backgroundColor: isDisabled ? '#6c757d' : '#ffc107',
+					border: `1px solid ${isDisabled ? '#6c757d' : '#ffc107'}`,
+					color: isDisabled ? 'white' : '#212529',
+					whiteSpace: 'nowrap',
+					display: 'flex',
+					alignItems: 'center',
+					gap: '4px',
+					width: '100%',
+					justifyContent: 'flex-start',
+					cursor: isDisabled ? 'not-allowed' : 'pointer'
+				};
 				return (
 					<div style={{display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '120px'}}>
 						<button
 							className="btn btn-sm"
-							style={{
-								fontSize: '10px',
-								padding: '4px 8px',
-								backgroundColor: '#ffc107',
-								border: '1px solid #ffc107',
-								color: '#212529',
-								whiteSpace: 'nowrap',
-								display: 'flex',
-								alignItems: 'center',
-								gap: '4px',
-								width: '100%',
-								justifyContent: 'flex-start'
-							}}
+							style={buttonStyle}
 							onClick={() => handleStartAssessment(application)}
 							title="Continue Assessment"
+							disabled={isDisabled}
 						>
-							<i className="fa fa-clock-o" style={{color: '#212529', width: '14px'}}></i>
-							<span>Continue</span>
+							<i className="fa fa-clock-o" style={{color: isDisabled ? 'white' : '#212529', width: '14px'}}></i>
+							<span>{isDisabled ? 'Closed' : 'Continue'}</span>
 						</button>
 						{dateDisplay && (
 							<small style={{fontSize: '8px', color: '#666', textAlign: 'center'}}>
@@ -334,6 +390,7 @@ function CanStatusPage() {
 						)}
 					</div>
 				);
+			}
 			case 'completed':
 				return (
 					<div style={{display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '120px'}}>
@@ -371,30 +428,34 @@ function CanStatusPage() {
 						)}
 					</div>
 				);
-			default:
-				// For jobs with assessment but status not set, default to available
+			default: {
+				const isDisabled = !windowInfo.isWithinWindow;
+				const label = windowInfo.isBeforeStart ? 'Opens Soon' : windowInfo.isAfterEnd ? 'Closed' : 'Start Assessment';
+				const buttonStyle = {
+					fontSize: '10px',
+					padding: '4px 8px',
+					backgroundColor: isDisabled ? '#6c757d' : '#28a745',
+					border: `1px solid ${isDisabled ? '#6c757d' : '#28a745'}`,
+					color: 'white',
+					whiteSpace: 'nowrap',
+					display: 'flex',
+					alignItems: 'center',
+					gap: '4px',
+					width: '100%',
+					justifyContent: 'flex-start',
+					cursor: isDisabled ? 'not-allowed' : 'pointer'
+				};
 				return (
 					<div style={{display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '120px'}}>
 						<button
 							className="btn btn-sm"
-							style={{
-								fontSize: '10px',
-								padding: '4px 8px',
-								backgroundColor: '#28a745',
-								border: '1px solid #28a745',
-								color: 'white',
-								whiteSpace: 'nowrap',
-								display: 'flex',
-								alignItems: 'center',
-								gap: '4px',
-								width: '100%',
-								justifyContent: 'flex-start'
-							}}
+							style={buttonStyle}
 							onClick={() => handleStartAssessment(application)}
 							title="Start Assessment"
+							disabled={isDisabled}
 						>
 							<i className="fa fa-play" style={{color: 'white', width: '14px'}}></i>
-							<span>Start Assessment</span>
+							<span>{label}</span>
 						</button>
 						{dateDisplay && (
 							<small style={{fontSize: '8px', color: '#666', textAlign: 'center'}}>
@@ -403,6 +464,7 @@ function CanStatusPage() {
 						)}
 					</div>
 				);
+			}
 		}
 	};
 
@@ -481,7 +543,7 @@ function CanStatusPage() {
 												<i className="fa fa-flag me-2" style={{color: '#ff6b35'}}></i>
 												Status
 											</th>
-											<th className="border-0 px-4 py-3 fw-semibold" style={{color: '#232323'}}>
+											<th className="border-0 px-4 py-3 fw-semibold text-center" style={{color: '#232323'}}>
 												<i className="fa fa-eye me-2" style={{color: '#ff6b35'}}></i>
 												View Details
 											</th>
@@ -601,47 +663,34 @@ function CanStatusPage() {
 																{app.status?.charAt(0).toUpperCase() + app.status?.slice(1) || 'Pending'}
 															</span>
 														</td>
-														<td className="px-4 py-3">
-															<div className="view-details-wrapper" style={{display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-start', maxHeight: '150px', overflowY: 'auto', overflowX: 'hidden'}}>
-																{interviewRounds.length > 0 ? (
-																	interviewRounds.map((round, roundIndex) => {
-																		// Special handling for Assessment round
-																		if (round === 'Assessment') {
-																			return (
-																				<div key={roundIndex} style={{marginBottom: '4px'}}>
-																					{getAssessmentButton(app)}
-																				</div>
-																			);
-																		}
-
-																		// Regular interview rounds
-																		const roundTypeMap = {
-																			'Technical': 'technical',
-																			'HR': 'hr',
-																			'Managerial': 'managerial',
-																			'Non-Technical': 'nonTechnical',
-																			'Final': 'final'
-																		};
-																		const roundKey = roundTypeMap[round];
-																		const roundDetails = app.jobId?.interviewRoundDetails?.[roundKey];
-																		return (
-																			<div key={roundIndex} style={{marginBottom: '4px'}}>
-																				<button
-																					className="btn btn-sm"
-																					style={{fontSize: '10px', padding: '4px 8px', backgroundColor: 'transparent', border: '1px solid #ff6b35', color: '#ff6b35 !important', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px', minWidth: '120px', justifyContent: 'flex-start'}}
-																					onClick={() => handleViewRoundDetails(roundKey, roundDetails)}
-																					title={`View ${round} details`}
-																				>
-																					<i className="fa fa-eye" style={{color: '#ff6b35', width: '14px'}}></i>
-																					<span style={{color: '#ff6b35'}}>{round}</span>
-																				</button>
-																			</div>
-																		);
-																	})
-																) : (
-																	<span className="text-muted fst-italic" style={{fontSize: '11px'}}>No rounds</span>
-																)}
-															</div>
+														<td className="px-4 py-3 text-center">
+															<button
+																className="btn btn-sm"
+																style={{
+																	width: '40px',
+																	height: '40px',
+																	borderRadius: '50%',
+																	backgroundColor: '#fff3e0',
+																	border: '2px solid #ff6b35',
+																	display: 'flex',
+																	alignItems: 'center',
+																	justifyContent: 'center',
+																	padding: '0',
+																	transition: 'all 0.3s ease'
+																}}
+																onClick={() => handleViewAllDetails(app)}
+																title="View all interview process details"
+																onMouseEnter={(e) => {
+																	e.currentTarget.style.backgroundColor = '#ff6b35';
+																	e.currentTarget.querySelector('i').style.color = 'white';
+																}}
+																onMouseLeave={(e) => {
+																	e.currentTarget.style.backgroundColor = '#fff3e0';
+																	e.currentTarget.querySelector('i').style.color = '#ff6b35';
+																}}
+															>
+																<i className="fa fa-eye" style={{color: '#ff6b35', fontSize: '18px', transition: 'color 0.3s ease'}}></i>
+															</button>
 														</td>
 													</tr>
 												);
@@ -664,6 +713,149 @@ function CanStatusPage() {
 				roundType={selectedRoundType}
 				assessmentId={selectedAssessmentId}
 			/>
+
+			{/* All Interview Details Modal */}
+			{showAllDetails && selectedApplication && (
+				<div className="modal fade show" style={{display: 'block', backgroundColor: 'rgba(0,0,0,0.5)'}} onClick={() => setShowAllDetails(false)}>
+					<div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" onClick={(e) => e.stopPropagation()}>
+						<div className="modal-content" style={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 40px rgba(0,0,0,0.2)'}}>
+							<div className="modal-header" style={{backgroundColor: '#ff6b35', color: 'white', borderRadius: '12px 12px 0 0'}}>
+								<h5 className="modal-title">
+									<i className="fa fa-clipboard-list me-2"></i>
+									Interview Process Details
+								</h5>
+								<button type="button" className="btn-close btn-close-white" onClick={() => setShowAllDetails(false)}></button>
+							</div>
+							<div className="modal-body" style={{padding: '30px'}}>
+								{/* Job Information */}
+								<div className="mb-4 p-3" style={{backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #e0e0e0'}}>
+									<h6 className="mb-3" style={{color: '#232323', fontWeight: '600'}}>
+										<i className="fa fa-briefcase me-2" style={{color: '#ff6b35'}}></i>
+										Job Information
+									</h6>
+									<div className="row">
+										<div className="col-md-6 mb-2">
+											<strong>Company:</strong> {selectedApplication.employerId?.companyName || 'N/A'}
+										</div>
+										<div className="col-md-6 mb-2">
+											<strong>Position:</strong> {selectedApplication.jobId?.title || 'N/A'}
+										</div>
+										<div className="col-md-6 mb-2">
+											<strong>Location:</strong> {selectedApplication.jobId?.location || 'N/A'}
+										</div>
+										<div className="col-md-6 mb-2">
+											<strong>Applied Date:</strong> {new Date(selectedApplication.createdAt || selectedApplication.appliedAt).toLocaleDateString('en-US', {day: '2-digit', month: 'short', year: 'numeric'})}
+										</div>
+										<div className="col-md-12 mb-2">
+											<strong>Status:</strong> 
+											<span className={
+												selectedApplication.status === 'pending' ? 'badge bg-warning ms-2' :
+												selectedApplication.status === 'shortlisted' ? 'badge bg-info ms-2' :
+												selectedApplication.status === 'interviewed' ? 'badge bg-primary ms-2' :
+												selectedApplication.status === 'hired' ? 'badge bg-success ms-2' :
+												selectedApplication.status === 'rejected' ? 'badge bg-danger ms-2' : 'badge bg-secondary ms-2'
+											}>
+												{selectedApplication.status?.charAt(0).toUpperCase() + selectedApplication.status?.slice(1) || 'Pending'}
+											</span>
+										</div>
+									</div>
+								</div>
+
+								{/* Interview Rounds */}
+								<div className="mb-3">
+									<h6 className="mb-3" style={{color: '#232323', fontWeight: '600'}}>
+										<i className="fa fa-tasks me-2" style={{color: '#ff6b35'}}></i>
+										Interview Rounds
+									</h6>
+									{getInterviewRounds(selectedApplication.jobId).map((round, roundIndex) => {
+										const roundStatus = getRoundStatus(selectedApplication, roundIndex);
+										const roundTypeMap = {
+											'Technical': 'technical',
+											'HR': 'hr',
+											'Managerial': 'managerial',
+											'Non-Technical': 'nonTechnical',
+											'Final': 'final',
+											'Assessment': 'assessment'
+										};
+										const roundKey = roundTypeMap[round];
+										const roundDetails = selectedApplication.jobId?.interviewRoundDetails?.[roundKey];
+										const assessmentId = selectedApplication.jobId?.assessmentId;
+
+										return (
+											<div key={roundIndex} className="mb-3 p-3" style={{backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e0e0e0'}}>
+												<div className="d-flex justify-content-between align-items-center mb-2">
+													<h6 className="mb-0" style={{color: '#232323', fontWeight: '600'}}>
+														<i className="fa fa-circle me-2" style={{color: '#ff6b35', fontSize: '8px'}}></i>
+														{round}
+													</h6>
+													<span className={`badge ${roundStatus.class}`}>
+														{roundStatus.text}
+													</span>
+												</div>
+												
+												{/* Assessment Details */}
+												{round === 'Assessment' && assessmentId && (
+													<div className="mt-2">
+														<div className="mb-2">
+															<small className="text-muted">Assessment Status:</small>
+															<div className="mt-1">
+																{getAssessmentButton(selectedApplication)}
+															</div>
+														</div>
+													</div>
+												)}
+
+												{/* Round Details */}
+												{round !== 'Assessment' && roundDetails && (
+													<div className="mt-2">
+														{roundDetails.date && (
+															<div className="mb-2">
+																<small className="text-muted"><i className="fa fa-calendar me-1"></i>Date:</small>
+																<div>{new Date(roundDetails.date).toLocaleDateString('en-US', {day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</div>
+															</div>
+														)}
+														{roundDetails.location && (
+															<div className="mb-2">
+																<small className="text-muted"><i className="fa fa-map-marker me-1"></i>Location:</small>
+																<div>{roundDetails.location}</div>
+															</div>
+														)}
+														{roundDetails.interviewerName && (
+															<div className="mb-2">
+																<small className="text-muted"><i className="fa fa-user me-1"></i>Interviewer:</small>
+																<div>{roundDetails.interviewerName}</div>
+															</div>
+														)}
+														{roundDetails.description && (
+															<div className="mb-2">
+																<small className="text-muted"><i className="fa fa-info-circle me-1"></i>Description:</small>
+																<div>{roundDetails.description}</div>
+															</div>
+														)}
+													</div>
+												)}
+
+												{/* Feedback */}
+												{roundStatus.feedback && (
+													<div className="mt-2 p-2" style={{backgroundColor: '#f8f9fa', borderRadius: '6px'}}>
+														<small className="text-muted"><i className="fa fa-comment me-1"></i>Feedback:</small>
+														<div className="mt-1">{roundStatus.feedback}</div>
+													</div>
+												)}
+											</div>
+										);
+									})}
+								</div>
+							</div>
+							<div className="modal-footer" style={{borderTop: '1px solid #e0e0e0'}}>
+								<button type="button" className="btn btn-secondary" onClick={() => setShowAllDetails(false)}>
+									Close
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
 		</>
 	);
 }

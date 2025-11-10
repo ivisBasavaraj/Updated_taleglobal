@@ -1,7 +1,8 @@
 import React from 'react';
 
-const TermsModal = ({ isOpen, onAccept, onDecline, assessmentTimeLimit }) => {
+const TermsModal = ({ isOpen, onAccept, onDecline, assessment }) => {
     if (!isOpen) return null;
+    const timeLimit = assessment?.timer ?? assessment?.timeLimit ?? '--';
 
     return (
         <div className="modal fade twm-model-popup show" id="termsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex={-1} aria-hidden="false" style={{ display: 'block' }}>
@@ -17,7 +18,7 @@ const TermsModal = ({ isOpen, onAccept, onDecline, assessmentTimeLimit }) => {
 
                             <div className="mb-3">
                                 <h6>Time Limit</h6>
-                                <p>You have <strong>{assessmentTimeLimit} minutes</strong> to complete this assessment. The timer will start once you begin the assessment.</p>
+                                <p>You have <strong>{timeLimit} minutes</strong> to complete this assessment. The timer will start once you begin the assessment.</p>
                             </div>
 
                             <div className="mb-3">

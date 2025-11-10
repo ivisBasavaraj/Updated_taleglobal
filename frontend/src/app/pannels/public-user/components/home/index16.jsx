@@ -574,22 +574,15 @@ function Home16Page() {
                                 className="wt-separator-two-part-left mb-4"
                             >
                                 {/* title="" START*/}
-                                <div className="section-head left wt-small-separator-outer" style={{paddingLeft: 0, marginLeft: 0}}>
-                                    <div className="wt-small-separator site-text-primary" style={{paddingLeft: 0, marginLeft: 0, justifyContent: 'flex-start'}}>
-                                        <div style={{paddingLeft: 0, marginLeft: 0}}>
-                                            {isFiltered ? "Filtered Jobs" : "Top Recruiters"}
-                                        </div>
-                                    </div>
-
-                                    <h2 className="wt-title" style={{paddingLeft: 0, marginLeft: 0, textAlign: 'left'}}>
-                                        {isFiltered
-                                            ? `Found ${filteredJobs.length} Job${
-                                                filteredJobs.length !== 1 ? "s" : ""
-                                              } Matching Your Search`
-                                            : "Discover your next career move"}
-                                    </h2>
-                                </div>
-                                {/* title="" END*/}
+                                 <div className="recruiters-header-section" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px'}}>
+                        <div className="text-left">
+                            <div className="wt-small-separator site-text-primary">
+                                <div>Top Recruiters</div>
+                            </div>
+                            <h2 className="wt-title mb-0">Discover your next career move</h2>
+                        </div>
+                        </div>
+                            {/* title="" END*/}
                             </Col>
 
                             <Col

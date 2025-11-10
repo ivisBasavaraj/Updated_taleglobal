@@ -6,10 +6,33 @@ import TermsModal from "../components/TermsModal";
 import ViolationModal from "../components/ViolationModal";
 import AssessmentTerminated from "../components/AssessmentTerminated";
 
+const ASSESSMENT_SESSION_KEY = 'candidateCurrentAssessment';
+const ASSESSMENT_ATTEMPT_KEY = 'candidateCurrentAssessmentAttempt';
+
 const StartAssessment = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { assessmentId, jobId, applicationId } = location.state || {};
+    const navigationState = location.state || {};
+
+    const getSessionInfo = () => {
+        const params = new URLSearchParams(location.search);
+        let stored = {};
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            try {
+                stored = JSON.parse(window.sessionStorage.getItem(ASSESSMENT_SESSION_KEY) || '{}');
+            } catch (err) {
+                stored = {};
+            }
+        }
+        return {
+            assessmentId: navigationState.assessmentId || params.get('assessmentId') || stored.assessmentId || null,
+            jobId: navigationState.jobId || params.get('jobId') || stored.jobId || null,
+            applicationId: navigationState.applicationId || params.get('applicationId') || stored.applicationId || null
+        };
+    };
+
+    const [sessionInfo, setSessionInfo] = useState(getSessionInfo);
+    const { assessmentId, jobId, applicationId } = sessionInfo;
 
     // Assessment state
     const [assessment, setAssessment] = useState(null);
@@ -21,6 +44,39 @@ const StartAssessment = () => {
     const [error, setError] = useState(null);
     const [attemptId, setAttemptId] = useState(null);
     const [startTime, setStartTime] = useState(null);
+
+    useEffect(() => {
+        setSessionInfo(getSessionInfo());
+    }, [location.search, location.state]);
+
+    useEffect(() => {
+        if (assessmentId && jobId && applicationId && typeof window !== 'undefined' && window.sessionStorage) {
+            try {
+                window.sessionStorage.setItem(ASSESSMENT_SESSION_KEY, JSON.stringify({ assessmentId, jobId, applicationId }));
+            } catch (err) {}
+        }
+    }, [assessmentId, jobId, applicationId]);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            try {
+                const savedAttemptId = window.sessionStorage.getItem(ASSESSMENT_ATTEMPT_KEY);
+                if (savedAttemptId) {
+                    setAttemptId(savedAttemptId);
+                }
+            } catch (err) {}
+        }
+    }, []);
+
+    const clearStoredAssessment = useCallback(() => {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+            try {
+                window.sessionStorage.removeItem(ASSESSMENT_SESSION_KEY);
+                window.sessionStorage.removeItem(ASSESSMENT_ATTEMPT_KEY);
+            } catch (err) {}
+        }
+        setAttemptId(null);
+    }, []);
 
     // Security and modal state
     const [assessmentState, setAssessmentState] = useState('not_started'); // not_started, terms_pending, in_progress, terminated, completed
@@ -61,6 +117,7 @@ const StartAssessment = () => {
                     setIsTerminated(true);
                     setAssessmentState('terminated');
                     removeSecurityListeners();
+                    clearStoredAssessment();
                 }
             }
         } catch (error) {
@@ -171,6 +228,7 @@ const StartAssessment = () => {
 	useEffect(() => {
 		if (!assessmentId || !jobId || !applicationId) {
 			setError("Missing assessment information. Please go back and try again.");
+			clearStoredAssessment();
 			setLoading(false);
 			return;
 		}
@@ -235,7 +293,6 @@ const StartAssessment = () => {
 		try {
 			setShowTermsModal(false);
 
-			// Now start the assessment attempt
 			const startResponse = await api.startAssessment({
 				assessmentId,
 				jobId,
@@ -244,23 +301,33 @@ const StartAssessment = () => {
 
 			if (startResponse.success && startResponse.attempt && startResponse.attempt._id) {
 				setAttemptId(startResponse.attempt._id);
+				if (typeof window !== 'undefined' && window.sessionStorage) {
+					try {
+						window.sessionStorage.setItem(ASSESSMENT_ATTEMPT_KEY, startResponse.attempt._id);
+					} catch (err) {}
+				}
 				setStartTime(new Date());
-				setTimeLeft(assessment.timer * 60); // Convert minutes to seconds
+				const timerSeconds = Number(assessment?.timer || 0) * 60;
+				setTimeLeft(timerSeconds);
 				setAssessmentState('in_progress');
+				setError(null);
 			} else {
 				setError(startResponse.message || "Failed to start assessment. No attempt ID received.");
 				setShowTermsModal(true);
+				setAssessmentState('terms_pending');
 			}
 		} catch (err) {
 			console.error("Error starting assessment:", err);
 			setError("Failed to start assessment. Please try again.");
 			setShowTermsModal(true);
+			setAssessmentState('terms_pending');
 		}
 	};
 
 	const handleTermsDecline = () => {
 		setShowTermsModal(false);
-		navigate(-1); // Go back to previous page
+		clearStoredAssessment();
+		navigate(-1);
 	};
 
 	const handleViolationAcknowledge = () => {
@@ -272,28 +339,40 @@ const StartAssessment = () => {
 		if (!isSubmitted) {
 			setIsSubmitted(true);
 			await logViolation('time_expired', 'Assessment time expired');
-			await submitAssessment();
+			const success = await submitAssessment();
+			if (!success) {
+				setIsSubmitted(false);
+			}
 		}
 	};
 
 	const submitAssessment = async () => {
+		if (!attemptId) {
+			setError("Assessment session not started. Please restart the assessment.");
+			setShowTermsModal(true);
+			setAssessmentState('terms_pending');
+			return false;
+		}
 		try {
 			const submitResponse = await api.submitAssessment(attemptId, []);
 			if (submitResponse.success) {
 				setAssessmentState('completed');
 				removeSecurityListeners();
+				clearStoredAssessment();
 				navigate("/candidate/assessment-result", {
 					state: {
 						result: submitResponse.result,
 						assessment: assessment
 					},
 				});
-			} else {
-				setError("Failed to submit assessment");
+				return true;
 			}
+			setError("Failed to submit assessment");
+			return false;
 		} catch (err) {
 			console.error("Error submitting assessment:", err);
 			setError("Failed to submit assessment");
+			return false;
 		}
 	};
 
@@ -305,52 +384,27 @@ const StartAssessment = () => {
 
 	const handleOptionChange = async (option) => {
 		if (isSubmitted) return;
+		if (!attemptId) return;
 
 		const updated = [...answers];
 		updated[currentQuestionIndex] = option;
 		setAnswers(updated);
 
-		// Submit answer to backend
-		if (attemptId) {
-			try {
-				await api.submitAnswer(attemptId, currentQuestionIndex, option, 0);
-			} catch (err) {
-				console.error("Error submitting answer:", err);
-				if (err.message.includes('404') || err.message.includes('not found')) {
-					setError("Assessment session expired. Please restart the assessment.");
-				}
+		try {
+			await api.submitAnswer(attemptId, currentQuestionIndex, option, 0);
+		} catch (err) {
+			console.error("Error submitting answer:", err);
+			if (err.message.includes('404') || err.message.includes('not found')) {
+				setError("Assessment session expired. Please restart the assessment.");
 			}
 		}
 	};
 
 	const handleSubmit = async () => {
 		if (isSubmitted) return;
-		if (!attemptId) {
-			setError("Assessment session not started. Please restart the assessment.");
-			return;
-		}
 		setIsSubmitted(true);
-
-		try {
-			const submitResponse = await api.submitAssessment(attemptId, []);
-			if (submitResponse.success) {
-				navigate("/candidate/assessment-result", {
-					state: {
-						result: submitResponse.result,
-						assessment: assessment
-					},
-				});
-			} else {
-				setError(submitResponse.message || "Failed to submit assessment");
-				setIsSubmitted(false);
-			}
-		} catch (err) {
-			console.error("Error submitting assessment:", err);
-			if (err.message.includes('404') || err.message.includes('not found')) {
-				setError("Assessment session expired. Please restart the assessment.");
-			} else {
-				setError("Failed to submit assessment. Please try again.");
-			}
+		const success = await submitAssessment();
+		if (!success) {
 			setIsSubmitted(false);
 		}
 	};
@@ -386,6 +440,16 @@ const StartAssessment = () => {
 		);
 	}
 
+	if (assessmentState === 'terminated') {
+		return (
+			<AssessmentTerminated
+				violationType={terminationReason}
+				violationTimestamp={terminationTimestamp}
+				assessmentTitle={assessment?.title}
+			/>
+		);
+	}
+
 	if (!assessment) {
 		return (
 			<div style={{ padding: "20px", textAlign: "center", fontFamily: "Arial, sans-serif" }}>
@@ -397,15 +461,29 @@ const StartAssessment = () => {
 	const question = assessment.questions[currentQuestionIndex];
 
 	return (
-		<div
-			style={{
-				padding: "20px",
-				fontFamily: "Arial, sans-serif",
-				backgroundColor: "#f5f6fa",
-				minHeight: "100vh",
-			}}
-		>
-			<div style={{ maxWidth: "900px", margin: "0 auto" }}>
+		<>
+			<TermsModal
+				isOpen={showTermsModal}
+				onAccept={handleTermsAccept}
+				onDecline={handleTermsDecline}
+				assessment={assessment}
+			/>
+			<ViolationModal
+				isOpen={showViolationModal}
+				violationType={currentViolation?.type}
+				timestamp={currentViolation?.timestamp}
+				onAcknowledge={handleViolationAcknowledge}
+			/>
+			<div
+				ref={assessmentContainerRef}
+				style={{
+					padding: "20px",
+					fontFamily: "Arial, sans-serif",
+					backgroundColor: "#f5f6fa",
+					minHeight: "100vh",
+				}}
+			>
+				<div style={{ maxWidth: "900px", margin: "0 auto" }}>
 				{/* Title Bar */}
 				<div
 					style={{
@@ -588,7 +666,8 @@ const StartAssessment = () => {
 				</div>
 			</div>
 		</div>
-	);
+	</>
+);
 };
 
 export default StartAssessment;
