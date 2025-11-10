@@ -7,54 +7,28 @@ function PlacementLayout() {
     return (
         <>
             <div className="page-wraper" style={{background: '#f8f9fa'}}>
-                {/* Top Navigation Bar */}
-                <nav className="navbar navbar-expand-lg" style={{
-                    background: '#FF8237',
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-                }}>
-                    <div className="container-fluid px-4">
-                        <div className="navbar-brand d-flex align-items-center" style={{color: 'white'}}>
-                            <i className="fa fa-graduation-cap fa-lg mr-2" style={{color: 'white'}}></i>
-                            <span style={{fontWeight: '600', fontSize: '1.2rem'}}>Placement Portal</span>
-                        </div>
-                        <div className="navbar-nav ml-auto d-flex align-items-center" style={{columnGap: '1rem'}}>
-                            <div className="nav-item">
-                                <span className="nav-link d-flex align-items-center" style={{color: 'white', fontWeight: 500}}>
-                                    <i className="fa fa-user-circle mr-2"></i>
-                                    Account
-                                </span>
-                            </div>
-                            <button 
-                                className="btn btn-sm logout-btn"
-                                style={{borderRadius: '50px', padding: '0.4rem 1.1rem', fontWeight: 600, letterSpacing: '0.5px', color: '#ffffff', border: '2px solid #ffffff', backgroundColor: 'transparent', transition: 'all 0.3s'}}
-                                onClick={() => {
-                                    localStorage.removeItem('placementToken');
-                                    window.location.href = '/login';
-                                }}
-                            >
-                                <i className="fa fa-sign-out mr-2"></i>
-                                Logout
-                            </button>
-                            <style>{`
-                                .logout-btn {
-                                    color: #FF8237 !important;
-                                    border-color: #ffffff !important;
-                                    background-color: #ffffff !important;
-                                }
-                                .logout-btn i {
-                                    color: #FF8237 !important;
-                                }
-                                .logout-btn:hover {
-                                    background-color: #ffffff !important;
-                                    color: #FF8237 !important;
-                                }
-                                .logout-btn:hover i {
-                                    color: #FF8237 !important;
-                                }
-                            `}</style>
-                        </div>
-                    </div>
-                </nav>
+                {/* Logout Button */}
+                <div style={{position: 'fixed', top: '20px', right: '20px', zIndex: 1000}}>
+                    <button 
+                        className="btn btn-sm logout-btn"
+                        style={{borderRadius: '50px', padding: '0.5rem 1.2rem', fontWeight: 600, color: '#ffffff', border: '2px solid #FF8237', backgroundColor: '#FF8237', transition: 'all 0.3s', boxShadow: '0 2px 8px rgba(255,130,55,0.3)'}}
+                        onClick={() => {
+                            localStorage.removeItem('placementToken');
+                            window.location.href = '/login';
+                        }}
+                    >
+                        <i className="fa fa-sign-out mr-2"></i>
+                        Logout
+                    </button>
+                    <style>{`
+                        .logout-btn:hover {
+                            background-color: #e55a2b !important;
+                            border-color: #e55a2b !important;
+                            transform: translateY(-2px);
+                            box-shadow: 0 4px 12px rgba(255,130,55,0.4) !important;
+                        }
+                    `}</style>
+                </div>
                 
                 <div className="page-content">
                     <PlacementRoutes />

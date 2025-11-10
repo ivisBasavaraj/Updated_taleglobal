@@ -3,77 +3,15 @@ import { api } from "../../../../../utils/api";
 import CountryCodeSelector from "../../../../../components/CountryCodeSelector";
 import showToast from "../../../../../utils/toastNotification";
 
-const LocationDropdown = ({ value, onChange, onBlur, className }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
-    
-    const indianCities = [
-        'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad',
-        'Surat', 'Jaipur', 'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Thane', 'Bhopal',
-        'Visakhapatnam', 'Pimpri-Chinchwad', 'Patna', 'Vadodara', 'Ghaziabad', 'Ludhiana',
-        'Agra', 'Nashik', 'Faridabad', 'Meerut', 'Rajkot', 'Kalyan-Dombivali', 'Vasai-Virar',
-        'Varanasi', 'Srinagar', 'Aurangabad', 'Dhanbad', 'Amritsar', 'Navi Mumbai', 'Allahabad',
-        'Ranchi', 'Howrah', 'Coimbatore', 'Jabalpur', 'Gwalior', 'Vijayawada', 'Jodhpur',
-        'Madurai', 'Raipur', 'Kota', 'Guwahati', 'Chandigarh', 'Solapur', 'Hubli-Dharwad'
-    ];
-    
-    const filteredCities = indianCities.filter(city => {
-        const cityLower = city.toLowerCase();
-        const searchLower = searchTerm.toLowerCase();
-        
-        // Match if city starts with search term or any word in city starts with search term
-        return cityLower.startsWith(searchLower) || 
-               cityLower.split(/[\s-]/).some(word => word.startsWith(searchLower));
-    });
-    
-    const handleSelect = (city) => {
-        onChange(city);
-        setSearchTerm('');
-        setIsOpen(false);
-    };
-    
-    const handleInputChange = (e) => {
-        const inputValue = e.target.value;
-        setSearchTerm(inputValue);
-        onChange(inputValue);
-        setIsOpen(true);
-    };
-    
-    return (
-        <div className="location-dropdown-container position-relative">
-            <input
-                className={`form-control ${className}`}
-                type="text"
-                value={searchTerm || value}
-                onChange={handleInputChange}
-                onFocus={() => setIsOpen(true)}
-                onBlur={(e) => {
-                    setTimeout(() => {
-                        setIsOpen(false);
-                        onBlur && onBlur(e);
-                    }, 200);
-                }}
-                placeholder="Type to search or select location"
-                autoComplete="off"
-            />
-            {isOpen && filteredCities.length > 0 && (
-                <div className="dropdown-menu show w-100">
-                    {filteredCities.slice(0, 10).map(city => (
-                        <button
-                            key={city}
-                            type="button"
-                            className="dropdown-item"
-                            onClick={() => handleSelect(city)}
-                            onMouseDown={(e) => e.preventDefault()}
-                        >
-                            {city}
-                        </button>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-};
+const indianCities = [
+    'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad',
+    'Surat', 'Jaipur', 'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Thane', 'Bhopal',
+    'Visakhapatnam', 'Pimpri-Chinchwad', 'Patna', 'Vadodara', 'Ghaziabad', 'Ludhiana',
+    'Agra', 'Nashik', 'Faridabad', 'Meerut', 'Rajkot', 'Kalyan-Dombivali', 'Vasai-Virar',
+    'Varanasi', 'Srinagar', 'Aurangabad', 'Dhanbad', 'Amritsar', 'Navi Mumbai', 'Allahabad',
+    'Ranchi', 'Howrah', 'Coimbatore', 'Jabalpur', 'Gwalior', 'Vijayawada', 'Jodhpur',
+    'Madurai', 'Raipur', 'Kota', 'Guwahati', 'Chandigarh', 'Solapur', 'Hubli-Dharwad'
+];
 
 
 function SectionCandicateBasicInfo() {
@@ -85,6 +23,7 @@ function SectionCandicateBasicInfo() {
         phoneCountryCode: '+91',
         email: '',
         location: '',
+        pincode: '',
         profilePicture: null
     });
     const [loading, setLoading] = useState(true);
@@ -147,6 +86,7 @@ function SectionCandicateBasicInfo() {
                     }
                 }
 
+                console.log('Profile data received:', { pincode: profile.pincode, location: profile.location });
                 setFormData({
                     name: candidate.name || '',
                     middleName: profile.middleName || '',
@@ -155,6 +95,7 @@ function SectionCandicateBasicInfo() {
                     phoneCountryCode: countryCode,
                     email: candidate.email || '',
                     location: profile.location || '',
+                    pincode: profile.pincode || '',
                     profilePicture: null
                 });
                 setErrors({});
@@ -245,6 +186,16 @@ function SectionCandicateBasicInfo() {
                     delete newErrors.location;
                 }
                 break;
+            
+            case 'pincode':
+                if (!value || !value.trim()) {
+                    newErrors.pincode = 'Pincode is required';
+                } else if (!/^\d{6}$/.test(value)) {
+                    newErrors.pincode = 'Pincode must be 6 digits';
+                } else {
+                    delete newErrors.pincode;
+                }
+                break;
         }
         
         setErrors(newErrors);
@@ -304,7 +255,7 @@ function SectionCandicateBasicInfo() {
 
 
     const validateForm = () => {
-        const fieldsToValidate = ['name', 'email', 'lastName', 'phone', 'location'];
+        const fieldsToValidate = ['name', 'email', 'lastName', 'phone', 'location', 'pincode'];
         let isValid = true;
         
         fieldsToValidate.forEach(field => {
@@ -349,6 +300,7 @@ function SectionCandicateBasicInfo() {
             submitData.append('phone', `${formData.phoneCountryCode}${formData.phone.trim()}`);
             submitData.append('email', formData.email.trim());
             submitData.append('location', formData.location.trim());
+            submitData.append('pincode', formData.pincode.trim());
             if (formData.profilePicture) {
                 submitData.append('profilePicture', formData.profilePicture);
             }
@@ -540,23 +492,38 @@ function SectionCandicateBasicInfo() {
                             />
                             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                         </div>
-                        <div className="col-md-4 mb-3" style={{position: 'relative', zIndex: 10}}>
+                        <div className="col-md-4 mb-3">
                             <label className="form-label"><i className="fa fa-map-marker me-2" style={{color: '#ff6b35'}}></i>Location *</label>
-                            <LocationDropdown 
+                            <select
+                                className={`form-control ${errors.location ? 'is-invalid' : ''}`}
+                                name="location"
                                 value={formData.location}
-                                onChange={(value) => {
-                                    setFormData(prev => ({ ...prev, location: value }));
-                                    if (touched.location) {
-                                        validateField('location', value);
-                                    }
-                                }}
-                                onBlur={() => {
-                                    setTouched(prev => ({ ...prev, location: true }));
-                                    validateField('location', formData.location);
-                                }}
-                                className={`${errors.location ? 'is-invalid' : ''}`}
-                            />
+                                onChange={handleInputChange}
+                                onBlur={handleBlur}
+                                required
+                            >
+                                <option value="">Select Location</option>
+                                {indianCities.map(city => (
+                                    <option key={city} value={city}>{city}</option>
+                                ))}
+                            </select>
                             {errors.location && <div className="invalid-feedback">{errors.location}</div>}
+                        </div>
+                        <div className="col-md-4 mb-3">
+                            <label className="form-label"><i className="fa fa-map-pin me-2" style={{color: '#ff6b35'}}></i>Pincode *</label>
+                            <input
+                                className={`form-control ${errors.pincode ? 'is-invalid' : ''}`}
+                                type="text"
+                                name="pincode"
+                                value={formData.pincode}
+                                onChange={handleInputChange}
+                                onBlur={handleBlur}
+                                placeholder="Enter 6-digit pincode"
+                                maxLength="6"
+                                required
+                            />
+                            {errors.pincode && <div className="invalid-feedback">{errors.pincode}</div>}
+                            <small className="text-muted">Enter 6-digit pincode</small>
                         </div>
                     </div>
 

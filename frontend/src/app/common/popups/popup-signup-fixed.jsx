@@ -130,9 +130,13 @@ function SignUpPopup() {
                     loginModal.show();
                 }, 300);
             } else {
-                setError(data.message || 'Registration failed');
-                
-                
+                // Display validation errors if available
+                if (data.errors && Array.isArray(data.errors)) {
+                    const errorMessages = data.errors.map(err => err.msg).join(', ');
+                    setError(errorMessages);
+                } else {
+                    setError(data.message || 'Registration failed');
+                }
             }
         } catch (error) {
             setError('Registration failed. Please try again.');
@@ -179,9 +183,13 @@ function SignUpPopup() {
                     loginModal.show();
                 }, 300);
             } else {
-                setError(data.message || 'Registration failed');
-                
-                
+                // Display validation errors if available
+                if (data.errors && Array.isArray(data.errors)) {
+                    const errorMessages = data.errors.map(err => err.msg).join(', ');
+                    setError(errorMessages);
+                } else {
+                    setError(data.message || 'Registration failed');
+                }
             }
         } catch (error) {
             setError('Registration failed. Please try again.');

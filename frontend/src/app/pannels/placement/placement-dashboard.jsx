@@ -23,6 +23,8 @@ function PlacementDashboard() {
     const [showEditModal, setShowEditModal] = useState(false);
     const [editFormData, setEditFormData] = useState({
         name: '',
+        firstName: '',
+        lastName: '',
         phone: '',
         collegeName: ''
     });
@@ -399,6 +401,8 @@ function PlacementDashboard() {
     const handleEditProfile = () => {
         setEditFormData({
             name: placementData?.name || '',
+            firstName: placementData?.firstName || '',
+            lastName: placementData?.lastName || '',
             phone: placementData?.phone || '',
             collegeName: placementData?.collegeName || ''
         });
@@ -406,8 +410,8 @@ function PlacementDashboard() {
     };
 
     const handleUpdateProfile = async () => {
-        if (!editFormData.name.trim() || !editFormData.phone.trim() || !editFormData.collegeName.trim()) {
-            alert('All fields are required');
+        if (!editFormData.firstName.trim() || !editFormData.lastName.trim() || !editFormData.phone.trim() || !editFormData.collegeName.trim()) {
+            alert('First Name, Last Name, Phone, and College Name are required');
             return;
         }
 
@@ -1049,14 +1053,27 @@ function PlacementDashboard() {
                             </div>
                             <div className="modal-body">
                                 <div className="form-group">
-                                    <label className="font-weight-bold">Name *</label>
+                                    <label className="font-weight-bold">First Name *</label>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        value={editFormData.name}
-                                        onChange={(e) => setEditFormData({...editFormData, name: e.target.value})}
-                                        placeholder="Enter your full name"
-                                        maxLength="100"
+                                        value={editFormData.firstName}
+                                        onChange={(e) => setEditFormData({...editFormData, firstName: e.target.value})}
+                                        placeholder="Enter your first name"
+                                        maxLength="50"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="font-weight-bold">Last Name *</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={editFormData.lastName}
+                                        onChange={(e) => setEditFormData({...editFormData, lastName: e.target.value})}
+                                        placeholder="Enter your last name"
+                                        maxLength="50"
+                                        required
                                     />
                                 </div>
                                 <div className="form-group">

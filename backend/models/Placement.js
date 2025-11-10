@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 
 const placementSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  firstName: { type: String },
+  lastName: { type: String },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: false },
   phone: { type: String, required: true },

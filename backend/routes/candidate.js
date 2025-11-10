@@ -104,6 +104,10 @@ router.put('/profile', upload.single('profilePicture'), (req, res, next) => {
       .withMessage('Location cannot exceed 100 characters')
       .matches(/^[a-zA-Z0-9\s,.-]*$/)
       .withMessage('Location contains invalid characters'),
+    body('pincode')
+      .optional()
+      .matches(/^\d{6}$/)
+      .withMessage('Pincode must be 6 digits'),
     body('dateOfBirth')
       .optional()
       .isISO8601()

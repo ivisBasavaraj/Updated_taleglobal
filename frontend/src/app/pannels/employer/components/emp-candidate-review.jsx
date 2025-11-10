@@ -242,14 +242,13 @@ function EmpCandidateReviewPage () {
 						<div className="d-flex align-items-center gap-3">
 							<button
 								className="btn btn-outline-primary rounded-circle d-flex align-items-center justify-content-center"
-								style={{width: '40px', height: '40px', borderColor: '#ffb366', color: '#ffb366'}}
+								style={{width: '40px', height: '40px', borderColor: '#ff6600', color: '#ff6600'}}
 								onClick={() => navigate(-1)}
 							>
 								<ArrowLeft size={18} />
 							</button>
 							<div>
-								<h2 className="mb-1 d-flex align-items-center gap-2 fw-bold" style={{color: '#2c3e50'}}>
-									<UserCircle2 size={28} style={{ color: "#ffb366" }} />
+								<h2 className="mb-1 fw-bold" style={{color: '#2c3e50'}}>
 									Candidate Review
 								</h2>
 								<p className="text-muted mb-0 fs-6">Comprehensive candidate evaluation & assessment</p>
@@ -268,8 +267,8 @@ function EmpCandidateReviewPage () {
 				<div className="col-lg-8">
 					{/* Personal Information Card */}
 					<div className="card border-0 shadow-sm mb-4" style={{borderRadius: '15px'}}>
-						<div className="card-header border-0" style={{background: 'linear-gradient(135deg, #ffb366 0%, #ffffff 100%)', borderRadius: '15px 15px 0 0'}}>
-							<h5 className="mb-0 d-flex align-items-center gap-2 text-white fw-semibold">
+						<div className="card-header border-0" style={{background: '#f8f9fa', borderRadius: '15px 15px 0 0'}}>
+							<h5 className="mb-0 d-flex align-items-center gap-2 fw-bold" style={{color: '#000'}}>
 								<User size={22} />
 								Basic Information
 							</h5>
@@ -279,7 +278,7 @@ function EmpCandidateReviewPage () {
 								<div className="col-auto">
 									<div
 										className="rounded-circle overflow-hidden shadow-sm"
-										style={{ width: "100px", height: "100px", border: '4px solid #ffb366' }}
+										style={{ width: "100px", height: "100px", border: '4px solid #ff6600' }}
 									>
 										{candidate.profilePicture ? (
 											<img
@@ -289,14 +288,14 @@ function EmpCandidateReviewPage () {
 											/>
 										) : (
 											<div className="d-flex align-items-center justify-content-center h-100" style={{background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)'}}>
-												<User size={50} style={{color: '#ffb366'}} />
+												<User size={50} style={{color: '#ff6600'}} />
 											</div>
 										)}
 									</div>
 								</div>
 								<div className="col">
 									<h3 className="mb-2 fw-bold" style={{color: '#2c3e50'}}>{candidate.name}</h3>
-									<p className="mb-2 d-flex align-items-center gap-2" style={{color: '#ffb366', fontWeight: '500'}}>
+									<p className="mb-2 d-flex align-items-center gap-2" style={{color: '#ff6600', fontWeight: '500'}}>
 										<Briefcase size={18} />
 										Applied for: {application.jobId?.title || 'Unknown Job'}
 									</p>
@@ -311,45 +310,52 @@ function EmpCandidateReviewPage () {
 								<div className="col-md-6">
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<Mail size={16} style={{ color: "#ffb366" }} />
+											<Mail size={16} style={{ color: "#ff6600" }} />
 											<strong>Email:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.email}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<Phone size={16} style={{ color: "#ffb366" }} />
+											<Phone size={16} style={{ color: "#ff6600" }} />
 											<strong>Mobile:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.phone || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<Calendar size={16} style={{ color: "#ffb366" }} />
+											<Calendar size={16} style={{ color: "#ff6600" }} />
 											<strong>Date of Birth:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.dateOfBirth ? formatDate(candidate.dateOfBirth) : 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<User size={16} style={{ color: "#ffb366" }} />
+											<User size={16} style={{ color: "#ff6600" }} />
 											<strong>Gender:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.gender || 'Not provided'}</p>
+									</div>
+									<div className="info-item mb-3">
+										<div className="d-flex align-items-center gap-2 mb-1">
+											<MapPin size={16} style={{ color: "#ff6600" }} />
+											<strong>Pincode:</strong>
+										</div>
+										<p className="text-muted mb-0 ms-4">{candidate.pincode || 'Not provided'}</p>
 									</div>
 								</div>
 								<div className="col-md-6">
 									<h6 className="text-primary mb-3"><i className="fa fa-users mr-2"></i>Family Information</h6>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<User size={16} style={{ color: "#ffb366" }} />
+											<User size={16} style={{ color: "#ff6600" }} />
 											<strong>Father's/Husband's Name:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.fatherName || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<User size={16} style={{ color: "#ffb366" }} />
+											<User size={16} style={{ color: "#ff6600" }} />
 											<strong>Mother's Name:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.motherName || 'Not provided'}</p>
@@ -358,21 +364,21 @@ function EmpCandidateReviewPage () {
 									<h6 className="text-primary mb-3 mt-4"><i className="fa fa-map-marker-alt mr-2"></i>Address Information</h6>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<MapPin size={16} style={{ color: "#ffb366" }} />
+											<MapPin size={16} style={{ color: "#ff6600" }} />
 											<strong>Residential Address:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.residentialAddress || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<MapPin size={16} style={{ color: "#ffb366" }} />
+											<MapPin size={16} style={{ color: "#ff6600" }} />
 											<strong>Permanent Address:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.permanentAddress || 'Not provided'}</p>
 									</div>
 									<div className="info-item mb-3">
 										<div className="d-flex align-items-center gap-2 mb-1">
-											<MapPin size={16} style={{ color: "#ffb366" }} />
+											<MapPin size={16} style={{ color: "#ff6600" }} />
 											<strong>Correspondence Address:</strong>
 										</div>
 										<p className="text-muted mb-0 ms-4">{candidate.correspondenceAddress || 'Not provided'}</p>
@@ -385,8 +391,8 @@ function EmpCandidateReviewPage () {
 					{/* Education Card */}
 					{candidate.education && candidate.education.length > 0 && (
 						<div className="card border-0 shadow-sm mb-4" style={{borderRadius: '15px'}}>
-							<div className="card-header border-0" style={{background: 'linear-gradient(135deg, #ffb366 0%, #ffffff 100%)', borderRadius: '15px 15px 0 0'}}>
-								<h5 className="mb-0 d-flex align-items-center gap-2 text-white fw-semibold">
+							<div className="card-header border-0" style={{background: '#f8f9fa', borderRadius: '15px 15px 0 0'}}>
+								<h5 className="mb-0 d-flex align-items-center gap-2 fw-bold" style={{color: '#000'}}>
 									<GraduationCap size={22} />
 									Education Details
 								</h5>
@@ -407,14 +413,14 @@ function EmpCandidateReviewPage () {
 													<div className="d-flex gap-2">
 														<button
 															className="btn btn-outline-primary btn-sm"
-															style={{color: 'white', backgroundColor: '#ffb366', borderColor: '#ffb366'}}
+															style={{color: 'white', backgroundColor: '#ff6600', borderColor: '#ff6600'}}
 															onClick={() => viewDocument(edu.marksheet)}
 														>
 															<Eye size={14} className="me-1" />View
 														</button>
 														<button
 															className="btn btn-outline-secondary btn-sm"
-															style={{color: 'white', backgroundColor: '#ffb366', borderColor: '#ffb366'}}
+															style={{color: 'white', backgroundColor: '#ff6600', borderColor: '#ff6600'}}
 															onClick={() => downloadDocument(edu.marksheet, `marksheet_${index}.pdf`)}
 														>
 															<Download size={14} className="me-1" />Download
@@ -432,8 +438,8 @@ function EmpCandidateReviewPage () {
 					{/* Skills & Summary */}
 					{(candidate.skills?.length > 0 || candidate.profileSummary) && (
 						<div className="card border-0 shadow-sm mb-4" style={{borderRadius: '15px'}}>
-							<div className="card-header border-0" style={{background: 'linear-gradient(135deg, #ffb366 0%, #ffffff 100%)', borderRadius: '15px 15px 0 0'}}>
-								<h5 className="mb-0 d-flex align-items-center gap-2 text-white fw-semibold">
+							<div className="card-header border-0" style={{background: '#f8f9fa', borderRadius: '15px 15px 0 0'}}>
+								<h5 className="mb-0 d-flex align-items-center gap-2 fw-bold" style={{color: '#000'}}>
 									<Award size={22} />
 									Skills & Summary
 								</h5>
@@ -444,7 +450,7 @@ function EmpCandidateReviewPage () {
 										<h6 className="fw-bold mb-3" style={{color: '#2c3e50'}}>Key Skills</h6>
 										<div className="d-flex flex-wrap gap-2">
 											{candidate.skills.map((skill, index) => (
-												<span key={index} className="badge px-3 py-2 rounded-pill" style={{backgroundColor: '#ffb366', color: 'white', fontSize: '0.85rem', fontWeight: '500'}}>{skill}</span>
+												<span key={index} className="badge px-3 py-2 rounded-pill" style={{backgroundColor: '#ff6600', color: 'white', fontSize: '0.85rem', fontWeight: '500'}}>{skill}</span>
 											))}
 										</div>
 									</div>
@@ -465,8 +471,8 @@ function EmpCandidateReviewPage () {
 					{/* Resume Card */}
 					{candidate.resume && (
 						<div className="card border-0 shadow-sm mb-4" style={{borderRadius: '15px'}}>
-							<div className="card-header border-0" style={{background: 'linear-gradient(135deg, #ffb366 0%, #ffffff 100%)', borderRadius: '15px 15px 0 0'}}>
-								<h5 className="mb-0 d-flex align-items-center gap-2 text-white fw-semibold">
+							<div className="card-header border-0" style={{background: '#f8f9fa', borderRadius: '15px 15px 0 0'}}>
+								<h5 className="mb-0 d-flex align-items-center gap-2 fw-bold" style={{color: '#000'}}>
 									<FileText size={22} />
 									Resume
 								</h5>
@@ -474,7 +480,7 @@ function EmpCandidateReviewPage () {
 							<div className="card-body text-center p-4">
 								<button
 									className="btn btn-lg rounded-pill px-4 py-2 fw-semibold"
-									style={{backgroundColor: '#ffb366', color: 'white', border: 'none'}}
+									style={{backgroundColor: '#ff6600', color: 'white', border: 'none'}}
 									onClick={() => downloadDocument(candidate.resume, 'resume.pdf')}
 								>
 									<Download size={18} className="me-2" />Download Resume
@@ -525,8 +531,8 @@ function EmpCandidateReviewPage () {
 
 					{/* Review & Actions */}
 					<div className="card border-0 shadow-sm" style={{borderRadius: '15px'}}>
-						<div className="card-header border-0" style={{background: 'linear-gradient(135deg, #ffb366 0%, #ffffff 100%)', borderRadius: '15px 15px 0 0'}}>
-							<h5 className="mb-0 text-white fw-semibold">Review & Actions</h5>
+						<div className="card-header border-0" style={{background: '#f8f9fa', borderRadius: '15px 15px 0 0'}}>
+							<h5 className="mb-0 fw-bold" style={{color: '#000'}}>Review & Actions</h5>
 						</div>
 						<div className="card-body p-4">
 							<div className="mb-4">
@@ -537,7 +543,7 @@ function EmpCandidateReviewPage () {
 									placeholder="Enter your detailed remarks and feedback..."
 									value={remarks}
 									onChange={(e) => setRemarks(e.target.value)}
-									style={{borderColor: '#ffb366', fontSize: '0.95rem'}}
+									style={{borderColor: '#ff6600', fontSize: '0.95rem'}}
 								/>
 							</div>
 
@@ -548,7 +554,7 @@ function EmpCandidateReviewPage () {
 									id="candidateSelection"
 									checked={isSelected}
 									onChange={(e) => setIsSelected(e.target.checked)}
-									style={{transform: 'scale(1.2)', accentColor: '#ffb366'}}
+									style={{transform: 'scale(1.2)', accentColor: '#ff6600'}}
 								/>
 								<label className="form-check-label fw-semibold ms-2" htmlFor="candidateSelection" style={{color: '#2c3e50'}}>
 									Select for further process
@@ -556,13 +562,13 @@ function EmpCandidateReviewPage () {
 							</div>
 
 							<div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
-								<button style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '10px 16px', height: '40px', width: '100%', borderRadius: '50px', fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'}} onClick={saveReview}>
+								<button style={{backgroundColor: '#ff6600', color: 'white', border: 'none', padding: '10px 16px', height: '40px', width: '100%', borderRadius: '50px', fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'}} onClick={saveReview}>
 									<Save size={16} style={{marginRight: '8px'}} />Save Review
 								</button>
-								<button style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '10px 16px', height: '40px', width: '100%', borderRadius: '50px', fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'}} onClick={shortlistCandidate}>
+								<button style={{backgroundColor: '#ff6600', color: 'white', border: 'none', padding: '10px 16px', height: '40px', width: '100%', borderRadius: '50px', fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'}} onClick={shortlistCandidate}>
 									<Check size={16} style={{marginRight: '8px'}} />Shortlist Candidate
 								</button>
-								<button style={{backgroundColor: '#ffb366', color: 'white', border: 'none', padding: '10px 16px', height: '40px', width: '100%', borderRadius: '50px', fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'}} onClick={rejectCandidate}>
+								<button style={{backgroundColor: '#ff6600', color: 'white', border: 'none', padding: '10px 16px', height: '40px', width: '100%', borderRadius: '50px', fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'}} onClick={rejectCandidate}>
 									<X size={16} style={{marginRight: '8px'}} />Reject Candidate
 								</button>
 							</div>

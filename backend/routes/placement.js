@@ -27,7 +27,7 @@ router.get('/profile', auth(['placement']), async (req, res) => {
     const Placement = require('../models/Placement');
     const placementId = req.user._id || req.user.id;
     const placement = await Placement.findById(placementId)
-      .select('name email phone collegeName status logo idCard fileHistory credits')
+      .select('name firstName lastName email phone collegeName status logo idCard fileHistory credits')
       .lean();
     
     if (!placement) {
@@ -86,6 +86,8 @@ router.post('/upload-id-card', auth(['placement']), placementController.uploadId
 // Update placement profile
 router.put('/profile', auth(['placement']), [
   body('name').optional().notEmpty().withMessage('Name cannot be empty'),
+  body('firstName').optional().notEmpty().withMessage('First name cannot be empty'),
+  body('lastName').optional().notEmpty().withMessage('Last name cannot be empty'),
   body('phone').optional().notEmpty().withMessage('Phone cannot be empty'),
   body('collegeName').optional().notEmpty().withMessage('College name cannot be empty')
 ], handleValidationErrors, placementController.updateProfile);

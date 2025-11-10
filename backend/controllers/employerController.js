@@ -76,9 +76,10 @@ exports.registerEmployer = async (req, res) => {
 
     const token = generateToken(employer._id, 'employer');
 
-    // Send welcome email
+    // Send welcome email (don't fail registration if email fails)
     try {
-      await sendWelcomeEmail(email, name, 'employer');
+      await sendWelcomeEmail(email, companyName, 'employer');
+      console.log('Welcome email sent to:', email);
     } catch (emailError) {
       console.error('Welcome email failed:', emailError);
     }

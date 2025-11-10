@@ -1106,10 +1106,12 @@ exports.uploadIdCard = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const placementId = req.user.id;
-    const { name, phone, collegeName } = req.body;
+    const { name, firstName, lastName, phone, collegeName } = req.body;
     
     const updateData = {};
     if (name) updateData.name = name.trim();
+    if (firstName) updateData.firstName = firstName.trim();
+    if (lastName) updateData.lastName = lastName.trim();
     if (phone) updateData.phone = phone.trim();
     if (collegeName) updateData.collegeName = collegeName.trim();
     

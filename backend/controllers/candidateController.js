@@ -68,6 +68,13 @@ exports.registerCandidate = async (req, res) => {
 
       const token = generateToken(candidate._id, 'candidate');
 
+      // Send welcome email (don't fail registration if email fails)
+      try {
+        await sendWelcomeEmail(email, name, 'candidate');
+      } catch (emailError) {
+        console.error('Welcome email failed:', emailError);
+      }
+
       res.status(201).json({
         success: true,
         token,
@@ -160,6 +167,12 @@ exports.updateProfile = async (req, res) => {
     
     const { name, phone, email, middleName, lastName, ...profileData } = req.body;
     
+    console.log('=== UPDATE PROFILE DEBUG ===');
+    console.log('Full req.body:', req.body);
+    console.log('Pincode received:', req.body.pincode);
+    console.log('Location received:', req.body.location);
+    console.log('Profile data (spread):', profileData);
+    
     // Validation for middleName and lastName
     const errors = [];
     
@@ -202,6 +215,9 @@ exports.updateProfile = async (req, res) => {
       const { fileToBase64 } = require('../middlewares/upload');
       updateData.profilePicture = fileToBase64(req.file);
     }
+    
+    console.log('Update data before DB save:', updateData);
+    console.log('Pincode in updateData:', updateData.pincode);
     
     // Handle education array updates with marksheet preservation
     if (updateData.education && Array.isArray(updateData.education)) {
