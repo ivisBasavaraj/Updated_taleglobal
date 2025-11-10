@@ -9,16 +9,9 @@ const handleValidationErrors = require('../middlewares/validation');
 
 // Authentication Routes
 router.post('/register', [
-  body('name').notEmpty().withMessage('Name is required'),
-  body('email').isEmail().withMessage('Valid email is required'),
-  body('password').optional().isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  body('confirmPassword').optional().custom((value, { req }) => {
-    if (req.body.password && value !== req.body.password) {
-      throw new Error('Passwords do not match');
-    }
-    return true;
-  }),
-  body('companyName').notEmpty().withMessage('Company name is required')
+  body('name').notEmpty().trim().withMessage('Name is required'),
+  body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
+  body('companyName').notEmpty().trim().withMessage('Company name is required')
 ], handleValidationErrors, employerController.registerEmployer);
 
 router.post('/login', employerController.loginEmployer);

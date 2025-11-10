@@ -23,68 +23,33 @@ exports.registerCandidate = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email already registered' });
     }
 
-    if (shouldSendWelcome) {
-      console.log('Creating candidate for email signup...');
-      // Create candidate without password for email-based signup
-      const candidate = await Candidate.create({ 
-        name, 
-        email, 
-        phone,
-        registrationMethod: 'email_signup',
-        credits: 0,
-        status: 'pending'
-      });
-      console.log('Candidate created:', candidate._id);
-      
-      await CandidateProfile.create({ candidateId: candidate._id });
-      console.log('Profile created for candidate');
+    // Create candidate without password - they will create it via email link
+    const candidate = await Candidate.create({ 
+      name, 
+      email, 
+      phone,
+      registrationMethod: 'email_signup',
+      credits: 0,
+      status: 'pending'
+    });
+    console.log('Candidate created:', candidate._id);
+    
+    await CandidateProfile.create({ candidateId: candidate._id });
+    console.log('Profile created for candidate');
 
-      // Send welcome email with password creation link
-      try {
-        const { sendPasswordCreationEmail } = require('../utils/emailService');
-        await sendPasswordCreationEmail(email, name);
-        console.log('Welcome email sent successfully');
-      } catch (emailError) {
-        console.error('Welcome email failed:', emailError);
-        // Don't fail registration if email fails, just log it
-        console.log('Continuing registration without email...');
-      }
-
-      res.status(201).json({
-        success: true,
-        message: 'Welcome email sent successfully'
-      });
-    } else {
-      // Regular signup with password
-      const candidate = await Candidate.create({ 
-        name, 
-        email, 
-        password, 
-        phone,
-        registrationMethod: 'signup',
-        credits: 0
-      });
-      await CandidateProfile.create({ candidateId: candidate._id });
-
-      const token = generateToken(candidate._id, 'candidate');
-
-      // Send welcome email (don't fail registration if email fails)
-      try {
-        await sendWelcomeEmail(email, name, 'candidate');
-      } catch (emailError) {
-        console.error('Welcome email failed:', emailError);
-      }
-
-      res.status(201).json({
-        success: true,
-        token,
-        candidate: {
-          id: candidate._id,
-          name: candidate.name,
-          email: candidate.email
-        }
-      });
+    // Send welcome email with password creation link
+    try {
+      await sendWelcomeEmail(email, name, 'candidate');
+      console.log('Welcome email sent successfully to:', email);
+    } catch (emailError) {
+      console.error('Welcome email failed:', emailError);
+      return res.status(500).json({ success: false, message: 'Failed to send welcome email. Please try again.' });
     }
+
+    res.status(201).json({
+      success: true,
+      message: 'Registration successful! Please check your email to create your password.'
+    });
   } catch (error) {
     console.error('Registration error:', error);
     res.status(500).json({ success: false, message: error.message });

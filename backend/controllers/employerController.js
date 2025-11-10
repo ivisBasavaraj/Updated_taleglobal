@@ -15,6 +15,8 @@ const generateToken = (id, role) => {
 // Authentication Controllers
 exports.registerEmployer = async (req, res) => {
   try {
+    console.log('=== EMPLOYER REGISTRATION ===');
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
     const { name, email, password, phone, companyName, employerCategory, employerType, sendWelcomeEmail: shouldSendEmail } = req.body;
 
     const existingEmployer = await Employer.findOne({ email });
@@ -24,47 +26,15 @@ exports.registerEmployer = async (req, res) => {
 
     const finalEmployerType = employerType || (employerCategory === 'consultancy' ? 'consultant' : 'company');
 
-    // If sendWelcomeEmail is true, create employer without password
-    if (shouldSendEmail) {
-      const employer = await Employer.create({ 
-        name, 
-        email, 
-        phone, 
-        companyName,
-        employerType: finalEmployerType
-      });
-      await EmployerProfile.create({ 
-        employerId: employer._id,
-        employerCategory: employerCategory || finalEmployerType,
-        companyName: companyName,
-        email: email,
-        phone: phone
-      });
-      await Subscription.create({ employerId: employer._id });
-
-      // Send welcome email with password creation link
-      try {
-        await sendWelcomeEmail(email, name, 'employer');
-      } catch (emailError) {
-        console.error('Welcome email failed:', emailError);
-        return res.status(500).json({ success: false, message: 'Failed to send welcome email' });
-      }
-
-      return res.status(201).json({
-        success: true,
-        message: 'Registration successful. Please check your email to create your password.'
-      });
-    }
-
-    // Original registration with password
+    // Create employer without password - they will create it via email link
     const employer = await Employer.create({ 
       name, 
       email, 
-      password, 
       phone, 
       companyName,
       employerType: finalEmployerType
     });
+    
     await EmployerProfile.create({ 
       employerId: employer._id,
       employerCategory: employerCategory || finalEmployerType,
@@ -72,28 +42,21 @@ exports.registerEmployer = async (req, res) => {
       email: email,
       phone: phone
     });
+    
     await Subscription.create({ employerId: employer._id });
 
-    const token = generateToken(employer._id, 'employer');
-
-    // Send welcome email (don't fail registration if email fails)
+    // Send welcome email with password creation link
     try {
       await sendWelcomeEmail(email, companyName, 'employer');
       console.log('Welcome email sent to:', email);
     } catch (emailError) {
       console.error('Welcome email failed:', emailError);
+      return res.status(500).json({ success: false, message: 'Failed to send welcome email. Please try again.' });
     }
 
     res.status(201).json({
       success: true,
-      token,
-      employer: {
-        id: employer._id,
-        name: employer.name,
-        email: employer.email,
-        companyName: employer.companyName,
-        employerType: employer.employerType
-      }
+      message: 'Registration successful! Please check your email to create your password.'
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

@@ -98,11 +98,6 @@ function SignUpPopup() {
 
     const handleCandidateSubmit = async (e) => {
         e.preventDefault();
-        if (candidateData.password !== candidateData.confirmPassword) {
-            setError('Passwords do not match');
-            return;
-        }
-        
         setLoading(true);
         setError('');
         
@@ -113,22 +108,17 @@ function SignUpPopup() {
                 body: JSON.stringify({
                     name: candidateData.username,
                     email: candidateData.email,
-                    phone: candidateData.mobileCountryCode + candidateData.mobile,
-                    password: candidateData.password,
-                    confirmPassword: candidateData.confirmPassword
+                    phone: candidateData.mobileCountryCode + candidateData.mobile
                 })
             });
             
             const data = await response.json();
             if (data.success) {
                 setCandidateData({ username: '', email: '', mobile: '', mobileCountryCode: '+91', password: '', confirmPassword: '' });
-                // Close signup modal and open login modal
+                alert(data.message || 'Registration successful! Please check your email to create your password.');
+                // Close signup modal
                 const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
                 if (signupModal) signupModal.hide();
-                setTimeout(() => {
-                    const loginModal = new window.bootstrap.Modal(document.getElementById('sign_up_popup2'));
-                    loginModal.show();
-                }, 300);
             } else {
                 // Display validation errors if available
                 if (data.errors && Array.isArray(data.errors)) {
@@ -148,11 +138,6 @@ function SignUpPopup() {
 
     const handleEmployerSubmit = async (e) => {
         e.preventDefault();
-        if (employerData.password !== employerData.confirmPassword) {
-            setError('Passwords do not match');
-            return;
-        }
-        
         setLoading(true);
         setError('');
         
@@ -164,8 +149,6 @@ function SignUpPopup() {
                     name: employerData.name,
                     email: employerData.email,
                     phone: employerData.mobileCountryCode + employerData.mobile,
-                    password: employerData.password,
-                    confirmPassword: employerData.confirmPassword,
                     companyName: employerData.name,
                     employerCategory: employerData.employerCategory,
                     employerType: employerData.employerCategory === 'consultancy' ? 'consultant' : 'company'
@@ -175,13 +158,10 @@ function SignUpPopup() {
             const data = await response.json();
             if (data.success) {
                 setEmployerData({ name: '', email: '', mobile: '', mobileCountryCode: '+91', password: '', confirmPassword: '', employerCategory: '' });
-                // Close signup modal and open login modal
+                alert(data.message || 'Registration successful! Please check your email to create your password.');
+                // Close signup modal
                 const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
                 if (signupModal) signupModal.hide();
-                setTimeout(() => {
-                    const loginModal = new window.bootstrap.Modal(document.getElementById('sign_up_popup2'));
-                    loginModal.show();
-                }, 300);
             } else {
                 // Display validation errors if available
                 if (data.errors && Array.isArray(data.errors)) {
@@ -374,52 +354,7 @@ function SignUpPopup() {
 													</div>
 												</div>
 
-												<div className="col-lg-12">
-													<div className="form-group mb-3 position-relative">
-														<input
-															name="password"
-															type={showCandidatePassword ? "text" : "password"}
-															className="form-control"
-															placeholder="Password*"
-															value={candidateData.password}
-															autoComplete="new-password"
-															onChange={handleCandidateChange}
-															required
-														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer', padding: '0', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-															onClick={() => setShowCandidatePassword(!showCandidatePassword)}
-														>
-															<i className={showCandidatePassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14', pointerEvents: 'none' }} />
-														</button>
-													</div>
-												</div>
 
-												<div className="col-lg-12">
-													<div className="form-group mb-3 position-relative">
-														<input
-															name="confirmPassword"
-															type={showCandidateConfirmPassword ? "text" : "password"}
-															className="form-control"
-															placeholder="Confirm Password*"
-															value={candidateData.confirmPassword}
-															autoComplete="new-password"
-															onChange={handleCandidateChange}
-															required
-														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer', padding: '0', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-															onClick={() => setShowCandidateConfirmPassword(!showCandidateConfirmPassword)}
-														>
-															<i className={showCandidateConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14', pointerEvents: 'none' }} />
-														</button>
-														{passwordError && <small className="text-danger">{passwordError}</small>}
-													</div>
-												</div>
 												
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
@@ -534,52 +469,7 @@ function SignUpPopup() {
 													</div>
 												</div>
 
-												<div className="col-lg-12">
-													<div className="form-group mb-3 position-relative">
-														<input
-															name="password"
-															type={showEmployerPassword ? "text" : "password"}
-															className="form-control"
-															placeholder="Password*"
-															value={employerData.password}
-															autoComplete="new-password"
-															onChange={handleEmployerChange}
-															required
-														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer', padding: '0', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-															onClick={() => setShowEmployerPassword(!showEmployerPassword)}
-														>
-															<i className={showEmployerPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14', pointerEvents: 'none' }} />
-														</button>
-													</div>
-												</div>
 
-												<div className="col-lg-12">
-													<div className="form-group mb-3 position-relative">
-														<input
-															name="confirmPassword"
-															type={showEmployerConfirmPassword ? "text" : "password"}
-															className="form-control"
-															placeholder="Confirm Password*"
-															value={employerData.confirmPassword}
-															autoComplete="new-password"
-															onChange={handleEmployerChange}
-															required
-														/>
-														<button
-															type="button"
-															className="btn position-absolute password-eye-icon"
-															style={{ right: '10px', top: '50%', transform: 'translateY(-50%)', border: 'none', background: 'transparent', cursor: 'pointer', padding: '0', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-															onClick={() => setShowEmployerConfirmPassword(!showEmployerConfirmPassword)}
-														>
-															<i className={showEmployerConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14', pointerEvents: 'none' }} />
-														</button>
-														{passwordError && <small className="text-danger">{passwordError}</small>}
-													</div>
-												</div>
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
