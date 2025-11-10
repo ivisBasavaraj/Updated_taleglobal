@@ -15,19 +15,64 @@ const generateToken = (id, role) => {
 
 exports.registerPlacement = async (req, res) => {
   try {
-    const { name, email, password, phone, collegeName } = req.body;
+    const { name, email, password, phone, collegeName, sendWelcomeEmail: shouldSendEmail } = req.body;
 
-    // Validate required fields
+    const existingPlacement = await Placement.findOne({ email });
+    if (existingPlacement) {
+      return res.status(400).json({ success: false, message: 'Email already registered' });
+    }
+
+    // If sendWelcomeEmail is true, create placement without password
+    if (shouldSendEmail) {
+      if (!name || !email || !phone || !collegeName) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Name, email, phone, and college name are required' 
+        });
+      }
+
+      const placementData = { 
+        name: name.trim(), 
+        email: email.toLowerCase().trim(), 
+        phone: phone.trim(), 
+        collegeName: collegeName.trim()
+      };
+      const placement = await Placement.create(placementData);
+      
+      // Create notification for admin
+      try {
+        await createNotification({
+          title: 'New Placement Officer Registration',
+          message: `${placement.name} from ${placement.collegeName} has registered as a placement officer.`,
+          type: 'placement_registered',
+          role: 'admin',
+          relatedId: placement._id,
+          createdBy: placement._id
+        });
+      } catch (notifError) {
+        console.error('Failed to create registration notification:', notifError);
+      }
+
+      // Send welcome email with password creation link
+      try {
+        await sendWelcomeEmail(placement.email, placement.name, 'placement');
+      } catch (emailError) {
+        console.error('Welcome email failed for placement officer:', emailError);
+        return res.status(500).json({ success: false, message: 'Failed to send welcome email' });
+      }
+
+      return res.status(201).json({
+        success: true,
+        message: 'Registration successful. Please check your email to create your password.'
+      });
+    }
+
+    // Original registration with password
     if (!name || !email || !password || !phone || !collegeName) {
       return res.status(400).json({ 
         success: false, 
         message: 'All fields are required: name, email, password, phone, collegeName' 
       });
-    }
-
-    const existingPlacement = await Placement.findOne({ email });
-    if (existingPlacement) {
-      return res.status(400).json({ success: false, message: 'Email already registered' });
     }
 
     const placementData = { 
@@ -39,7 +84,7 @@ exports.registerPlacement = async (req, res) => {
     };
     const placement = await Placement.create(placementData);
     
-    // Create notification for admin about new placement registration
+    // Create notification for admin
     try {
       await createNotification({
         title: 'New Placement Officer Registration',
@@ -53,7 +98,7 @@ exports.registerPlacement = async (req, res) => {
       console.error('Failed to create registration notification:', notifError);
     }
 
-    // Send welcome email to placement officer
+    // Send welcome email
     try {
       await sendWelcomeEmail(placement.email, placement.name, 'placement');
     } catch (emailError) {

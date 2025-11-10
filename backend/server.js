@@ -8,6 +8,8 @@ require('dotenv').config();
 const { connectDB } = require('./config/database');
 const errorHandler = require('./middlewares/errorHandler');
 const { initializeWebSocket } = require('./utils/websocket');
+const Application = require('./models/Application');
+const { sendAssessmentNotificationEmail } = require('./utils/emailService');
 
 // Import Routes
 const publicRoutes = require('./routes/public');
@@ -19,6 +21,87 @@ const holidaysRoutes = require('./routes/holidays');
 const cacheRoutes = require('./routes/cache');
 
 const app = express();
+
+const startAssessmentNotificationScheduler = () => {
+  const intervalMs = 5 * 60 * 1000;
+  const reminderWindowMs = 60 * 60 * 1000;
+  const startAlertGraceMs = 15 * 60 * 1000;
+  let isRunning = false;
+
+  const runCheck = async () => {
+    if (isRunning) {
+      return;
+    }
+    isRunning = true;
+    try {
+      const now = new Date();
+      const applications = await Application.find({
+        assessmentStatus: { $in: ['pending', 'available', 'in_progress'] },
+        $or: [
+          { assessmentReminderSent: { $ne: true } },
+          { assessmentStartAlertSent: { $ne: true } }
+        ]
+      })
+        .populate('candidateId', 'email name')
+        .populate('jobId', 'title assessmentStartDate');
+
+      for (const application of applications) {
+        try {
+          const job = application.jobId;
+          if (!job || !job.assessmentStartDate) {
+            continue;
+          }
+          const startDate = new Date(job.assessmentStartDate);
+          if (Number.isNaN(startDate.getTime())) {
+            continue;
+          }
+
+          const email = application.isGuestApplication ? application.applicantEmail : application.candidateId?.email;
+          if (!email) {
+            continue;
+          }
+          const name = application.isGuestApplication ? application.applicantName : application.candidateId?.name;
+          const jobTitle = job.title || 'Assessment';
+          const timeToStart = startDate.getTime() - now.getTime();
+
+          if (timeToStart > 0 && timeToStart <= reminderWindowMs && !application.assessmentReminderSent) {
+            await sendAssessmentNotificationEmail({
+              email,
+              name,
+              jobTitle,
+              startDate,
+              type: 'reminder'
+            });
+            await Application.updateOne({ _id: application._id }, { $set: { assessmentReminderSent: true } });
+          }
+
+          if (timeToStart <= 0 && timeToStart >= -startAlertGraceMs && !application.assessmentStartAlertSent) {
+            await sendAssessmentNotificationEmail({
+              email,
+              name,
+              jobTitle,
+              startDate,
+              type: 'start'
+            });
+            await Application.updateOne({ _id: application._id }, { $set: { assessmentStartAlertSent: true } });
+          }
+        } catch (schedulerError) {
+          console.error('Failed to process assessment notification for application', application._id, schedulerError);
+        }
+      }
+    } catch (error) {
+      console.error('Assessment notification scheduler error:', error);
+    } finally {
+      isRunning = false;
+    }
+  };
+
+  runCheck();
+  const interval = setInterval(runCheck, intervalMs);
+  if (interval.unref) {
+    interval.unref();
+  }
+};
 
 // Trust proxy for rate limiting
 app.set('trust proxy', 1);
@@ -110,4 +193,5 @@ initializeWebSocket(server);
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Tale Job Portal API running on port ${PORT}`);
   console.log('WebSocket server initialized for real-time updates');
+  startAssessmentNotificationScheduler();
 });

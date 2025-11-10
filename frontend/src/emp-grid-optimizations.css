@@ -5,6 +5,16 @@
   transform: translateZ(0);
 }
 
+.emp-grid-page .rightSidebar {
+  align-self: flex-start;
+}
+
+.emp-grid-page .rightSidebar .side-bar {
+  position: sticky !important;
+  top: 100px !important;
+  overflow-y: visible !important;
+}
+
 /* Employer Card Optimizations */
 .twm-employer-grid-style1 {
   background: #fff;
@@ -158,6 +168,16 @@
   .emp-grid-page .rightSidebar {
     order: 2;
     margin-top: 30px;
+    position: static;
+    top: auto;
+  }
+  
+  .emp-grid-page .rightSidebar .side-bar {
+    position: static;
+    top: auto;
+    max-height: none;
+    height: auto;
+    overflow: visible;
   }
   
   .emp-grid-page .col-lg-8 {

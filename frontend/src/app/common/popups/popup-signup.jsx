@@ -12,8 +12,6 @@ function SignUpPopup() {
         name: '',
         email: '',
         mobile: '',
-        password: '',
-        confirmPassword: '',
         employerCategory: ''
     });
     
@@ -21,29 +19,19 @@ function SignUpPopup() {
         name: '',
         email: '',
         phone: '',
-        password: '',
-        confirmPassword: '',
         collegeName: ''
     });
     
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
     const [fieldErrors, setFieldErrors] = useState({});
-    const [showCandidatePassword, setShowCandidatePassword] = useState(false);
-    const [showCandidateConfirmPassword, setShowCandidateConfirmPassword] = useState(false);
-    const [showEmployerPassword, setShowEmployerPassword] = useState(false);
-    const [showEmployerConfirmPassword, setShowEmployerConfirmPassword] = useState(false);
-    const [showPlacementPassword, setShowPlacementPassword] = useState(false);
-    const [showPlacementConfirmPassword, setShowPlacementConfirmPassword] = useState(false);
 
     useEffect(() => {
         setCandidateData({ username: '', email: '', mobile: '' });
-        setEmployerData({ name: '', email: '', mobile: '', password: '', confirmPassword: '', employerCategory: '' });
-        setPlacementData({ name: '', email: '', phone: '', password: '', confirmPassword: '', collegeName: '' });
+        setEmployerData({ name: '', email: '', mobile: '', employerCategory: '' });
+        setPlacementData({ name: '', email: '', phone: '', collegeName: '' });
         setFieldErrors({});
         setError('');
-        setPasswordError('');
     }, []);
 
     // Validation functions
@@ -85,21 +73,7 @@ function SignUpPopup() {
                 }
                 break;
 
-            case 'password':
-                if (!value) {
-                    errors.password = 'Password is required';
-                } else if (value.length < 8) {
-                    errors.password = 'Password must be at least 8 characters long';
-                } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/.test(value)) {
-                    errors.password = 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character';
-                } else {
-                    delete errors.password;
-                }
-                break;
 
-            case 'confirmPassword':
-                // This is handled separately in the change handlers
-                break;
 
             case 'employerCategory':
                 if (!value) {
@@ -153,39 +127,13 @@ function SignUpPopup() {
     const handleEmployerChange = (e) => {
         const { name, value } = e.target;
         setEmployerData({ ...employerData, [name]: value });
-
-        // Validate the field
         validateField(name, value, 'employer');
-
-        if (name === 'confirmPassword' || name === 'password') {
-            const password = name === 'password' ? value : employerData.password;
-            const confirmPassword = name === 'confirmPassword' ? value : employerData.confirmPassword;
-
-            if (confirmPassword && password !== confirmPassword) {
-                setPasswordError('Passwords do not match');
-            } else {
-                setPasswordError('');
-            }
-        }
     };
 
     const handlePlacementChange = (e) => {
         const { name, value } = e.target;
         setPlacementData({ ...placementData, [name]: value });
-
-        // Validate the field
         validateField(name, value, 'placement');
-
-        if (name === 'confirmPassword' || name === 'password') {
-            const password = name === 'password' ? value : placementData.password;
-            const confirmPassword = name === 'confirmPassword' ? value : placementData.confirmPassword;
-
-            if (confirmPassword && password !== confirmPassword) {
-                setPasswordError('Passwords do not match');
-            } else {
-                setPasswordError('');
-            }
-        }
     };
 
     const handleCandidateSubmit = async (e) => {
@@ -238,16 +186,10 @@ function SignUpPopup() {
     const handleEmployerSubmit = async (e) => {
         e.preventDefault();
 
-        // Validate all fields
         const isFormValid = validateForm(employerData, 'employer');
 
         if (!isFormValid || Object.keys(fieldErrors).length > 0) {
             setError('Please correct the errors below and try again.');
-            return;
-        }
-
-        if (employerData.password !== employerData.confirmPassword) {
-            setError('Passwords do not match');
             return;
         }
         
@@ -262,55 +204,30 @@ function SignUpPopup() {
                     name: employerData.name,
                     email: employerData.email,
                     phone: employerData.mobile,
-                    password: employerData.password,
-                    confirmPassword: employerData.confirmPassword,
                     companyName: employerData.name,
                     employerCategory: employerData.employerCategory,
-                    employerType: employerData.employerCategory === 'consultancy' ? 'consultant' : 'company'
+                    employerType: employerData.employerCategory === 'consultancy' ? 'consultant' : 'company',
+                    sendWelcomeEmail: true
                 })
             });
             
             const data = await response.json();
 
             if (response.ok && data.success) {
-                setEmployerData({ name: '', email: '', mobile: '', password: '', confirmPassword: '', employerCategory: '' });
+                setEmployerData({ name: '', email: '', mobile: '', employerCategory: '' });
                 setFieldErrors({});
-                setPasswordError('');
-                // Close signup modal and open login modal
+                alert('Welcome email sent! Please check your email to create your password.');
                 const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
                 if (signupModal) signupModal.hide();
-                setTimeout(() => {
-                    const loginModal = new window.bootstrap.Modal(document.getElementById('sign_up_popup2'));
-                    loginModal.show();
-                }, 300);
             } else {
-                // Handle specific server error messages
-                if (data.message) {
-                    if (data.message.includes('email') || data.message.includes('Email')) {
-                        setError('This email address is already registered. Please use a different email or try logging in.');
-                    } else if (data.message.includes('phone') || data.message.includes('mobile')) {
-                        setError('This phone number is already registered. Please use a different number.');
-                    } else if (data.message.includes('password')) {
-                        setError('Password does not meet security requirements. Please ensure it contains uppercase, lowercase, number, and special character.');
-                    } else {
-                        setError(data.message);
-                    }
-                } else if (response.status === 400) {
-                    setError('Invalid registration data. Please check all fields and try again.');
-                } else if (response.status === 409) {
-                    setError('Account already exists with this information. Please try logging in instead.');
-                } else if (response.status === 500) {
-                    setError('Server error occurred. Please try again later.');
+                if (data.message && data.message.includes('email')) {
+                    setError('This email address is already registered. Please try logging in instead.');
                 } else {
-                    setError('Registration failed. Please check your information and try again.');
+                    setError(data.message || 'Registration failed. Please try again.');
                 }
             }
         } catch (error) {
-            if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                setError('Network error. Please check your internet connection and try again.');
-            } else {
-                setError('An unexpected error occurred. Please try again.');
-            }
+            setError('Network error. Please check your connection and try again.');
         } finally {
             setLoading(false);
         }
@@ -319,16 +236,10 @@ function SignUpPopup() {
     const handlePlacementSubmit = async (e) => {
         e.preventDefault();
 
-        // Validate all fields
         const isFormValid = validateForm(placementData, 'placement');
 
         if (!isFormValid || Object.keys(fieldErrors).length > 0) {
             setError('Please correct the errors below and try again.');
-            return;
-        }
-
-        if (placementData.password !== placementData.confirmPassword) {
-            setError('Passwords do not match');
             return;
         }
         
@@ -343,53 +254,28 @@ function SignUpPopup() {
                     name: placementData.name,
                     email: placementData.email,
                     phone: placementData.phone,
-                    password: placementData.password,
-                    confirmPassword: placementData.confirmPassword,
-                    collegeName: placementData.collegeName
+                    collegeName: placementData.collegeName,
+                    sendWelcomeEmail: true
                 })
             });
             
             const data = await response.json();
 
             if (response.ok && data.success) {
-                setPlacementData({ name: '', email: '', phone: '', password: '', confirmPassword: '', collegeName: '' });
+                setPlacementData({ name: '', email: '', phone: '', collegeName: '' });
                 setFieldErrors({});
-                setPasswordError('');
-                // Close signup modal and open login modal
+                alert('Welcome email sent! Please check your email to create your password.');
                 const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
                 if (signupModal) signupModal.hide();
-                setTimeout(() => {
-                    const loginModal = new window.bootstrap.Modal(document.getElementById('sign_up_popup2'));
-                    loginModal.show();
-                }, 300);
             } else {
-                // Handle specific server error messages
-                if (data.message) {
-                    if (data.message.includes('email') || data.message.includes('Email')) {
-                        setError('This email address is already registered. Please use a different email or try logging in.');
-                    } else if (data.message.includes('phone') || data.message.includes('mobile')) {
-                        setError('This phone number is already registered. Please use a different number.');
-                    } else if (data.message.includes('password')) {
-                        setError('Password does not meet security requirements. Please ensure it contains uppercase, lowercase, number, and special character.');
-                    } else {
-                        setError(data.message);
-                    }
-                } else if (response.status === 400) {
-                    setError('Invalid registration data. Please check all fields and try again.');
-                } else if (response.status === 409) {
-                    setError('Account already exists with this information. Please try logging in instead.');
-                } else if (response.status === 500) {
-                    setError('Server error occurred. Please try again later.');
+                if (data.message && data.message.includes('email')) {
+                    setError('This email address is already registered. Please try logging in instead.');
                 } else {
-                    setError('Registration failed. Please check your information and try again.');
+                    setError(data.message || 'Registration failed. Please try again.');
                 }
             }
         } catch (error) {
-            if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                setError('Network error. Please check your internet connection and try again.');
-            } else {
-                setError('An unexpected error occurred. Please try again.');
-            }
+            setError('Network error. Please check your connection and try again.');
         } finally {
             setLoading(false);
         }
@@ -559,7 +445,7 @@ function SignUpPopup() {
 													</div>
 												</div>
 												<div className="col-md-12">
-													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading || passwordError}>
+													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -646,55 +532,6 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-lg-12">
-													<div className="form-group mb-3 position-relative">
-														<input
-															name="password"
-															type={showEmployerPassword ? "text" : "password"}
-															className={`form-control ${fieldErrors.password ? 'is-invalid' : ''}`}
-															placeholder="Password*"
-															value={employerData.password}
-															autoComplete="new-password"
-															onChange={handleEmployerChange}
-															required
-														/>
-														<span
-															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none' }}
-															onClick={() => setShowEmployerPassword(!showEmployerPassword)}
-														>
-															<i className={showEmployerPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</span>
-														{fieldErrors.password && (
-															<div className="invalid-feedback d-block">{fieldErrors.password}</div>
-														)}
-													</div>
-												</div>
-
-												<div className="col-lg-12">
-													<div className="form-group mb-3 position-relative">
-														<input
-															name="confirmPassword"
-															type={showEmployerConfirmPassword ? "text" : "password"}
-															className={`form-control ${fieldErrors.confirmPassword ? 'is-invalid' : ''}`}
-															placeholder="Confirm Password*"
-															value={employerData.confirmPassword}
-															autoComplete="new-password"
-															onChange={handleEmployerChange}
-															required
-														/>
-														<span
-															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none' }}
-															onClick={() => setShowEmployerConfirmPassword(!showEmployerConfirmPassword)}
-														>
-															<i className={showEmployerConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</span>
-														{passwordError && <small className="text-danger d-block">{passwordError}</small>}
-														{fieldErrors.confirmPassword && (
-															<div className="invalid-feedback d-block">{fieldErrors.confirmPassword}</div>
-														)}
-													</div>
-												</div>
-
-												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<div className=" form-check">
 															<input
@@ -727,7 +564,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading || passwordError}>
+													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -813,57 +650,6 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-lg-12">
-													<div className="form-group mb-3 position-relative">
-														<input
-															name="password"
-															type={showPlacementPassword ? "text" : "password"}
-															className={`form-control ${fieldErrors.password ? 'is-invalid' : ''}`}
-															placeholder="Password*"
-															value={placementData.password}
-															autoComplete="new-password"
-															onChange={handlePlacementChange}
-															required
-														/>
-														<span
-															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none' }}
-															onClick={() => setShowPlacementPassword(!showPlacementPassword)}
-														>
-															<i className={showPlacementPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</span>
-														{fieldErrors.password && (
-															<div className="invalid-feedback d-block">{fieldErrors.password}</div>
-														)}
-													</div>
-												</div>
-
-												<div className="col-lg-12">
-													<div className="form-group mb-3 position-relative">
-														<input
-															name="confirmPassword"
-															type={showPlacementConfirmPassword ? "text" : "password"}
-															className={`form-control ${fieldErrors.confirmPassword ? 'is-invalid' : ''}`}
-															placeholder="Confirm Password*"
-															value={placementData.confirmPassword}
-															autoComplete="new-password"
-															onChange={handlePlacementChange}
-															required
-														/>
-														<span
-															style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', userSelect: 'none' }}
-															onClick={() => setShowPlacementConfirmPassword(!showPlacementConfirmPassword)}
-														>
-															<i className={showPlacementConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"} style={{ color: '#fd7e14' }} />
-														</span>
-														{passwordError && <small className="text-danger d-block">{passwordError}</small>}
-														{fieldErrors.confirmPassword && (
-															<div className="invalid-feedback d-block">{fieldErrors.confirmPassword}</div>
-														)}
-													</div>
-												</div>
-
-
-
-												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<div className=" form-check">
 															<input
@@ -896,7 +682,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading || passwordError}>
+													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>

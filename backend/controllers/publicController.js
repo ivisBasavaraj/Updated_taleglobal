@@ -394,9 +394,15 @@ exports.getEmployerProfile = async (req, res) => {
 
 exports.getEmployers = async (req, res) => {
   try {
-    const { page = 1, limit = 10, sortBy } = req.query;
+    const { page = 1, limit = 10, sortBy, keyword, location, industry, teamSize } = req.query;
     
-    const cacheKey = `employers_v3_${JSON.stringify({ page, limit, sortBy })}`; // v3 to clear cache
+    const keywordFilter = keyword?.trim();
+    const locationFilter = location?.trim();
+    const industryFilter = industry?.trim();
+    const teamSizeFilter = teamSize?.trim();
+    const createRegex = (value) => new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    
+    const cacheKey = `employers_v3_${JSON.stringify({ page, limit, sortBy, keyword: keywordFilter, location: locationFilter, industry: industryFilter, teamSize: teamSizeFilter })}`;
     const cached = cache.get(cacheKey);
     
     if (cached) {
@@ -423,15 +429,19 @@ exports.getEmployers = async (req, res) => {
           foreignField: 'employerId',
           as: 'profile',
           pipeline: [
-            { $project: { 
-              logo: 1, 
-              industry: 1, 
-              corporateAddress: 1, 
-              website: 1, 
-              companySize: 1,
-              establishedSince: 1,
-              foundedYear: 1
-            } }
+            {
+              $project: {
+                logo: 1,
+                industry: 1,
+                corporateAddress: 1,
+                website: 1,
+                companySize: 1,
+                teamSize: 1,
+                location: 1,
+                establishedSince: 1,
+                foundedYear: 1
+              }
+            }
           ]
         }
       },
@@ -454,7 +464,44 @@ exports.getEmployers = async (req, res) => {
           establishedSince: { $arrayElemAt: ['$profile.establishedSince', 0] },
           foundedYear: { $arrayElemAt: ['$profile.foundedYear', 0] }
         }
-      },
+      }
+    ];
+
+    const matchConditions = [];
+
+    if (keywordFilter) {
+      matchConditions.push({ companyName: createRegex(keywordFilter) });
+    }
+
+    if (locationFilter) {
+      const locationRegex = createRegex(locationFilter);
+      matchConditions.push({
+        $or: [
+          { 'profile.corporateAddress': locationRegex },
+          { 'profile.location': locationRegex }
+        ]
+      });
+    }
+
+    if (industryFilter) {
+      matchConditions.push({ 'profile.industry': createRegex(industryFilter) });
+    }
+
+    if (teamSizeFilter) {
+      const teamSizeRegex = createRegex(teamSizeFilter);
+      matchConditions.push({
+        $or: [
+          { 'profile.teamSize': teamSizeRegex },
+          { 'profile.companySize': teamSizeRegex }
+        ]
+      });
+    }
+
+    if (matchConditions.length > 0) {
+      pipeline.push({ $match: { $and: matchConditions } });
+    }
+
+    pipeline.push(
       {
         $project: {
           companyName: 1,
@@ -478,7 +525,7 @@ exports.getEmployers = async (req, res) => {
           totalCount: [{ $count: 'count' }]
         }
       }
-    ];
+    );
 
     const [result] = await Employer.aggregate(pipeline);
     const employers = result.employers || [];

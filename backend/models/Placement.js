@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const placementSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: false },
   phone: { type: String, required: true },
   collegeName: { type: String, required: true },
   logo: { type: String }, // Base64 encoded logo image
@@ -58,12 +58,13 @@ const placementSchema = new mongoose.Schema({
 });
 
 placementSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
+  if (!this.isModified('password') || !this.password) return next();
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 
 placementSchema.methods.comparePassword = async function(password) {
+  if (!this.password) return false;
   return await bcrypt.compare(password, this.password);
 };
 

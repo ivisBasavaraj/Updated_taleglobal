@@ -33,6 +33,8 @@ const applicationSchema = new mongoose.Schema({
     enum: ['not_required', 'pending', 'available', 'in_progress', 'completed', 'expired'], 
     default: 'not_required' 
   },
+  assessmentReminderSent: { type: Boolean, default: false },
+  assessmentStartAlertSent: { type: Boolean, default: false },
   assessmentScore: { type: Number },
   assessmentPercentage: { type: Number },
   assessmentResult: { type: String, enum: ['pass', 'fail', 'pending'] },

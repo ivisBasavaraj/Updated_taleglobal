@@ -4,12 +4,12 @@ const bcrypt = require('bcryptjs');
 const employerSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: false },
   phone: { type: String },
   companyName: { type: String, required: true },
   employerType: { type: String, enum: ['company', 'consultant'], default: 'company' },
   isVerified: { type: Boolean, default: false },
-  status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+  status: { type: String, enum: ['active', 'inactive', 'pending'], default: 'active' },
   isApproved: { type: Boolean, default: false },
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date }
@@ -18,12 +18,13 @@ const employerSchema = new mongoose.Schema({
 });
 
 employerSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
+  if (!this.isModified('password') || !this.password) return next();
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 
 employerSchema.methods.comparePassword = async function(password) {
+  if (!this.password) return false;
   return await bcrypt.compare(password, this.password);
 };
 
