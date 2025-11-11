@@ -34,18 +34,23 @@ export default function AdminLogin() {
             const data = await response.json();
 
             if (response.ok && data.success) {
-                localStorage.setItem("adminToken", data.token);
-                
                 // Handle both admin and sub-admin login
                 if (data.admin) {
+                    localStorage.setItem("adminToken", data.token);
                     localStorage.setItem("adminData", JSON.stringify(data.admin));
-                    localStorage.removeItem("subAdminData"); // Clear sub-admin data if exists
+                    localStorage.removeItem("subAdminToken");
+                    localStorage.removeItem("subAdminData");
                 } else if (data.subAdmin) {
+                    localStorage.setItem("subAdminToken", data.token);
                     localStorage.setItem("subAdminData", JSON.stringify(data.subAdmin));
-                    localStorage.removeItem("adminData"); // Clear admin data if exists
+                    localStorage.removeItem("adminToken");
+                    localStorage.removeItem("adminData");
                 }
                 
-                navigate("/admin/dashboard");
+                // Small delay to ensure localStorage is written
+                setTimeout(() => {
+                    navigate("/admin/dashboard", { replace: true });
+                }, 100);
             } else {
                 setError(data.message || `Login failed (${response.status})`);
             }
