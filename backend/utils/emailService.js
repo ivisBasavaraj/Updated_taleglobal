@@ -15,7 +15,8 @@ const createTransport = () => {
 
 const sendWelcomeEmail = async (email, name, userType) => {
   const transporter = createTransport();
-  const createPasswordUrl = `${process.env.FRONTEND_URL}/create-password?email=${encodeURIComponent(email)}`;
+  const userTypeParam = encodeURIComponent(userType || 'candidate');
+  const createPasswordUrl = `${process.env.FRONTEND_URL}/create-password?email=${encodeURIComponent(email)}&type=${userTypeParam}`;
   
   const welcomeTemplate = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9fa;">
@@ -100,7 +101,7 @@ const sendResetEmail = async (email, resetToken, userType) => {
 
 const sendPasswordCreationEmail = async (email, name) => {
   const transporter = createTransport();
-  const createPasswordUrl = `${process.env.FRONTEND_URL}/create-password?email=${encodeURIComponent(email)}`;
+  const createPasswordUrl = `${process.env.FRONTEND_URL}/create-password?email=${encodeURIComponent(email)}&type=candidate`;
   
   const welcomeTemplate = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9fa;">

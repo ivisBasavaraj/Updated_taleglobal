@@ -12,6 +12,17 @@ function CreatePassword() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const email = searchParams.get('email');
+    const rawType = (searchParams.get('type') || 'candidate').toLowerCase();
+    const endpointMap = {
+        candidate: 'http://localhost:5000/api/candidate/create-password',
+        employer: 'http://localhost:5000/api/employer/create-password',
+        placement: 'http://localhost:5000/api/placement/create-password'
+    };
+    const hasTypeParam = !!searchParams.get('type');
+    const userType = endpointMap[rawType] ? rawType : 'candidate';
+    const endpoint = endpointMap[userType];
+    const displayRole = userType === 'placement' ? 'placement officer' : userType;
+    const displayRoleLabel = displayRole === 'placement officer' ? 'Placement Officer' : displayRole.charAt(0).toUpperCase() + displayRole.slice(1);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,11 +37,21 @@ function CreatePassword() {
             return;
         }
 
+        if (!email) {
+            setError('Email parameter is missing.');
+            return;
+        }
+
+        if (hasTypeParam && !endpointMap[rawType]) {
+            setError('Invalid user type. Please use the link provided in your email.');
+            return;
+        }
+
         setLoading(true);
         setError('');
 
         try {
-            const response = await fetch('http://localhost:5000/api/candidate/create-password', {
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
@@ -64,7 +85,7 @@ function CreatePassword() {
                     <div className="card">
                         <div className="card-header">
                             <h3>Create Your Password</h3>
-                            {email && <p className="mb-0">for {email}</p>}
+                            {email && <p className="mb-0">for {email} ({displayRoleLabel})</p>}
                         </div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>

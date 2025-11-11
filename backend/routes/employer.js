@@ -16,6 +16,11 @@ router.post('/register', [
 
 router.post('/login', employerController.loginEmployer);
 
+router.post('/create-password', [
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+], handleValidationErrors, employerPasswordController.createPassword);
+
 // Password Reset Routes (Public - before auth middleware)
 router.post('/password/reset', [
   body('email').isEmail().withMessage('Valid email is required')

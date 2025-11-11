@@ -120,6 +120,30 @@ exports.registerPlacement = async (req, res) => {
   }
 };
 
+exports.createPassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const normalizedEmail = email.toLowerCase().trim();
+    const placement = await Placement.findOne({ email: normalizedEmail });
+
+    if (!placement) {
+      return res.status(404).json({ success: false, message: 'Placement officer not found' });
+    }
+
+    if (placement.password) {
+      return res.status(400).json({ success: false, message: 'Password already set' });
+    }
+
+    placement.password = password;
+    placement.status = 'active';
+    await placement.save();
+
+    res.json({ success: true, message: 'Password created successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // Upload student data file after registration
 exports.uploadStudentData = async (req, res) => {
   try {
