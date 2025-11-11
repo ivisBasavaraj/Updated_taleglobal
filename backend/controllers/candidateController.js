@@ -712,43 +712,81 @@ exports.changePassword = async (req, res) => {
 exports.updatePasswordReset = async (req, res) => {
   try {
     const { email, newPassword } = req.body;
-    // Removed console debug line for security;
-    // Removed console debug line for security;
     
     if (!email || !newPassword) {
-      // Removed console debug line for security;
       return res.status(400).json({ success: false, message: 'Email and new password are required' });
     }
 
     const candidate = await Candidate.findOne({ email });
     if (!candidate) {
-      // Removed console debug line for security;
       return res.status(404).json({ success: false, message: 'Candidate not found' });
     }
-
-    // Removed console debug line for security;
-    // Removed console debug line for security;
-    // Removed console debug line for security;
-    // Removed console debug line for security;
     
     // For placement candidates, change to signup method so password gets hashed
     if (candidate.registrationMethod === 'placement') {
-      // Removed console debug line for security;
       candidate.registrationMethod = 'signup';
     }
     
     candidate.password = newPassword;
     candidate.markModified('password');
     await candidate.save();
-    
-    // Removed console debug line for security;
-    // Removed console debug line for security;
-    // Removed console debug line for security;
-    // Removed console debug line for security;
 
     res.json({ success: true, message: 'Password updated successfully' });
   } catch (error) {
-    console.error('❌ Password reset error:', error);
+    console.error('Password reset error:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// OTP-based Password Reset
+exports.sendOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const candidate = await Candidate.findOne({ email });
+    
+    if (!candidate) {
+      return res.status(404).json({ success: false, message: 'Candidate not found' });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    candidate.resetPasswordOTP = otp;
+    candidate.resetPasswordOTPExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+    await candidate.save();
+
+    const { sendOTPEmail } = require('../utils/emailService');
+    await sendOTPEmail(email, otp, candidate.name);
+
+    res.json({ success: true, message: 'OTP sent to your email' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.verifyOTPAndResetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    
+    const candidate = await Candidate.findOne({
+      email,
+      resetPasswordOTP: otp,
+      resetPasswordOTPExpires: { $gt: Date.now() }
+    });
+
+    if (!candidate) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired OTP' });
+    }
+
+    if (candidate.registrationMethod === 'placement') {
+      candidate.registrationMethod = 'signup';
+    }
+
+    candidate.password = newPassword;
+    candidate.resetPasswordOTP = undefined;
+    candidate.resetPasswordOTPExpires = undefined;
+    await candidate.save();
+
+    res.json({ success: true, message: 'Password reset successful' });
+  } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };

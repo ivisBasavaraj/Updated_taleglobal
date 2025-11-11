@@ -31,6 +31,17 @@ router.post('/password/confirm-reset', [
   body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
 ], handleValidationErrors, employerPasswordController.confirmResetPassword);
 
+// OTP-based Password Reset Routes
+router.post('/password/send-otp', [
+  body('email').isEmail().withMessage('Valid email is required')
+], handleValidationErrors, employerPasswordController.sendOTP);
+
+router.post('/password/verify-otp', [
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('otp').isLength({ min: 6, max: 6 }).withMessage('OTP must be 6 digits'),
+  body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+], handleValidationErrors, employerPasswordController.verifyOTPAndResetPassword);
+
 // Protected Routes
 router.use(auth(['employer']));
 

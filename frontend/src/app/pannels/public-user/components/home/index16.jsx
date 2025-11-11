@@ -370,191 +370,64 @@ function Home16Page() {
 
             {/* JOBS CATEGORIES SECTION START */}
             <div className="section-full p-t20 p-b20 twm-job-categories-hpage-6-area animate-on-scroll" style={{backgroundColor: 'white !important'}}>
-                {/* title="" START*/}
                 <div className="section-head center wt-small-separator-outer mb-3">
                     <div className="wt-small-separator site-text-primary">
                         <div>Jobs by Categories</div>
                     </div>
-
                     <h2 className="wt-title">Choose a Relevant Category</h2>
                 </div>
-                {/* title="" END*/}
                 <Container className="py-2">
-                    <div className="twm-job-cat-hpage-6-wrap">
-                        <div className="job-cat-block-hpage-6-section m-b30">
-                            <Row>
-                                {/* COLUMNS 1 */}
-                                <Col lg={4} md={6} sm={12} xs={12} className="mb-4">
-                                    <div className="job-cat-block-hpage-6 m-b30 hover-card" style={{backgroundColor: 'white'}}>
-                                        <div className="twm-media">
-                                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="category-svg">
-                                                    <rect x="10" y="15" width="50" height="40" fill="none" stroke="#fd7e14" strokeWidth="3" rx="3"/>
-                                                    <circle cx="20" cy="25" r="2" fill="#fd7e14"/>
-                                                    <circle cx="30" cy="25" r="2" fill="#fd7e14"/>
-                                                    <line x1="10" y1="35" x2="60" y2="35" stroke="#fd7e14" strokeWidth="2"/>
-                                                    <path d="M 20 45 L 25 50 L 20 55 M 40 45 L 45 50 L 40 55 M 30 48 L 35 48 M 30 52 L 35 52" stroke="#fd7e14" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                                                </svg>
-                                        </div>
-                                        <div className="twm-content">
-                                            <NavLink to="/job-grid?category=IT">
-                                                Programming &amp; Tech
-                                            </NavLink>
-                                            <div className="twm-jobs-available">
-                                                <span>{categories[0]?.count || 0}+</span> Posted new
-                                                jobs
-                                            </div>
-                                            <div className="circle-line-wrap">
-                                                <NavLink
-                                                    to="/job-grid?category=IT"
-                                                    className="circle-line-btn"
-                                                >
-                                                    <i className="fa fa-arrow-right" />
-                                                </NavLink>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col>
-
-                                {/* COLUMNS 2 */}
-                                <Col lg={4} md={6} sm={12} xs={12} className="mb-4">
-                                    <div className="job-cat-block-hpage-6 m-b30 hover-card" style={{backgroundColor: 'white'}}>
-                                        <div className="twm-media">
-                                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="category-svg">
-                                                    <path d="M 15 20 L 15 60 Q 15 65 20 65 L 55 65 Q 60 65 60 60 L 60 20 Q 60 15 55 15 L 20 15 Q 15 15 15 20 Z" fill="none" stroke="#fd7e14" strokeWidth="2.5"/>
-                                                    <line x1="20" y1="25" x2="55" y2="25" stroke="#fd7e14" strokeWidth="2"/>
-                                                    <line x1="20" y1="35" x2="55" y2="35" stroke="#fd7e14" strokeWidth="2"/>
-                                                    <line x1="20" y1="45" x2="55" y2="45" stroke="#fd7e14" strokeWidth="2"/>
-                                                    <line x1="20" y1="55" x2="40" y2="55" stroke="#fd7e14" strokeWidth="2"/>
-                                                    <path d="M 45 48 L 50 43 L 55 48 L 50 53 Z" fill="#fd7e14"/>
-                                                </svg>
-                                        </div>
-                                        <div className="twm-content">
-                                            <NavLink to="/job-grid?category=Content">
-                                                Content Writer
-                                            </NavLink>
-                                            <div className="twm-jobs-available">
-                                                <span>{categories[1]?.count || 0}+</span> Posted new
-                                                jobs
-                                            </div>
-                                            <div className="circle-line-wrap">
-                                                <NavLink
-                                                    to="/job-grid?category=Content"
-                                                    className="circle-line-btn"
-                                                >
-                                                    <i className="fa fa-arrow-right" />
-                                                </NavLink>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col>
-
-                                {/* COLUMNS 3 */}
-                                <Col lg={4} md={6} sm={12} xs={12} className="mb-4">
-                                    <div className="job-cat-block-hpage-6 m-b30 hover-card" style={{backgroundColor: 'white'}}>
-                                        <div className="twm-media">
-                                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="category-svg">
-                                                    <line x1="15" y1="55" x2="65" y2="55" stroke="#fd7e14" strokeWidth="3"/>
-                                                    <rect x="18" y="45" width="8" height="10" fill="#fd7e14"/>
-                                                    <rect x="30" y="35" width="8" height="20" fill="#fd7e14"/>
-                                                    <rect x="42" y="25" width="8" height="30" fill="#fd7e14"/>
-                                                    <rect x="54" y="15" width="8" height="40" fill="#fd7e14"/>
-                                                    <path d="M 25 45 L 35 35 L 45 25 L 55 15" stroke="#fd7e14" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                                                    <circle cx="25" cy="45" r="2.5" fill="#fd7e14"/>
-                                                    <circle cx="35" cy="35" r="2.5" fill="#fd7e14"/>
-                                                    <circle cx="45" cy="25" r="2.5" fill="#fd7e14"/>
-                                                    <circle cx="55" cy="15" r="2.5" fill="#fd7e14"/>
-                                                </svg>
-                                        </div>
-                                        <div className="twm-content">
-                                            <NavLink to="/job-grid?category=Sales">
-                                                Sales & Marketing
-                                            </NavLink>
-                                            <div className="twm-jobs-available">
-                                                <span>{categories[2]?.count || 0}+</span> Posted new
-                                                jobs
-                                            </div>
-                                            <div className="circle-line-wrap">
-                                                <NavLink
-                                                    to="/job-grid?category=Sales"
-                                                    className="circle-line-btn"
-                                                >
-                                                    <i className="fa fa-arrow-right" />
-                                                </NavLink>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col>
-
-                                {/* COLUMNS 4 */}
-                                <Col lg={4} md={6} sm={12} xs={12} className="mb-4">
-                                    <div className="job-cat-block-hpage-6 m-b30 hover-card" style={{backgroundColor: 'white'}}>
-                                        <div className="twm-media">
-                                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="category-svg">
-                                                    <path d="M 40 18 C 40 18 28 28 28 38 C 28 48 33 55 40 55 C 47 55 52 48 52 38 C 52 28 40 18 40 18 Z" fill="none" stroke="#fd7e14" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                                    <path d="M 40 32 L 40 45 M 35 38.5 L 45 38.5" stroke="#fd7e14" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                                                </svg>
-                                        </div>
-                                        <div className="twm-content">
-                                            <NavLink to="/job-grid?category=Healthcare">
-                                                Healthcare
-                                            </NavLink>
-                                            <div className="twm-jobs-available">
-                                                <span>{categories[3]?.count || 0}+</span> Posted new
-                                                jobs
-                                            </div>
-                                            <div className="circle-line-wrap">
-                                                <NavLink
-                                                    to="/job-grid?category=Healthcare"
-                                                    className="circle-line-btn"
-                                                >
-                                                    <i className="fa fa-arrow-right" />
-                                                </NavLink>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col>
-
-                                {/* COLUMNS 5 */}
-                                <Col lg={4} md={6} sm={12} xs={12} className="mb-4">
-                                    <div className="job-cat-block-hpage-6 m-b30 hover-card" style={{backgroundColor: 'white'}}>
-                                        <div className="twm-media">
-                                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="category-svg">
-                                                    <circle cx="25" cy="24" r="5.5" fill="none" stroke="#fd7e14" strokeWidth="2.5"/>
-                                                    <path d="M 18 32 Q 18 32 32 32" fill="none" stroke="#fd7e14" strokeWidth="2.5" strokeLinecap="round"/>
-                                                    <circle cx="55" cy="24" r="5.5" fill="none" stroke="#fd7e14" strokeWidth="2.5"/>
-                                                    <path d="M 48 32 Q 48 32 62 32" fill="none" stroke="#fd7e14" strokeWidth="2.5" strokeLinecap="round"/>
-                                                    <circle cx="40" cy="38" r="6" fill="none" stroke="#fd7e14" strokeWidth="2.5"/>
-                                                    <path d="M 30 48 Q 30 48 50 48" fill="none" stroke="#fd7e14" strokeWidth="2.5" strokeLinecap="round"/>
-                                                    <path d="M 25 56 Q 25 52 55 52 Q 55 56 40 62 Q 25 56 25 56 Z" fill="#fd7e14" opacity="0.3" stroke="#fd7e14" strokeWidth="2.5"/>
-                                                </svg>
-                                        </div>
-                                        <div className="twm-content">
-                                            <NavLink to="/job-grid?category=HR">
-                                                Human Resources
-                                            </NavLink>
-                                            <div className="twm-jobs-available">
-                                                <span>{categories[4]?.count || 0}+</span> Posted new
-                                                jobs
-                                            </div>
-                                            <div className="circle-line-wrap">
-                                                <NavLink
-                                                    to="/job-grid?category=HR"
-                                                    className="circle-line-btn"
-                                                >
-                                                    <i className="fa fa-arrow-right" />
-                                                </NavLink>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </div>
-
-                        <div className="text-center job-categories-btn">
-                            <NavLink to="/job-grid" className="site-button" style={{padding: '0.5rem 1rem', fontSize: '14px', display: 'inline-flex', width: 'auto', whiteSpace: 'nowrap'}}>
-                                All Categories
-                            </NavLink>
-                        </div>
+                    <div style={{display: 'flex', gap: '16px', flexWrap: 'nowrap', justifyContent: 'center', marginBottom: '30px'}}>
+                        <NavLink to="/job-grid?category=IT" style={{textDecoration: 'none'}}>
+                            <div className="category-card">
+                                <div>
+                                    <div className="category-text-title">Programming</div>
+                                    <div className="category-text-sub">{categories[0]?.count || 0} Jobs</div>
+                                </div>
+                                <div className="plus-badge">+</div>
+                            </div>
+                        </NavLink>
+                        <NavLink to="/job-grid?category=Content" style={{textDecoration: 'none'}}>
+                            <div className="category-card">
+                                <div>
+                                    <div className="category-text-title">Content Writer</div>
+                                    <div className="category-text-sub">{categories[1]?.count || 0} Jobs</div>
+                                </div>
+                                <div className="plus-badge">+</div>
+                            </div>
+                        </NavLink>
+                        <NavLink to="/job-grid?category=Sales" style={{textDecoration: 'none'}}>
+                            <div className="category-card">
+                                <div>
+                                    <div className="category-text-title">Sales & Marketing</div>
+                                    <div className="category-text-sub">{categories[2]?.count || 0} Jobs</div>
+                                </div>
+                                <div className="plus-badge">+</div>
+                            </div>
+                        </NavLink>
+                        <NavLink to="/job-grid?category=Healthcare" style={{textDecoration: 'none'}}>
+                            <div className="category-card">
+                                <div>
+                                    <div className="category-text-title">Healthcare</div>
+                                    <div className="category-text-sub">{categories[3]?.count || 0} Jobs</div>
+                                </div>
+                                <div className="plus-badge">+</div>
+                            </div>
+                        </NavLink>
+                        <NavLink to="/job-grid?category=HR" style={{textDecoration: 'none'}}>
+                            <div className="category-card">
+                                <div>
+                                    <div className="category-text-title">Human Resources</div>
+                                    <div className="category-text-sub">{categories[4]?.count || 0} Jobs</div>
+                                </div>
+                                <div className="plus-badge">+</div>
+                            </div>
+                        </NavLink>
+                    </div>
+                    <div className="text-center job-categories-btn">
+                        <NavLink to="/job-grid" className="site-button" style={{padding: '0.5rem 1rem', fontSize: '14px', display: 'inline-flex', width: 'auto', whiteSpace: 'nowrap'}}>
+                            All Categories
+                        </NavLink>
                     </div>
                 </Container>
             </div>

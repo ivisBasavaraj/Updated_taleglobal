@@ -12,7 +12,9 @@ const employerSchema = new mongoose.Schema({
   status: { type: String, enum: ['active', 'inactive', 'pending'], default: 'active' },
   isApproved: { type: Boolean, default: false },
   resetPasswordToken: { type: String },
-  resetPasswordExpires: { type: Date }
+  resetPasswordExpires: { type: Date },
+  resetPasswordOTP: { type: String },
+  resetPasswordOTPExpires: { type: Date }
 }, {
   timestamps: true
 });

@@ -70,3 +70,52 @@ exports.confirmResetPassword = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// OTP-based Password Reset
+exports.sendOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const employer = await Employer.findOne({ email });
+    
+    if (!employer) {
+      return res.status(404).json({ success: false, message: 'Employer not found' });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    employer.resetPasswordOTP = otp;
+    employer.resetPasswordOTPExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+    await employer.save();
+
+    const { sendOTPEmail } = require('../utils/emailService');
+    await sendOTPEmail(email, otp, employer.name);
+
+    res.json({ success: true, message: 'OTP sent to your email' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.verifyOTPAndResetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    
+    const employer = await Employer.findOne({
+      email,
+      resetPasswordOTP: otp,
+      resetPasswordOTPExpires: { $gt: Date.now() }
+    });
+
+    if (!employer) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired OTP' });
+    }
+
+    employer.password = newPassword;
+    employer.resetPasswordOTP = undefined;
+    employer.resetPasswordOTPExpires = undefined;
+    await employer.save();
+
+    res.json({ success: true, message: 'Password reset successful' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

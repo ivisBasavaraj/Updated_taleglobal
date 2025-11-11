@@ -202,4 +202,46 @@ const sendAssessmentNotificationEmail = async ({ email, name, jobTitle, startDat
   await transporter.sendMail(mailOptions);
 };
 
-module.exports = { sendWelcomeEmail, sendResetEmail, sendPasswordCreationEmail, sendAssessmentNotificationEmail };
+const sendOTPEmail = async (email, otp, name) => {
+  const transporter = createTransport();
+  
+  const otpTemplate = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9fa;">
+      <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <h1 style="color: #333; text-align: center; margin-bottom: 30px;">Password Reset OTP</h1>
+        
+        <p style="color: #666; font-size: 16px; line-height: 1.6;">Dear ${name || 'User'},</p>
+        
+        <p style="color: #666; font-size: 16px; line-height: 1.6;">
+          You have requested to reset your password. Please use the following OTP to complete the process:
+        </p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <div style="background-color: #fff5f2; border: 2px solid #ff6b35; padding: 20px; border-radius: 8px; display: inline-block;">
+            <span style="font-size: 32px; font-weight: bold; color: #ff6b35; letter-spacing: 8px;">${otp}</span>
+          </div>
+        </div>
+        
+        <p style="color: #666; font-size: 16px; line-height: 1.6;">
+          This OTP will expire in 10 minutes. If you didn't request this, please ignore this email.
+        </p>
+        
+        <p style="color: #999; font-size: 14px; text-align: center; margin-top: 30px;">
+          Best regards,<br>
+          The TaleGlobal Team
+        </p>
+      </div>
+    </div>
+  `;
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Password Reset OTP - TaleGlobal',
+    html: otpTemplate
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+module.exports = { sendWelcomeEmail, sendResetEmail, sendPasswordCreationEmail, sendAssessmentNotificationEmail, sendOTPEmail };

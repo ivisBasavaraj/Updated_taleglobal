@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -7,21 +7,11 @@ function ForgotPassword() {
   const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [generatedOTP, setGeneratedOTP] = useState('');
-
-  useEffect(() => {
-    // Load EmailJS script
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-    script.onload = () => {
-      window.emailjs.init('IUBFJTFkQbQuIA-6P');
-    };
-    document.head.appendChild(script);
-  }, []);
 
   const handleSendOTP = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setMessage('');
 
     if (!email.includes('@')) {
       setMessage('Please enter a valid email.');
@@ -29,9 +19,8 @@ function ForgotPassword() {
       return;
     }
 
-    // Check if email is registered
     try {
-      const response = await fetch('http://localhost:5000/api/candidate/check-email', {
+      const response = await fetch('http://localhost:5000/api/candidate/password/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
@@ -39,44 +28,14 @@ function ForgotPassword() {
       
       const result = await response.json();
       
-      if (!result.exists) {
-        setMessage('This email is not registered. Please use a registered email address.');
-        setLoading(false);
-        return;
-      }
-    } catch (error) {
-      setMessage('Unable to verify email. Please try again.');
-      setLoading(false);
-      return;
-    }
-
-    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedOTP(otpCode);
-
-    try {
-      if (window.emailjs) {
-        const result = await window.emailjs.send(
-          'service_efcac65',
-          'template_7vg4zm5',
-          {
-            to_email: email,
-            to_name: email.split('@')[0],
-            otp_code: otpCode,
-            reply_to: email,
-            email: email
-          },
-          'IUBFJTFkQbQuIA-6P'
-        );
-        
-        setMessage(`OTP sent to ${email} successfully!`);
+      if (response.ok && result.success) {
+        setMessage('OTP sent to your email successfully!');
         setOtpSent(true);
       } else {
-        throw new Error('EmailJS not loaded');
+        setMessage(result.message || 'Failed to send OTP. Please try again.');
       }
     } catch (error) {
-      
-      setMessage(`Failed to send email: ${error.text || error.message}. Demo OTP: ${otpCode}`);
-      setOtpSent(true);
+      setMessage('Unable to send OTP. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -85,12 +44,7 @@ function ForgotPassword() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    if (otp !== generatedOTP) {
-      setMessage('Invalid OTP. Please check and try again.');
-      setLoading(false);
-      return;
-    }
+    setMessage('');
 
     if (newPassword.length < 6) {
       setMessage('Password must be at least 6 characters long.');
@@ -99,38 +53,31 @@ function ForgotPassword() {
     }
 
     try {
-      // Update password in database
-      const response = await fetch('http://localhost:5000/api/candidate/password/update-reset', {
+      const response = await fetch('http://localhost:5000/api/candidate/password/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          email: email,
-          newPassword: newPassword 
+          email,
+          otp,
+          newPassword
         })
       });
 
       const result = await response.json();
       
       if (response.ok && result.success) {
-        setMessage('Password reset successful! You can now login with your new password.');
+        setMessage('Password reset successful! Redirecting to login...');
         setTimeout(() => {
           window.location.href = '/login';
         }, 2000);
       } else {
-        setMessage(result.message || 'Failed to update password. Please try again.');
+        setMessage(result.message || 'Failed to reset password. Please try again.');
       }
     } catch (error) {
-      
-      setMessage('Failed to update password. Please try again.');
+      setMessage('Failed to reset password. Please try again.');
     } finally {
       setLoading(false);
     }
-
-    setOtpSent(false);
-    setEmail('');
-    setOtp('');
-    setNewPassword('');
-    setGeneratedOTP('');
   };
 
   return (
