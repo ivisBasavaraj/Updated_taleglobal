@@ -7,24 +7,20 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     const subAdminData = localStorage.getItem('subAdminData');
 
     console.log('ProtectedRoute Debug:', {
-        adminToken: adminToken ? 'exists' : 'missing',
-        adminData: adminData ? 'exists' : 'missing',
-        subAdminToken: subAdminToken ? 'exists' : 'missing',
-        subAdminData: subAdminData ? 'exists' : 'missing',
-        allowedRoles,
-        isAdminAuth: !!(adminToken && adminData),
-        isSubAdminAuth: !!(subAdminToken && subAdminData)
+        adminToken: !!adminToken,
+        adminData: !!adminData,
+        subAdminToken: !!subAdminToken,
+        subAdminData: !!subAdminData,
+        allowedRoles
     });
 
     // Check if user is authenticated
     const isAuthenticated = (adminToken && adminData) || (subAdminToken && subAdminData);
     
     if (!isAuthenticated) {
-        console.log('ProtectedRoute: Not authenticated, redirecting to /admin-login');
+        
         return <Navigate to="/admin-login" replace />;
     }
-    
-    console.log('ProtectedRoute: Authenticated, allowing access');
 
     // Check role-based access
     if (allowedRoles.length > 0) {

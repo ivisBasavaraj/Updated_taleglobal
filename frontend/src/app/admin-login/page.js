@@ -34,33 +34,18 @@ export default function AdminLogin() {
             const data = await response.json();
 
             if (response.ok && data.success) {
-                console.log('Login response:', data);
+                localStorage.setItem("adminToken", data.token);
                 
                 // Handle both admin and sub-admin login
                 if (data.admin) {
-                    localStorage.setItem("adminToken", data.token);
                     localStorage.setItem("adminData", JSON.stringify(data.admin));
-                    localStorage.removeItem("subAdminToken");
-                    localStorage.removeItem("subAdminData");
-                    console.log('Admin login - stored:', {
-                        token: !!localStorage.getItem("adminToken"),
-                        data: !!localStorage.getItem("adminData")
-                    });
-                    window.location.href = "/admin/dashboard";
+                    localStorage.removeItem("subAdminData"); // Clear sub-admin data if exists
                 } else if (data.subAdmin) {
-                    localStorage.setItem("subAdminToken", data.token);
                     localStorage.setItem("subAdminData", JSON.stringify(data.subAdmin));
-                    localStorage.removeItem("adminToken");
-                    localStorage.removeItem("adminData");
-                    console.log('Sub-admin login - stored:', {
-                        token: !!localStorage.getItem("subAdminToken"),
-                        data: !!localStorage.getItem("subAdminData")
-                    });
-                    window.location.href = "/admin/dashboard";
-                } else {
-                    console.error('No admin or subAdmin in response:', data);
-                    setError('Invalid response from server');
+                    localStorage.removeItem("adminData"); // Clear admin data if exists
                 }
+                
+                navigate("/admin/dashboard");
             } else {
                 setError(data.message || `Login failed (${response.status})`);
             }

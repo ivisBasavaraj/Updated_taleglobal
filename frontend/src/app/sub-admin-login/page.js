@@ -36,22 +36,18 @@ export default function SubAdminLogin() {
             
 
             if (response.ok && data.success) {
+                localStorage.setItem("adminToken", data.token);
+                
                 if (data.subAdmin) {
-                    localStorage.setItem("subAdminToken", data.token);
+                    // Sub-admin login
                     localStorage.setItem("subAdminData", JSON.stringify(data.subAdmin));
-                    localStorage.removeItem("adminToken");
                     localStorage.removeItem("adminData");
-                    setTimeout(() => {
-                        navigate("/admin/dashboard", { replace: true });
-                    }, 100);
+                    navigate("/admin/dashboard");
                 } else if (data.admin && data.admin.role === 'sub-admin') {
-                    localStorage.setItem("subAdminToken", data.token);
+                    // Handle case where sub-admin is returned as admin
                     localStorage.setItem("subAdminData", JSON.stringify(data.admin));
-                    localStorage.removeItem("adminToken");
                     localStorage.removeItem("adminData");
-                    setTimeout(() => {
-                        navigate("/admin/dashboard", { replace: true });
-                    }, 100);
+                    navigate("/admin/dashboard");
                 } else {
                     setError("Access denied. This login is for sub-admins only.");
                 }
