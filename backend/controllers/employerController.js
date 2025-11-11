@@ -189,17 +189,33 @@ exports.updateProfile = async (req, res) => {
     console.log('Saved profile - googleMapsEmbed:', profile.googleMapsEmbed?.substring(0, 50));
     console.log('Saved profile - location:', profile.location?.substring(0, 50));
 
-    // Create notification for admin when profile is updated
+    // Check if profile is now complete and notify admin for approval
     try {
       const { createNotification } = require('./notificationController');
-      await createNotification({
-        title: 'Company Profile Updated',
-        message: `${profile.employerId?.companyName || 'A company'} has updated their profile`,
-        type: 'profile_submitted',
-        role: 'admin',
-        relatedId: profile._id,
-        createdBy: req.user._id
-      });
+      const requiredFields = ['companyName', 'description', 'location', 'phone', 'email'];
+      const isProfileComplete = requiredFields.every(field => profile[field]);
+      
+      if (isProfileComplete && !req.user.isApproved) {
+        // Profile is complete but not yet approved - notify admin
+        await createNotification({
+          title: 'Company Profile Ready for Review',
+          message: `${profile.companyName || 'A company'} has completed their profile and is ready for admin approval to post jobs.`,
+          type: 'profile_submitted',
+          role: 'admin',
+          relatedId: profile._id,
+          createdBy: req.user._id
+        });
+      } else {
+        // Regular profile update notification
+        await createNotification({
+          title: 'Company Profile Updated',
+          message: `${profile.companyName || 'A company'} has updated their profile`,
+          type: 'profile_updated',
+          role: 'admin',
+          relatedId: profile._id,
+          createdBy: req.user._id
+        });
+      }
     } catch (notifError) {
       console.error('Notification creation failed:', notifError);
     }
@@ -406,11 +422,36 @@ exports.deleteGalleryImage = async (req, res) => {
 // Job Management Controllers
 exports.createJob = async (req, res) => {
   try {
-    // Check if employer is approved
+    // Check if company profile is complete
+    const profile = await EmployerProfile.findOne({ employerId: req.user._id });
+    
+    if (!profile) {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'Please complete your company profile before posting jobs.',
+        requiresProfile: true
+      });
+    }
+
+    // Check required profile fields
+    const requiredFields = ['companyName', 'description', 'location', 'phone', 'email'];
+    const missingFields = requiredFields.filter(field => !profile[field]);
+    
+    if (missingFields.length > 0) {
+      return res.status(403).json({ 
+        success: false, 
+        message: `Please complete your company profile. Missing fields: ${missingFields.join(', ')}`,
+        requiresProfile: true,
+        missingFields
+      });
+    }
+
+    // Check if employer is approved by admin
     if (!req.user.isApproved) {
       return res.status(403).json({ 
         success: false, 
-        message: 'Your account needs admin approval before you can post jobs. Please wait for approval.' 
+        message: 'Your company profile is under review. Admin approval is required before you can post jobs. Please wait for approval.',
+        requiresApproval: true
       });
     }
 
@@ -1107,19 +1148,56 @@ exports.saveInterviewReview = async (req, res) => {
 exports.getProfileCompletion = async (req, res) => {
   try {
     const profile = await EmployerProfile.findOne({ employerId: req.user._id });
+    const employer = await Employer.findById(req.user._id);
     
     if (!profile) {
-      return res.json({ success: true, completion: 25, missingFields: ['All profile fields'] });
+      return res.json({ 
+        success: true, 
+        completion: 0, 
+        missingFields: ['All profile fields'],
+        isApproved: employer?.isApproved || false,
+        canPostJobs: false,
+        message: 'Please complete your company profile to post jobs.'
+      });
     }
     
-    const requiredFields = ['companyName', 'description', 'website', 'logo'];
+    // Required fields for profile completion
+    const requiredFields = ['companyName', 'description', 'location', 'phone', 'email'];
     const completedFields = requiredFields.filter(field => profile[field]);
     const completion = Math.round((completedFields.length / requiredFields.length) * 100);
     const missingFields = requiredFields.filter(field => !profile[field]);
     
-    res.json({ success: true, completion, missingFields });
+    const isProfileComplete = missingFields.length === 0;
+    const isApproved = employer?.isApproved || false;
+    const canPostJobs = isProfileComplete && isApproved;
+    
+    let message = '';
+    if (!isProfileComplete) {
+      message = 'Please complete your company profile to submit for admin approval.';
+    } else if (!isApproved) {
+      message = 'Your profile is complete and under admin review. You can post jobs once approved.';
+    } else {
+      message = 'Your profile is approved. You can now post jobs!';
+    }
+    
+    res.json({ 
+      success: true, 
+      completion, 
+      missingFields,
+      isProfileComplete,
+      isApproved,
+      canPostJobs,
+      message
+    });
   } catch (error) {
-    res.json({ success: true, completion: 25, missingFields: ['Profile data'] });
+    res.json({ 
+      success: true, 
+      completion: 0, 
+      missingFields: ['Profile data'],
+      isApproved: false,
+      canPostJobs: false,
+      message: 'Error loading profile status.'
+    });
   }
 };
 

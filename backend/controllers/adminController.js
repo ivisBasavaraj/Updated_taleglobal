@@ -277,10 +277,12 @@ exports.getAllJobs = async (req, res) => {
 
 exports.getAllEmployers = async (req, res) => {
   try {
-    const { status, page = 1, limit = 50 } = req.query;
+    const { status, page = 1, limit = 50, approvalStatus } = req.query;
     
     let query = {};
     if (status) query.status = status;
+    if (approvalStatus === 'pending') query.isApproved = false;
+    if (approvalStatus === 'approved') query.isApproved = true;
 
     const employers = await Employer.find(query)
       .select('-password')
@@ -288,7 +290,25 @@ exports.getAllEmployers = async (req, res) => {
       .limit(limit * 1)
       .skip((page - 1) * limit);
 
-    res.json({ success: true, data: employers });
+    // Enrich with profile completion status
+    const employersWithProfile = await Promise.all(
+      employers.map(async (employer) => {
+        const profile = await EmployerProfile.findOne({ employerId: employer._id });
+        const requiredFields = ['companyName', 'description', 'location', 'phone', 'email'];
+        const isProfileComplete = profile && requiredFields.every(field => profile[field]);
+        
+        return {
+          ...employer.toObject(),
+          hasProfile: !!profile,
+          isProfileComplete,
+          profileCompletionPercentage: profile 
+            ? Math.round((requiredFields.filter(field => profile[field]).length / requiredFields.length) * 100)
+            : 0
+        };
+      })
+    );
+
+    res.json({ success: true, data: employersWithProfile });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -313,6 +333,30 @@ exports.getAllCandidates = async (req, res) => {
 exports.updateEmployerStatus = async (req, res) => {
   try {
     const { status, isApproved } = req.body;
+
+    // Check if employer has completed their profile before approving
+    if (isApproved === true) {
+      const profile = await EmployerProfile.findOne({ employerId: req.params.id });
+      
+      if (!profile) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Cannot approve employer. Company profile not found. Employer must complete their profile first.' 
+        });
+      }
+
+      // Check required profile fields
+      const requiredFields = ['companyName', 'description', 'location', 'phone', 'email'];
+      const missingFields = requiredFields.filter(field => !profile[field]);
+      
+      if (missingFields.length > 0) {
+        return res.status(400).json({ 
+          success: false, 
+          message: `Cannot approve employer. Company profile is incomplete. Missing fields: ${missingFields.join(', ')}`,
+          missingFields
+        });
+      }
+    }
 
     const updateData = {};
 
@@ -1201,6 +1245,40 @@ exports.deleteSubAdmin = async (req, res) => {
     }
     
     res.json({ success: true, message: 'Sub Admin deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Get employers pending approval with complete profiles
+exports.getEmployersPendingApproval = async (req, res) => {
+  try {
+    const employers = await Employer.find({ isApproved: false, status: 'active' })
+      .select('-password')
+      .sort({ createdAt: -1 });
+
+    // Filter employers with complete profiles
+    const employersWithCompleteProfile = [];
+    
+    for (const employer of employers) {
+      const profile = await EmployerProfile.findOne({ employerId: employer._id });
+      const requiredFields = ['companyName', 'description', 'location', 'phone', 'email'];
+      const isProfileComplete = profile && requiredFields.every(field => profile[field]);
+      
+      if (isProfileComplete) {
+        employersWithCompleteProfile.push({
+          ...employer.toObject(),
+          profile: profile.toObject(),
+          isProfileComplete: true
+        });
+      }
+    }
+
+    res.json({ 
+      success: true, 
+      data: employersWithCompleteProfile,
+      count: employersWithCompleteProfile.length
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

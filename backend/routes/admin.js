@@ -38,6 +38,7 @@ router.put('/jobs/:jobId/reject', adminController.rejectJob);
 
 // Employer Management Routes
 router.get('/employers', checkPermission('employers'), adminController.getAllEmployers);
+router.get('/employers/pending-approval', checkPermission('employers'), adminController.getEmployersPendingApproval);
 router.get('/employer-profile/:id', checkPermission('employers'), adminController.getEmployerProfile);
 router.put('/employer-profile/:id', checkPermission('employers'), adminController.updateEmployerProfile);
 router.get('/download-document/:employerId/:documentType', checkPermission('employers'), adminController.downloadDocument);
