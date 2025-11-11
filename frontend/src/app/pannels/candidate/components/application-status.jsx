@@ -638,12 +638,40 @@ function CanStatusPage() {
 																		};
 																		const roundKey = roundTypeMap[round];
 																		const roundDetails = app.jobId?.interviewRoundDetails?.[roundKey];
+																		const formatDate = (dateStr) => {
+																			if (!dateStr) return null;
+																			return new Date(dateStr).toLocaleDateString('en-US', {day: '2-digit', month: 'short', year: 'numeric'});
+																		};
+																		// For Assessment, use job-level dates
+																		let startDate, endDate, dateDisplay;
+																		if (round === 'Assessment') {
+																			console.log('Assessment dates:', {
+																				assessmentStartDate: app.jobId?.assessmentStartDate,
+																				assessmentEndDate: app.jobId?.assessmentEndDate,
+																				jobId: app.jobId
+																			});
+																			startDate = formatDate(app.jobId?.assessmentStartDate);
+																			endDate = formatDate(app.jobId?.assessmentEndDate);
+																			dateDisplay = startDate && endDate ? `${startDate} - ${endDate}` : startDate || endDate || null;
+																		} else {
+																			console.log(`${round} dates:`, { roundDetails });
+																			startDate = formatDate(roundDetails?.startDate || roundDetails?.date);
+																			endDate = formatDate(roundDetails?.endDate);
+																			dateDisplay = startDate && endDate ? `${startDate} - ${endDate}` : startDate || endDate || null;
+																		}
 																		return (
 																			<div key={roundIndex} className="interview-round-item">
 																				<div className="round-name">{round}</div>
-																				<span className={`badge ${roundStatus.class}`}>
-																					{roundStatus?.text || 'Pending'}
-																				</span>
+																				<div style={{display: 'flex', flexDirection: 'column', gap: '2px'}}>
+																					<span className={`badge ${roundStatus.class}`}>
+																						{roundStatus?.text || 'Pending'}
+																					</span>
+																					{dateDisplay && (
+																						<small style={{fontSize: '9px', color: '#666', marginTop: '2px'}}>
+																							{dateDisplay}
+																						</small>
+																					)}
+																				</div>
 																			</div>
 																		);
 																	})
@@ -719,12 +747,12 @@ function CanStatusPage() {
 				<div className="modal fade show" style={{display: 'block', backgroundColor: 'rgba(0,0,0,0.5)'}} onClick={() => setShowAllDetails(false)}>
 					<div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" onClick={(e) => e.stopPropagation()}>
 						<div className="modal-content" style={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 40px rgba(0,0,0,0.2)'}}>
-							<div className="modal-header" style={{backgroundColor: '#ff6b35', color: 'white', borderRadius: '12px 12px 0 0'}}>
+							<div className="modal-header" style={{backgroundColor: '#f5f5f5', color: '#000', borderRadius: '12px 12px 0 0'}}>
 								<h5 className="modal-title">
 									<i className="fa fa-clipboard-list me-2"></i>
 									Interview Process Details
 								</h5>
-								<button type="button" className="btn-close btn-close-white" onClick={() => setShowAllDetails(false)}></button>
+								<button type="button" className="btn-close" onClick={() => setShowAllDetails(false)}></button>
 							</div>
 							<div className="modal-body" style={{padding: '30px'}}>
 								{/* Job Information */}

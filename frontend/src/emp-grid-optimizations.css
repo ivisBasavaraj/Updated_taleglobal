@@ -15,8 +15,7 @@
 }
 
 .emp-grid-page .rightSidebar.sticky-sidebar > * {
-  max-height: calc(100vh - 40px) !important;
-  overflow-y: auto !important;
+  overflow-y: visible !important;
 }
 
 .emp-grid-page .container {

@@ -166,7 +166,7 @@
     overflow: hidden !important;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
     margin: 0 !important;
-    table-layout: auto !important;
+    table-layout: fixed !important;
 }
 
 /* Table Header */
@@ -183,17 +183,23 @@
     background: #FDC360 !important;
     color: #232323 !important;
     font-weight: 700 !important;
-    font-size: 0.85rem !important;
+    font-size: 0.7rem !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    padding: 18px 15px !important;
+    letter-spacing: 0.1px !important;
+    padding: 12px 6px !important;
     border: none !important;
     vertical-align: middle !important;
-    line-height: 1.4 !important;
-    white-space: nowrap !important;
+    line-height: 1.2 !important;
+    white-space: normal !important;
     display: table-cell !important;
     text-align: center !important;
 }
+
+.documents-table thead th:nth-child(1) { width: 25% !important; }
+.documents-table thead th:nth-child(2) { width: 25% !important; }
+.documents-table thead th:nth-child(3) { width: 15% !important; }
+.documents-table thead th:nth-child(4) { width: 15% !important; }
+.documents-table thead th:nth-child(5) { width: 20% !important; }
 
 .documents-table thead th i {
     color: #ffffff !important;
@@ -224,12 +230,21 @@
 }
 
 .documents-table tbody td {
-    padding: 18px 15px !important;
+    padding: 12px 6px !important;
     vertical-align: middle !important;
     border: none !important;
-    font-size: 0.9rem !important;
+    font-size: 0.75rem !important;
     color: #333333 !important;
     display: table-cell !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.documents-table tbody td:nth-child(1),
+.documents-table tbody td:nth-child(2) {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
 .documents-table tbody td:nth-child(1) {
@@ -240,7 +255,7 @@
 
 .documents-table tbody td:nth-child(1) i {
     color: #FDC360 !important;
-    margin-right: 8px !important;
+    margin-right: 5px !important;
 }
 
 .documents-table tbody td:nth-child(2) {
@@ -255,17 +270,22 @@
     text-align: center !important;
 }
 
+.documents-table tbody td:nth-child(5) {
+    text-align: center !important;
+    padding: 10px 8px !important;
+}
+
 .status-badge {
-    padding: 6px 16px !important;
+    padding: 4px 10px !important;
     border-radius: 9999px !important;
-    font-size: 0.75rem !important;
+    font-size: 0.65rem !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.3px !important;
+    letter-spacing: 0.2px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 4px !important;
+    gap: 3px !important;
     border: 1px solid #FF7A00 !important;
     background: rgba(255, 122, 0, 0.08) !important;
     color: #FF7A00 !important;
@@ -742,29 +762,30 @@
 /* Authorization Letters specific action buttons */
 .documents-table tbody td:last-child .action-buttons-container {
     display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
+    flex-wrap: nowrap;
+    gap: 2px;
     justify-content: center;
     align-items: center;
-    min-width: 180px;
-    padding: 8px 4px;
+    padding: 0;
 }
 
 .documents-table tbody td:last-child .btn {
-    min-width: 70px;
-    padding: 6px 8px;
-    font-size: 0.75rem;
-    margin: 2px;
+    min-width: 28px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    font-size: 0.7rem;
+    margin: 0;
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    flex-shrink: 0;
+    border-width: 1px !important;
 }
 
 .documents-table tbody td:last-child .btn i {
-    color: #cc5500 !important;
-    font-weight: bold;
+    margin: 0 !important;
 }
 
 /* Table responsive wrapper */

@@ -445,7 +445,7 @@ function SignUpPopup() {
 													</div>
 												</div>
 												<div className="col-md-12">
-													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading}>
+													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "12px", borderRadius: "10px", fontSize: "16px", fontWeight: "700", minHeight: "48px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -564,7 +564,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading}>
+													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "12px", borderRadius: "10px", fontSize: "16px", fontWeight: "700", minHeight: "48px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>
@@ -682,7 +682,7 @@ function SignUpPopup() {
 												</div>
 
 												<div className="col-md-12">
-													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "22px", borderRadius: "10px", fontSize: "22px", fontWeight: "700", minHeight: "70px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading}>
+													<button type="submit" style={{ width: "100%", maxWidth: "none", minWidth: "100%", padding: "12px", borderRadius: "10px", fontSize: "16px", fontWeight: "700", minHeight: "48px", backgroundColor: "#fd7e14", color: "white", border: "none", cursor: "pointer", display: "block", boxSizing: "border-box", flex: "1 1 100%" }} disabled={loading}>
 														{loading ? 'Signing Up...' : 'Sign Up'}
 													</button>
 												</div>

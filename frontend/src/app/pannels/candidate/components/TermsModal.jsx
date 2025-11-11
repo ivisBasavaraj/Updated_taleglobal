@@ -75,6 +75,11 @@ const TermsModal = ({ isOpen, onAccept, onDecline, assessment }) => {
                             type="button"
                             className="btn btn-secondary"
                             onClick={onDecline}
+                            style={{
+                                backgroundColor: 'transparent',
+                                border: '1px solid #6c757d',
+                                color: '#6c757d'
+                            }}
                         >
                             Decline & Exit
                         </button>
@@ -82,6 +87,11 @@ const TermsModal = ({ isOpen, onAccept, onDecline, assessment }) => {
                             type="button"
                             className="btn btn-primary"
                             onClick={onAccept}
+                            style={{
+                                backgroundColor: 'transparent',
+                                border: '1px solid #ff6b35',
+                                color: '#ff6b35'
+                            }}
                         >
                             I Accept - Start Assessment
                         </button>
