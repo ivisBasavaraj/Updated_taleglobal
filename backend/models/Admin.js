@@ -7,7 +7,9 @@ const adminSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, enum: ['super-admin', 'admin'], default: 'admin' },
   permissions: [String],
-  status: { type: String, enum: ['active', 'inactive'], default: 'active' }
+  status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+  resetPasswordOTP: { type: String },
+  resetPasswordOTPExpires: { type: Date }
 }, {
   timestamps: true
 });

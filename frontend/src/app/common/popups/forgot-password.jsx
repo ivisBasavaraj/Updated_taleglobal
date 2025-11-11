@@ -20,19 +20,32 @@ function ForgotPassword() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/candidate/password/send-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
+      const endpoints = [
+        'http://localhost:5000/api/candidate/password/send-otp',
+        'http://localhost:5000/api/employer/password/send-otp',
+        'http://localhost:5000/api/admin/password/send-otp',
+        'http://localhost:5000/api/placement/password/send-otp'
+      ];
       
-      const result = await response.json();
+      let success = false;
+      for (const endpoint of endpoints) {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          setMessage('OTP sent to your email successfully!');
+          setOtpSent(true);
+          success = true;
+          break;
+        }
+      }
       
-      if (response.ok && result.success) {
-        setMessage('OTP sent to your email successfully!');
-        setOtpSent(true);
-      } else {
-        setMessage(result.message || 'Failed to send OTP. Please try again.');
+      if (!success) {
+        setMessage('Email not registered');
       }
     } catch (error) {
       setMessage('Unable to send OTP. Please try again.');
@@ -53,25 +66,34 @@ function ForgotPassword() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/candidate/password/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email,
-          otp,
-          newPassword
-        })
-      });
-
-      const result = await response.json();
+      const endpoints = [
+        'http://localhost:5000/api/candidate/password/verify-otp',
+        'http://localhost:5000/api/employer/password/verify-otp',
+        'http://localhost:5000/api/admin/password/verify-otp',
+        'http://localhost:5000/api/placement/password/verify-otp'
+      ];
       
-      if (response.ok && result.success) {
-        setMessage('Password reset successful! Redirecting to login...');
-        setTimeout(() => {
-          window.location.href = '/login';
-        }, 2000);
-      } else {
-        setMessage(result.message || 'Failed to reset password. Please try again.');
+      let success = false;
+      for (const endpoint of endpoints) {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, otp, newPassword })
+        });
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          setMessage('Password reset successful! Redirecting to login...');
+          setTimeout(() => {
+            window.location.href = '/login';
+          }, 2000);
+          success = true;
+          break;
+        }
+      }
+      
+      if (!success) {
+        setMessage('Invalid or expired OTP');
       }
     } catch (error) {
       setMessage('Failed to reset password. Please try again.');

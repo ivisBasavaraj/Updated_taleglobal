@@ -1159,3 +1159,53 @@ exports.updateProfile = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+// OTP-based Password Reset for Placement
+exports.sendOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const placement = await Placement.findOne({ email });
+    
+    if (!placement) {
+      return res.status(404).json({ success: false, message: 'Placement officer not found' });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    placement.resetPasswordOTP = otp;
+    placement.resetPasswordOTPExpires = Date.now() + 10 * 60 * 1000;
+    await placement.save();
+
+    const { sendOTPEmail } = require('../utils/emailService');
+    await sendOTPEmail(email, otp, placement.name);
+
+    res.json({ success: true, message: 'OTP sent to your email' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.verifyOTPAndResetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    
+    const placement = await Placement.findOne({
+      email,
+      resetPasswordOTP: otp,
+      resetPasswordOTPExpires: { $gt: Date.now() }
+    });
+
+    if (!placement) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired OTP' });
+    }
+
+    placement.password = newPassword;
+    placement.resetPasswordOTP = undefined;
+    placement.resetPasswordOTPExpires = undefined;
+    await placement.save();
+
+    res.json({ success: true, message: 'Password reset successful' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

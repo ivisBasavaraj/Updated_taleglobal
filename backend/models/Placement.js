@@ -54,7 +54,9 @@ const placementSchema = new mongoose.Schema({
     timestamp: Date
   },
   resetPasswordToken: { type: String },
-  resetPasswordExpires: { type: Date }
+  resetPasswordExpires: { type: Date },
+  resetPasswordOTP: { type: String },
+  resetPasswordOTPExpires: { type: Date }
 }, {
   timestamps: true
 });

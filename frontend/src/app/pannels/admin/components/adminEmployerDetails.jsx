@@ -418,7 +418,7 @@ function EmployerDetails() {
                                         disabled={!profile.panCardImage}
                                         style={{ borderColor: '#ff6b35', color: '#ff6b35' }}
                                     >
-                                        <i className="fa fa-eye me-1"></i>View
+                                        <i className="fa fa-eye"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -443,7 +443,7 @@ function EmployerDetails() {
                                         disabled={!profile.cinImage}
                                         style={{ borderColor: '#ff6b35', color: '#ff6b35' }}
                                     >
-                                        <i className="fa fa-eye me-1"></i>View
+                                        <i className="fa fa-eye"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -468,7 +468,7 @@ function EmployerDetails() {
                                         disabled={!profile.gstImage}
                                         style={{ borderColor: '#ff6b35', color: '#ff6b35' }}
                                     >
-                                        <i className="fa fa-eye me-1"></i>View
+                                        <i className="fa fa-eye"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -493,7 +493,7 @@ function EmployerDetails() {
                                         disabled={!profile.certificateOfIncorporation}
                                         style={{ borderColor: '#ff6b35', color: '#ff6b35' }}
                                     >
-                                        <i className="fa fa-eye me-1"></i>View
+                                        <i className="fa fa-eye"></i>
                                     </button>
                                 </td>
                             </tr>

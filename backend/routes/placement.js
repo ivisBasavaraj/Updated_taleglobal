@@ -23,6 +23,16 @@ router.post('/create-password', [
 // Login route
 router.post('/login', placementController.loginPlacement);
 
+router.post('/password/send-otp', [
+  body('email').isEmail().withMessage('Valid email is required')
+], handleValidationErrors, placementController.sendOTP);
+
+router.post('/password/verify-otp', [
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('otp').notEmpty().withMessage('OTP is required'),
+  body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+], handleValidationErrors, placementController.verifyOTPAndResetPassword);
+
 // Get placement officer's student data
 router.get('/students', auth(['placement']), placementController.getMyStudents);
 

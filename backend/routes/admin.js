@@ -13,6 +13,16 @@ router.post('/login', [
   body('password').notEmpty().withMessage('Password is required')
 ], handleValidationErrors, adminController.loginAdmin);
 
+router.post('/password/send-otp', [
+  body('email').isEmail().withMessage('Valid email is required')
+], handleValidationErrors, adminController.sendOTP);
+
+router.post('/password/verify-otp', [
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('otp').notEmpty().withMessage('OTP is required'),
+  body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+], handleValidationErrors, adminController.verifyOTPAndResetPassword);
+
 router.post('/sub-admin-login', [
   body('email').isEmail().withMessage('Valid email is required'),
   body('password').notEmpty().withMessage('Password is required')

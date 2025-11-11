@@ -2203,3 +2203,67 @@ exports.downloadSupportAttachment = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+// OTP-based Password Reset for Admin/SubAdmin
+exports.sendOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+    let user = await Admin.findOne({ email });
+    let userType = 'Admin';
+    
+    if (!user) {
+      user = await SubAdmin.findOne({ email });
+      userType = 'SubAdmin';
+    }
+    
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.resetPasswordOTP = otp;
+    user.resetPasswordOTPExpires = Date.now() + 10 * 60 * 1000;
+    await user.save();
+
+    const { sendOTPEmail } = require('../utils/emailService');
+    await sendOTPEmail(email, otp, user.name);
+
+    res.json({ success: true, message: 'OTP sent to your email' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.verifyOTPAndResetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    
+    let user = await Admin.findOne({
+      email,
+      resetPasswordOTP: otp,
+      resetPasswordOTPExpires: { $gt: Date.now() }
+    });
+    
+    if (!user) {
+      user = await SubAdmin.findOne({
+        email,
+        resetPasswordOTP: otp,
+        resetPasswordOTPExpires: { $gt: Date.now() }
+      });
+    }
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired OTP' });
+    }
+
+    user.password = newPassword;
+    user.resetPasswordOTP = undefined;
+    user.resetPasswordOTPExpires = undefined;
+    await user.save();
+
+    res.json({ success: true, message: 'Password reset successful' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
