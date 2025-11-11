@@ -1,32 +1,47 @@
 import { Navigate } from 'react-router-dom';
 
-const ProtectedRoute = ({ children, allowedRoles = [] }) => {
+const ProtectedRoute = ({ children, allowedRoles = [], requiredRole = null }) => {
     const adminToken = localStorage.getItem('adminToken');
     const subAdminToken = localStorage.getItem('subAdminToken');
     const adminData = localStorage.getItem('adminData');
     const subAdminData = localStorage.getItem('subAdminData');
+    const candidateToken = localStorage.getItem('candidateToken');
+    const employerToken = localStorage.getItem('employerToken');
+    const placementToken = localStorage.getItem('placementToken');
 
-    console.log('ProtectedRoute Debug:', {
-        adminToken: !!adminToken,
-        adminData: !!adminData,
-        subAdminToken: !!subAdminToken,
-        subAdminData: !!subAdminData,
-        allowedRoles
-    });
-
-    // Check if user is authenticated
-    const isAuthenticated = (adminToken && adminData) || (subAdminToken && subAdminData);
-    
-    if (!isAuthenticated) {
-        
-        return <Navigate to="/admin-login" replace />;
+    // Handle role-specific authentication
+    if (requiredRole) {
+        switch (requiredRole) {
+            case 'admin':
+                const isAdminAuth = (adminToken && adminData) || (subAdminToken && subAdminData);
+                if (!isAdminAuth) {
+                    return <Navigate to="/admin-login" replace />;
+                }
+                break;
+            case 'candidate':
+                if (!candidateToken) {
+                    return <Navigate to="/candidate-login" replace />;
+                }
+                break;
+            case 'employer':
+                if (!employerToken) {
+                    return <Navigate to="/employer-login" replace />;
+                }
+                break;
+            case 'placement':
+                if (!placementToken) {
+                    return <Navigate to="/placement-login" replace />;
+                }
+                break;
+            default:
+                return <Navigate to="/" replace />;
+        }
     }
 
-    // Check role-based access
+    // Legacy support for allowedRoles (for admin sub-pages)
     if (allowedRoles.length > 0) {
         let userRole = null;
         
-        // Determine user role based on available data
         if (adminToken && adminData) {
             userRole = 'admin';
         } else if (subAdminToken && subAdminData) {

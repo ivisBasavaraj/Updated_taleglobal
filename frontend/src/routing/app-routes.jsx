@@ -22,7 +22,11 @@ function AppRoutes() {
                     <CandidateLayout />
                 </ProtectedRoute>
             } />
-            <Route path={base.ADMIN_PRE + "/*"} element={<AdminLayout />} />
+            <Route path={base.ADMIN_PRE + "/*"} element={
+                <ProtectedRoute requiredRole="admin">
+                    <AdminLayout />
+                </ProtectedRoute>
+            } />
             <Route path={base.PLACEMENT_PRE + "/*"} element={
                 <ProtectedRoute requiredRole="placement">
                     <PlacementLayout />
