@@ -60,14 +60,15 @@ function CreatePassword() {
             const data = await response.json();
 
             if (response.ok && data.success) {
-                alert('Password created successfully! Redirecting to login...');
+                alert('Password created successfully! Please login.');
+                navigate('/', { replace: true });
                 setTimeout(() => {
-                    navigate(pubRoute(publicUser.pages.HOME));
-                    setTimeout(() => {
-                        const loginModal = new window.bootstrap.Modal(document.getElementById('sign_up_popup2'));
-                        loginModal.show();
-                    }, 500);
-                }, 1000);
+                    const loginModal = document.getElementById('sign_up_popup2');
+                    if (loginModal) {
+                        const modal = new window.bootstrap.Modal(loginModal);
+                        modal.show();
+                    }
+                }, 500);
             } else {
                 setError(data.message || 'Failed to create password');
             }
