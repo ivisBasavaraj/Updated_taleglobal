@@ -147,7 +147,7 @@
     top: 0;
     z-index: 10;
     box-shadow: 0 2px 8px rgba(255, 245, 230, 0.3) !important;
-    text-align: left;
+    text-align: center !important;
     border-bottom: 2px solid #ffe0b3 !important;
     white-space: nowrap;
 }
@@ -291,28 +291,29 @@
 .action-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(253, 195, 96, 0.4);
-    background: #e5b050;
 }
 
 .btn-approve {
-    background: #FDC360 !important;
+    background: #FFD89B !important;
     color: white !important;
-    border: 1px solid #FDC360 !important;
+    border: 1px solid #FFD89B !important;
 }
 
 .btn-approve:hover {
-    background: #e5b050 !important;
+    background: #FDC360 !important;
+    color: white !important;
     box-shadow: 0 5px 15px rgba(253, 195, 96, 0.4) !important;
 }
 
 .btn-reject {
-    background: #FDC360 !important;
+    background: #FFD89B !important;
     color: white !important;
-    border: 1px solid #FDC360 !important;
+    border: 1px solid #FFD89B !important;
 }
 
 .btn-reject:hover {
-    background: #e5b050 !important;
+    background: #FDC360 !important;
+    color: white !important;
     box-shadow: 0 5px 15px rgba(253, 195, 96, 0.4) !important;
 }
 

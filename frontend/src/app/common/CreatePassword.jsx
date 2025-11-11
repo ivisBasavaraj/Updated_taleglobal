@@ -11,6 +11,13 @@ function CreatePassword() {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [passwordValidation, setPasswordValidation] = useState({
+        length: false,
+        uppercase: false,
+        lowercase: false,
+        number: false,
+        specialChars: false
+    });
     const email = searchParams.get('email');
     const rawType = (searchParams.get('type') || 'candidate').toLowerCase();
     const endpointMap = {
@@ -24,16 +31,37 @@ function CreatePassword() {
     const displayRole = userType === 'placement' ? 'placement officer' : userType;
     const displayRoleLabel = displayRole === 'placement officer' ? 'Placement Officer' : displayRole.charAt(0).toUpperCase() + displayRole.slice(1);
 
+    const validatePassword = (pwd) => {
+        const specialChars = pwd.match(/[@#!%$*?]/g) || [];
+        setPasswordValidation({
+            length: pwd.length >= 10 && pwd.length <= 25,
+            uppercase: /[A-Z]/.test(pwd),
+            lowercase: /[a-z]/.test(pwd),
+            number: /[0-9]/.test(pwd),
+            specialChars: specialChars.length >= 3
+        });
+    };
+
+    const handlePasswordChange = (e) => {
+        const pwd = e.target.value;
+        setPassword(pwd);
+        validatePassword(pwd);
+    };
+
+    const isPasswordValid = () => {
+        return Object.values(passwordValidation).every(v => v === true);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (password !== confirmPassword) {
-            setError('Passwords do not match');
+        if (!isPasswordValid()) {
+            setError('Please meet all password requirements');
             return;
         }
 
-        if (password.length < 8) {
-            setError('Password must be at least 8 characters long');
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
             return;
         }
 
@@ -100,7 +128,7 @@ function CreatePassword() {
                                         className="form-control"
                                         placeholder="Password*"
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        onChange={handlePasswordChange}
                                         required
                                     />
                                     <span
@@ -110,6 +138,34 @@ function CreatePassword() {
                                         <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"} />
                                     </span>
                                 </div>
+
+                                {password && (
+                                    <div style={{ marginBottom: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '8px', border: '1px solid #dee2e6' }}>
+                                        <h6 style={{ marginBottom: '12px', fontSize: '14px', fontWeight: '600', color: '#495057' }}>Password Requirements:</h6>
+                                        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                                            <li style={{ padding: '6px 0', fontSize: '13px', color: passwordValidation.length ? '#28a745' : '#dc3545' }}>
+                                                <i className={`fa ${passwordValidation.length ? 'fa-check-circle' : 'fa-times-circle'}`} style={{ marginRight: '8px' }}></i>
+                                                Must contain 10-25 characters
+                                            </li>
+                                            <li style={{ padding: '6px 0', fontSize: '13px', color: passwordValidation.uppercase ? '#28a745' : '#dc3545' }}>
+                                                <i className={`fa ${passwordValidation.uppercase ? 'fa-check-circle' : 'fa-times-circle'}`} style={{ marginRight: '8px' }}></i>
+                                                Must contain at least one uppercase letter
+                                            </li>
+                                            <li style={{ padding: '6px 0', fontSize: '13px', color: passwordValidation.lowercase ? '#28a745' : '#dc3545' }}>
+                                                <i className={`fa ${passwordValidation.lowercase ? 'fa-check-circle' : 'fa-times-circle'}`} style={{ marginRight: '8px' }}></i>
+                                                Must contain at least one lowercase letter
+                                            </li>
+                                            <li style={{ padding: '6px 0', fontSize: '13px', color: passwordValidation.number ? '#28a745' : '#dc3545' }}>
+                                                <i className={`fa ${passwordValidation.number ? 'fa-check-circle' : 'fa-times-circle'}`} style={{ marginRight: '8px' }}></i>
+                                                Must contain at least one number
+                                            </li>
+                                            <li style={{ padding: '6px 0', fontSize: '13px', color: passwordValidation.specialChars ? '#28a745' : '#dc3545' }}>
+                                                <i className={`fa ${passwordValidation.specialChars ? 'fa-check-circle' : 'fa-times-circle'}`} style={{ marginRight: '8px' }}></i>
+                                                Must contain at least three special characters (@#!%$*?)
+                                            </li>
+                                        </ul>
+                                    </div>
+                                )}
 
                                 <div className="form-group mb-3 position-relative">
                                     <input

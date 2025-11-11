@@ -192,6 +192,7 @@
     line-height: 1.4 !important;
     white-space: nowrap !important;
     display: table-cell !important;
+    text-align: center !important;
 }
 
 .documents-table thead th i {

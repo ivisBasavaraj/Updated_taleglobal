@@ -136,7 +136,7 @@ function AdminEmployersAllRequest() {
                                 ) : (
                                     employers.map((employer) => (
                                         <tr key={employer._id}>
-                                            <td>
+                                            <td style={{textAlign: 'center'}}>
                                                 <span className="company-name">
                                                     {employer.companyName || employer.email}
                                                 </span>
@@ -153,7 +153,7 @@ function AdminEmployersAllRequest() {
                                                     {employer.employerType === 'consultant' ? 'Consultant' : 'Company'}
                                                 </span>
                                             </td>
-                                            <td style={{fontFamily: 'monospace', fontSize: '0.85rem'}}>
+                                            <td style={{textAlign: 'center', fontFamily: 'monospace', fontSize: '0.85rem'}}>
                                                 {employer.email}
                                             </td>
                                             <td style={{textAlign: 'center', fontFamily: 'monospace', fontSize: '0.85rem'}}>
@@ -170,7 +170,7 @@ function AdminEmployersAllRequest() {
                                                     {employer.status || 'Pending'}
                                                 </span>
                                             </td>
-                                            <td>
+                                            <td style={{textAlign: 'center'}}>
                                                 <div className="action-buttons">
                                                     <button
                                                         type="button"

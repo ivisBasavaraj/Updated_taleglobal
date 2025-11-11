@@ -226,7 +226,7 @@ const EmployersGridPage = memo(() => {
         <div className="section-full py-5 site-bg-white emp-grid-page">
             <Container>
                 <Row className="mb-4">
-                    <Col lg={4} md={12} className="rightSidebar">
+                    <Col lg={4} md={12} className="rightSidebar sticky-sidebar">
                         <SectionEmployerSidebar onFilterChange={setFilters} />
                     </Col>
 

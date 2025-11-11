@@ -5,14 +5,26 @@
   transform: translateZ(0);
 }
 
-.emp-grid-page .rightSidebar {
-  align-self: flex-start;
+.emp-grid-page .rightSidebar.sticky-sidebar {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 20px !important;
+  align-self: flex-start !important;
+  z-index: 10 !important;
+  height: fit-content !important;
 }
 
-.emp-grid-page .rightSidebar .side-bar {
-  position: sticky !important;
-  top: 100px !important;
-  overflow-y: visible !important;
+.emp-grid-page .rightSidebar.sticky-sidebar > * {
+  max-height: calc(100vh - 40px) !important;
+  overflow-y: auto !important;
+}
+
+.emp-grid-page .container {
+  position: relative !important;
+}
+
+.emp-grid-page .row {
+  position: relative !important;
 }
 
 /* Employer Card Optimizations */
@@ -168,16 +180,16 @@
   .emp-grid-page .rightSidebar {
     order: 2;
     margin-top: 30px;
-    position: static;
-    top: auto;
+    position: static !important;
+    top: auto !important;
   }
   
   .emp-grid-page .rightSidebar .side-bar {
-    position: static;
-    top: auto;
-    max-height: none;
-    height: auto;
-    overflow: visible;
+    position: static !important;
+    top: auto !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
   }
   
   .emp-grid-page .col-lg-8 {
