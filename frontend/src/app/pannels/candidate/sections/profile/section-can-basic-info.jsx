@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { api } from "../../../../../utils/api";
 import CountryCodeSelector from "../../../../../components/CountryCodeSelector";
 import showToast from "../../../../../utils/toastNotification";
@@ -33,6 +33,9 @@ function SectionCandicateBasicInfo() {
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
     const [notification, setNotification] = useState(null);
+    const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
+    const [locationSearch, setLocationSearch] = useState('');
+    const locationDropdownRef = useRef(null);
 
     useEffect(() => {
         fetchProfile();
@@ -44,6 +47,16 @@ function SectionCandicateBasicInfo() {
             return () => clearTimeout(timer);
         }
     }, [notification]);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (locationDropdownRef.current && !locationDropdownRef.current.contains(event.target)) {
+                setLocationDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const fetchProfile = async () => {
         try {
@@ -226,6 +239,7 @@ function SectionCandicateBasicInfo() {
         if (file) {
             // Validate file size (5MB max)
             if (file.size > 5 * 1024 * 1024) {
+                setErrors(prev => ({...prev, profilePicture: 'File size must be less than 5MB'}));
                 setNotification({ type: 'error', message: 'File size must be less than 5MB' });
                 e.target.value = '';
                 return;
@@ -233,10 +247,18 @@ function SectionCandicateBasicInfo() {
             
             const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
             if (!allowedTypes.includes(file.type)) {
+                setErrors(prev => ({...prev, profilePicture: 'Please upload only JPG, PNG or GIF files'}));
                 setNotification({ type: 'error', message: 'Please upload only JPG, PNG or GIF files' });
                 e.target.value = '';
                 return;
             }
+            
+            // Clear any previous errors
+            setErrors(prev => {
+                const newErrors = {...prev};
+                delete newErrors.profilePicture;
+                return newErrors;
+            });
             
             setFormData(prev => ({
                 ...prev,
@@ -392,12 +414,17 @@ function SectionCandicateBasicInfo() {
                                     )}
                                 </div>
                                 <input 
-                                    className="form-control mx-auto" 
+                                    className={`form-control mx-auto ${errors.profilePicture ? 'is-invalid' : ''}`}
                                     type="file" 
                                     accept="image/*"
                                     onChange={handleFileChange}
                                     style={{maxWidth: '300px'}}
                                 />
+                                {errors.profilePicture && (
+                                    <div className="invalid-feedback d-block" style={{maxWidth: '300px', margin: '0 auto'}}>
+                                        {errors.profilePicture}
+                                    </div>
+                                )}
                                 <small className="text-muted mt-2 d-block">Upload JPG, PNG or GIF (Max 5MB)</small>
                             </div>
                         </div>
@@ -492,21 +519,65 @@ function SectionCandicateBasicInfo() {
                             />
                             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                         </div>
-                        <div className="col-md-4 mb-3">
+                        <div className="col-md-4 mb-3" ref={locationDropdownRef}>
                             <label className="form-label"><i className="fa fa-map-marker me-2" style={{color: '#ff6b35'}}></i>Location *</label>
-                            <select
-                                className={`form-control ${errors.location ? 'is-invalid' : ''}`}
-                                name="location"
-                                value={formData.location}
-                                onChange={handleInputChange}
-                                onBlur={handleBlur}
-                                required
-                            >
-                                <option value="">Select Location</option>
-                                {indianCities.map(city => (
-                                    <option key={city} value={city}>{city}</option>
-                                ))}
-                            </select>
+                            <div style={{position: 'relative'}}>
+                                <input
+                                    className={`form-control ${errors.location ? 'is-invalid' : ''}`}
+                                    type="text"
+                                    name="location"
+                                    value={formData.location}
+                                    onChange={(e) => {
+                                        handleInputChange(e);
+                                        setLocationSearch(e.target.value);
+                                        setLocationDropdownOpen(true);
+                                    }}
+                                    onFocus={() => setLocationDropdownOpen(true)}
+                                    onBlur={handleBlur}
+                                    placeholder="Select or type location"
+                                    autoComplete="off"
+                                    required
+                                />
+                                {locationDropdownOpen && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '100%',
+                                        left: 0,
+                                        right: 0,
+                                        maxHeight: '200px',
+                                        overflowY: 'auto',
+                                        backgroundColor: '#fff',
+                                        border: '1px solid #dee2e6',
+                                        borderRadius: '0 0 8px 8px',
+                                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                                        zIndex: 1050,
+                                        marginTop: '2px'
+                                    }}>
+                                        {indianCities
+                                            .filter(city => city.toLowerCase().includes(formData.location.toLowerCase()))
+                                            .map(city => (
+                                                <div
+                                                    key={city}
+                                                    onClick={() => {
+                                                        setFormData(prev => ({...prev, location: city}));
+                                                        setLocationDropdownOpen(false);
+                                                        if (touched.location) validateField('location', city);
+                                                    }}
+                                                    style={{
+                                                        padding: '10px 16px',
+                                                        cursor: 'pointer',
+                                                        transition: 'background-color 0.2s',
+                                                        borderBottom: '1px solid #f0f0f0'
+                                                    }}
+                                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#f8f9fa'}
+                                                    onMouseLeave={(e) => e.target.style.backgroundColor = '#fff'}
+                                                >
+                                                    {city}
+                                                </div>
+                                            ))}
+                                    </div>
+                                )}
+                            </div>
                             {errors.location && <div className="invalid-feedback">{errors.location}</div>}
                         </div>
                         <div className="col-md-4 mb-3">

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../../admin-login-custom.css";
 
 export default function AdminLogin() {
     const [formData, setFormData] = useState({

@@ -23,6 +23,7 @@ function AdminSubAdmin() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [authChecked, setAuthChecked] = useState(false);
+    const [validationErrors, setValidationErrors] = useState({});
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -30,6 +31,13 @@ function AdminSubAdmin() {
             ...prev,
             [name]: value
         }));
+        // Clear validation error for this field
+        if (validationErrors[name]) {
+            setValidationErrors(prev => ({
+                ...prev,
+                [name]: ''
+            }));
+        }
     };
 
     const handlePermissionChange = (permission) => {
@@ -39,25 +47,95 @@ function AdminSubAdmin() {
                 ? prev.permissions.filter(p => p !== permission)
                 : [...prev.permissions, permission]
         }));
+        // Clear permissions validation error
+        if (validationErrors.permissions) {
+            setValidationErrors(prev => ({
+                ...prev,
+                permissions: ''
+            }));
+        }
+    };
+
+    const validateForm = () => {
+        const errors = {};
+        
+        // First Name validation
+        if (!formData.firstName.trim()) {
+            errors.firstName = 'First name is required';
+        } else if (formData.firstName.trim().length < 2) {
+            errors.firstName = 'First name must be at least 2 characters';
+        } else if (!/^[a-zA-Z\s]+$/.test(formData.firstName)) {
+            errors.firstName = 'First name can only contain letters';
+        }
+        
+        // Last Name validation
+        if (!formData.lastName.trim()) {
+            errors.lastName = 'Last name is required';
+        } else if (formData.lastName.trim().length < 2) {
+            errors.lastName = 'Last name must be at least 2 characters';
+        } else if (!/^[a-zA-Z\s]+$/.test(formData.lastName)) {
+            errors.lastName = 'Last name can only contain letters';
+        }
+        
+        // Username validation
+        if (!formData.username.trim()) {
+            errors.username = 'Username is required';
+        } else if (formData.username.trim().length < 3) {
+            errors.username = 'Username must be at least 3 characters';
+        } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
+            errors.username = 'Username can only contain letters, numbers, and underscores';
+        }
+        
+        // Email validation
+        if (!formData.email.trim()) {
+            errors.email = 'Email is required';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            errors.email = 'Please enter a valid email address';
+        }
+        
+        // Phone validation
+        if (!formData.phone.trim()) {
+            errors.phone = 'Phone number is required';
+        } else if (!/^[0-9]{10}$/.test(formData.phone.replace(/[\s-]/g, ''))) {
+            errors.phone = 'Please enter a valid 10-digit phone number';
+        }
+        
+        // Permissions validation
+        if (formData.permissions.length === 0) {
+            errors.permissions = 'Please select at least one permission';
+        }
+        
+        // Password validation (only for add form or if password is provided in edit)
+        if (showAddForm || formData.password) {
+            if (!formData.password) {
+                errors.password = 'Password is required';
+            } else if (formData.password.length < 6) {
+                errors.password = 'Password must be at least 6 characters';
+            } else if (!/(?=.*[a-z])/.test(formData.password)) {
+                errors.password = 'Password must contain at least one lowercase letter';
+            } else if (!/(?=.*[A-Z])/.test(formData.password)) {
+                errors.password = 'Password must contain at least one uppercase letter';
+            } else if (!/(?=.*[0-9])/.test(formData.password)) {
+                errors.password = 'Password must contain at least one number';
+            }
+            
+            // Confirm Password validation
+            if (!formData.confirmPassword) {
+                errors.confirmPassword = 'Please confirm your password';
+            } else if (formData.password !== formData.confirmPassword) {
+                errors.confirmPassword = 'Passwords do not match';
+            }
+        }
+        
+        setValidationErrors(errors);
+        return Object.keys(errors).length === 0;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Only check password match if password is provided (for add or if changing password in edit)
-        if (formData.password && formData.password !== formData.confirmPassword) {
-            alert('Passwords do not match');
-            return;
-        }
-        
-        // For add form, password is required
-        if (showAddForm && !formData.password) {
-            alert('Password is required');
-            return;
-        }
-        
-        if (formData.permissions.length === 0) {
-            alert('Please select at least one permission');
+        // Validate form
+        if (!validateForm()) {
             return;
         }
         
@@ -116,6 +194,7 @@ function AdminSubAdmin() {
             password: '',
             confirmPassword: ''
         });
+        setValidationErrors({});
         setShowAddForm(false);
         setShowEditForm(false);
         setEditingId(null);
@@ -323,66 +402,97 @@ function AdminSubAdmin() {
                                     <div className="row g-4">
                                         <div className="col-md-6">
                                             <input
-                                                className="form-control rounded-3"
+                                                className={`form-control rounded-3 ${validationErrors.firstName ? 'is-invalid' : ''}`}
                                                 name="firstName"
                                                 type="text"
                                                 placeholder="First Name *"
                                                 value={formData.firstName}
                                                 onChange={handleInputChange}
-                                                required
                                             />
+                                            {validationErrors.firstName && (
+                                                <div className="invalid-feedback d-block">
+                                                    <i className="fa fa-exclamation-circle me-1"></i>
+                                                    {validationErrors.firstName}
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div className="col-md-6">
                                             <input
-                                                className="form-control rounded-3"
+                                                className={`form-control rounded-3 ${validationErrors.lastName ? 'is-invalid' : ''}`}
                                                 name="lastName"
                                                 type="text"
                                                 placeholder="Last Name *"
                                                 value={formData.lastName}
                                                 onChange={handleInputChange}
-                                                required
                                             />
+                                            {validationErrors.lastName && (
+                                                <div className="invalid-feedback d-block">
+                                                    <i className="fa fa-exclamation-circle me-1"></i>
+                                                    {validationErrors.lastName}
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div className="col-md-6">
                                             <input
-                                                className="form-control rounded-3"
+                                                className={`form-control rounded-3 ${validationErrors.username ? 'is-invalid' : ''}`}
                                                 name="username"
                                                 type="text"
                                                 placeholder="Username *"
                                                 value={formData.username}
                                                 onChange={handleInputChange}
-                                                required
                                             />
+                                            {validationErrors.username && (
+                                                <div className="invalid-feedback d-block">
+                                                    <i className="fa fa-exclamation-circle me-1"></i>
+                                                    {validationErrors.username}
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div className="col-md-6">
                                             <input
-                                                className="form-control rounded-3"
+                                                className={`form-control rounded-3 ${validationErrors.email ? 'is-invalid' : ''}`}
                                                 name="email"
                                                 type="email"
                                                 placeholder="Email Address *"
                                                 value={formData.email}
                                                 onChange={handleInputChange}
-                                                required
                                             />
+                                            {validationErrors.email && (
+                                                <div className="invalid-feedback d-block">
+                                                    <i className="fa fa-exclamation-circle me-1"></i>
+                                                    {validationErrors.email}
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div className="col-12">
                                             <input
-                                                className="form-control rounded-3"
+                                                className={`form-control rounded-3 ${validationErrors.phone ? 'is-invalid' : ''}`}
                                                 name="phone"
                                                 type="tel"
                                                 placeholder="Phone Number *"
                                                 value={formData.phone}
                                                 onChange={handleInputChange}
-                                                required
                                             />
+                                            {validationErrors.phone && (
+                                                <div className="invalid-feedback d-block">
+                                                    <i className="fa fa-exclamation-circle me-1"></i>
+                                                    {validationErrors.phone}
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div className="col-12 mt-4">
                                             <label className="form-label fw-semibold text-dark mb-3">Permissions *</label>
+                                            {validationErrors.permissions && (
+                                                <div className="alert alert-danger py-2 mb-3">
+                                                    <i className="fa fa-exclamation-circle me-1"></i>
+                                                    {validationErrors.permissions}
+                                                </div>
+                                            )}
                                             <div className="row g-3">
                                                 <div className="col-md-4">
                                                     <div className="card border-2 h-100" style={{ cursor: 'pointer', borderColor: formData.permissions.includes('employers') ? '#fd7e14' : '#dee2e6' }}>
@@ -443,13 +553,12 @@ function AdminSubAdmin() {
 
                                         <div className="col-md-6" style={{ position: 'relative' }}>
                                             <input
-                                                className="form-control rounded-3"
+                                                className={`form-control rounded-3 ${validationErrors.password ? 'is-invalid' : ''}`}
                                                 name="password"
                                                 type={showPassword ? "text" : "password"}
                                                 placeholder={showAddForm ? "Password *" : "Password (Leave blank to keep current)"}
                                                 value={formData.password}
                                                 onChange={handleInputChange}
-                                                required={showAddForm}
                                                 style={{ paddingRight: '45px' }}
                                             />
                                             <span
@@ -461,22 +570,28 @@ function AdminSubAdmin() {
                                                     transform: 'translateY(-50%)',
                                                     cursor: 'pointer',
                                                     fontSize: '16px',
-                                                    color: '#666'
+                                                    color: '#666',
+                                                    zIndex: 10
                                                 }}
                                             >
                                                 {showPassword ? '👁️' : '👁️🗨️'}
                                             </span>
+                                            {validationErrors.password && (
+                                                <div className="invalid-feedback d-block">
+                                                    <i className="fa fa-exclamation-circle me-1"></i>
+                                                    {validationErrors.password}
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div className="col-md-6" style={{ position: 'relative' }}>
                                             <input
-                                                className="form-control rounded-3"
+                                                className={`form-control rounded-3 ${validationErrors.confirmPassword ? 'is-invalid' : ''}`}
                                                 name="confirmPassword"
                                                 type={showConfirmPassword ? "text" : "password"}
                                                 placeholder={showAddForm ? "Confirm Password *" : "Confirm Password"}
                                                 value={formData.confirmPassword}
                                                 onChange={handleInputChange}
-                                                required={showAddForm}
                                                 style={{ paddingRight: '45px' }}
                                             />
                                             <span
@@ -488,11 +603,18 @@ function AdminSubAdmin() {
                                                     transform: 'translateY(-50%)',
                                                     cursor: 'pointer',
                                                     fontSize: '16px',
-                                                    color: '#666'
+                                                    color: '#666',
+                                                    zIndex: 10
                                                 }}
                                             >
                                                 {showConfirmPassword ? '👁️' : '👁️🗨️'}
                                             </span>
+                                            {validationErrors.confirmPassword && (
+                                                <div className="invalid-feedback d-block">
+                                                    <i className="fa fa-exclamation-circle me-1"></i>
+                                                    {validationErrors.confirmPassword}
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div className="col-12">

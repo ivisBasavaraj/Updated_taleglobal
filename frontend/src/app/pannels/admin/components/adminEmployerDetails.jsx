@@ -577,16 +577,6 @@ function EmployerDetails() {
                                 Total Jobs Posted
                             </div>
                         </div>
-                        <div className="job-count-actions">
-                            <button
-                                className="btn btn-outline-light"
-                                onClick={() => navigate(`/emp-detail/${profile.employerId._id}`)}
-                                style={{ borderColor: 'white', color: 'white' }}
-                            >
-                                <i className="fa fa-arrow-left"></i>
-                                Back
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>

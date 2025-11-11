@@ -169,10 +169,11 @@ const NotificationBell = ({ userRole }) => {
             borderBottom: '1px solid #eee',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
+            gap: '16px'
           }}>
-            <h4 style={{ margin: 0, fontSize: '16px' }}>Notifications</h4>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h4 style={{ margin: 0, fontSize: '16px', flexShrink: 0, lineHeight: '24px' }}>Notifications</h4>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
               {unreadCount > 0 && (
                 <button 
                   onClick={markAllAsRead}
@@ -182,7 +183,11 @@ const NotificationBell = ({ userRole }) => {
                     border: 'none',
                     color: '#007bff',
                     cursor: 'pointer',
-                    fontSize: '12px'
+                    fontSize: '11px',
+                    whiteSpace: 'nowrap',
+                    padding: '0',
+                    lineHeight: '24px',
+                    height: '24px'
                   }}
                 >
                   Mark all as read
@@ -196,12 +201,16 @@ const NotificationBell = ({ userRole }) => {
                   border: 'none',
                   color: '#666',
                   cursor: 'pointer',
-                  fontSize: '16px',
-                  padding: '4px',
+                  fontSize: '20px',
+                  padding: '0',
                   borderRadius: '4px',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  lineHeight: '1',
+                  width: '24px',
+                  height: '24px'
                 }}
                 title="Close notifications"
               >

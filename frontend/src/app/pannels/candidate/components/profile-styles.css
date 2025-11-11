@@ -353,3 +353,23 @@ input[type="file"]:hover {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+/* Force select dropdown to appear below */
+select.form-control {
+    position: relative;
+    z-index: auto !important;
+}
+
+select.form-control[name="location"] {
+    position: relative;
+    z-index: 1 !important;
+}
+
+/* Ensure parent containers don't clip dropdown */
+.row {
+    overflow: visible !important;
+}
+
+.col-md-4 {
+    overflow: visible !important;
+}

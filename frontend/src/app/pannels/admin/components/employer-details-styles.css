@@ -255,19 +255,21 @@
 }
 
 .status-badge {
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    border: 1px solid;
-    transition: all 0.15s ease-in-out;
-    white-space: nowrap;
-    background-color: transparent;
+    padding: 6px 16px !important;
+    border-radius: 9999px !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    border: 1px solid #FF7A00 !important;
+    background: rgba(255, 122, 0, 0.08) !important;
+    color: #FF7A00 !important;
+    transition: all 0.15s ease-in-out !important;
+    white-space: nowrap !important;
 }
 
 .status-badge:hover {
@@ -276,45 +278,53 @@
 }
 
 .badge-uploaded {
-    background: linear-gradient(135deg, #ff8c00 0%, #ff7700 100%);
-    color: white;
-    border-color: #ff7700;
+    background: rgba(255, 122, 0, 0.08) !important;
+    color: #FF7A00 !important;
+    border-color: #FF7A00 !important;
 }
 
 .badge-not-uploaded {
-    background: linear-gradient(135deg, #ffb366 0%, #ff9933 100%);
-    color: white;
-    border-color: #ff9933;
+    background: rgba(255, 122, 0, 0.08) !important;
+    color: #FF7A00 !important;
+    border-color: #FF7A00 !important;
 }
 
 .badge-approved {
-    background: linear-gradient(135deg, #ff9c00 0%, #ff8c00 100%);
-    color: white;
-    border-color: #ff8c00;
+    background: rgba(255, 122, 0, 0.08) !important;
+    color: #FF7A00 !important;
+    border-color: #FF7A00 !important;
 }
 
 .badge-rejected {
-    background: linear-gradient(135deg, #ffa500 0%, #ff9500 100%);
-    color: white;
-    border-color: #ff9500;
+    background: rgba(255, 122, 0, 0.08) !important;
+    color: #FF7A00 !important;
+    border-color: #FF7A00 !important;
 }
 
 .badge-pending {
-    background: linear-gradient(135deg, #ffb84d 0%, #ff9c00 100%);
-    color: white !important;
-    border-color: #ff9c00;
+    background: rgba(255, 122, 0, 0.08) !important;
+    color: #FF7A00 !important;
+    border-color: #FF7A00 !important;
 }
 
 .badge-pending i {
-    color: white !important;
+    color: #FF7A00 !important;
 }
 
 .status-badge.badge-pending {
-    color: white !important;
+    color: #FF7A00 !important;
 }
 
 .status-badge.badge-pending * {
-    color: white !important;
+    color: #FF7A00 !important;
+}
+
+.status-badge i {
+    color: #FF7A00 !important;
+}
+
+.status-badge * {
+    color: #FF7A00 !important;
 }
 
 .action-btn {

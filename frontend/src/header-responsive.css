@@ -21,6 +21,24 @@
   /* Show desktop auth buttons */
   .extra-nav.header-2-nav {
     display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+  }
+
+  /* Align user dashboard link properly */
+  .extra-nav.header-2-nav .extra-cell {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .extra-nav.header-2-nav .extra-cell:first-child {
+    margin-left: 80px !important;
+  }
+
+  .employer-nav-menu,
+  .dashboard-link {
+    display: flex !important;
+    align-items: center !important;
   }
 }
 

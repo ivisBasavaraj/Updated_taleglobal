@@ -24,6 +24,7 @@ export default function EmpPostJob({ onNext }) {
 		skillInput: "",
 		experienceLevel: "freshers", // 'freshers' | 'minimum'
 		minExperience: "",
+		maxExperience: "",
 		interviewRoundsCount: "",
 		interviewRoundTypes: {
 			technical: false,
@@ -155,6 +156,7 @@ export default function EmpPostJob({ onNext }) {
 					requiredSkills: job.requiredSkills || [],
 					experienceLevel: job.experienceLevel || 'freshers',
 					minExperience: job.minExperience || '',
+					maxExperience: job.maxExperience || '',
 					interviewRoundsCount: job.interviewRoundsCount || '',
 					interviewRoundTypes: job.interviewRoundTypes || {
 						technical: false,
@@ -282,6 +284,22 @@ export default function EmpPostJob({ onNext }) {
 
 	/* Update interview round details */
 	const updateRoundDetails = async (roundType, field, value) => {
+		// Validate date range
+		if (field === 'toDate' && value) {
+			const fromDate = formData.interviewRoundDetails[roundType]?.fromDate;
+			if (fromDate && new Date(value) < new Date(fromDate)) {
+				alert('To Date cannot be earlier than From Date');
+				return;
+			}
+		}
+		if (field === 'fromDate' && value) {
+			const toDate = formData.interviewRoundDetails[roundType]?.toDate;
+			if (toDate && new Date(value) > new Date(toDate)) {
+				alert('From Date cannot be later than To Date');
+				return;
+			}
+		}
+
 		setFormData(s => ({
 			...s,
 			interviewRoundDetails: {
@@ -368,6 +386,77 @@ export default function EmpPostJob({ onNext }) {
 				return;
 			}
 
+			// Validate Experience Level
+			if (formData.experienceLevel === 'minimum') {
+				if (!formData.minExperience || parseInt(formData.minExperience) < 0) {
+					alert('Please enter valid Minimum Experience');
+					return;
+				}
+				if (formData.maxExperience && parseInt(formData.maxExperience) < parseInt(formData.minExperience)) {
+					alert('Maximum Experience cannot be less than Minimum Experience');
+					return;
+				}
+			}
+
+			// Validate Interview Round Details
+			const selectedRounds = Object.entries(formData.interviewRoundTypes)
+				.filter(([key, value]) => value && key !== 'assessment')
+				.map(([key]) => key);
+
+			for (const roundType of selectedRounds) {
+				const details = formData.interviewRoundDetails[roundType];
+				const roundNames = {
+					technical: 'Technical Round',
+					nonTechnical: 'Non-Technical Round',
+					managerial: 'Managerial Round',
+					final: 'Final Round',
+					hr: 'HR Round'
+				};
+
+				if (!details?.description?.trim()) {
+					alert(`Please enter description for ${roundNames[roundType]}`);
+					return;
+				}
+				if (!details?.fromDate) {
+					alert(`Please select From Date for ${roundNames[roundType]}`);
+					return;
+				}
+				if (!details?.toDate) {
+					alert(`Please select To Date for ${roundNames[roundType]}`);
+					return;
+				}
+				if (!details?.time) {
+					alert(`Please select Time for ${roundNames[roundType]}`);
+					return;
+				}
+				// Validate date range
+				if (new Date(details.fromDate) > new Date(details.toDate)) {
+					alert(`From Date cannot be after To Date for ${roundNames[roundType]}`);
+					return;
+				}
+			}
+
+			// Validate Assessment if selected
+			if (formData.interviewRoundTypes.assessment) {
+				if (!selectedAssessment) {
+					alert('Please select an Assessment');
+					return;
+				}
+				const assessmentDetails = formData.interviewRoundDetails.assessment;
+				if (!assessmentDetails?.fromDate) {
+					alert('Please select From Date for Assessment');
+					return;
+				}
+				if (!assessmentDetails?.toDate) {
+					alert('Please select To Date for Assessment');
+					return;
+				}
+				if (new Date(assessmentDetails.fromDate) > new Date(assessmentDetails.toDate)) {
+					alert('Assessment From Date cannot be after To Date');
+					return;
+				}
+			}
+
 			// Validate consultant fields
 			if (employerType === 'consultant') {
 				if (!formData.companyName.trim()) {
@@ -396,6 +485,7 @@ export default function EmpPostJob({ onNext }) {
 				requiredSkills: formData.requiredSkills,
 				experienceLevel: formData.experienceLevel,
 				minExperience: formData.minExperience ? parseInt(formData.minExperience) : 0,
+				maxExperience: formData.maxExperience ? parseInt(formData.maxExperience) : 0,
 				education: formData.education,
 				backlogsAllowed: formData.backlogsAllowed,
 				interviewRoundsCount: parseInt(formData.interviewRoundsCount) || 0,
@@ -1031,7 +1121,7 @@ export default function EmpPostJob({ onNext }) {
 									boxShadow: formData.experienceLevel === "freshers" ? '0 4px 12px rgba(255,107,53,0.2)' : '0 2px 4px rgba(0,0,0,0.1)',
 									textAlign: 'center'
 								}}
-								onClick={() => update({ experienceLevel: "freshers", minExperience: "" })}
+								onClick={() => update({ experienceLevel: "freshers", minExperience: "", maxExperience: "" })}
 							>
 
 								<h4 style={{
@@ -1075,7 +1165,7 @@ export default function EmpPostJob({ onNext }) {
 									boxShadow: formData.experienceLevel === "both" ? '0 4px 12px rgba(255,107,53,0.2)' : '0 2px 4px rgba(0,0,0,0.1)',
 									textAlign: 'center'
 								}}
-								onClick={() => update({ experienceLevel: "both", minExperience: "" })}
+								onClick={() => update({ experienceLevel: "both", minExperience: "", maxExperience: "" })}
 							>
 
 								<h4 style={{
@@ -1093,30 +1183,58 @@ export default function EmpPostJob({ onNext }) {
 								background: '#f0f9ff',
 								border: '1px solid #0ea5e9',
 								borderRadius: 8,
-								display: 'flex',
-								alignItems: 'center',
-								gap: 12
+								display: 'grid',
+								gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+								gap: 16
 							}}>
-								<span style={{
-									fontSize: 18,
-									color: '#0f172a',
-									fontWeight: 600
-								}}>Min. Years:</span>
-								<input
-									style={{
-										...input,
-										width: 120,
-										marginBottom: 0,
-										border: '2px solid #0ea5e9',
+								<div>
+									<label style={{
+										display: 'block',
+										fontSize: 14,
+										color: '#0f172a',
 										fontWeight: 600,
-										fontSize: 16
-									}}
-									type="number"
-									min="0"
-									placeholder="Years"
-									value={formData.minExperience}
-									onChange={(e) => update({ minExperience: e.target.value })}
-								/>
+										marginBottom: 8
+									}}>Minimum Years</label>
+									<input
+										style={{
+											...input,
+											width: '100%',
+											marginBottom: 0,
+											border: '2px solid #0ea5e9',
+											fontWeight: 600,
+											fontSize: 16
+										}}
+										type="number"
+										min="0"
+										placeholder="e.g., 2"
+										value={formData.minExperience}
+										onChange={(e) => update({ minExperience: e.target.value })}
+									/>
+								</div>
+								<div>
+									<label style={{
+										display: 'block',
+										fontSize: 14,
+										color: '#0f172a',
+										fontWeight: 600,
+										marginBottom: 8
+									}}>Maximum Years</label>
+									<input
+										style={{
+											...input,
+											width: '100%',
+											marginBottom: 0,
+											border: '2px solid #0ea5e9',
+											fontWeight: 600,
+											fontSize: 16
+										}}
+										type="number"
+										min="0"
+										placeholder="e.g., 5"
+										value={formData.maxExperience}
+										onChange={(e) => update({ maxExperience: e.target.value })}
+									/>
+								</div>
 							</div>
 						)}
 					</div>
@@ -1187,13 +1305,14 @@ export default function EmpPostJob({ onNext }) {
 											alignItems: 'center',
 											gap: 8,
 											padding: '8px 12px',
-											background: '#e7f3ff',
+											background: '#fff5f2',
 											borderRadius: 20,
-											border: '1px solid #b3d9ff',
+											border: '2px solid #ff6b35',
 											marginRight: 8,
-											marginBottom: 8
+											marginBottom: 8,
+											color: '#ff6b35'
 										}}>
-											<span style={{fontSize: 13, fontWeight: 500, color: '#0066cc'}}>{index + 1}. {roundNames[roundType]}</span>
+											<span style={{fontSize: 13, fontWeight: 500, color: '#ff6b35'}}>{index + 1}. {roundNames[roundType]}</span>
 											<span 
 												style={{cursor: 'pointer', color: '#ef4444', fontWeight: 700, fontSize: 16}}
 												onClick={() => toggleNested('interviewRoundTypes', roundType)}
@@ -1253,7 +1372,7 @@ export default function EmpPostJob({ onNext }) {
 										<input
 											style={{...input, fontSize: 13}}
 											type="date"
-											min={new Date().toISOString().split('T')[0]}
+											min={formData.interviewRoundDetails.assessment?.fromDate || new Date().toISOString().split('T')[0]}
 											value={formData.interviewRoundDetails.assessment?.toDate || ''}
 											onChange={(e) => updateRoundDetails('assessment', 'toDate', e.target.value)}
 										/>
@@ -1552,7 +1671,7 @@ export default function EmpPostJob({ onNext }) {
 													<input
 														style={{...input, fontSize: 13}}
 														type="date"
-														min={new Date().toISOString().split('T')[0]}
+														min={formData.interviewRoundDetails[roundType]?.fromDate || new Date().toISOString().split('T')[0]}
 														value={formData.interviewRoundDetails[roundType]?.toDate || ''}
 														onChange={(e) => updateRoundDetails(roundType, 'toDate', e.target.value)}
 													/>
