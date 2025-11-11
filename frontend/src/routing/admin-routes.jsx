@@ -26,32 +26,32 @@ import AdminCandidateReviewPage from "../app/pannels/admin/components/admin-cand
 function AdminRoutes() {
     return (
 			<Routes>
-				<Route path={admin.DASHBOARD} element={<AdminDashboardPage />} />
-				<Route path={admin.CAN_MANAGE} element={<AdminEmployersAllRequest />} />
-				<Route path={admin.CAN_APPROVE} element={<AdminEmployersApproved />} />
-				<Route path={admin.CAN_REJECT} element={<AdminEmployersRejected />} />
-				<Route path={admin.CANDIDATES} element={<AdminCandidates />} />
+				<Route path={admin.DASHBOARD} element={<ProtectedRoute><AdminDashboardPage /></ProtectedRoute>} />
+				<Route path={admin.CAN_MANAGE} element={<ProtectedRoute><AdminEmployersAllRequest /></ProtectedRoute>} />
+				<Route path={admin.CAN_APPROVE} element={<ProtectedRoute><AdminEmployersApproved /></ProtectedRoute>} />
+				<Route path={admin.CAN_REJECT} element={<ProtectedRoute><AdminEmployersRejected /></ProtectedRoute>} />
+				<Route path={admin.CANDIDATES} element={<ProtectedRoute><AdminCandidates /></ProtectedRoute>} />
 				<Route
 					path={admin.CANDIDATE_ADD_EDIT}
-					element={<AdminCandidateAddEdit />}
+					element={<ProtectedRoute><AdminCandidateAddEdit /></ProtectedRoute>}
 				/>
-				<Route path={admin.EMPLOYER_JOBS} element={<AdminEmployerJobs />} />
-				<Route path={admin.JOBS} element={<AdminJobs />} />
-				<Route path={admin.CREDITS} element={<AdminCreditsPage />} />
-				<Route path={admin.BULK_UPLOAD} element={<AdminBulkUploadPage />} />
+				<Route path={admin.EMPLOYER_JOBS} element={<ProtectedRoute><AdminEmployerJobs /></ProtectedRoute>} />
+				<Route path={admin.JOBS} element={<ProtectedRoute><AdminJobs /></ProtectedRoute>} />
+				<Route path={admin.CREDITS} element={<ProtectedRoute><AdminCreditsPage /></ProtectedRoute>} />
+				<Route path={admin.BULK_UPLOAD} element={<ProtectedRoute><AdminBulkUploadPage /></ProtectedRoute>} />
 				<Route
 					path={admin.EMPLOYER_DETAILS}
-					element={<EmployerDetails />}
+					element={<ProtectedRoute><EmployerDetails /></ProtectedRoute>}
 				/>
 
-				<Route path={admin.REGISTERED_CANDIDATES} element={<RegisteredCandidatesPage />} />
-				<Route path={admin.CANDIDATE_REVIEW} element={<AdminCandidateReviewPage />} />
-				<Route path={admin.PLACEMENT_MANAGE} element={<AdminPlacementOfficersAllRequest />} />
-				<Route path={admin.PLACEMENT_APPROVE} element={<AdminPlacementOfficersApproved />} />
-				<Route path={admin.PLACEMENT_REJECT} element={<AdminPlacementOfficersRejected />} />
-				<Route path={admin.PLACEMENT_DETAILS} element={<PlacementDetails />} />
-				<Route path={admin.SUPPORT_TICKETS} element={<AdminSupportTickets />} />
-				<Route path={admin.SUB_ADMIN} element={<AdminSubAdmin />} />
+				<Route path={admin.REGISTERED_CANDIDATES} element={<ProtectedRoute><RegisteredCandidatesPage /></ProtectedRoute>} />
+				<Route path={admin.CANDIDATE_REVIEW} element={<ProtectedRoute><AdminCandidateReviewPage /></ProtectedRoute>} />
+				<Route path={admin.PLACEMENT_MANAGE} element={<ProtectedRoute><AdminPlacementOfficersAllRequest /></ProtectedRoute>} />
+				<Route path={admin.PLACEMENT_APPROVE} element={<ProtectedRoute><AdminPlacementOfficersApproved /></ProtectedRoute>} />
+				<Route path={admin.PLACEMENT_REJECT} element={<ProtectedRoute><AdminPlacementOfficersRejected /></ProtectedRoute>} />
+				<Route path={admin.PLACEMENT_DETAILS} element={<ProtectedRoute><PlacementDetails /></ProtectedRoute>} />
+				<Route path={admin.SUPPORT_TICKETS} element={<ProtectedRoute><AdminSupportTickets /></ProtectedRoute>} />
+				<Route path={admin.SUB_ADMIN} element={<ProtectedRoute allowedRoles={['admin']}><AdminSubAdmin /></ProtectedRoute>} />
 			</Routes>
 		);
 }
