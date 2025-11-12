@@ -299,7 +299,7 @@ function EmployerDetails() {
                         </div>
                         <div className="profile-field" data-aos="fade-left" data-aos-delay="300">
                             <h6><i className="fa fa-cogs"></i>Industry Sector</h6>
-                            <p>{profile.industrySector || 'N/A'}</p>
+                            <p style={{textTransform: 'uppercase'}}>{profile.industrySector || 'N/A'}</p>
                         </div>
                         <div className="profile-field" data-aos="fade-left" data-aos-delay="350">
                             <h6><i className="fa fa-map-marker-alt"></i>Corporate Address</h6>
@@ -314,10 +314,6 @@ function EmployerDetails() {
                             <p>{profile.branchLocations || 'N/A'}</p>
                         </div>
                         <div className="profile-field" data-aos="fade-left" data-aos-delay="450">
-                            <h6><i className="fa fa-code"></i>Legal Entity Code</h6>
-                            <p>{profile.legalEntityCode || 'N/A'}</p>
-                        </div>
-                        <div className="profile-field" data-aos="fade-left" data-aos-delay="500">
                             <h6><i className="fa fa-certificate"></i>CIN</h6>
                             <p>{profile.cin || 'N/A'}</p>
                         </div>

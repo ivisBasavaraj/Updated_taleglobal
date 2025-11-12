@@ -95,51 +95,64 @@ function EmpCompanyProfilePage() {
 
                 // Split phone numbers into country code and number parts
                 if (profileData.phone) {
-                    const phoneMatch = profileData.phone.match(/^(\+\d+)(.*)$/);
+                    const phoneStr = String(profileData.phone).trim();
+                    // Match country code (prefer longer matches like +91 over +1)
+                    const phoneMatch = phoneStr.match(/^(\+\d{2,4})(\d+)$/) || phoneStr.match(/^(\+\d{1})(\d{10,})$/);
                     if (phoneMatch) {
                         profileData.phoneCountryCode = phoneMatch[1];
                         profileData.phone = phoneMatch[2];
                     } else {
                         profileData.phoneCountryCode = '+91';
+                        profileData.phone = phoneStr.replace(/^\+\d+/, '');
                     }
                 } else {
                     profileData.phoneCountryCode = '+91';
+                    profileData.phone = '';
                 }
 
                 if (profileData.officialMobile) {
-                    const officialMatch = profileData.officialMobile.match(/^(\+\d+)(.*)$/);
+                    const officialStr = String(profileData.officialMobile).trim();
+                    const officialMatch = officialStr.match(/^(\+\d{2,4})(\d+)$/) || officialStr.match(/^(\+\d{1})(\d{10,})$/);
                     if (officialMatch) {
                         profileData.officialMobileCountryCode = officialMatch[1];
                         profileData.officialMobile = officialMatch[2];
                     } else {
                         profileData.officialMobileCountryCode = '+91';
+                        profileData.officialMobile = officialStr.replace(/^\+\d+/, '');
                     }
                 } else {
                     profileData.officialMobileCountryCode = '+91';
+                    profileData.officialMobile = '';
                 }
 
                 if (profileData.contactMobile) {
-                    const contactMatch = profileData.contactMobile.match(/^(\+\d+)(.*)$/);
+                    const contactStr = String(profileData.contactMobile).trim();
+                    const contactMatch = contactStr.match(/^(\+\d{2,4})(\d+)$/) || contactStr.match(/^(\+\d{1})(\d{10,})$/);
                     if (contactMatch) {
                         profileData.contactMobileCountryCode = contactMatch[1];
                         profileData.contactMobile = contactMatch[2];
                     } else {
                         profileData.contactMobileCountryCode = '+91';
+                        profileData.contactMobile = contactStr.replace(/^\+\d+/, '');
                     }
                 } else {
                     profileData.contactMobileCountryCode = '+91';
+                    profileData.contactMobile = '';
                 }
 
                 if (profileData.alternateContact) {
-                    const alternateMatch = profileData.alternateContact.match(/^(\+\d+)(.*)$/);
+                    const alternateStr = String(profileData.alternateContact).trim();
+                    const alternateMatch = alternateStr.match(/^(\+\d{2,4})(\d+)$/) || alternateStr.match(/^(\+\d{1})(\d{10,})$/);
                     if (alternateMatch) {
                         profileData.alternateContactCountryCode = alternateMatch[1];
                         profileData.alternateContact = alternateMatch[2];
                     } else {
                         profileData.alternateContactCountryCode = '+91';
+                        profileData.alternateContact = alternateStr.replace(/^\+\d+/, '');
                     }
                 } else {
                     profileData.alternateContactCountryCode = '+91';
+                    profileData.alternateContact = '';
                 }
 
                 setFormData(prev => ({ ...prev, ...profileData }));

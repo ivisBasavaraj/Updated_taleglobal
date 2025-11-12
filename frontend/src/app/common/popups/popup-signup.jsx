@@ -24,6 +24,7 @@ function SignUpPopup() {
     
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [fieldErrors, setFieldErrors] = useState({});
 
     useEffect(() => {
@@ -32,6 +33,7 @@ function SignUpPopup() {
         setPlacementData({ name: '', email: '', phone: '', collegeName: '' });
         setFieldErrors({});
         setError('');
+        setSuccess('');
     }, []);
 
     // Validation functions
@@ -166,9 +168,8 @@ function SignUpPopup() {
             if (response.ok && data.success) {
                 setCandidateData({ username: '', email: '', mobile: '' });
                 setFieldErrors({});
-                alert('Welcome email sent! Please check your email to create your password.');
-                const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
-                if (signupModal) signupModal.hide();
+                setError('');
+                setSuccess('Registration successful! Please check your email to create your password.');
             } else {
                 if (data.message && data.message.includes('email')) {
                     setError('This email address is already registered. Please try logging in instead.');
@@ -216,9 +217,8 @@ function SignUpPopup() {
             if (response.ok && data.success) {
                 setEmployerData({ name: '', email: '', mobile: '', employerCategory: '' });
                 setFieldErrors({});
-                alert('Welcome email sent! Please check your email to create your password.');
-                const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
-                if (signupModal) signupModal.hide();
+                setError('');
+                setSuccess('Registration successful! Please check your email to create your password.');
             } else {
                 if (data.message && data.message.includes('email')) {
                     setError('This email address is already registered. Please try logging in instead.');
@@ -264,9 +264,8 @@ function SignUpPopup() {
             if (response.ok && data.success) {
                 setPlacementData({ name: '', email: '', phone: '', collegeName: '' });
                 setFieldErrors({});
-                alert('Welcome email sent! Please check your email to create your password.');
-                const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
-                if (signupModal) signupModal.hide();
+                setError('');
+                setSuccess('Registration successful! Please check your email to create your password.');
             } else {
                 if (data.message && data.message.includes('email')) {
                     setError('This email address is already registered. Please try logging in instead.');
@@ -359,6 +358,11 @@ function SignUpPopup() {
 														<div className="alert alert-danger">{error}</div>
 													</div>
 												)}
+												{success && (
+													<div className="col-12">
+														<div className="alert alert-success">{success}</div>
+													</div>
+												)}
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<input
@@ -430,17 +434,7 @@ function SignUpPopup() {
 																<a href={pubRoute(publicUser.pages.TERMS)} target="_blank" rel="noopener noreferrer">Terms and conditions</a>
 															</label>
 															<p style={{marginTop: "10px"}}>
-																Already registered?
-																<button
-																	type="button"
-																	className="twm-backto-login"
-																	data-bs-target="#sign_up_popup2"
-																	data-bs-toggle="modal"
-																	data-bs-dismiss="modal"
-																	style={{padding: "2px 6px", height: "auto", lineHeight: "1.2"}}
-																>
-																	Sign in
-																</button>
+																Already registered? <a href="#sign_up_popup2" data-bs-target="#sign_up_popup2" data-bs-toggle="modal" data-bs-dismiss="modal" style={{textDecoration: "underline", cursor: "pointer", color: "#fd7e14"}}>Sign in</a>
 															</p>
 														</div>
 													</div>
@@ -460,6 +454,11 @@ function SignUpPopup() {
 												{error && (
 													<div className="col-12">
 														<div className="alert alert-danger">{error}</div>
+													</div>
+												)}
+												{success && (
+													<div className="col-12">
+														<div className="alert alert-success">{success}</div>
 													</div>
 												)}
 												<div className="col-lg-12">
@@ -549,17 +548,7 @@ function SignUpPopup() {
 																<a href={pubRoute(publicUser.pages.TERMS)} target="_blank" rel="noopener noreferrer">Terms and conditions</a>
 															</label>
 															<p style={{marginTop: "10px"}}>
-																Already registered?
-																<button
-																	type="button"
-																	className="twm-backto-login"
-																	data-bs-target="#sign_up_popup2"
-																	data-bs-toggle="modal"
-																	data-bs-dismiss="modal"
-																	style={{padding: "2px 6px", height: "auto", lineHeight: "1.2"}}
-																>
-																	Sign in
-																</button>
+																Already registered? <a href="#sign_up_popup2" data-bs-target="#sign_up_popup2" data-bs-toggle="modal" data-bs-dismiss="modal" style={{textDecoration: "underline", cursor: "pointer", color: "#fd7e14"}}>Sign in</a>
 															</p>
 														</div>
 													</div>
@@ -580,6 +569,11 @@ function SignUpPopup() {
 												{error && (
 													<div className="col-12">
 														<div className="alert alert-danger">{error}</div>
+													</div>
+												)}
+												{success && (
+													<div className="col-12">
+														<div className="alert alert-success">{success}</div>
 													</div>
 												)}
 												<div className="col-lg-12">
@@ -668,17 +662,7 @@ function SignUpPopup() {
 																<a href={pubRoute(publicUser.pages.TERMS)} target="_blank" rel="noopener noreferrer">Terms and conditions</a>
 															</label>
 															<p style={{marginTop: "10px"}}>
-																Already registered?
-																<button
-																	type="button"
-																	className="twm-backto-login"
-																	data-bs-target="#sign_up_popup2"
-																	data-bs-toggle="modal"
-																	data-bs-dismiss="modal"
-																	style={{padding: "2px 6px", height: "auto", lineHeight: "1.2"}}
-																>
-																	Sign in
-																</button>
+																Already registered? <a href="#sign_up_popup2" data-bs-target="#sign_up_popup2" data-bs-toggle="modal" data-bs-dismiss="modal" style={{textDecoration: "underline", cursor: "pointer", color: "#fd7e14"}}>Sign in</a>
 															</p>
 														</div>
 													</div>

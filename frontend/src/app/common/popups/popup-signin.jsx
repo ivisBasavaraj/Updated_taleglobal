@@ -15,6 +15,7 @@ function SignInPopup() {
     const [placementpassword, setPlacementPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [showCanPassword, setShowCanPassword] = useState(false);
     const [showEmpPassword, setShowEmpPassword] = useState(false);
     const [showPlacementPassword, setShowPlacementPassword] = useState(false);
@@ -26,12 +27,15 @@ function SignInPopup() {
         setEmpPassword('');
         setPlacementUsername('');
         setPlacementPassword('');
+        setError('');
+        setSuccess('');
     }, []);
 
     const handleCandidateLogin = async (event) => {
         event.preventDefault();
         setLoading(true);
         setError('');
+        setSuccess('');
         
         const result = await login({
             email: canusername.trim(),
@@ -50,6 +54,7 @@ function SignInPopup() {
         event.preventDefault();
         setLoading(true);
         setError('');
+        setSuccess('');
         
         const result = await login({
             email: empusername,
@@ -82,6 +87,7 @@ function SignInPopup() {
         event.preventDefault();
         setLoading(true);
         setError('');
+        setSuccess('');
         
         const result = await login({
             email: placementusername,
@@ -220,6 +226,11 @@ function SignInPopup() {
 														<div className="alert alert-danger">{error}</div>
 													</div>
 												)}
+												{success && (
+													<div className="col-12">
+														<div className="alert alert-success">{success}</div>
+													</div>
+												)}
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<input
@@ -278,16 +289,8 @@ function SignInPopup() {
 														Log in
 													</button>
 
-													<div className="mt-3 mb-3">
-														Don't have an account ?
-														<button
-															className="twm-backto-login"
-															data-bs-target="#sign_up_popup"
-															data-bs-toggle="modal"
-															data-bs-dismiss="modal"
-														>
-															Sign Up
-														</button>
+													<div className="mt-3 mb-3" style={{color: "#000"}}>
+														Don't have an account? <a href="#sign_up_popup" data-bs-target="#sign_up_popup" data-bs-toggle="modal" data-bs-dismiss="modal" style={{textDecoration: "underline", cursor: "pointer", color: "#fd7e14"}}>Sign Up</a>
 													</div>
 												</div>
 											</div>
@@ -303,6 +306,11 @@ function SignInPopup() {
 												{error && (
 													<div className="col-12">
 														<div className="alert alert-danger">{error}</div>
+													</div>
+												)}
+												{success && (
+													<div className="col-12">
+														<div className="alert alert-success">{success}</div>
 													</div>
 												)}
 												<div className="col-lg-12">
@@ -363,16 +371,8 @@ function SignInPopup() {
 														Log in
 													</button>
 
-													<div className="mt-3 mb-3">
-														Don't have an account ?
-														<button
-															className="twm-backto-login"
-															data-bs-target="#sign_up_popup"
-															data-bs-toggle="modal"
-															data-bs-dismiss="modal"
-														>
-															Sign Up
-														</button>
+													<div className="mt-3 mb-3" style={{color: "#000"}}>
+														Don't have an account? <a href="#sign_up_popup" data-bs-target="#sign_up_popup" data-bs-toggle="modal" data-bs-dismiss="modal" style={{textDecoration: "underline", cursor: "pointer", color: "#fd7e14"}}>Sign Up</a>
 													</div>
 												</div>
 											</div>
@@ -388,6 +388,11 @@ function SignInPopup() {
 												{error && (
 													<div className="col-12">
 														<div className="alert alert-danger">{error}</div>
+													</div>
+												)}
+												{success && (
+													<div className="col-12">
+														<div className="alert alert-success">{success}</div>
 													</div>
 												)}
 												<div className="col-lg-12">
@@ -448,16 +453,8 @@ function SignInPopup() {
 														Log in
 													</button>
 
-													<div className="mt-3 mb-3">
-														Don't have an account ?
-														<button
-															className="twm-backto-login"
-															data-bs-target="#sign_up_popup"
-															data-bs-toggle="modal"
-															data-bs-dismiss="modal"
-														>
-															Sign Up
-														</button>
+													<div className="mt-3 mb-3" style={{color: "#000"}}>
+														Don't have an account? <a href="#sign_up_popup" data-bs-target="#sign_up_popup" data-bs-toggle="modal" data-bs-dismiss="modal" style={{textDecoration: "underline", cursor: "pointer", color: "#fd7e14"}}>Sign Up</a>
 													</div>
 												</div>
 											</div>

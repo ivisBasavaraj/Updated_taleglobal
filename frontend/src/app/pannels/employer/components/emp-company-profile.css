@@ -454,15 +454,16 @@ input[type="file"]:focus {
 }
 
 .btn-outline-danger {
-  border: 2px solid #e53e3e;
-  color: #e53e3e;
-  background: transparent;
+  border: none !important;
+  color: #fd7e14 !important;
+  background: transparent !important;
 }
 
 .btn-outline-danger:hover {
-  background: #e53e3e;
-  color: white;
-  box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3);
+  background: transparent !important;
+  color: #fd7e14 !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 /* Select dropdown animations */
@@ -785,46 +786,52 @@ html {
     stroke: #ff6b35 !important;
 }
 
-/* Delete buttons - Orange color */
-.btn-outline-danger,
-.btn-danger,
-.btn-outline-danger i,
-.btn-danger i,
-.fa-trash,
-.fa-times,
-.fas.fa-trash,
-.fas.fa-times {
-    color: #ff6b35 !important;
-    background: none !important;
+/* Delete buttons - Orange icon only, no background */
+button.btn-outline-danger,
+button.btn-danger,
+.emp-company-profile button.btn-outline-danger,
+.emp-company-profile button.btn-danger,
+.document-card button.btn-outline-danger,
+.uploaded-documents button.btn-outline-danger {
+    background: transparent !important;
     background-color: transparent !important;
     border: none !important;
+    color: #fd7e14 !important;
     box-shadow: none !important;
-    outline: none !important;
+    padding: 5px !important;
 }
 
-.btn-outline-danger:hover,
-.btn-danger:hover,
-.btn-outline-danger:hover i,
-.btn-danger:hover i {
-    color: #fff !important;
-    background-color: #ff6b35 !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-/* Remove any orange background or circle from danger buttons */
-.btn-danger::before,
-.btn-danger::after,
-.btn-outline-danger::before,
-.btn-outline-danger::after {
-    display: none !important;
-    background: none !important;
-}
-
-/* Override Bootstrap default danger button styling */
-.btn-danger {
+button.btn-outline-danger:hover,
+button.btn-danger:hover,
+.emp-company-profile button.btn-outline-danger:hover,
+.emp-company-profile button.btn-danger:hover {
+    background: transparent !important;
     background-color: transparent !important;
     border: none !important;
+    color: #fd7e14 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* Delete button icons - Orange and visible */
+button.btn-outline-danger i.fas,
+button.btn-danger i.fas,
+button.btn-outline-danger i.fa-trash,
+button.btn-danger i.fa-trash,
+.emp-company-profile button i.fas.fa-trash,
+.document-card button i.fas.fa-trash,
+.uploaded-documents button i.fas.fa-trash {
+    color: #fd7e14 !important;
+    background: transparent !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-size: 16px !important;
+}
+
+button.btn-outline-danger:hover i.fas,
+button.btn-danger:hover i.fas {
+    color: #fd7e14 !important;
+    background: transparent !important;
 }
 
 /* Mobile Touch Optimizations */
@@ -867,4 +874,36 @@ html {
   .emp-company-profile {
     padding-top: 60px; /* Account for mobile menu toggle */
   }
+}
+
+
+/* Fix for delete button icons in authorization letters */
+.uploaded-documents .btn-outline-danger,
+.uploaded-documents .btn-danger,
+.document-card .btn-outline-danger,
+.document-card .btn-danger {
+    background-color: #fd7e14 !important;
+    border-color: #fd7e14 !important;
+    color: #ffffff !important;
+}
+
+.uploaded-documents .btn-outline-danger:hover,
+.uploaded-documents .btn-danger:hover,
+.document-card .btn-outline-danger:hover,
+.document-card .btn-danger:hover {
+    background-color: #fd7e14 !important;
+    border-color: #fd7e14 !important;
+    color: #ffffff !important;
+    transform: none !important;
+}
+
+.uploaded-documents .btn-outline-danger i,
+.uploaded-documents .btn-danger i,
+.document-card .btn-outline-danger i,
+.document-card .btn-danger i,
+.uploaded-documents .fa-trash,
+.document-card .fa-trash {
+    color: #ffffff !important;
+    background: none !important;
+    background-color: transparent !important;
 }

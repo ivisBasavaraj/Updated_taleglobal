@@ -351,18 +351,21 @@
 }
 
 .delete-btn {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  background: #fd7e14;
+  border: 1px solid #fd7e14;
   border-radius: 10px;
   padding: 0.45rem 0.95rem;
-  color: #b91c1c;
+  color: #ffffff;
   font-weight: 600;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: none;
 }
 
 .delete-btn:hover {
-  background: #fee2e2;
-  transform: translateY(-1px);
+  background: #fd7e14;
+  border: 1px solid #fd7e14;
+  color: #ffffff;
+  transform: none;
+  box-shadow: none;
 }
 
 .badge-soft.badge {

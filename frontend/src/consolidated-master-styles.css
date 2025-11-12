@@ -544,17 +544,18 @@ button.btn-success:hover {
 /* Danger Button - Orange Variant */
 .btn-danger,
 button.btn-danger {
-  background-color: rgba(255, 122, 0, 0.08) !important;
-  color: #FF7A00 !important;
-  border: 1px solid #FF7A00 !important;
+  background-color: #fd7e14 !important;
+  color: #ffffff !important;
+  border: 1px solid #fd7e14 !important;
 }
 
 .btn-danger:hover,
 button.btn-danger:hover {
-  background-color: #FFF3E5 !important;
-  color: #FF7A00 !important;
-  border: 1px solid #FF7A00 !important;
-  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
+  background-color: #fd7e14 !important;
+  color: #ffffff !important;
+  border: 1px solid #fd7e14 !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 /* Warning Button - Orange Variant */
@@ -3005,10 +3006,6 @@ a.btn.active {
 .btn-success:focus,
 .btn-success:active,
 .btn-success.active,
-.btn-danger:hover,
-.btn-danger:focus,
-.btn-danger:active,
-.btn-danger.active,
 .btn-warning:hover,
 .btn-warning:focus,
 .btn-warning:active,
@@ -3030,6 +3027,69 @@ a.btn.active {
   border-color: #FF7A00 !important;
   box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2) !important;
   outline: none !important;
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger.active {
+  background-color: #fd7e14 !important;
+  color: #ffffff !important;
+  border-color: #fd7e14 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transform: none !important;
+}
+
+/* Remove background from delete button icons */
+.btn-danger i,
+.btn-outline-danger i,
+.btn-danger .fa,
+.btn-danger .fas,
+.btn-outline-danger .fa,
+.btn-outline-danger .fas {
+  color: #ffffff !important;
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.btn-danger:hover i,
+.btn-outline-danger:hover i,
+.btn-danger:hover .fa,
+.btn-danger:hover .fas,
+.btn-outline-danger:hover .fa,
+.btn-outline-danger:hover .fas {
+  color: #ffffff !important;
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Delete button icons - no background */
+button.btn-danger i,
+button.btn-outline-danger i,
+a.btn-danger i,
+a.btn-outline-danger i,
+.btn-delete i,
+.delete-btn i {
+  color: #ffffff !important;
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+button.btn-danger:hover i,
+button.btn-outline-danger:hover i,
+a.btn-danger:hover i,
+a.btn-outline-danger:hover i,
+.btn-delete:hover i,
+.delete-btn:hover i {
+  color: #ffffff !important;
 }
 
 /* ============================================================================

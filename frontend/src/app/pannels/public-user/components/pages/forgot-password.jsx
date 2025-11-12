@@ -5,7 +5,8 @@ function ForgotPassword() {
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const [generatedOTP, setGeneratedOTP] = useState('');
 
@@ -24,7 +25,8 @@ function ForgotPassword() {
     setLoading(true);
 
     if (!email.includes('@')) {
-      setMessage('Please enter a valid email.');
+      setError('Please enter a valid email.');
+      setSuccess('');
       setLoading(false);
       return;
     }
@@ -56,12 +58,14 @@ function ForgotPassword() {
       ]);
       
       if (!candidateData.exists && !employerData.exists && !placementData.exists) {
-        setMessage('This email is not registered. Please use a registered email address.');
+        setError('This email is not registered. Please use a registered email address.');
+        setSuccess('');
         setLoading(false);
         return;
       }
     } catch (error) {
-      setMessage('Unable to verify email. Please try again.');
+      setError('Unable to verify email. Please try again.');
+      setSuccess('');
       setLoading(false);
       return;
     }
@@ -83,14 +87,16 @@ function ForgotPassword() {
           'IUBFJTFkQbQuIA-6P'
         );
         
-        setMessage(`OTP sent to ${email} successfully!`);
+        setSuccess(`OTP sent to ${email} successfully!`);
+        setError('');
         setOtpSent(true);
       } else {
         throw new Error('EmailJS not loaded');
       }
     } catch (error) {
       
-      setMessage(`Failed to send email: ${error.text || error.message}. Demo OTP: ${otpCode}`);
+      setError(`Failed to send email: ${error.text || error.message}. Demo OTP: ${otpCode}`);
+      setSuccess('');
       setOtpSent(true);
     } finally {
       setLoading(false);
@@ -102,13 +108,15 @@ function ForgotPassword() {
     setLoading(true);
 
     if (otp !== generatedOTP) {
-      setMessage('Invalid OTP. Please check and try again.');
+      setError('Invalid OTP. Please check and try again.');
+      setSuccess('');
       setLoading(false);
       return;
     }
 
     if (newPassword.length < 6) {
-      setMessage('Password must be at least 6 characters long.');
+      setError('Password must be at least 6 characters long.');
+      setSuccess('');
       setLoading(false);
       return;
     }
@@ -143,17 +151,20 @@ function ForgotPassword() {
 
       if (data.success) {
         
-        setMessage('Password reset successful! Redirecting to login...');
+        setSuccess('Password reset successful! Redirecting to login...');
+        setError('');
         setTimeout(() => {
           window.location.href = '/';
         }, 1500);
       } else {
         
-        setMessage(data.message || 'Failed to reset password');
+        setError(data.message || 'Failed to reset password');
+        setSuccess('');
       }
     } catch (error) {
       
-      setMessage('Network error. Please try again.');
+      setError('Network error. Please try again.');
+      setSuccess('');
     } finally {
       setLoading(false);
     }
@@ -166,6 +177,8 @@ function ForgotPassword() {
       
       {!otpSent ? (
         <form onSubmit={handleSendOTP}>
+          {error && <div className="alert alert-danger">{error}</div>}
+          {success && <div className="alert alert-success">{success}</div>}
           <div className="mb-3">
             <label className="form-label">Email</label>
             <input
@@ -191,6 +204,8 @@ function ForgotPassword() {
         </form>
       ) : (
         <form onSubmit={handleResetPassword}>
+          {error && <div className="alert alert-danger">{error}</div>}
+          {success && <div className="alert alert-success">{success}</div>}
           <div className="mb-3">
             <label className="form-label">Enter OTP</label>
             <input
@@ -226,8 +241,6 @@ function ForgotPassword() {
           </button>
         </form>
       )}
-
-      {message && <div className="alert alert-info mt-3">{message}</div>}
     </div>
   );
 }
