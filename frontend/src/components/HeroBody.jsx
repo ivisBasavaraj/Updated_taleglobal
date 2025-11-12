@@ -322,38 +322,40 @@ const HeroBody = ({ onSearch }) => {
                 <div key={index} className="category-card" style={{
                   background: 'white',
                   borderRadius: '10px',
-                  padding: '1rem 0.875rem',
+                  padding: '1.25rem 1rem',
                   boxShadow: '0 3px 14px rgba(0, 0, 0, 0.06)',
                   transition: 'all 0.3s ease',
                   cursor: 'pointer',
                   minWidth: '140px',
                   maxWidth: '220px',
                   flex: '0 0 140px',
-                  textAlign: 'center'
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.15rem'
                 }}>
-                  <div className="category-icon small" style={{
+                  <div className="category-icon" style={{
                     backgroundColor: 'rgba(255, 156, 0, 0.1)',
                     border: '1px solid rgba(255, 156, 0, 0.3)',
                     color: '#e68900',
                     width: '40px',
                     height: '40px',
-                    marginBottom: '0.5rem',
                     borderRadius: '8px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 0.5rem'
+                    justifyContent: 'center'
                   }}>
-                    {category.icon ? <category.icon size={16} /> : null}
+                    {category.icon && React.createElement(category.icon, { size: 20 })}
                   </div>
-                  <div className="category-info">
-                    <h3 className="category-name" style={{
-                      color: '#333',
-                      fontWeight: '700',
-                      fontSize: '1rem',
-                      margin: '0'
-                    }}>{category.name}</h3>
-                  </div>
+                  <h3 className="category-name" style={{
+                    color: '#333',
+                    fontWeight: '700',
+                    fontSize: '0.95rem',
+                    margin: '0',
+                    textAlign: 'center',
+                    lineHeight: '1.2'
+                  }}>{category.name}</h3>
                 </div>
               ))}
             </div>
