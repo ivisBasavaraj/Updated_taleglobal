@@ -213,6 +213,23 @@ const AssessmentResults = () => {
 			}}
 		>
 			<div style={{ maxWidth: "800px", margin: "0 auto" }}>
+				{/* Back Button - Top Left */}
+				<button
+					onClick={handleCloseAssessment}
+					style={{
+						padding: "10px 20px",
+						border: "none",
+						borderRadius: "8px",
+						background: "#007bff",
+						color: "#fff",
+						cursor: "pointer",
+						fontSize: "14px",
+						fontWeight: "bold",
+						marginBottom: "20px",
+					}}
+				>
+					← Back to Status Page
+				</button>
 				{/* Header */}
 				<div
 					style={{
@@ -352,24 +369,7 @@ const AssessmentResults = () => {
 					</div>
 				</div>
 
-				{/* Close Button */}
-				<div style={{ textAlign: "center" }}>
-					<button
-						onClick={handleCloseAssessment}
-						style={{
-							padding: "12px 30px",
-							border: "none",
-							borderRadius: "8px",
-							background: "#007bff",
-							color: "#fff",
-							cursor: "pointer",
-							fontSize: "16px",
-							fontWeight: "bold",
-						}}
-					>
-						Back to Status Page
-					</button>
-				</div>
+
 			</div>
 		</div>
 	);

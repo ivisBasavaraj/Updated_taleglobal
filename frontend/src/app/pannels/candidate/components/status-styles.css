@@ -156,14 +156,14 @@
 }
 
 .interview-round-item .round-name {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     color: #000;
     white-space: nowrap;
 }
 
 .interview-round-item .badge {
-    font-size: 10px;
+    font-size: 12px;
     padding: 4px 8px;
     border-radius: 12px;
     white-space: nowrap;

@@ -600,7 +600,7 @@ exports.getMessages = async (req, res) => {
 exports.checkEmail = async (req, res) => {
   try {
     const { email } = req.body;
-    const candidate = await Candidate.findOne({ email });
+    const candidate = await Candidate.findOne({ email: email.toLowerCase().trim() });
     
     res.json({ 
       success: true, 

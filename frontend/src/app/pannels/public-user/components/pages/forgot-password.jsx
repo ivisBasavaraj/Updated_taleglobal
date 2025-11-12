@@ -29,17 +29,33 @@ function ForgotPassword() {
       return;
     }
 
-    // Check if email is registered
+    // Check if email is registered in any user type
     try {
-      const response = await fetch('http://localhost:5000/api/candidate/check-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
+      const [candidateRes, employerRes, placementRes] = await Promise.all([
+        fetch('http://localhost:5000/api/candidate/check-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        }),
+        fetch('http://localhost:5000/api/employer/check-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        }),
+        fetch('http://localhost:5000/api/placement/check-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        })
+      ]);
       
-      const result = await response.json();
+      const [candidateData, employerData, placementData] = await Promise.all([
+        candidateRes.json(),
+        employerRes.json(),
+        placementRes.json()
+      ]);
       
-      if (!result.exists) {
+      if (!candidateData.exists && !employerData.exists && !placementData.exists) {
         setMessage('This email is not registered. Please use a registered email address.');
         setLoading(false);
         return;
@@ -101,13 +117,27 @@ function ForgotPassword() {
     
 
     try {
-      const response = await fetch('http://localhost:5000/api/candidate/password/update-reset', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, newPassword })
-      });
+      // Try all user types
+      const responses = await Promise.all([
+        fetch('http://localhost:5000/api/candidate/password/update-reset', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, newPassword })
+        }),
+        fetch('http://localhost:5000/api/employer/password/update-reset', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, newPassword })
+        }),
+        fetch('http://localhost:5000/api/placement/password/update-reset', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, newPassword })
+        })
+      ]);
 
-      const data = await response.json();
+      const results = await Promise.all(responses.map(r => r.json()));
+      const data = results.find(r => r.success) || results[0];
       
       
 

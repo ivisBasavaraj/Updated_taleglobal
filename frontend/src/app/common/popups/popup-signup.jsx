@@ -429,7 +429,7 @@ function SignUpPopup() {
 																I agree to the{" "}
 																<a href={pubRoute(publicUser.pages.TERMS)} target="_blank" rel="noopener noreferrer">Terms and conditions</a>
 															</label>
-															<p>
+															<p style={{marginTop: "10px"}}>
 																Already registered?
 																<button
 																	type="button"
@@ -437,6 +437,7 @@ function SignUpPopup() {
 																	data-bs-target="#sign_up_popup2"
 																	data-bs-toggle="modal"
 																	data-bs-dismiss="modal"
+																	style={{padding: "2px 6px", height: "auto", lineHeight: "1.2"}}
 																>
 																	Sign in
 																</button>
@@ -547,7 +548,7 @@ function SignUpPopup() {
 																I agree to the{" "}
 																<a href={pubRoute(publicUser.pages.TERMS)} target="_blank" rel="noopener noreferrer">Terms and conditions</a>
 															</label>
-															<p>
+															<p style={{marginTop: "10px"}}>
 																Already registered?
 																<button
 																	type="button"
@@ -555,6 +556,7 @@ function SignUpPopup() {
 																	data-bs-target="#sign_up_popup2"
 																	data-bs-toggle="modal"
 																	data-bs-dismiss="modal"
+																	style={{padding: "2px 6px", height: "auto", lineHeight: "1.2"}}
 																>
 																	Sign in
 																</button>
@@ -665,7 +667,7 @@ function SignUpPopup() {
 																I agree to the{" "}
 																<a href={pubRoute(publicUser.pages.TERMS)} target="_blank" rel="noopener noreferrer">Terms and conditions</a>
 															</label>
-															<p>
+															<p style={{marginTop: "10px"}}>
 																Already registered?
 																<button
 																	type="button"
@@ -673,6 +675,7 @@ function SignUpPopup() {
 																	data-bs-target="#sign_up_popup2"
 																	data-bs-toggle="modal"
 																	data-bs-dismiss="modal"
+																	style={{padding: "2px 6px", height: "auto", lineHeight: "1.2"}}
 																>
 																	Sign in
 																</button>
