@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { loadScript } from "../../../../globals/constants";
 import JobZImage from "../../../common/jobz-img";
 import { ArrowLeft, ListChecks, Eye, Search } from "lucide-react";
+import './emp-candidates.css';
 
 function EmpCandidatesPage() {
   const navigate = useNavigate();
@@ -153,9 +154,9 @@ function EmpCandidatesPage() {
   }, [applications, searchText, statusFilter, genderFilter]);
 
   return (
-    <>
+    <div className="emp-candidates-page">
       <div className="wt-admin-right-page-header clearfix">
-        <h2 style={{marginLeft: '25px'}}>
+        <h2>
           {jobId && currentJob
             ? `Applicants for ${currentJob.title}`
             : "Applicants Details"}
@@ -173,7 +174,7 @@ function EmpCandidatesPage() {
         )}
       </div>
 
-      <div className="panel panel-default site-bg-white p-3" style={{marginTop: '10px'}}>
+      <div className="panel panel-default site-bg-white p-3">
         <div className="panel-heading wt-panel-heading mb-3 d-flex align-items-center justify-content-between">
           <h4 className="panel-tittle d-flex align-items-center m-0">
             <ListChecks
@@ -322,7 +323,7 @@ function EmpCandidatesPage() {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

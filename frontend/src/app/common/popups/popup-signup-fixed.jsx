@@ -34,6 +34,7 @@ function SignUpPopup() {
     
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [showCandidatePassword, setShowCandidatePassword] = useState(false);
     const [showCandidateConfirmPassword, setShowCandidateConfirmPassword] = useState(false);
@@ -100,6 +101,7 @@ function SignUpPopup() {
         e.preventDefault();
         setLoading(true);
         setError('');
+        setSuccessMessage('');
         
         try {
             const response = await fetch('http://localhost:5000/api/candidate/register', {
@@ -115,10 +117,12 @@ function SignUpPopup() {
             const data = await response.json();
             if (data.success) {
                 setCandidateData({ username: '', email: '', mobile: '', mobileCountryCode: '+91', password: '', confirmPassword: '' });
-                alert(data.message || 'Registration successful! Please check your email to create your password.');
-                // Close signup modal
-                const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
-                if (signupModal) signupModal.hide();
+                setSuccessMessage(data.message || 'Registration successful! Please check your email to create your password.');
+                setTimeout(() => {
+                    const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
+                    if (signupModal) signupModal.hide();
+                    setSuccessMessage('');
+                }, 1500);
             } else {
                 // Display validation errors if available
                 if (data.errors && Array.isArray(data.errors)) {
@@ -140,6 +144,7 @@ function SignUpPopup() {
         e.preventDefault();
         setLoading(true);
         setError('');
+        setSuccessMessage('');
         
         try {
             const response = await fetch('http://localhost:5000/api/employer/register', {
@@ -158,10 +163,12 @@ function SignUpPopup() {
             const data = await response.json();
             if (data.success) {
                 setEmployerData({ name: '', email: '', mobile: '', mobileCountryCode: '+91', password: '', confirmPassword: '', employerCategory: '' });
-                alert(data.message || 'Registration successful! Please check your email to create your password.');
-                // Close signup modal
-                const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
-                if (signupModal) signupModal.hide();
+                setSuccessMessage(data.message || 'Registration successful! Please check your email to create your password.');
+                setTimeout(() => {
+                    const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
+                    if (signupModal) signupModal.hide();
+                    setSuccessMessage('');
+                }, 1500);
             } else {
                 // Display validation errors if available
                 if (data.errors && Array.isArray(data.errors)) {
@@ -183,11 +190,13 @@ function SignUpPopup() {
         e.preventDefault();
         if (placementData.password !== placementData.confirmPassword) {
             setError('Passwords do not match');
+            setSuccessMessage('');
             return;
         }
         
         setLoading(true);
         setError('');
+        setSuccessMessage('');
         
         try {
             const response = await fetch('http://localhost:5000/api/placement/register', {
@@ -206,13 +215,19 @@ function SignUpPopup() {
             const data = await response.json();
             if (data.success) {
                 setPlacementData({ name: '', email: '', phone: '', phoneCountryCode: '+91', password: '', confirmPassword: '', collegeName: '' });
-                // Close signup modal and open login modal
-                const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
-                if (signupModal) signupModal.hide();
+                setSuccessMessage(data.message || 'Registration successful! Please check your email to create your password.');
                 setTimeout(() => {
-                    const loginModal = new window.bootstrap.Modal(document.getElementById('sign_up_popup2'));
-                    loginModal.show();
-                }, 300);
+                    const signupModal = window.bootstrap.Modal.getInstance(document.getElementById('sign_up_popup'));
+                    if (signupModal) signupModal.hide();
+                    setSuccessMessage('');
+                    setTimeout(() => {
+                        const loginModalElement = document.getElementById('sign_up_popup2');
+                        if (loginModalElement) {
+                            const loginModal = new window.bootstrap.Modal(loginModalElement);
+                            loginModal.show();
+                        }
+                    }, 300);
+                }, 1500);
             } else {
                 setError(data.message || 'Registration failed');
             }
@@ -250,6 +265,9 @@ function SignUpPopup() {
 							</div>
 
 							<div className="modal-body">
+						{successMessage && (
+							<div className="alert alert-success mb-3">{successMessage}</div>
+						)}
 								<div className="twm-tabs-style-2">
 									<ul className="nav nav-tabs" id="myTab" role="tablist">
 										<li className="nav-item" role="presentation">

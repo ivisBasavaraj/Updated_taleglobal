@@ -397,7 +397,7 @@ function EmployersDetail1Page() {
 															
 															<button 
 																type="submit" 
-																className="btn btn-primary"
+																className="site-button"
 															>
 																Submit Review
 															</button>

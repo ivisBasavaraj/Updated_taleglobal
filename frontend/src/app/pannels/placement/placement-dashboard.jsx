@@ -407,6 +407,7 @@ function PlacementDashboard() {
             collegeName: placementData?.collegeName || ''
         });
         setShowEditModal(true);
+        document.body.classList.add('modal-open');
     };
 
     const handleUpdateProfile = async () => {
@@ -421,6 +422,7 @@ function PlacementDashboard() {
             if (response.success) {
                 alert('Profile updated successfully!');
                 setShowEditModal(false);
+                document.body.classList.remove('modal-open');
                 fetchPlacementDetails();
             } else {
                 alert(response.message || 'Failed to update profile');
@@ -491,6 +493,17 @@ function PlacementDashboard() {
                         >
                             <i className="fa fa-refresh"></i>
                             Refresh
+                        </button>
+                        <button 
+                            className="btn"
+                            onClick={() => {
+                                localStorage.removeItem('placementToken');
+                                window.location.href = '/login';
+                            }}
+                            style={{borderRadius: '50px', padding: '0.65rem 1.5rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: '#ffffff', border: '2px solid #FF8237', backgroundColor: '#FF8237'}}
+                        >
+                            <i className="fa fa-sign-out"></i>
+                            Logout
                         </button>
                     </div>
                 </div>
@@ -1035,7 +1048,7 @@ function PlacementDashboard() {
 
             {/* Edit Profile Modal */}
             {showEditModal && (
-                <div className="modal fade show" style={{display: 'block', backgroundColor: 'rgba(0,0,0,0.5)'}} onClick={() => setShowEditModal(false)}>
+                <div className="modal fade show" style={{display: 'block', backgroundColor: 'rgba(0,0,0,0.5)', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, overflowY: 'auto', zIndex: 1050}} onClick={() => { setShowEditModal(false); document.body.style.overflow = 'auto'; }}>
                     <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-content">
                             <div className="modal-header">
@@ -1106,7 +1119,7 @@ function PlacementDashboard() {
                                 <button 
                                     type="button" 
                                     className="btn btn-secondary" 
-                                    onClick={() => setShowEditModal(false)}
+                                    onClick={() => { setShowEditModal(false); document.body.classList.remove('modal-open'); }}
                                     disabled={updating}
                                 >
                                     Cancel

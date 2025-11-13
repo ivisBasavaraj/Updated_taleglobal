@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { loadScript } from "../../../../../globals/constants";
 import { employer, empRoute } from "../../../../../globals/route-names";
+import './emp-posted-jobs.css';
 
 export default function EmpPostedJobs() {
 	const navigate = useNavigate();
@@ -173,9 +174,9 @@ export default function EmpPostedJobs() {
     };
 
 	return (
-		<>
+		<div className="emp-posted-jobs-page">
 			<div className="wt-admin-right-page-header clearfix">
-				<h2 style={{marginLeft: '25px'}}>Jobs Posted</h2>
+				<h2>Jobs Posted</h2>
 			</div>
 
 			<div className="panel panel-default site-bg-white p-3">
@@ -335,7 +336,7 @@ export default function EmpPostedJobs() {
 					)}
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }
 

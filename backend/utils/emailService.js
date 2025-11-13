@@ -205,6 +205,11 @@ const sendAssessmentNotificationEmail = async ({ email, name, jobTitle, startDat
 const sendOTPEmail = async (email, otp, name) => {
   const transporter = createTransport();
   
+  console.log('=== SENDING OTP EMAIL ===');
+  console.log('Recipient Email:', email);
+  console.log('OTP Code:', otp);
+  console.log('Recipient Name:', name);
+  
   const otpTemplate = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9fa;">
       <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
@@ -241,7 +246,10 @@ const sendOTPEmail = async (email, otp, name) => {
     html: otpTemplate
   };
 
-  await transporter.sendMail(mailOptions);
+  console.log('Mail Options:', JSON.stringify(mailOptions, null, 2));
+  const result = await transporter.sendMail(mailOptions);
+  console.log('Email sent successfully:', result);
+  return result;
 };
 
 module.exports = { sendWelcomeEmail, sendResetEmail, sendPasswordCreationEmail, sendAssessmentNotificationEmail, sendOTPEmail };

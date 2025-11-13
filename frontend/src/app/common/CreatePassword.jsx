@@ -9,6 +9,7 @@ function CreatePassword() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [passwordValidation, setPasswordValidation] = useState({
@@ -54,6 +55,7 @@ function CreatePassword() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSuccessMessage('');
         
         if (!isPasswordValid()) {
             setError('Please meet all password requirements');
@@ -88,15 +90,17 @@ function CreatePassword() {
             const data = await response.json();
 
             if (response.ok && data.success) {
-                alert('Password created successfully! Please login.');
-                navigate('/', { replace: true });
+                setSuccessMessage('Password created successfully! Please login.');
                 setTimeout(() => {
-                    const loginModal = document.getElementById('sign_up_popup2');
-                    if (loginModal) {
-                        const modal = new window.bootstrap.Modal(loginModal);
-                        modal.show();
-                    }
-                }, 500);
+                    navigate('/', { replace: true });
+                    setTimeout(() => {
+                        const loginModal = document.getElementById('sign_up_popup2');
+                        if (loginModal) {
+                            const modal = new window.bootstrap.Modal(loginModal);
+                            modal.show();
+                        }
+                    }, 500);
+                }, 1500);
             } else {
                 setError(data.message || 'Failed to create password');
             }
@@ -118,6 +122,9 @@ function CreatePassword() {
                         </div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>
+                                {successMessage && (
+                                    <div className="alert alert-success">{successMessage}</div>
+                                )}
                                 {error && (
                                     <div className="alert alert-danger">{error}</div>
                                 )}

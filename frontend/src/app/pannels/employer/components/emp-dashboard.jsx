@@ -118,7 +118,8 @@ function EmpDashboardPage() {
                 minHeight: '100vh'
             }}>
                 {/* Header */}
-                <div className="wt-admin-right-page-header clearfix" style={{ background: 'white', borderBottom: '1px solid #e5e7eb', padding: isMobile ? '1rem' : '2rem' }}>
+                <div style={{ padding: '2rem 2rem 2rem 2rem' }}>
+                <div className="wt-admin-right-page-header clearfix" style={{ background: 'white', borderRadius: '12px', padding: isMobile ? '1rem' : '2rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                             <div style={{
@@ -149,10 +150,11 @@ function EmpDashboardPage() {
 
                     </div>
                 </div>
+                </div>
 
                 {/* Stats Cards */}
-                <div style={{ padding: isMobile ? '1rem' : '2rem' }}>
-                    <div className="row" style={{ marginBottom: '2rem', margin: '0' }}>
+                <div style={{ padding: '0 2rem 2rem 2rem' }}>
+                    <div className="row" style={{ marginBottom: '2rem' }}>
                         <div className="col-xl-4 col-lg-4 col-md-12 mb-3">
                             <div className="panel panel-default">
                                 <div className="panel-body wt-panel-body dashboard-card-2" style={{ backgroundColor: '#e0f7fa' }}>
@@ -209,7 +211,7 @@ function EmpDashboardPage() {
                     </div>
 
                     {/* Profile Completion and Recent Activity */}
-                    <div className="row" style={{ margin: '0', marginTop: '-1rem' }}>
+                    <div className="row" style={{ marginTop: '-1rem' }}>
                         {/* Profile Completion Section */}
                         <div className="col-xl-8 col-lg-8 col-md-12 mb-2">
                             <div style={{

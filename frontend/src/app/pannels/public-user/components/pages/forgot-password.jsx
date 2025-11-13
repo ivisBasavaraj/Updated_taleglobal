@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -8,96 +8,48 @@ function ForgotPassword() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-  const [generatedOTP, setGeneratedOTP] = useState('');
-
-  useEffect(() => {
-    // Load EmailJS script
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-    script.onload = () => {
-      window.emailjs.init('IUBFJTFkQbQuIA-6P');
-    };
-    document.head.appendChild(script);
-  }, []);
 
   const handleSendOTP = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
+    setSuccess('');
 
     if (!email.includes('@')) {
       setError('Please enter a valid email.');
-      setSuccess('');
       setLoading(false);
       return;
     }
 
-    // Check if email is registered in any user type
     try {
-      const [candidateRes, employerRes, placementRes] = await Promise.all([
-        fetch('http://localhost:5000/api/candidate/check-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        }),
-        fetch('http://localhost:5000/api/employer/check-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        }),
-        fetch('http://localhost:5000/api/placement/check-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        })
-      ]);
+      const endpoints = [
+        'http://localhost:5000/api/candidate/password/send-otp',
+        'http://localhost:5000/api/employer/password/send-otp',
+        'http://localhost:5000/api/placement/password/send-otp'
+      ];
       
-      const [candidateData, employerData, placementData] = await Promise.all([
-        candidateRes.json(),
-        employerRes.json(),
-        placementRes.json()
-      ]);
-      
-      if (!candidateData.exists && !employerData.exists && !placementData.exists) {
-        setError('This email is not registered. Please use a registered email address.');
-        setSuccess('');
-        setLoading(false);
-        return;
-      }
-    } catch (error) {
-      setError('Unable to verify email. Please try again.');
-      setSuccess('');
-      setLoading(false);
-      return;
-    }
-
-    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedOTP(otpCode);
-
-    try {
-      if (window.emailjs) {
-        const result = await window.emailjs.send(
-          'service_efcac65',
-          'template_7vg4zm5',
-          {
-            to_email: email,
-            to_name: email.split('@')[0],
-            otp_code: otpCode,
-            user_email: email
-          },
-          'IUBFJTFkQbQuIA-6P'
-        );
+      let otpSentSuccess = false;
+      for (const endpoint of endpoints) {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const result = await response.json();
         
-        setSuccess(`OTP sent to ${email} successfully!`);
-        setError('');
-        setOtpSent(true);
-      } else {
-        throw new Error('EmailJS not loaded');
+        if (response.ok && result.success) {
+          setSuccess(`OTP sent to ${email} successfully!`);
+          setOtpSent(true);
+          otpSentSuccess = true;
+          break;
+        }
+      }
+      
+      if (!otpSentSuccess) {
+        setError('This email is not registered. Please use a registered email address.');
       }
     } catch (error) {
-      
-      setError(`Failed to send email: ${error.text || error.message}. Demo OTP: ${otpCode}`);
-      setSuccess('');
-      setOtpSent(true);
+      setError('Unable to send OTP. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -106,65 +58,46 @@ function ForgotPassword() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    if (otp !== generatedOTP) {
-      setError('Invalid OTP. Please check and try again.');
-      setSuccess('');
-      setLoading(false);
-      return;
-    }
+    setError('');
+    setSuccess('');
 
     if (newPassword.length < 6) {
       setError('Password must be at least 6 characters long.');
-      setSuccess('');
       setLoading(false);
       return;
     }
 
-    
-    
-
     try {
-      // Try all user types
-      const responses = await Promise.all([
-        fetch('http://localhost:5000/api/candidate/password/update-reset', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, newPassword })
-        }),
-        fetch('http://localhost:5000/api/employer/password/update-reset', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, newPassword })
-        }),
-        fetch('http://localhost:5000/api/placement/password/update-reset', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, newPassword })
-        })
-      ]);
-
-      const results = await Promise.all(responses.map(r => r.json()));
-      const data = results.find(r => r.success) || results[0];
+      const endpoints = [
+        'http://localhost:5000/api/candidate/password/verify-otp',
+        'http://localhost:5000/api/employer/password/verify-otp',
+        'http://localhost:5000/api/placement/password/verify-otp'
+      ];
       
+      let resetSuccess = false;
+      for (const endpoint of endpoints) {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, otp, newPassword })
+        });
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          setSuccess('Password reset successful! Redirecting to login...');
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 1500);
+          resetSuccess = true;
+          break;
+        }
+      }
       
-
-      if (data.success) {
-        
-        setSuccess('Password reset successful! Redirecting to login...');
-        setError('');
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 1500);
-      } else {
-        
-        setError(data.message || 'Failed to reset password');
-        setSuccess('');
+      if (!resetSuccess) {
+        setError('Invalid or expired OTP. Please try again.');
       }
     } catch (error) {
-      
       setError('Network error. Please try again.');
-      setSuccess('');
     } finally {
       setLoading(false);
     }

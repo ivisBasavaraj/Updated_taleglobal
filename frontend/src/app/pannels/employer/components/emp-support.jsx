@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import './emp-support.css';
 
 function EmpSupport() {
     const [formData, setFormData] = useState({
@@ -181,7 +182,10 @@ function EmpSupport() {
 
     if (isSubmitted) {
         return (
-            <div className="panel-main-content">
+            <div className="emp-support-page">
+                <div className="wt-admin-right-page-header clearfix">
+                    <h2>Support</h2>
+                </div>
                 <div className="twm-dash-b-blocks">
                     <div className="col-lg-12">
                         <div className="panel panel-default">
@@ -211,7 +215,10 @@ function EmpSupport() {
     }
 
     return (
-        <div className="panel-main-content">
+        <div className="emp-support-page">
+            <div className="wt-admin-right-page-header clearfix">
+                <h2>Support</h2>
+            </div>
             <div className="twm-dash-b-blocks">
                 <div className="col-lg-12">
                     <div className="panel panel-default">

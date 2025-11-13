@@ -1,4 +1,46 @@
+import { useState } from 'react';
+
 function SectionCanPersonalDetail() {
+    const [formData, setFormData] = useState({
+        dateOfBirth: '',
+        gender: '',
+        residentialAddress: '',
+        permanentAddress: '',
+        hometown: '',
+        pincode: '',
+        maritalStatus: '',
+        passportNumber: '',
+        assistance: '',
+        workPermit: ''
+    });
+    const [sameAsResidential, setSameAsResidential] = useState(false);
+    const [dobError, setDobError] = useState('');
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleDobChange = (e) => {
+        const selectedDate = new Date(e.target.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (selectedDate > today) {
+            setDobError('Date of birth cannot be in the future');
+            return;
+        }
+        setDobError('');
+        setFormData(prev => ({ ...prev, dateOfBirth: e.target.value }));
+    };
+
+    const handleCheckboxChange = (e) => {
+        setSameAsResidential(e.target.checked);
+        if (e.target.checked) {
+            setFormData(prev => ({ ...prev, permanentAddress: prev.residentialAddress }));
+        }
+    };
+
     return (
         <>
             <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
@@ -89,9 +131,17 @@ function SectionCanPersonalDetail() {
                                         <div className="form-group">
                                             <label>Date of Birth</label>
                                             <div className="ls-inputicon-box">
-                                                <input className="form-control datepicker" data-provide="datepicker" name="company_since" type="text" placeholder="mm/dd/yyyy" />
+                                                <input 
+                                                    className="form-control" 
+                                                    name="dateOfBirth" 
+                                                    type="date" 
+                                                    value={formData.dateOfBirth}
+                                                    onChange={handleDobChange}
+                                                    max={new Date().toISOString().split('T')[0]}
+                                                />
                                                 <i className="fs-input-icon far fa-calendar" />
                                             </div>
+                                            {dobError && <small className="text-danger">{dobError}</small>}
                                         </div>
                                     </div>
                                     <div className="col-xl-12 col-lg-12">
@@ -99,13 +149,13 @@ function SectionCanPersonalDetail() {
                                             <label>Gender</label>
                                             <div className="row twm-form-radio-inline">
                                                 <div className="col-md-6">
-                                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="S_male" />
+                                                    <input className="form-check-input" type="radio" name="gender" id="S_male" value="male" onChange={handleInputChange} />
                                                     <label className="form-check-label" htmlFor="S_male">
                                                         Male
                                                     </label>
                                                 </div>
                                                 <div className="col-md-6">
-                                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="S_female" defaultChecked />
+                                                    <input className="form-check-input" type="radio" name="gender" id="S_female" value="female" onChange={handleInputChange} />
                                                     <label className="form-check-label" htmlFor="S_female">
                                                         Female
                                                     </label>
@@ -115,9 +165,49 @@ function SectionCanPersonalDetail() {
                                     </div>
                                     <div className="col-xl-12 col-lg-12">
                                         <div className="form-group">
+                                            <label>Residential Address</label>
+                                            <div className="ls-inputicon-box">
+                                                <input 
+                                                    className="form-control" 
+                                                    type="text" 
+                                                    name="residentialAddress"
+                                                    value={formData.residentialAddress}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Enter Residential Address" 
+                                                />
+                                                <i className="fs-input-icon fa fa-map-marker-alt" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-xl-12 col-lg-12">
+                                        <div className="form-group">
+                                            <div className="form-check mb-2">
+                                                <input 
+                                                    className="form-check-input" 
+                                                    type="checkbox" 
+                                                    id="sameAsResidential"
+                                                    checked={sameAsResidential}
+                                                    onChange={handleCheckboxChange}
+                                                />
+                                                <label className="form-check-label" htmlFor="sameAsResidential">
+                                                    Permanent address same as residential address
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-xl-12 col-lg-12">
+                                        <div className="form-group">
                                             <label>Permanent Address</label>
                                             <div className="ls-inputicon-box">
-                                                <input className="form-control" type="text" placeholder="Enter Permanent Address" />
+                                                <input 
+                                                    className="form-control" 
+                                                    type="text" 
+                                                    name="permanentAddress"
+                                                    value={formData.permanentAddress}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Enter Permanent Address" 
+                                                    disabled={sameAsResidential}
+                                                />
                                                 <i className="fs-input-icon fa fa-map-marker-alt" />
                                             </div>
                                         </div>
@@ -126,7 +216,14 @@ function SectionCanPersonalDetail() {
                                         <div className="form-group">
                                             <label>Hometown</label>
                                             <div className="ls-inputicon-box">
-                                                <input className="form-control" type="text" placeholder="Enter Hometown" />
+                                                <input 
+                                                    className="form-control" 
+                                                    type="text" 
+                                                    name="hometown"
+                                                    value={formData.hometown}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Enter Hometown" 
+                                                />
                                                 <i className="fs-input-icon fa fa-map-marker-alt" />
                                             </div>
                                         </div>
@@ -135,7 +232,14 @@ function SectionCanPersonalDetail() {
                                         <div className="form-group">
                                             <label>Pincode</label>
                                             <div className="ls-inputicon-box">
-                                                <input className="form-control" type="text" placeholder="Enter Pincode" />
+                                                <input 
+                                                    className="form-control" 
+                                                    type="text" 
+                                                    name="pincode"
+                                                    value={formData.pincode}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Enter Pincode" 
+                                                />
                                                 <i className="fs-input-icon fa fa-map-pin" />
                                             </div>
                                         </div>
@@ -144,7 +248,15 @@ function SectionCanPersonalDetail() {
                                         <div className="form-group">
                                             <label>Marital Status</label>
                                             <div className="ls-inputicon-box">
-                                                <select className="wt-select-box selectpicker" data-live-search="true" title="" data-bv-field="size">
+                                                <select 
+                                                    className="wt-select-box selectpicker" 
+                                                    name="maritalStatus"
+                                                    value={formData.maritalStatus}
+                                                    onChange={handleInputChange}
+                                                    data-live-search="true" 
+                                                    title="" 
+                                                    data-bv-field="size"
+                                                >
                                                     <option className="bs-title-option" value>Select Category</option>
                                                     <option>Married</option>
                                                     <option>Single</option>
@@ -157,7 +269,14 @@ function SectionCanPersonalDetail() {
                                         <div className="form-group">
                                             <label>Passport Number</label>
                                             <div className="ls-inputicon-box">
-                                                <input className="form-control" type="text" placeholder="Enter Passport Number" />
+                                                <input 
+                                                    className="form-control" 
+                                                    type="text" 
+                                                    name="passportNumber"
+                                                    value={formData.passportNumber}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Enter Passport Number" 
+                                                />
                                                 <i className="fs-input-icon fa fa-star-of-life" />
                                             </div>
                                         </div>
@@ -165,14 +284,29 @@ function SectionCanPersonalDetail() {
                                     <div className="col-md-12">
                                         <div className="form-group">
                                             <label>What assistance do you need</label>
-                                            <textarea className="form-control" rows={3} placeholder="Describe" defaultValue={""} />
+                                            <textarea 
+                                                className="form-control" 
+                                                rows={3} 
+                                                name="assistance"
+                                                value={formData.assistance}
+                                                onChange={handleInputChange}
+                                                placeholder="Describe" 
+                                            />
                                         </div>
                                     </div>
                                     <div className="col-xl-12 col-lg-12">
                                         <div className="form-group mb-0">
                                             <label>Work Permit for Other Countries</label>
                                             <div className="ls-inputicon-box">
-                                                <select className="wt-select-box selectpicker" data-live-search="true" title="" data-bv-field="size">
+                                                <select 
+                                                    className="wt-select-box selectpicker" 
+                                                    name="workPermit"
+                                                    value={formData.workPermit}
+                                                    onChange={handleInputChange}
+                                                    data-live-search="true" 
+                                                    title="" 
+                                                    data-bv-field="size"
+                                                >
                                                     <option className="bs-title-option" value>Country</option>
                                                     <option>Afghanistan</option>
                                                     <option>Albania</option>

@@ -242,6 +242,13 @@ export function setBanner(currentpath) {
             return banner.candidate.chat
         }
         default: {
+            // Handle dynamic routes
+            if (currentpath.startsWith('/emp-detail/')) {
+                return banner.publicUser.employer.detail1
+            }
+            if (currentpath.startsWith('/job-detail/')) {
+                return banner.publicUser.jobs.detail1
+            }
             return {
                 title: "", crumb: ""
             }

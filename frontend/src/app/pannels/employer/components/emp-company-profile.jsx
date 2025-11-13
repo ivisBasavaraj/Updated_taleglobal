@@ -912,16 +912,19 @@ function EmpCompanyProfilePage() {
 
     return (
         <div className="emp-company-profile orange-icons">
-            <div className="wt-admin-right-page-header clearfix">
-                <h2 style={{marginLeft: '25px'}}>Company Details</h2>
+            <div style={{ padding: '2rem 2rem 0 2rem' }}>
+            <div className="wt-admin-right-page-header clearfix" style={{ background: 'white', borderRadius: '12px', padding: '2rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', marginBottom: '2rem' }}>
+                <h2>Company Details</h2>
                 
                 <div className="alert alert-info mt-3" style={{fontSize: '14px'}}>
                     <i className="fas fa-info-circle me-2"></i>
                     <strong>Tip:</strong> Upload all files (logo, documents, etc.) individually first, then click "Save Profile" to save your text information.
                 </div>
             </div>
+            </div>
 
             {/*Logo and Cover image*/}
+            <div style={{ padding: '0 2rem 2rem 2rem' }}>
             <div className="panel panel-default">
                 <div className="panel-heading wt-panel-heading p-a20">
                     <h4 className="panel-tittle m-a0"><ImageIcon size={18} className="me-2" /> Logo and Cover image</h4>
@@ -1857,6 +1860,7 @@ function EmpCompanyProfilePage() {
                     </div>
                 </div>
             </form>
+            </div>
         </div>
     );
 }
